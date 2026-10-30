@@ -182,7 +182,7 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §7 Camera
 
-- **Mode:** Free orbit with auto-follow (DEFAULT) | Fixed per-section camera volumes | 2.5D side-view on path
+- **Mode:** Free orbit with auto-follow (DEFAULT) | Fixed per-section camera volumes | 2.5D side-view on path. All three are used: free orbit by default, with camera volumes for set pieces and 2.5D side views (built in Milestone 4).
 - **Look-ahead:** offset forward by `[[0.3]]` × velocity, smoothed.
 - **Speed FOV:** `[[70]]°` at rest → `[[85]]°` at top speed.
 - **Loop handling:** camera keeps world-up during loops unless a `CameraVolume` overrides it.
@@ -316,7 +316,7 @@ res://
 1. ~~Project setup: repo, licenses, folder layout, Jolt, input map, CI skeleton.~~ **Done 2026-10-29.**
 2. ~~Player physics v1: flat ground, acc/dec/frc, jump, gravity, debug overlay, test room.~~ **Done 2026-10-29.**
 3. ~~Slopes, surface alignment, loops, slip/fall, rolling, spindash.~~ **Done 2026-10-29.**
-4. Camera v1 plus camera volumes.
+4. ~~Camera v1 plus camera volumes.~~ **Done 2026-10-30.**
 5. Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.
 6. Greybox Zone 1 Act 1 plus a playtest build.
 7. Character art pipeline: Blender → glTF → AnimationTree.

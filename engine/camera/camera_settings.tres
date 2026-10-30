@@ -1,0 +1,6 @@
+[gd_resource type="Resource" script_class="CameraSettings" format=3]
+
+[ext_resource type="Script" path="res://engine/camera/camera_settings.gd" id="1_t0qg0"]
+
+[resource]
+script = ExtResource("1_t0qg0")

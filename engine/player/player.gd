@@ -271,6 +271,11 @@ func land() -> void:
 
 # --- Body -----------------------------------------------------------------------------------
 
+## Shows or hides the player's model, as when a wall pushes the camera right up against it.
+func set_model_visible(on: bool) -> void:
+	(_body_mesh.get_parent() as Node3D).visible = on
+
+
 ## Switches between standing and curled into a ball (rolling, spin dash, jumping).
 func set_ball(on: bool) -> void:
 	_standing_shape.disabled = on
@@ -352,15 +357,20 @@ func _read_input() -> void:
 
 
 ## The stick direction on the horizontal plane, relative to the active camera. Its length (0 to 1)
-## is how far the stick is pushed.
+## is how far the stick is pushed. A PlayerCamera says which yaw to use, so a camera volume can
+## switch views without turning a player who is holding the stick.
 func _camera_wish() -> Vector3:
 	var stick := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
 	if stick == Vector2.ZERO:
 		return Vector3.ZERO
 	var camera := get_viewport().get_camera_3d()
-	var view := camera.global_basis if camera else global_basis
-	var forward := _flat(-view.z, Vector3.FORWARD)
-	var right := _flat(view.x, Vector3.RIGHT)
+	var yaw := CameraMath.yaw_facing(-global_basis.z)
+	if camera is PlayerCamera:
+		yaw = (camera as PlayerCamera).input_yaw()
+	elif camera:
+		yaw = CameraMath.yaw_facing(-camera.global_basis.z)
+	var forward := CameraMath.forward_for_yaw(yaw)
+	var right := forward.cross(Vector3.UP)
 	return (right * stick.x - forward * stick.y).limit_length(1.0)
 
 

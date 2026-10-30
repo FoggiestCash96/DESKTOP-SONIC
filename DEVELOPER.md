@@ -27,7 +27,7 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 - **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to load the greybox test room.
 - **F6** runs whichever scene is open. Open `stages/greybox/test_room.tscn` to go straight to the test room.
 
-In the test room you control the player (a white capsule for now), followed by a basic camera:
+In the test room you control the player (a white capsule for now). The camera follows behind as you run, and you can turn it yourself at any time:
 
 | Action | Keyboard and mouse | Controller |
 |---|---|---|
@@ -37,16 +37,21 @@ In the test room you control the player (a white capsule for now), followed by a
 | Spin dash: hold while still, tap jump to charge, let go to launch | Ctrl, then Space | B, then A |
 | Orbit the camera | Mouse or arrow keys | Right stick |
 | Swing the camera behind the player | Middle mouse button | Right stick click |
-| Debug overlay (player state, speed, heading) | F3 | |
+| Debug overlay (player and camera state) | F3 | |
 | Back to the title screen | Esc | Start |
 
 The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. Falling off the edge of the floor puts the player back at the start.
 
-The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip.
+The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip. The camera swings side-on at the loop, and again on a 2.5D stretch at the far end of the runway.
 
-### Tuning the player
+### Tuning
 
-Movement values live in `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
+- **Player movement:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
+- **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow and wall handling.
+
+### Camera volumes
+
+To give part of a level a set camera angle or a 2.5D side view, add a `Node3D` with `engine/camera/camera_volume.gd` and set its `size`. Its box shows in the editor. Turn the node so its -Z axis points the way the camera should look; the box turns with it. For a side view, tick `side_view` and lay the box's X axis along the path. Turn off `avoid_walls` where the camera should look through geometry, as at the loop.
 
 ## Checks and tests
 
@@ -79,7 +84,7 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 ```
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
   player/         Player controller, movement math and tuning resource
-  camera/         Basic follow camera (full camera and volumes in Milestone 4)
+  camera/         Player camera, camera volumes and camera tuning
   gimmicks/       Loop track now; springs, dash panels, rails... later
   enemies/base/   Enemy base classes (Milestone 8)
   systems/        Save, settings, audio, scene loading
