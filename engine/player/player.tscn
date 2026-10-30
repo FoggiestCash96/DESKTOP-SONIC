@@ -32,8 +32,48 @@ roughness = 0.6
 radius = 0.3
 height = 0.6
 
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r32ii"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.35, 0.6, 1, 0.3)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.35, 0.6, 1, 1)
+emission_energy_multiplier = 0.8
+
+[sub_resource type="SphereMesh" id="SphereMesh_h8u00"]
+radius = 0.68
+height = 1.36
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_it1hm"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(1, 0.95, 0.6, 0.35)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.95, 0.6, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_676au"]
+radius = 0.78
+height = 1.56
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xxmkq"]
+albedo_color = Color(0.45, 1, 0.5, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.45, 1, 0.5, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="TorusMesh" id="TorusMesh_u7e2u"]
+inner_radius = 0.55
+outer_radius = 0.62
+rings = 32
+ring_segments = 6
+
 [node name="Player" type="CharacterBody3D" unique_id=719696558]
 collision_layer = 2
+collision_mask = 9
 floor_snap_length = 0.5
 script = ExtResource("1_r32ii")
 
@@ -49,6 +89,7 @@ shape = SubResource("SphereShape3D_it1hm")
 disabled = true
 
 [node name="Visual" type="Node3D" parent="." unique_id=285729387]
+unique_name_in_owner = true
 
 [node name="Body" type="MeshInstance3D" parent="Visual" unique_id=416879587]
 unique_name_in_owner = true
@@ -67,3 +108,27 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
 visible = false
 material_override = SubResource("StandardMaterial3D_s88to")
 mesh = SubResource("SphereMesh_shdhw")
+
+[node name="Shield" type="MeshInstance3D" parent="Visual" unique_id=1396969863]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_r32ii")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_h8u00")
+
+[node name="Sparkle" type="MeshInstance3D" parent="Visual" unique_id=1077401445]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_it1hm")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_676au")
+
+[node name="Magnet" type="MeshInstance3D" parent="Visual" unique_id=958882197]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_xxmkq")
+cast_shadow = 0
+mesh = SubResource("TorusMesh_u7e2u")

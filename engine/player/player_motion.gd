@@ -7,6 +7,9 @@ const AIR_DRAG_MAX_RISE := 4.0 * PlayerPhysics.SPEED  ## Air drag only applies w
 const AIR_DRAG_MIN_SPEED := 0.125 * PlayerPhysics.SPEED  ## ...and moving horizontally at least this fast (m/s).
 const AIR_DRAG_KEEP_PER_FRAME := 1.0 - 1.0 / 32.0  ## Share of horizontal speed kept per classic frame (1/60 s).
 const SPIN_CHARGE_KEEP_PER_FRAME := 1.0 - 1.0 / 32.0  ## Share of spin dash charge kept per classic frame (1/60 s).
+const LOST_RINGS_PER_CIRCLE := 16  ## Scattered rings fly out in circles of this many, as in the classic games.
+const LOST_RING_STEEP := 60.0  ## Alternate scattered rings fly out this many degrees above the horizontal...
+const LOST_RING_SHALLOW := 30.0  ## ...and the others this many.
 
 
 ## Ground speed after one tick of running. `input_strength` (0 to 1) is how far the stick is
@@ -129,3 +132,37 @@ static func spin_dash_speed(charge: float, physics: PlayerPhysics) -> float:
 ## Spin dash charge after one tick: it bleeds off by 1/32 per 60 fps frame, as in the classic games.
 static func decay_charge(charge: float, delta: float) -> float:
 	return charge * pow(SPIN_CHARGE_KEEP_PER_FRAME, delta * PlayerPhysics.CLASSIC_FPS)
+
+
+## Velocity of the knockback from a hit: `away` (a horizontal unit vector pointing away from what
+## hurt the player) at hurt_speed, plus hurt_rise upward.
+static func hurt_velocity(away: Vector3, physics: PlayerPhysics) -> Vector3:
+	return away * physics.hurt_speed + Vector3.UP * physics.hurt_rise
+
+
+## Launch velocities for the rings a hit knocks loose: one per ring, at most max_lost_rings. As in
+## the classic games the first circle of 16 flies out fast and the rest slowly; in 3D each circle
+## fans out all the way around the player, alternately steep and shallow.
+static func ring_scatter(count: int, physics: PlayerPhysics) -> Array[Vector3]:
+	var velocities: Array[Vector3] = []
+	for i in mini(count, physics.max_lost_rings):
+		var later := i >= LOST_RINGS_PER_CIRCLE
+		var speed := physics.lost_ring_speed_slow if later else physics.lost_ring_speed_fast
+		# Later circles sit half a step round from the first, so the rings don't overlap.
+		var around := TAU * (float(i % LOST_RINGS_PER_CIRCLE) + (0.5 if later else 0.0)) / LOST_RINGS_PER_CIRCLE
+		var up := deg_to_rad(LOST_RING_STEEP if i % 2 == 0 else LOST_RING_SHALLOW)
+		velocities.append(Vector3(cos(around) * cos(up), sin(up), sin(around) * cos(up)) * speed)
+	return velocities
+
+
+## Movement values with speed shoes on: a copy of `physics` with acc, frc, top, air_acc and
+## roll_frc multiplied by speed_shoes_factor, as the classic shoes double them.
+static func with_speed_shoes(physics: PlayerPhysics) -> PlayerPhysics:
+	var fast := physics.duplicate() as PlayerPhysics
+	var factor := physics.speed_shoes_factor
+	fast.acc *= factor
+	fast.frc *= factor
+	fast.top *= factor
+	fast.air_acc *= factor
+	fast.roll_frc *= factor
+	return fast

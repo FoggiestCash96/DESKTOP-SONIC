@@ -161,22 +161,54 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 
 ### 5.5 Damage, rings and lives
 
-- When hit with rings, scatter up to 32 of them and get 2.0 s of invulnerability.
-- When hit with no rings, lose a life. You start with **5 lives**. Extra lives come from a unique hidden 1-up collectible in acts.
-- Crush deaths and pit deaths are on.
+Built in Milestone 5. The values are classic ones, in `player_physics.tres` (damage, ring loss and power-ups) and `engine/systems/game_rules.tres` (lives and restart timing).
+
+- **Rings:** touch one to collect it. The HUD's ring count flashes red at zero, because the next hit is then fatal. 100 rings don't give a life.
+- **Hit with rings:** all of them are lost, and up to 32 scatter. The first 16 fly out at 7.5 m/s and the rest at 3.75 m/s, fanned out all around the player and upward. They fall under 10.55 m/s² of gravity and bounce off level geometry, keeping 75% of their speed into the surface. They can be grabbed back after 64 frames (1.07 s) and vanish after 256 frames (4.27 s).
+- **Knockback:** a hit throws the player away from what hurt them at 3.75 m/s and up at 7.5 m/s, under lighter gravity (21.09 m/s²) and with no control. Landing stops them dead. Then follow 2.0 s (120 frames) of flashing, during which nothing can hurt them.
+- **Shield:** takes the next hit instead of the rings, with the same knockback and flashing.
+- **Hit with no rings:** the player dies. They hop up at 13.1 m/s and fall through everything, and the camera stops to watch. 2 s later the stage restarts from the last checkpoint, a life down.
+- **Lives:** you start with **5**. Extra lives come only from a unique hidden 1-up object in each act. Each gives a life once per visit, and one found before a death stays found. Losing the last life shows GAME OVER for 3 s, then the title screen returns and the next game starts with 5 lives again.
+- **Pit deaths** are on: falling below `kill_height` (y = −50 m) costs a life the same way. **Crush deaths** are on too, but come with the first moving solid objects, as there is nothing to be crushed by yet.
+- **Item monitors** (decided 2026-10-30):
+
+| Item | Effect |
+|---|---|
+| Rings | 10 rings. The amount is a setting on each monitor, so 5- and 20-ring boxes need nothing new. |
+| Shield | Takes the next hit in place of the rings |
+| Speed shoes | 20 s of doubled acceleration, friction, top speed, air acceleration and roll friction, as the classic shoes |
+| Invincibility | 20 s of ignoring hits. Pits still kill. |
+| Ring magnet | 20 s of pulling in rings within 5 m. A pulled ring flies 15 m/s faster than the player, so it always catches up. |
+| Boost refill | Added once the boost exists |
+
+  Monitors are solid: a player standing up bumps into them or stands on them. Curled up (jumping, rolling or spin dashing) they break them open. Breaking one from above bounces the player back up: their falling speed turns into rising speed, still cut short if jump is let go.
+- **Hidden collectibles** (decided 2026-10-30): **red rings, 5 per act.** The HUD counts them. One found before a death stays found and shows greyed out after the restart. Saving them for good comes with the save system (Milestone 9).
+- **Checkpoints:** passing a post saves the spot and the stage clock. After a death the stage restarts 1 m in front of the post, facing the way it points, with the clock as it was then and no rings. The lamp turns from blue to red.
+- **Stage clock:** counts up with no time limit (the modern rule; the classic games had 10 minutes). It stops while the player is dead.
 
 ### 5.6 Player controller (Milestones 2 and 3)
 
-- `engine/player/player.tscn` is a `CharacterBody3D` on the `player` layer, colliding with `world`. Its origin is at its feet. Standing, it uses a capsule 1.0 m tall and 0.3 m in radius; rolling, spin dashing and jumping it curls into a 0.3 m ball.
-- It is a state machine with one script per state in `engine/player/states/`: `GroundState` (run, brake, turn, crouch), `RollState`, `SpinDashState` and `AirState`. The shared surface handling lives in `player.gd`.
+- `engine/player/player.tscn` is a `CharacterBody3D` on the `player` layer, colliding with `world` and `gimmicks` (for solid item monitors). Its origin is at its feet. Standing, it uses a capsule 1.0 m tall and 0.3 m in radius; rolling, spin dashing and jumping it curls into a 0.3 m ball.
+- It is a state machine with one script per state in `engine/player/states/`: `GroundState` (run, brake, turn, crouch), `RollState`, `SpinDashState`, `AirState`, and since Milestone 5 `HurtState` (knockback) and `DeathState`. The shared surface handling, rings, hits and power-ups live in `player.gd`.
 - On the ground, `ground_speed` and `heading` set the velocity along the surface, and `move_and_slide()` resolves collisions. The body turns to match the ground normal, pivoting on the center of its rounded bottom so the part touching the ground stays put.
 - Godot only snaps a body to the floor when its velocity points into it, and velocity along a slope rounds either way, so the player calls `apply_floor_snap()` itself after each move. A ray from the center of its rounded bottom then reads the ground normal, as the classic ground sensors did.
 - Walls: a head-on hit stops the player. A glancing hit slides along the wall, keeping only the part of the speed that wasn't pointing into it.
 - Variable jump height: while jump is not held, upward speed is capped at `jmp_release_cap`. Jumps push away from the surface, along its normal.
 - Landing keeps the part of the velocity that runs along the surface. Touching only an edge, with no ground under the player's middle, isn't a landing.
-- Falling below `kill_height` (y = −50 m) respawns the player where it started.
+- Falling below `kill_height` (y = −50 m) costs a life (§5.5).
 - `engine/player/player_motion.gd` holds the movement math as static functions, so `tests/unit/test_player_motion.gd` can check it against the classic values without running a scene.
-- The F3 overlay shows the state, ground speed, velocity, surface angle (and any slip), heading with the current turn rate, and position.
+- The F3 overlay shows the state, ground speed, velocity, surface angle (and any time the stick is locked), heading with the current turn rate, position, and rings and power-ups. A "Game" line shows lives, the stage clock and the last checkpoint.
+
+### 5.7 Gimmicks (Milestone 5)
+
+All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and every number is a setting on the node.
+
+- **Springs** launch the player along the spring's +Y axis, uncurled, so letting go of jump doesn't cut the launch short (classic air drag still applies). Yellow springs launch at 18.75 m/s (10 px/frame, about 7.1 m high) and red ones at 30 m/s (16 px/frame, about 18 m). Upward springs keep the player's running speed, as the classic ones do. Turning `keep_momentum` off launches exactly along the spring, for diagonal springs aimed at a ledge. A spring lying on its side sends a grounded player along the ground at its speed instead. Springs can lock the stick for a moment: 0.27 s (16 frames) for classic sideways springs.
+- **Dash panels** send a grounded player along the panel's −Z axis at 30 m/s (the classic speed booster, 16 px/frame), or faster if they already were, and lock the stick for 0.25 s.
+- **Spikes** hurt on touch, and again once the flashing runs out if the player is still on them.
+- **Ring rows** (`RingLine`) place rings along a line, straight or arched over a jump.
+- **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
+- **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
 
 ## 6. Camera
 
@@ -226,7 +258,6 @@ Each one is grouped by the milestone where it starts to block work.
 |---|---|
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
-| **M5 (gimmicks)** | Item monitor list; hidden collectible type (red rings, emblems or medals) and count per act |
 | **M6 (first act)** | Level-building workflow: Blender stages, CSG greybox → Blender, or TrenchBroom |
 | **M7 (art)** | Art style, poly budgets, outline and speed-line shaders, low-end performance target |
 | **M8 (enemies)** | Badnik roster and boss concepts per world |
@@ -241,8 +272,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 2 | Player physics v1: flat ground, acc/dec/frc, jump, gravity, player values in the debug overlay | **Done** |
 | 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | **Done** |
 | 4 | Camera v1 plus camera volumes | **Done** |
-| 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | Next |
-| 6 | Greybox Emerald Shore Act 1 plus a playtest build | |
+| 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | **Done** |
+| 6 | Greybox Emerald Shore Act 1 plus a playtest build | Next |
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | |
 | 8 | Enemies and the first boss | |
 | 9 | Menus, save system, settings, accessibility | |

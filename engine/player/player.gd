@@ -3,18 +3,29 @@ extends CharacterBody3D
 ## Kinematic player controller with classic momentum physics: speed along the surface, slopes
 ## that add and take away speed, walls and loops through surface alignment, rolling and the spin
 ## dash, and free 3D velocity in the air. Each movement state is a script in engine/player/states/;
-## the shared surface handling lives here. Input is relative to the active camera, and all tuning
-## lives in `physics`.
+## the shared surface handling lives here, along with rings, hits and power-ups. Input is relative
+## to the active camera, and all tuning lives in `physics`.
 
-const OVERLAY_LABELS: Array[String] = ["State", "Speed", "Velocity", "Surface", "Heading", "Position"]
+signal died  ## The player died. The stage restarts, or the game ends, a moment later.
+
+const GROUP := "players"  ## Every player joins this group, so stages can find them.
+const OVERLAY_LABELS: Array[String] = ["State", "Speed", "Velocity", "Surface", "Heading", "Position", "Items"]
 const NEAR_VERTICAL := 75.0  ## Running off the top of a surface this steep (degrees) launches straight up, as at the lip of a half-pipe.
+const COLLECTIBLES_LAYER := 1 << 4  ## Physics layer the ring magnet searches.
+const MAGNET_MAX_RINGS := 64  ## Most rings the magnet can start pulling in one tick.
+const FLASH_PERIOD := 0.1  ## Seconds per flash while invulnerable or invincible.
+const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
 
-@export var physics: PlayerPhysics = preload("res://engine/player/player_physics.tres")
-@export var kill_height: float = -50.0  ## Falling below this height (m) respawns the player.
+static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
+
+@export var physics: PlayerPhysics = preload("res://engine/player/player_physics.tres")  ## Swapped for a faster copy while speed shoes last.
+@export var kill_height: float = -50.0  ## Falling below this height (m) costs a life.
 
 var ground_speed := 0.0  ## Speed along the ground (m/s).
 var heading := Vector3.FORWARD  ## Direction of travel along the ground, as a unit vector.
 var ground_normal := Vector3.UP  ## Normal of the surface underfoot, or straight up in the air.
+var rings := 0
+var shield := false  ## A shield takes the next hit in place of the rings.
 
 # Input, read once at the start of every physics tick.
 var wish := Vector3.ZERO  ## Camera-relative stick direction on the horizontal plane, length 0 to 1.
@@ -27,40 +38,68 @@ var ground_state: GroundState
 var roll_state: RollState
 var spin_dash_state: SpinDashState
 var air_state: AirState
+var hurt_state: HurtState
+var death_state: DeathState
 
 var _spawn: Transform3D
+var _base_physics: PlayerPhysics
 var _control_lock := 0.0
 var _coyote_timer := 0.0
 var _jump_buffer_timer := 0.0
 var _flat_heading := Vector3.FORWARD  # Horizontal direction of travel from before the surface got steep.
+var _curled := false
+var _intangible := false
+var _hidden_by_camera := false
+var _invulnerable_timer := 0.0
+var _shoes_timer := 0.0
+var _invincible_timer := 0.0
+var _magnet_timer := 0.0
+var _magnet_query := PhysicsShapeQueryParameters3D.new()
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
+@onready var _visual: Node3D = %Visual
 @onready var _body_mesh: Node3D = %Body
 @onready var _ball_mesh: Node3D = %Ball
+@onready var _shield_mesh: Node3D = %Shield
+@onready var _sparkle_mesh: Node3D = %Sparkle
+@onready var _magnet_mesh: Node3D = %Magnet
 
 
 func _ready() -> void:
+	add_to_group(GROUP)
 	ground_state = GroundState.new(self)
 	roll_state = RollState.new(self)
 	spin_dash_state = SpinDashState.new(self)
 	air_state = AirState.new(self)
+	hurt_state = HurtState.new(self)
+	death_state = DeathState.new(self)
+	_base_physics = physics
 	floor_snap_length = physics.snap_length
 	floor_max_angle = deg_to_rad(physics.surface_step_angle)
 	# The states set velocity themselves; without this a falling body touching an edge would stop dead on it.
 	floor_stop_on_slope = false
-	_spawn = global_transform
+	# After a death the stage reloads, and the player starts from the last checkpoint touched.
+	_spawn = GameState.spawn_point(owner.scene_file_path if owner else "", global_transform)
+	global_transform = _spawn
 	heading = _flat(-global_basis.z, Vector3.FORWARD)
 	_flat_heading = heading
+	var magnet_shape := SphereShape3D.new()
+	magnet_shape.radius = physics.magnet_range
+	_magnet_query.shape = magnet_shape
+	_magnet_query.collision_mask = COLLECTIBLES_LAYER
+	_magnet_query.collide_with_areas = true
+	_magnet_query.collide_with_bodies = false
 	state = air_state
 	state.enter(null)
 
 	DebugOverlay.watch("State", func() -> String: return state.label())
 	DebugOverlay.watch("Speed", func() -> String: return "%.2f m/s  (top %.2f)" % [ground_speed, physics.top])
 	DebugOverlay.watch("Velocity", func() -> String: return "horizontal %.2f  vertical %.2f m/s" % [Vector2(velocity.x, velocity.z).length(), velocity.y])
-	DebugOverlay.watch("Surface", func() -> String: return "%.0f° from flat%s" % [PlayerMotion.steepness(ground_normal), "  (slipping %.2f s)" % _control_lock if _control_lock > 0.0 else ""])
+	DebugOverlay.watch("Surface", func() -> String: return "%.0f° from flat%s" % [PlayerMotion.steepness(ground_normal), "  (stick locked %.2f s)" % _control_lock if _control_lock > 0.0 else ""])
 	DebugOverlay.watch("Heading", func() -> String: return "%.0f°  (turn rate %.0f°/s)" % [rad_to_deg(atan2(-horizontal_heading().x, -horizontal_heading().z)), rad_to_deg(PlayerMotion.turn_rate(ground_speed, physics))])
 	DebugOverlay.watch("Position", func() -> String: return "%.1f, %.1f, %.1f" % [global_position.x, global_position.y, global_position.z])
+	DebugOverlay.watch("Items", describe_items)
 
 
 func _exit_tree() -> void:
@@ -73,11 +112,15 @@ func _physics_process(delta: float) -> void:
 	state.tick(delta)
 	move_and_slide()
 	state.after_move(delta)
-	_control_lock = maxf(_control_lock - delta, 0.0)
-	_coyote_timer = maxf(_coyote_timer - delta, 0.0)
-	_jump_buffer_timer = maxf(_jump_buffer_timer - delta, 0.0)
-	if global_position.y < kill_height:
-		respawn()
+	_count_down(delta)
+	if _magnet_timer > 0.0:
+		_pull_rings()
+	if global_position.y < kill_height and state != death_state:
+		die(false)
+
+
+func _process(_delta: float) -> void:
+	_update_visual()
 
 
 ## Leaves the current state and enters `next`.
@@ -88,7 +131,7 @@ func change_state(next: PlayerState) -> void:
 	next.enter(previous)
 
 
-## Puts the player back where it started, standing still.
+## Puts the player back at its spawn point, standing still, without power-ups. Rings are kept.
 func respawn() -> void:
 	global_transform = _spawn
 	velocity = Vector3.ZERO
@@ -96,6 +139,8 @@ func respawn() -> void:
 	heading = _flat(-_spawn.basis.z, Vector3.FORWARD)
 	_flat_heading = heading
 	_control_lock = 0.0
+	_invulnerable_timer = 0.0
+	_end_power_ups()
 	change_state(air_state)
 	reset_physics_interpolation()
 
@@ -104,6 +149,21 @@ func respawn() -> void:
 ## the way the player was going before it got steep.
 func horizontal_heading() -> Vector3:
 	return _flat_heading if _is_steep() else _flat(heading, _flat_heading)
+
+
+func is_dead() -> bool:
+	return state == death_state
+
+
+## Whether the player is on the ground: running, rolling or spin dashing.
+func is_grounded() -> bool:
+	return state == ground_state or state == roll_state or state == spin_dash_state
+
+
+## Whether the player is curled into a ball (jumping, rolling or spin dashing), which breaks item
+## monitors and, later, enemies.
+func is_attacking() -> bool:
+	return _curled and not _intangible
 
 
 # --- Input --------------------------------------------------------------------------------
@@ -120,6 +180,15 @@ func consume_jump() -> void:
 
 func coyote_jump_ready() -> bool:
 	return _coyote_timer > 0.0
+
+
+## Ignores the stick for at least `seconds`, as after a slip or a spring.
+func lock_controls(seconds: float) -> void:
+	_control_lock = maxf(_control_lock, seconds)
+
+
+func controls_locked() -> bool:
+	return _control_lock > 0.0
 
 
 ## The stick as a direction along the current surface, length 0 to 1. On surfaces steeper than
@@ -269,28 +338,183 @@ func land() -> void:
 	change_state(ground_state)
 
 
+# --- Gimmicks -----------------------------------------------------------------------------
+
+## Throws the player into the air at `new_velocity`, uncurled, as a spring does. The stick is
+## ignored for `lock_time` seconds.
+func launch(new_velocity: Vector3, lock_time: float) -> void:
+	if state == death_state:
+		return
+	velocity = new_velocity
+	if state != air_state:
+		change_state(air_state)
+	air_state.jumped = false
+	air_state.rising = false
+	set_ball(false)
+	_coyote_timer = 0.0
+	lock_controls(lock_time)
+
+
+## Sends a grounded player along the surface in `direction` at `speed`, as sideways springs and
+## dash panels do. With `keep_faster` a faster player keeps their speed. The stick is ignored for
+## `lock_time` seconds. Returns false, doing nothing, if the player isn't on the ground.
+func push_along_ground(direction: Vector3, speed: float, keep_faster: bool, lock_time: float) -> bool:
+	if not is_grounded():
+		return false
+	heading = _on_plane(direction, ground_normal, heading)
+	ground_speed = maxf(ground_speed, speed) if keep_faster else speed
+	if state == spin_dash_state:
+		change_state(roll_state)
+	lock_controls(lock_time)
+	return true
+
+
+## Bounces back up off something broken from above, such as an item monitor: falling speed turns
+## into rising speed. Letting go of jump still cuts the rise short, as it would a jump.
+func bounce() -> void:
+	if state == air_state and velocity.y < 0.0:
+		velocity.y = -velocity.y
+		air_state.rising = air_state.jumped
+
+
+# --- Rings, damage and power-ups ----------------------------------------------------------
+
+func collect_rings(amount: int) -> void:
+	rings += amount
+
+
+## Takes a hit from something at `from`. A shield or the rings soak it up (the rings scatter), with
+## a short knockback and a couple of seconds of flashing invulnerability. With neither, the player
+## dies. Invincibility and that flashing ignore hits. Returns whether the hit landed.
+func hurt(from: Vector3) -> bool:
+	if state == death_state or _invulnerable_timer > 0.0 or _invincible_timer > 0.0:
+		return false
+	if shield:
+		shield = false
+	elif rings > 0:
+		_scatter_rings()
+	else:
+		die()
+		return true
+	_invulnerable_timer = physics.invulnerable_time
+	velocity = PlayerMotion.hurt_velocity(_flat(global_position - from, -heading), physics)
+	change_state(hurt_state)
+	return true
+
+
+## Dies: a hop up and a fall through everything, then the stage restarts or the game ends. A fall
+## out of the world (`hop` false) skips the hop. With no stage listening, the player respawns.
+func die(hop := true) -> void:
+	if state == death_state:
+		return
+	death_state.hop = hop
+	change_state(death_state)
+	_invulnerable_timer = 0.0
+	_end_power_ups()
+	if died.get_connections().is_empty():
+		get_tree().create_timer(GameState.rules.restart_delay).timeout.connect(respawn)
+	died.emit()
+
+
+func give_shield() -> void:
+	shield = true
+
+
+## Speed shoes double acceleration, friction and top speed for a while.
+func give_speed_shoes() -> void:
+	_shoes_timer = _base_physics.speed_shoes_time
+	physics = PlayerMotion.with_speed_shoes(_base_physics)
+
+
+func give_invincibility() -> void:
+	_invincible_timer = _base_physics.invincibility_time
+
+
+func give_magnet() -> void:
+	_magnet_timer = _base_physics.magnet_time
+
+
+func is_invincible() -> bool:
+	return _invincible_timer > 0.0
+
+
+## Seconds left of flashing invulnerability after a hit.
+func invulnerable_time_left() -> float:
+	return _invulnerable_timer
+
+
+func shoes_time_left() -> float:
+	return _shoes_timer
+
+
+func invincibility_time_left() -> float:
+	return _invincible_timer
+
+
+func magnet_time_left() -> float:
+	return _magnet_timer
+
+
+## Rings and power-ups, for the debug overlay.
+func describe_items() -> String:
+	var parts: PackedStringArray = ["rings %d" % rings]
+	if shield:
+		parts.append("shield")
+	if _shoes_timer > 0.0:
+		parts.append("shoes %.1f s" % _shoes_timer)
+	if _invincible_timer > 0.0:
+		parts.append("invincible %.1f s" % _invincible_timer)
+	if _magnet_timer > 0.0:
+		parts.append("magnet %.1f s" % _magnet_timer)
+	if _invulnerable_timer > 0.0:
+		parts.append("flashing %.1f s" % _invulnerable_timer)
+	return "  ".join(parts)
+
+
 # --- Body -----------------------------------------------------------------------------------
 
 ## Shows or hides the player's model, as when a wall pushes the camera right up against it.
 func set_model_visible(on: bool) -> void:
-	(_body_mesh.get_parent() as Node3D).visible = on
+	_hidden_by_camera = not on
+	_update_visual()
 
 
 ## Switches between standing and curled into a ball (rolling, spin dash, jumping).
 func set_ball(on: bool) -> void:
-	_standing_shape.disabled = on
-	_ball_shape.disabled = not on
+	_curled = on
+	_update_shapes()
 	_body_mesh.visible = not on
 	_ball_mesh.visible = on
 
 
-## In the air: swings the body back upright and faces the direction of travel.
-func turn_upright(delta: float) -> void:
-	heading = _flat(velocity, heading)
+## Makes the player pass through everything, as when dead, or solid again.
+func set_intangible(on: bool) -> void:
+	_intangible = on
+	_update_shapes()
+
+
+## In the air: swings the body back upright and, unless `face_motion` is false, faces the
+## direction of travel. Knocked back by a hit, the player keeps facing the same way.
+func turn_upright(delta: float, face_motion := true) -> void:
+	if face_motion:
+		heading = _flat(velocity, heading)
 	var up := global_basis.y.normalized()
 	var angle := up.angle_to(Vector3.UP)
 	var step := minf(deg_to_rad(physics.upright_speed) * delta / maxf(angle, 1e-6), 1.0)
 	_orient(Vector3.UP, heading, step)
+
+
+func _update_shapes() -> void:
+	_standing_shape.disabled = _curled or _intangible
+	_ball_shape.disabled = not _curled or _intangible
+
+
+func _update_visual() -> void:
+	var flash_off := _invulnerable_timer > 0.0 and fmod(_invulnerable_timer, FLASH_PERIOD) < FLASH_PERIOD * 0.5
+	_visual.visible = not _hidden_by_camera and not flash_off
+	_shield_mesh.visible = shield
+	_sparkle_mesh.visible = _invincible_timer > 0.0 and fmod(_invincible_timer, FLASH_PERIOD) < FLASH_PERIOD * 0.6
+	_magnet_mesh.visible = _magnet_timer > 0.0
 
 
 ## Turns the body toward `up` (all the way when `weight` is 1) and to face `forward`. It pivots on
@@ -345,6 +569,49 @@ func _slide_along_walls() -> void:
 	var slide := (heading - normal * into) * ground_speed
 	ground_speed = slide.length()
 	heading = _on_plane(slide, ground_normal, heading)
+
+
+## Scatters the rings, up to max_lost_rings of them, as LostRings the player can grab back.
+func _scatter_rings() -> void:
+	if _lost_ring == null:
+		_lost_ring = load(LOST_RING_SCENE)
+	var center := global_position + global_basis.y * _ball_shape.position.y
+	for ring_velocity in PlayerMotion.ring_scatter(rings, physics):
+		var ring := _lost_ring.instantiate() as LostRing
+		ring.drop(center, ring_velocity, physics)
+		get_parent().add_child.call_deferred(ring)
+	rings = 0
+
+
+## The ring magnet: rings in range start flying to the player.
+func _pull_rings() -> void:
+	_magnet_query.transform = Transform3D(Basis.IDENTITY, global_position + global_basis.y * _ball_shape.position.y)
+	for hit in get_world_3d().direct_space_state.intersect_shape(_magnet_query, MAGNET_MAX_RINGS):
+		var collider: Object = hit["collider"]
+		var ring := collider as Ring
+		if ring:
+			ring.attract(self)
+
+
+func _count_down(delta: float) -> void:
+	_control_lock = maxf(_control_lock - delta, 0.0)
+	_coyote_timer = maxf(_coyote_timer - delta, 0.0)
+	_jump_buffer_timer = maxf(_jump_buffer_timer - delta, 0.0)
+	_invulnerable_timer = maxf(_invulnerable_timer - delta, 0.0)
+	_invincible_timer = maxf(_invincible_timer - delta, 0.0)
+	_magnet_timer = maxf(_magnet_timer - delta, 0.0)
+	if _shoes_timer > 0.0:
+		_shoes_timer = maxf(_shoes_timer - delta, 0.0)
+		if _shoes_timer == 0.0:
+			physics = _base_physics
+
+
+func _end_power_ups() -> void:
+	shield = false
+	_shoes_timer = 0.0
+	_invincible_timer = 0.0
+	_magnet_timer = 0.0
+	physics = _base_physics
 
 
 func _read_input() -> void:

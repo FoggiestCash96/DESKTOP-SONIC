@@ -1,0 +1,10 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://engine/collectibles/ring.gdshader" id="1_amyg0"]
+
+[resource]
+render_priority = 0
+shader = ExtResource("1_amyg0")
+shader_parameter/color = Color(0.35, 0.35, 0.38, 1)
+shader_parameter/spin_speed = null
+shader_parameter/glow = 0.0

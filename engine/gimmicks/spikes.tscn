@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/spikes.gd" id="1_amdpv"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_dowmg"]
+size = Vector3(2, 0.5, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aemc7"]
+albedo_color = Color(0.22, 0.22, 0.25, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_l1hy1"]
+size = Vector3(2, 0.1, 2)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fintj"]
+albedo_color = Color(0.85, 0.87, 0.9, 1)
+metallic = 0.7
+roughness = 0.35
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_p63uu"]
+material = SubResource("StandardMaterial3D_fintj")
+top_radius = 0.0
+bottom_radius = 0.2
+height = 0.5
+radial_segments = 8
+rings = 1
+
+[sub_resource type="MultiMesh" id="MultiMesh_jora7"]
+transform_format = 1
+mesh = SubResource("CylinderMesh_p63uu")
+
+[node name="Spikes" type="Area3D" unique_id=119470117]
+collision_layer = 32
+collision_mask = 2
+script = ExtResource("1_amdpv")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=2138560577]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_dowmg")
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=579108694]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+material_override = SubResource("StandardMaterial3D_aemc7")
+mesh = SubResource("BoxMesh_l1hy1")
+
+[node name="Points" type="MultiMeshInstance3D" parent="." unique_id=433769276]
+unique_name_in_owner = true
+multimesh = SubResource("MultiMesh_jora7")

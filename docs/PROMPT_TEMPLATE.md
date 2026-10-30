@@ -160,6 +160,7 @@ MODERN
 - Hit with rings: scatter min(rings, 32 rings and get 120 frames of invulnerability. DEFAULT classic rules.
 - Hit with 0 rings: lose a life. Lives system starting with 5 with the ability to collect ojbects that give the player a life by collecting a unique object that can be found in acts
 - Crush and pit deaths: DEFAULT on.
+- Built in Milestone 5 (2026-10-30). The full rules are in DESIGN.md §5.5.
 
 ---
 
@@ -222,8 +223,8 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §10 Collectibles and progression
 
-- Rings, 1-ups, item monitors (`[[list]]`), checkpoints (star posts).
-- Hidden collectibles per act: `[[CHOOSE: Red rings | Emblems (SRB2-style) | Medals | None]]`, count `[[5]]`.
+- Rings, 1-ups, item monitors (10 rings, shield, speed shoes, invincibility, ring magnet, plus a boost refill once the boost exists; decided 2026-10-30), checkpoints (star posts).
+- Hidden collectibles per act: **Red rings**, count **5** (decided 2026-10-30).
 - Special stages / Chaos Emeralds: `[[CHOOSE: None | Classic-style 3D half-pipe | Sphere grid | Own design]]`. Super form unlocked at 7: `[[Y/N]]`.
 - Ranking: `[[CHOOSE: None | S–D rank by time+rings+score]]`.
 - Time attack and ghost replays: `[[Y/N]]` (needs deterministic input recording; see §15).
@@ -317,7 +318,7 @@ res://
 2. ~~Player physics v1: flat ground, acc/dec/frc, jump, gravity, debug overlay, test room.~~ **Done 2026-10-29.**
 3. ~~Slopes, surface alignment, loops, slip/fall, rolling, spindash.~~ **Done 2026-10-29.**
 4. ~~Camera v1 plus camera volumes.~~ **Done 2026-10-30.**
-5. Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.
+5. ~~Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.~~ **Done 2026-10-30.**
 6. Greybox Zone 1 Act 1 plus a playtest build.
 7. Character art pipeline: Blender → glTF → AnimationTree.
 8. Enemies and the first boss.

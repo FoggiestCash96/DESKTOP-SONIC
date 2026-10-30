@@ -193,6 +193,53 @@ func test_spin_dash_charge_bleeds_off_at_the_classic_rate() -> void:
 	assert_almost_eq(two_ticks, one_frame, 1e-5, "same at 120 Hz")
 
 
+func test_damage_and_ring_loss_defaults_are_classic() -> void:
+	assert_almost_eq(physics.invulnerable_time, 2.0, 1e-6, "120 frames of flashing")
+	assert_almost_eq(physics.lost_ring_pickup_delay, 64.0 / 60.0, 1e-6, "64 frames before scattered rings can be grabbed")
+	assert_almost_eq(physics.lost_ring_lifetime, 256.0 / 60.0, 1e-6, "256 frames before they vanish")
+	assert_almost_eq(physics.lost_ring_gravity, 10.546875, 1e-6, "0.09375 px/frame² on scattered rings")
+	assert_eq(physics.max_lost_rings, 32)
+
+
+func test_a_hit_knocks_the_player_back_and_up_at_the_classic_speeds() -> void:
+	var knockback := PlayerMotion.hurt_velocity(Vector3.BACK, physics)
+	assert_almost_eq(knockback.z, 3.75, 1e-5, "2 px/frame away")
+	assert_almost_eq(knockback.y, 7.5, 1e-5, "4 px/frame up")
+	assert_almost_eq(knockback.x, 0.0, 1e-5)
+
+
+func test_a_hit_scatters_at_most_32_rings() -> void:
+	assert_eq(PlayerMotion.ring_scatter(50, physics).size(), 32)
+	assert_eq(PlayerMotion.ring_scatter(7, physics).size(), 7)
+	assert_eq(PlayerMotion.ring_scatter(0, physics).size(), 0)
+
+
+func test_the_first_16_scattered_rings_fly_fast_and_the_rest_slow() -> void:
+	var velocities := PlayerMotion.ring_scatter(32, physics)
+	for i in velocities.size():
+		var expected := 7.5 if i < 16 else 3.75
+		assert_almost_eq(velocities[i].length(), expected, 1e-4, "ring %d" % i)
+		assert_true(velocities[i].y > 0.0, "ring %d flies upward" % i)
+
+
+func test_scattered_rings_fan_out_evenly_all_around() -> void:
+	var sideways := Vector3.ZERO
+	for velocity in PlayerMotion.ring_scatter(16, physics):
+		sideways += Vector3(velocity.x, 0.0, velocity.z)
+	assert_almost_eq(sideways.length(), 0.0, 1e-4, "no direction is favoured")
+
+
+func test_speed_shoes_double_the_classic_values() -> void:
+	var fast := PlayerMotion.with_speed_shoes(physics)
+	assert_almost_eq(fast.top, 22.5, 1e-5, "12 px/frame")
+	assert_almost_eq(fast.acc, 10.546875, 1e-5, "0.09375 px/frame²")
+	assert_almost_eq(fast.frc, 10.546875, 1e-5)
+	assert_almost_eq(fast.air_acc, 21.09375, 1e-5, "0.1875 px/frame²")
+	assert_almost_eq(fast.roll_frc, 5.2734375, 1e-5, "0.046875 px/frame²")
+	assert_almost_eq(fast.dec, physics.dec, 1e-6, "braking is unchanged")
+	assert_almost_eq(physics.top, 11.25, 1e-6, "the original values are untouched")
+
+
 ## Normal of a slope that rises toward -Z at `degrees` from flat.
 func _slope_normal(degrees: float) -> Vector3:
 	return Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(degrees))

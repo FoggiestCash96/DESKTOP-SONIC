@@ -40,18 +40,45 @@ In the test room you control the player (a white capsule for now). The camera fo
 | Debug overlay (player and camera state) | F3 | |
 | Back to the title screen | Esc | Start |
 
-The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. Falling off the edge of the floor puts the player back at the start.
+The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge of the floor or touching spikes with no rings costs a life, and the room restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
 
 The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip. The camera swings side-on at the loop, and again on a 2.5D stretch at the far end of the runway.
 
+Follow the ring trail to the right of the start for the gimmick area, three lanes running away from you:
+
+- **Left lane:** rings, a dash panel, a checkpoint, then spikes.
+- **Middle lane:** springs (yellow, red, diagonal onto a ledge, and one lying on its side).
+- **Right lane:** item monitors (rings, shield, speed shoes, invincibility, magnet) with spikes to try them on.
+
+Five red rings are hidden around the room, and an extra life floats over the yellow spring.
+
 ### Tuning
 
-- **Player movement:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
+- **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
 - **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow and wall handling.
+- **Lives and restarts:** `engine/systems/game_rules.tres`: starting lives, the delay before a restart, and how long GAME OVER shows.
+- **Gimmicks:** each spring, dash panel, monitor and ring row has its own settings in the Inspector.
 
 ### Camera volumes
 
 To give part of a level a set camera angle or a 2.5D side view, add a `Node3D` with `engine/camera/camera_volume.gd` and set its `size`. Its box shows in the editor. Turn the node so its -Z axis points the way the camera should look; the box turns with it. For a side view, tick `side_view` and lay the box's X axis along the path. Turn off `avoid_walls` where the camera should look through geometry, as at the loop.
+
+### Gimmicks and collectibles
+
+Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.gd` (or a script that extends `Stage`) so deaths restart it from the last checkpoint.
+
+| Scene | Notes |
+|---|---|
+| `engine/gimmicks/spring.tscn` | Launches along its +Y axis, so turn it to aim. `speed` 18.75 is the yellow spring and 30 the red one. Turn off `keep_momentum` for exact diagonal launches. On its side it pushes a grounded player along the ground. |
+| `engine/gimmicks/dash_panel.tscn` | Sends a grounded player along its −Z axis (the arrows) at `speed` or faster. |
+| `engine/gimmicks/spikes.tscn` | Set `size` for the bed's footprint. |
+| `engine/gimmicks/checkpoint.tscn` | The player restarts 1 m in front of it, facing its −Z axis. |
+| `engine/collectibles/ring.tscn` | One ring. For rows and arches, add a `Node3D` with `engine/collectibles/ring_line.gd` instead: set `count`, `spacing` and `arc_height`, and turn it to aim along its −Z axis. |
+| `engine/collectibles/item_monitor.tscn` | Pick the `item`. Ring monitors have a `ring_amount`. |
+| `engine/collectibles/hidden_collectible.tscn` | A red ring. Acts have five. |
+| `engine/collectibles/extra_life.tscn` | The act's hidden 1-up. |
+
+Rings sit about 0.8 m above the ground, so both a standing and a rolling player collect them.
 
 ## Checks and tests
 
@@ -85,12 +112,13 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
   player/         Player controller, movement math and tuning resource
   camera/         Player camera, camera volumes and camera tuning
-  gimmicks/       Loop track now; springs, dash panels, rails... later
+  gimmicks/       Loop, springs, dash panels, spikes, checkpoints; rails... later
+  collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
   enemies/base/   Enemy base classes (Milestone 8)
-  systems/        Save, settings, audio, scene loading
+  systems/        Stage root script and GameState (autoload); save, settings, audio later
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, stages and UI (title screen)
+content/sonic/    Sonic-specific characters, stages and UI (title screen, placeholder HUD)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 docs/             Design decisions and the AI session prompt
