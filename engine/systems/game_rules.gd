@@ -6,3 +6,4 @@ extends Resource
 @export var start_lives: int = 5  ## Lives at the start of a new game.
 @export var restart_delay: float = 2.0  ## Seconds between a death and the stage restarting.
 @export var game_over_time: float = 3.0  ## Seconds the game-over message shows before the title screen returns.
+@export var results_time: float = 6.0  ## Seconds the results show after the goal before the stage moves on.

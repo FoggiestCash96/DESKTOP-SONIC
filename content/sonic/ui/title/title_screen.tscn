@@ -31,6 +31,13 @@ outline_color = Color(0.023529412, 0.0627451, 0.22745098, 1)
 shadow_color = Color(0, 0, 0, 0.35)
 shadow_offset = Vector2(0, 6)
 
+[sub_resource type="LabelSettings" id="LabelSettings_jrg8v"]
+font_size = 26
+outline_size = 10
+outline_color = Color(0.023529412, 0.0627451, 0.22745098, 1)
+shadow_color = Color(0, 0, 0, 0.35)
+shadow_offset = Vector2(0, 6)
+
 [sub_resource type="LabelSettings" id="LabelSettings_hh72y"]
 font_size = 24
 font_color = Color(1, 1, 1, 0.8)
@@ -49,9 +56,11 @@ shadow_offset = Vector2(0, 6)
 
 [node name="TitleScreen" type="Control" unique_id=1006751272]
 layout_mode = 3
-anchors_preset = 0
+anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
 script = ExtResource("1_jrg8v")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1968111248]
@@ -89,6 +98,13 @@ unique_name_in_owner = true
 layout_mode = 2
 text = "Press Enter or Start"
 label_settings = SubResource("LabelSettings_e7jdg")
+horizontal_alignment = 1
+
+[node name="TestRoomHint" type="Label" parent="Center" unique_id=825318858]
+modulate = Color(1, 1, 1, 0.65)
+layout_mode = 2
+text = "F or Y: greybox test room"
+label_settings = SubResource("LabelSettings_jrg8v")
 horizontal_alignment = 1
 
 [node name="VersionLabel" type="Label" parent="." unique_id=2005433263]

@@ -6,6 +6,8 @@ extends Node3D
 ## back down beside the entry, shifted along +X by `exit_offset` so its two ends don't meet.
 ## The mesh and collision are generated when the node is ready (in the editor too) and never saved.
 
+const CURB_RAMP := PI / 6.0  ## The curbs rise to full height over this much of each end of the loop (radians).
+
 @export var radius: float = 4.0:
 	set(value):
 		radius = value
@@ -48,6 +50,12 @@ static func surface_normal(angle: float) -> Vector3:
 	return Vector3(0.0, cos(angle), sin(angle))
 
 
+## Height of the curbs `angle` radians around the loop: they rise from nothing over the first
+## CURB_RAMP of the loop and sink again over the last, so their ends can't snag a player running in.
+static func curb_rise(angle: float, full_height: float) -> float:
+	return full_height * clampf(minf(angle, TAU - angle) / CURB_RAMP, 0.0, 1.0)
+
+
 func _rebuild() -> void:
 	if is_node_ready():
 		_build()
@@ -75,9 +83,11 @@ func _build() -> void:
 		var left_b := center_b - side_b * width * 0.5
 		var right_b := center_b + side_b * width * 0.5
 		var facing := (normal_a + normal_b).normalized()
+		var curb_a := normal_a * curb_rise(angle_a, curb_height)
+		var curb_b := normal_b * curb_rise(angle_b, curb_height)
 		_quad(surface, faces, left_a, right_a, right_b, left_b, facing)
-		_quad(surface, faces, left_a, left_b, left_b + normal_b * curb_height, left_a + normal_a * curb_height, side_a)
-		_quad(surface, faces, right_a, right_b, right_b + normal_b * curb_height, right_a + normal_a * curb_height, -side_a)
+		_quad(surface, faces, left_a, left_b, left_b + curb_b, left_a + curb_a, side_a)
+		_quad(surface, faces, right_a, right_b, right_b + curb_b, right_a + curb_a, -side_a)
 
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.name = "Mesh"

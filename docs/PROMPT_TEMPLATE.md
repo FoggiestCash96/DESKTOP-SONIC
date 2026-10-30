@@ -62,7 +62,7 @@ You are the lead gameplay engineer and technical designer on an **open-source, n
 | 3D physics backend | **Jolt** (built into Godot 4.4+; set it in Project Settings → Physics → 3D) | |
 | Player collision | **Custom kinematic controller** (shape/ray casts on a `CharacterBody3D`). **Never a `RigidBody`.** | |
 | 3D modelling and animation | **Blender**; export **glTF 2.0 (`.glb`)**, commit both the `.blend` source and the `.glb` | |
-| Level building | `[[CHOOSE: Blender-modelled stages + Godot placement (DEFAULT) | Godot CSG/greybox → Blender | TrenchBroom + func_godot]]` | |
+| Level building | **Godot CSG/greybox → Blender** (decided 2026-10-30) | Block out in the Godot editor, remodel in Blender for the art pass |
 | Splines (loops, rails, 2D paths) | Godot `Path3D` / `Curve3D` | |
 | 2D art and textures | Krita / GIMP / Aseprite (`[[FILL]]`) | |
 | Music | `[[CHOOSE: Furnace Tracker (Genesis FM style) | LMMS | Reaper/DAW | Commissioned]]` | |
@@ -319,7 +319,7 @@ res://
 3. ~~Slopes, surface alignment, loops, slip/fall, rolling, spindash.~~ **Done 2026-10-29.**
 4. ~~Camera v1 plus camera volumes.~~ **Done 2026-10-30.**
 5. ~~Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.~~ **Done 2026-10-30.**
-6. Greybox Zone 1 Act 1 plus a playtest build.
+6. ~~Greybox Zone 1 Act 1 plus a playtest build.~~ **Done 2026-10-30.** Act 1 is a speed act with Tidal Surge waves that push (swimming later) and a short 2.5D pier.
 7. Character art pipeline: Blender → glTF → AnimationTree.
 8. Enemies and the first boss.
 9. Menus, save system, settings, accessibility.

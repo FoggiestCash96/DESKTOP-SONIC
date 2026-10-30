@@ -155,6 +155,16 @@ static func ring_scatter(count: int, physics: PlayerPhysics) -> Array[Vector3]:
 	return velocities
 
 
+## `velocity` after a push along `direction` (a unit vector) by `amount` (m/s), as from moving
+## water: it adds speed along the push, but never past `max_speed` along it. Against the push it
+## slows the player down.
+static func pushed(velocity: Vector3, direction: Vector3, max_speed: float, amount: float) -> Vector3:
+	var along := velocity.dot(direction)
+	if along >= max_speed:
+		return velocity
+	return velocity + direction * minf(amount, max_speed - along)
+
+
 ## Movement values with speed shoes on: a copy of `physics` with acc, frc, top, air_acc and
 ## roll_frc multiplied by speed_shoes_factor, as the classic shoes double them.
 static func with_speed_shoes(physics: PlayerPhysics) -> PlayerPhysics:

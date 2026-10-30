@@ -24,10 +24,10 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 
 ## Run the game
 
-- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to load the greybox test room.
-- **F6** runs whichever scene is open. Open `stages/greybox/test_room.tscn` to go straight to the test room.
+- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to play Emerald Shore Act 1, or F (Y on a controller) for the greybox test room.
+- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn` or `stages/greybox/test_room.tscn` to go straight there.
 
-In the test room you control the player (a white capsule for now). The camera follows behind as you run, and you can turn it yourself at any time:
+You control the player (a white capsule for now). The camera follows behind as you run, and you can turn it yourself at any time:
 
 | Action | Keyboard and mouse | Controller |
 |---|---|---|
@@ -40,7 +40,16 @@ In the test room you control the player (a white capsule for now). The camera fo
 | Debug overlay (player and camera state) | F3 | |
 | Back to the title screen | Esc | Start |
 
-The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge of the floor or touching spikes with no rings costs a life, and the room restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+The mouse is captured while you play. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge or touching spikes with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+
+**Emerald Shore Act 1** is the first greybox act, a speed act about 1.2 km long:
+- Waves wash up the tidal flats every 15 seconds. Ride one up the steep slope.
+- From the top, jump the gap on the left to the high deck, or run down the right to the low road.
+- After the right turn there's a side-view pier, then a second loop.
+- Five red rings are hidden along the way.
+- The goal shows your time and rings, then returns to the title screen.
+
+[docs/DESIGN.md](docs/DESIGN.md#71-emerald-shore-act-1-sunny-beachfront-greybox-milestone-6) maps it section by section.
 
 The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip. The camera swings side-on at the loop, and again on a 2.5D stretch at the far end of the runway.
 
@@ -77,6 +86,21 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 | `engine/collectibles/item_monitor.tscn` | Pick the `item`. Ring monitors have a `ring_amount`. |
 | `engine/collectibles/hidden_collectible.tscn` | A red ring. Acts have five. |
 | `engine/collectibles/extra_life.tscn` | The act's hidden 1-up. |
+| `engine/gimmicks/tidal_wave.tscn` | Washes along its −Z axis on a timer: set `size`, `reach` and the surge, backwash and rest times. Keep its path clear of overhangs, since the water follows the ground. |
+| `engine/gimmicks/goal.tscn` | The end of an act. Turn it so its −Z axis points the way the player runs through. |
+
+A checkpoint counts anywhere through its gate: set `gate_width` to the width of the course. For a 2.5D section, tick `lock_depth` on a side-view camera volume as well as `side_view`; the player then stays on the box's middle plane.
+
+### Building an act
+
+Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and remodelled in Blender later. An act needs:
+
+- A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results) and `next_scene`.
+- An instance of `engine/player/player.tscn`. Set `kill_height` a little below the lowest ground.
+- `engine/camera/player_camera.tscn` (its `target` is the player) and `content/sonic/ui/hud/hud.tscn` (its `target` too).
+- The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.
+
+Then add gimmicks, checkpoints, five red rings, one extra life and a goal. Play it, and keep at least one route open to players who aren't fast.
 
 Rings sit about 0.8 m above the ground, so both a standing and a rolling player collect them.
 
@@ -112,13 +136,13 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
   player/         Player controller, movement math and tuning resource
   camera/         Player camera, camera volumes and camera tuning
-  gimmicks/       Loop, springs, dash panels, spikes, checkpoints; rails... later
+  gimmicks/       Loop, springs, dash panels, spikes, checkpoints, tidal waves, goal; rails... later
   collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
   enemies/base/   Enemy base classes (Milestone 8)
   systems/        Stage root script and GameState (autoload); save, settings, audio later
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, stages and UI (title screen, placeholder HUD)
+content/sonic/    Sonic-specific characters, stages (Emerald Shore Act 1) and UI (title screen, placeholder HUD)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 docs/             Design decisions and the AI session prompt

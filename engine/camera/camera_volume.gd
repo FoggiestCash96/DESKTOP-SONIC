@@ -4,8 +4,9 @@ extends Node3D
 ## A box that takes over the player camera while the player is inside it, for set pieces and
 ## 2.5D sections. The camera faces this node's -Z axis (turn the node to aim it), tilted by
 ## pitch_degrees, from `distance` away, and blends in and out over blend_time. A side-view volume
-## is for a 2.5D path that runs along the box's X axis: the camera only aims ahead along that axis.
-## Where volumes overlap, the highest priority wins. The box shows in the editor only.
+## is for a 2.5D path that runs along the box's X axis: the camera only aims ahead along that axis,
+## and with lock_depth the player is held to the path too. Where volumes overlap, the highest
+## priority wins. The box shows in the editor only.
 
 const GROUP := "camera_volumes"
 
@@ -18,6 +19,7 @@ const GROUP := "camera_volumes"
 @export var fov: float = 0.0  ## Field of view (degrees). 0 keeps the camera's speed-based field of view.
 @export var blend_time: float = 0.6  ## Seconds to blend into this view, and back out of it.
 @export var side_view: bool = false  ## A 2.5D section along the box's X axis.
+@export var lock_depth: bool = false  ## Hold the player to the box's middle plane (its X axis and up) while inside, so a side view plays in 2.5D: no stepping off the path into depth.
 @export var avoid_walls: bool = true  ## Pull the camera in front of walls. Turn off where the view looks through geometry on purpose, such as the side of a loop.
 @export var priority: int = 0
 
@@ -37,6 +39,16 @@ func contains(point: Vector3) -> bool:
 ## Yaw of the view this volume asks for.
 func view_yaw() -> float:
 	return CameraMath.yaw_facing(-global_basis.z)
+
+
+## Direction of a 2.5D path through the volume: the box's X axis.
+func path_axis() -> Vector3:
+	return global_basis.x.normalized()
+
+
+## Direction across a 2.5D path, into the screen and out: the box's Z axis.
+func depth_axis() -> Vector3:
+	return global_basis.z.normalized()
 
 
 func _update_preview() -> void:

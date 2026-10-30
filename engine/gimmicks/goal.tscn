@@ -1,0 +1,85 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/goal.gd" id="1_wbmoo"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_fd4tx"]
+size = Vector3(18, 6, 1.5)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mqgrg"]
+albedo_color = Color(0.92, 0.93, 0.96, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gcobs"]
+top_radius = 0.18
+bottom_radius = 0.18
+height = 5.5
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bxb1r"]
+albedo_color = Color(0.15, 0.35, 0.9, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.15, 0.35, 0.9, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="BoxMesh" id="BoxMesh_lfev1"]
+size = Vector3(18, 1, 0.15)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_qgpyc"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 2.4
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_d6uts"]
+albedo_color = Color(1, 0.8, 0.2, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.8, 0.2, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_ehytv"]
+size = Vector3(1.6, 1.2, 0.08)
+
+[node name="Goal" type="Area3D" unique_id=1196609197]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_wbmoo")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=419285296]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+shape = SubResource("BoxShape3D_fd4tx")
+
+[node name="PostLeft" type="MeshInstance3D" parent="." unique_id=62322390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2.75, 0)
+material_override = SubResource("StandardMaterial3D_mqgrg")
+mesh = SubResource("CylinderMesh_gcobs")
+
+[node name="PostRight" type="MeshInstance3D" parent="." unique_id=99324022]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 2.75, 0)
+material_override = SubResource("StandardMaterial3D_mqgrg")
+mesh = SubResource("CylinderMesh_gcobs")
+
+[node name="Banner" type="MeshInstance3D" parent="." unique_id=635198704]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, 0)
+material_override = SubResource("StandardMaterial3D_bxb1r")
+mesh = SubResource("BoxMesh_lfev1")
+
+[node name="BannerText" type="Label3D" parent="." unique_id=1591359509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, 0.12)
+pixel_size = 0.008
+modulate = Color(1, 0.9, 0.3, 1)
+text = "GOAL"
+font_size = 160
+
+[node name="Sign" type="Node3D" parent="." unique_id=174904642]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, 0)
+
+[node name="Pole" type="MeshInstance3D" parent="Sign" unique_id=305803428]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.2, 0)
+material_override = SubResource("StandardMaterial3D_mqgrg")
+mesh = SubResource("CylinderMesh_qgpyc")
+
+[node name="Panel" type="MeshInstance3D" parent="Sign" unique_id=1765694461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3, 0)
+material_override = SubResource("StandardMaterial3D_d6uts")
+mesh = SubResource("BoxMesh_ehytv")

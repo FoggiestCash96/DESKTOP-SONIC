@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/tidal_wave.gd" id="1_88q37"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_pejaq"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_6b7hh"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.2, 0.55, 0.95, 0.55)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.2, 0.55, 0.95, 1)
+emission_energy_multiplier = 0.3
+
+[sub_resource type="BoxMesh" id="BoxMesh_uynki"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_r5xcm"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.95, 0.98, 1, 0.85)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.95, 0.98, 1, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_avqya"]
+
+[node name="TidalWave" type="Node3D" unique_id=1819294855]
+script = ExtResource("1_88q37")
+
+[node name="Water" type="Area3D" parent="." unique_id=198379999]
+unique_name_in_owner = true
+collision_layer = 64
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Water" unique_id=207202815]
+unique_name_in_owner = true
+shape = SubResource("BoxShape3D_pejaq")
+
+[node name="Surface" type="MeshInstance3D" parent="Water" unique_id=2115616539]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_6b7hh")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_uynki")
+
+[node name="Foam" type="MeshInstance3D" parent="Water" unique_id=274345392]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_r5xcm")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_avqya")

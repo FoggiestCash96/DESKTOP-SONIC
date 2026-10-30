@@ -1,5 +1,6 @@
 extends "res://tests/test_suite.gd"
-## Spring launches and bounces (engine/gimmicks/gimmick_math.gd), and where a RingLine puts its rings.
+## Spring launches, bounces and tidal waves (engine/gimmicks/gimmick_math.gd), where a RingLine
+## puts its rings, and how a loop's curbs rise.
 
 const YELLOW_SPRING := 18.75  ## The classic yellow spring, 10 px/frame.
 const DIAGONAL := Vector3(0.0, 0.70710678, -0.70710678)  ## Up and along -Z, 45° each.
@@ -45,6 +46,21 @@ func test_moving_away_from_a_surface_is_not_a_bounce() -> void:
 func test_a_ring_line_spaces_its_rings_along_minus_z() -> void:
 	assert_true(RingLine.ring_position(0, 5, 1.5, 0.0).is_equal_approx(Vector3.ZERO))
 	assert_true(RingLine.ring_position(4, 5, 1.5, 0.0).is_equal_approx(Vector3(0.0, 0.0, -6.0)))
+
+
+func test_a_wave_surges_up_then_drains_back_then_rests() -> void:
+	assert_true(GimmickMath.wave_cycle(0.0, 6.0, 4.0, 2.0).is_equal_approx(Vector2(0.0, 1.0)), "starts surging at the shore")
+	assert_true(GimmickMath.wave_cycle(3.0, 6.0, 4.0, 2.0).is_equal_approx(Vector2(0.5, 1.0)), "halfway up")
+	assert_true(GimmickMath.wave_cycle(8.0, 6.0, 4.0, 2.0).is_equal_approx(Vector2(0.5, -1.0)), "halfway back down")
+	assert_true(GimmickMath.wave_cycle(11.0, 6.0, 4.0, 2.0).is_equal_approx(Vector2(0.0, 0.0)), "resting")
+	assert_true(GimmickMath.wave_cycle(15.0, 6.0, 4.0, 2.0).is_equal_approx(Vector2(0.5, 1.0)), "the next wave, 12 s later")
+
+
+func test_a_loops_curbs_rise_from_nothing_at_both_ends() -> void:
+	assert_almost_eq(LoopTrack.curb_rise(0.0, 0.6), 0.0, 1e-6, "flush at the entry")
+	assert_almost_eq(LoopTrack.curb_rise(LoopTrack.CURB_RAMP * 0.5, 0.6), 0.3, 1e-6, "halfway up the ramp")
+	assert_almost_eq(LoopTrack.curb_rise(PI, 0.6), 0.6, 1e-6, "full height over the top")
+	assert_almost_eq(LoopTrack.curb_rise(TAU, 0.6), 0.0, 1e-6, "flush at the exit")
 
 
 func test_an_arched_ring_line_peaks_in_the_middle() -> void:
