@@ -4,7 +4,7 @@ This is my open source game. Enjoy!
 
 **Sonic Velocity Run** is a free, open-source 3D Sonic fan game made in [Godot](https://godotengine.org/). It aims for momentum-first movement with classic slope physics, boost-era moves, and Adventure-style stages spread across six worlds.
 
-> **Status: pre-alpha.** Player physics v1 is done: you can run, brake, turn and jump around a greybox test room. Slopes, loops and rolling come next.
+> **Status: pre-alpha.** The core physics are in: run, jump, roll and spin dash through slopes, a half-pipe and a loop in a greybox test room. A proper camera comes next.
 
 ## Download
 

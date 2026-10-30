@@ -33,12 +33,16 @@ In the test room you control the player (a white capsule for now), followed by a
 |---|---|---|
 | Move (relative to the camera) | W A S D | Left stick |
 | Jump (hold for a higher jump) | Space | A |
+| Roll (hold while moving) | Ctrl | B |
+| Spin dash: hold while still, tap jump to charge, let go to launch | Ctrl, then Space | B, then A |
 | Orbit the camera | Mouse or arrow keys | Right stick |
 | Swing the camera behind the player | Middle mouse button | Right stick click |
 | Debug overlay (player state, speed, heading) | F3 | |
 | Back to the title screen | Esc | Start |
 
 The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. Falling off the edge of the floor puts the player back at the start.
+
+The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip.
 
 ### Tuning the player
 
@@ -76,7 +80,7 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
   player/         Player controller, movement math and tuning resource
   camera/         Basic follow camera (full camera and volumes in Milestone 4)
-  gimmicks/       Springs, dash panels, rails... (Milestone 5)
+  gimmicks/       Loop track now; springs, dash panels, rails... later
   enemies/base/   Enemy base classes (Milestone 8)
   systems/        Save, settings, audio, scene loading
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera

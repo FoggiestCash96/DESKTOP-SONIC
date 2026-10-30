@@ -8,6 +8,7 @@
 [ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="5_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="6_x61iv"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_marker.tres" id="7_npbbw"]
+[ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="8_bebbj"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -123,6 +124,18 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 5, -100)
 use_collision = true
 size = Vector3(1, 10, 80)
 material = ExtResource("6_x61iv")
+
+[node name="Loop" type="Node3D" parent="Geometry" unique_id=105359281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 0.005, -30)
+script = ExtResource("8_bebbj")
+material = ExtResource("5_k0xv2")
+
+[node name="Hill" type="CSGPolygon3D" parent="Geometry" unique_id=2017356076]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -60, 0, 0)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 51.212162, 0, 51.212162, 15, 41.212162, 15)
+depth = 10.0
+material = ExtResource("5_k0xv2")
 
 [node name="Label15" type="Label3D" parent="." unique_id=1259574177]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4.1435933, -18)
@@ -660,7 +673,24 @@ pixel_size = 0.01
 billboard = 1
 text = "Greybox Test Room
 Move: WASD / left stick  ·  Jump: Space / A
-Runway ahead: posts every 25 m
+Roll: hold Ctrl / B while moving
+Spin dash: hold Ctrl / B, tap Space / A, let go
 F3 debug overlay  ·  Esc title screen"
+font_size = 96
+outline_size = 18
+
+[node name="LabelLoop" type="Label3D" parent="." unique_id=143258439]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.5, 10, -30)
+pixel_size = 0.01
+billboard = 1
+text = "Loop  r = 4 m"
+font_size = 96
+outline_size = 18
+
+[node name="LabelHill" type="Label3D" parent="." unique_id=1581229510]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 17.5, -20.606081)
+pixel_size = 0.01
+billboard = 1
+text = "Hill  20°"
 font_size = 96
 outline_size = 18

@@ -15,7 +15,7 @@ A reusable, franchise-free 3D platformer engine: player physics, camera, gimmick
 | `player/` | Player controller, movement math and tuning resource | 2 |
 | `player/states/` | One script per movement state, once there are more than ground and air (roll, spin dash, grind...) | 3 |
 | `camera/` | Basic follow camera now; the full camera and camera volumes later | 2, 4 |
-| `gimmicks/` | Springs, dash panels, rails and other reusable stage objects | 5 |
+| `gimmicks/` | Reusable stage objects: the loop track now; springs, dash panels, rails and more later | 3, 5 |
 | `enemies/base/` | Enemy base classes and state machines | 8 |
 | `systems/` | Save, settings, audio, scene loading, replays | 9 |
 | `debug/` | Developer overlay (F3) and fly camera | 1 |

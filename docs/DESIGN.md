@@ -87,23 +87,25 @@ Controller first. Every gameplay action has both a keyboard and a controller bin
 
 The **boost gauge** fills from rings and special boost items placed in acts, and from defeating certain enemies.
 
-### 5.2 Simulation rules (defaults from the template)
+### 5.2 Simulation rules
 
 | Rule | Value |
 |---|---|
 | Tick | 120 Hz |
 | Ground model | Scalar `ground_speed` along the surface plus a surface-tangent heading. Free 3D velocity in the air. |
-| Surfaces | Full 360° (loops and wall-running come from surface alignment) |
-| Ground snap | Cast down up to 0.5 m. Detach if the angle changes by more than 45° in one tick. |
-| Slip | Below `slip_threshold` on a surface steeper than 46°, horizontal input locks for 0.5 s |
-| Fall | Detach when the surface is steeper than 90° |
-| Input | Relative to the camera, projected onto the surface. Turn rate eases from 720°/s at rest to 180°/s at top speed. Input more than 135° from the heading brakes, and after stopping the player turns around at 0.94 m/s. |
+| Surfaces | **Full 360°**, chosen 2026-10-29: loops, half-pipes and wall runs all come from surface alignment, not tagged geometry. |
+| Slopes | Gravity's pull along the surface (`slp`, or `slp_roll_up` / `slp_roll_down` while rolling) speeds the player up downhill and slows them uphill, and bends their path downhill across a slope. Standing still holds on slopes gentle enough for friction to win (about 22°). |
+| Ground snap | Reaches up to 0.5 m for the ground, so crests don't launch the player. A ground ray reads the face underfoot and ignores surface changes sharper than 46° in one step, so the top of a wall or a ledge launches the player instead of being wrapped around. |
+| Slip | Below `slip_threshold` (4.69 m/s) on a surface steeper than 46°, the stick is ignored for 0.5 s. |
+| Fall | Past vertical, a player slower than the classic slip speed drops off. `ground_magnetism` would add grip, but it is **0 (classic)**, chosen 2026-10-29. |
+| Input | Relative to the camera, projected onto the surface. Turn rate eases from 720°/s at rest to 180°/s at top speed. Input more than 135° from the heading brakes, and after stopping the player turns around at 0.94 m/s. On surfaces steeper than 46° the stick only speeds up or slows down along the path, so loops and walls work from any camera angle. |
+| Launches | Leaving the top of a near-vertical wall (steeper than 75°) launches straight up, so the player falls back into a half-pipe. |
 
 ### 5.3 Constants
 
 The classic values come from the Sonic Physics Guide (px/frame at 60 fps), converted to SI units with `PIXELS_PER_METER = 32`. Speeds use `× 60 / 32` and accelerations use `× 3600 / 32`.
 
-`engine/player/player_physics.gd` defines each constant, with the converted classic value as its default. `engine/player/player_physics.tres` is the copy the game uses, and the one to tune. Milestone 2 added the ground, turning, air and assist values. The slope and rolling values (`slp`, `slp_roll_*`, `roll_*`, `slip_threshold`) arrive with slope physics in Milestone 3. The boost-era values (boost speed, gauge rates, quickstep distance) are set when the boost is built, after Milestone 2.
+`engine/player/player_physics.gd` defines each constant, with the converted classic value as its default. `engine/player/player_physics.tres` is the copy the game uses, and the one to tune. Milestone 2 added the ground, turning, air and assist values, and Milestone 3 the slope, rolling and spin dash values. The boost-era values (boost speed, gauge rates, quickstep distance) are set when the boost is built.
 
 | Constant | Classic (px/frame) | SI default | Meaning |
 |---|---|---|---|
@@ -130,18 +132,31 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 | `brake_angle` | — | 135° | Input further than this from the heading brakes instead of turning (3D only) |
 | `coyote_time` | — | 0.1 s | A jump still works this long after running off a ledge |
 | `jump_buffer_time` | — | 0.1 s | A jump pressed this long before landing still happens |
+| `roll_min_speed` | 1.0 | 1.875 m/s | Holding crouch at this speed or faster starts a roll |
+| `unroll_speed` | 0.5 | 0.9375 m/s | A roll ends below this speed |
+| `roll_turn_factor` | — | 0.5 | Turn rate while rolling, as a share of the running turn rate (3D only) |
+| `spin_dash_speed` | 8.0 | 15.0 m/s | Spin dash launch speed with no charge |
+| `spin_dash_charge_speed` | 0.5 | 0.9375 m/s | Extra launch speed per whole unit of charge (8 + floor(charge) / 2 px/frame) |
+| `spin_dash_charge_per_press` | 2 | 2 | Charge added by each jump press; it bleeds off by 1/32 per 60 fps frame |
+| `spin_dash_max_charge` | 8 | 8 | Most charge the spin dash holds (22.5 m/s launch) |
+| `slip_angle` | 46° | 46° | Surfaces steeper than this can make a slow player slip, and the stick stops steering on them |
+| `slip_lock_time` | 30 frames | 0.5 s | How long the stick is ignored after slipping |
+| `ground_magnetism` | — | 0 m/s² | Extra grip on overhangs and ceilings for slow players; 0 is classic (3D only) |
+| `snap_length` | — | 0.5 m | How far the player reaches for the ground over crests |
+| `surface_step_angle` | — | 46° | Sharpest change of surface followed in one step; sharper edges act as ledges or walls |
+| `upright_speed` | — | 540°/s | How fast the player turns back upright in the air (3D only) |
 
 ### 5.4 Moves
 
 | Move | Status |
 |---|---|
 | Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes |
-| Homing attack, air dash | Yes (lock-on range and cone not set yet) |
+| Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built once there are targets. |
 | Boost | Yes, built after Milestone 2, once the camera's speed effects and rings exist |
 | Stomp/bounce | Yes |
 | Grind rails (`Path3D`), wall-run and wall-jump | Yes |
 | Swimming (half acc/dec/frc/top and gravity, air timer) | Yes |
-| Light speed dash | **Undecided** |
+| Light speed dash | **Yes**, chosen 2026-10-29 (`special` button along ring trails). Built once rings exist. |
 | Insta-shield and elemental shields | No |
 
 ### 5.5 Damage, rings and lives
@@ -150,16 +165,18 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 - When hit with no rings, lose a life. You start with **5 lives**. Extra lives come from a unique hidden 1-up collectible in acts.
 - Crush deaths and pit deaths are on.
 
-### 5.6 Player controller (Milestone 2)
+### 5.6 Player controller (Milestones 2 and 3)
 
-- `engine/player/player.tscn` is a `CharacterBody3D` with a capsule 1.0 m tall and 0.3 m in radius, on the `player` layer and colliding with `world`. Its origin is at its feet.
-- There are two states so far, ground and air. When more arrive (roll, spin dash, grind), each gets its own script in `engine/player/states/`, starting in Milestone 3.
-- On the ground, `ground_speed` and `heading` set the velocity, and `move_and_slide()` resolves collisions with a 0.5 m floor snap. In the air, velocity is free 3D.
+- `engine/player/player.tscn` is a `CharacterBody3D` on the `player` layer, colliding with `world`. Its origin is at its feet. Standing, it uses a capsule 1.0 m tall and 0.3 m in radius; rolling, spin dashing and jumping it curls into a 0.3 m ball.
+- It is a state machine with one script per state in `engine/player/states/`: `GroundState` (run, brake, turn, crouch), `RollState`, `SpinDashState` and `AirState`. The shared surface handling lives in `player.gd`.
+- On the ground, `ground_speed` and `heading` set the velocity along the surface, and `move_and_slide()` resolves collisions. The body turns to match the ground normal, pivoting on the center of its rounded bottom so the part touching the ground stays put.
+- Godot only snaps a body to the floor when its velocity points into it, and velocity along a slope rounds either way, so the player calls `apply_floor_snap()` itself after each move. A ray from the center of its rounded bottom then reads the ground normal, as the classic ground sensors did.
 - Walls: a head-on hit stops the player. A glancing hit slides along the wall, keeping only the part of the speed that wasn't pointing into it.
-- Variable jump height: while jump is not held, upward speed is capped at `jmp_release_cap`.
+- Variable jump height: while jump is not held, upward speed is capped at `jmp_release_cap`. Jumps push away from the surface, along its normal.
+- Landing keeps the part of the velocity that runs along the surface. Touching only an edge, with no ground under the player's middle, isn't a landing.
 - Falling below `kill_height` (y = −50 m) respawns the player where it started.
 - `engine/player/player_motion.gd` holds the movement math as static functions, so `tests/unit/test_player_motion.gd` can check it against the classic values without running a scene.
-- The F3 overlay shows the state, ground speed, velocity, heading with the current turn rate, and position.
+- The F3 overlay shows the state, ground speed, velocity, surface angle (and any slip), heading with the current turn rate, and position.
 
 ## 6. Camera
 
@@ -188,6 +205,8 @@ Until Milestone 4, `engine/camera/follow_camera.tscn` stands in. It orbits the p
 
 **Greybox first:** every act starts as blockout geometry plus gimmicks, gets playtested, then gets an art pass in Blender. Collision uses simplified meshes (`-col` suffix on import), never the render mesh.
 
+**Loops:** `engine/gimmicks/loop_track.gd` generates a loop from its radius, width and exit offset, in the editor as well as in the game. The exit comes back down beside the entry, and low curbs along both edges keep the player on the track as it shifts sideways. The test room's loop has a 4 m radius, which a runner at top speed clears with about 5 m/s to spare at the top; anything slower doesn't make it.
+
 ---
 
 ## 8. Open decisions
@@ -196,7 +215,6 @@ Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
-| **M3 (physics)** | Ground magnetism; homing lock-on range and cone; light speed dash yes or no |
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
 | **M5 (gimmicks)** | Item monitor list; hidden collectible type (red rings, emblems or medals) and count per act |
@@ -212,8 +230,8 @@ Each one is grouped by the milestone where it starts to block work.
 |---|---|---|
 | 1 | Project setup: repo, licenses, folder layout, Jolt, input map, CI, tests, title screen, greybox test room, debug overlay | **Done** |
 | 2 | Player physics v1: flat ground, acc/dec/frc, jump, gravity, player values in the debug overlay | **Done** |
-| 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | Next |
-| 4 | Camera v1 plus camera volumes | |
+| 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | **Done** |
+| 4 | Camera v1 plus camera volumes | Next |
 | 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | |
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | |
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | |

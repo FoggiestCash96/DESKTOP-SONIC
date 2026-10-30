@@ -58,11 +58,11 @@ func _process(delta: float) -> void:
 	global_rotation = Vector3(_pitch, _yaw, 0.0)
 
 
-## The target's direction of travel: a player's heading, otherwise the way it faces.
+## The target's direction of travel: a player's horizontal heading, otherwise the way it faces.
 func _target_forward() -> Vector3:
 	var player := target as Player
 	if player:
-		return player.heading
+		return player.horizontal_heading()
 	return -target.global_basis.z
 
 

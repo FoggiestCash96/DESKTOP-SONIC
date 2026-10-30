@@ -6,38 +6,64 @@
 radius = 0.3
 height = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_it1hm"]
+[sub_resource type="SphereShape3D" id="SphereShape3D_it1hm"]
+radius = 0.3
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_676au"]
 albedo_color = Color(0.92, 0.93, 0.96, 1)
 roughness = 0.6
 
-[sub_resource type="CapsuleMesh" id="CapsuleMesh_676au"]
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_xxmkq"]
 radius = 0.3
 height = 1.0
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xxmkq"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u7e2u"]
 albedo_color = Color(1, 0.55, 0.1, 1)
+roughness = 0.6
 
-[sub_resource type="BoxMesh" id="BoxMesh_u7e2u"]
+[sub_resource type="BoxMesh" id="BoxMesh_8y8ya"]
 size = Vector3(0.18, 0.12, 0.22)
 
-[node name="Player" type="CharacterBody3D" unique_id=1508176083]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s88to"]
+albedo_color = Color(0.75, 0.85, 1, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_shdhw"]
+radius = 0.3
+height = 0.6
+
+[node name="Player" type="CharacterBody3D" unique_id=719696558]
 collision_layer = 2
 floor_snap_length = 0.5
 script = ExtResource("1_r32ii")
 
-[node name="Collision" type="CollisionShape3D" parent="." unique_id=587792771]
+[node name="StandingShape" type="CollisionShape3D" parent="." unique_id=200095001]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
 shape = SubResource("CapsuleShape3D_h8u00")
 
-[node name="Visual" type="Node3D" parent="." unique_id=1459529656]
+[node name="BallShape" type="CollisionShape3D" parent="." unique_id=1344898525]
 unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+shape = SubResource("SphereShape3D_it1hm")
+disabled = true
 
-[node name="Body" type="MeshInstance3D" parent="Visual" unique_id=2097649931]
+[node name="Visual" type="Node3D" parent="." unique_id=285729387]
+
+[node name="Body" type="MeshInstance3D" parent="Visual" unique_id=416879587]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
-material_override = SubResource("StandardMaterial3D_it1hm")
-mesh = SubResource("CapsuleMesh_676au")
+material_override = SubResource("StandardMaterial3D_676au")
+mesh = SubResource("CapsuleMesh_xxmkq")
 
-[node name="Nose" type="MeshInstance3D" parent="Visual" unique_id=347945230]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, -0.3)
-material_override = SubResource("StandardMaterial3D_xxmkq")
-mesh = SubResource("BoxMesh_u7e2u")
+[node name="Nose" type="MeshInstance3D" parent="Visual/Body" unique_id=299982129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, -0.3)
+material_override = SubResource("StandardMaterial3D_u7e2u")
+mesh = SubResource("BoxMesh_8y8ya")
+
+[node name="Ball" type="MeshInstance3D" parent="Visual" unique_id=1307063787]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+visible = false
+material_override = SubResource("StandardMaterial3D_s88to")
+mesh = SubResource("SphereMesh_shdhw")

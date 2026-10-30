@@ -127,6 +127,77 @@ func test_air_drag_matches_the_classic_rate_near_the_apex() -> void:
 	assert_eq(PlayerMotion.air_drag(horizontal, -1.0, TICK), horizontal, "no drag while falling")
 
 
+func test_downhill_pull_follows_the_slope() -> void:
+	assert_almost_eq(PlayerMotion.downhill(Vector3.UP).length(), 0.0, 1e-6, "none on flat ground")
+	var slope := _slope_normal(30.0)
+	var pull := PlayerMotion.downhill(slope)
+	assert_almost_eq(pull.length(), 0.5, 1e-6, "sin 30° on a 30° slope")
+	assert_almost_eq(pull.dot(slope), 0.0, 1e-6, "runs along the surface")
+	assert_true(pull.y < 0.0 and pull.z > 0.0, "points down the slope")
+	assert_almost_eq(PlayerMotion.downhill(Vector3.BACK).length(), 1.0, 1e-6, "full strength on a wall")
+	assert_almost_eq(PlayerMotion.downhill(Vector3.DOWN).length(), 0.0, 1e-6, "none on a ceiling")
+
+
+func test_standing_still_holds_on_gentle_slopes_only() -> void:
+	# Friction (5.27 m/s²) beats the slope pull (14.06 m/s² × sin) below about 22°.
+	assert_false(PlayerMotion.slope_beats_friction(_slope_normal(15.0), physics), "15° holds")
+	assert_true(PlayerMotion.slope_beats_friction(_slope_normal(30.0), physics), "30° slides")
+
+
+func test_slow_players_slip_on_steep_surfaces() -> void:
+	var slow := physics.slip_threshold - 0.1
+	assert_true(PlayerMotion.slips(slow, _slope_normal(60.0), physics), "slow on 60°")
+	assert_false(PlayerMotion.slips(slow, _slope_normal(30.0), physics), "slow on 30°")
+	assert_false(PlayerMotion.slips(physics.slip_threshold + 0.1, _slope_normal(60.0), physics), "fast on 60°")
+
+
+func test_only_overhangs_drop_a_slow_player() -> void:
+	var slow := physics.slip_threshold * 0.9
+	assert_true(PlayerMotion.falls_off(slow, Vector3.DOWN, physics), "slow on a ceiling")
+	assert_false(PlayerMotion.falls_off(physics.slip_threshold, Vector3.DOWN, physics), "classic slip speed holds upside down")
+	assert_false(PlayerMotion.falls_off(0.0, Vector3.BACK, physics), "walls don't drop the player, they slip")
+	physics.ground_magnetism = physics.grv * 0.75
+	assert_false(PlayerMotion.falls_off(physics.slip_threshold * 0.5, Vector3.DOWN, physics), "magnetism holds at half speed")
+
+
+func test_landing_keeps_the_velocity_along_the_surface() -> void:
+	var landed := PlayerMotion.along_surface(Vector3(3.0, -10.0, 0.0), Vector3.UP)
+	assert_eq(landed, Vector3(3.0, 0.0, 0.0), "flat ground keeps the horizontal part")
+	var on_slope := PlayerMotion.along_surface(Vector3(0.0, -10.0, 0.0), _slope_normal(30.0))
+	assert_almost_eq(on_slope.length(), 5.0, 1e-5, "a straight drop onto 30° keeps sin 30° of the speed")
+
+
+func test_rolling_coasts_twice_as_far_as_running() -> void:
+	# Classic: roll friction is half of running friction, so stopping from top speed takes twice as long.
+	var speed := physics.top
+	var ticks := 0
+	while speed > 0.0 and ticks < 2000:
+		speed = PlayerMotion.roll_speed(speed, false, physics, TICK)
+		ticks += 1
+	assert_almost_eq(ticks * TICK, 256.0 / 60.0, TICK * 1.5, "time to stop rolling")
+	var braked := PlayerMotion.roll_speed(physics.top, true, physics, 0.1)
+	assert_almost_eq(braked, physics.top - (physics.roll_frc + physics.roll_dec) * 0.1, 1e-5, "braking adds roll_dec")
+	assert_almost_eq(PlayerMotion.roll_speed(1.0, true, physics, 1.0), 0.0, 1e-6, "braking stops at zero, it doesn't reverse")
+
+
+func test_spin_dash_launch_speed_matches_the_classic_formula() -> void:
+	assert_almost_eq(PlayerMotion.spin_dash_speed(0.0, physics), 15.0, 1e-6, "no charge: 8 px/frame")
+	assert_almost_eq(PlayerMotion.spin_dash_speed(8.0, physics), 22.5, 1e-6, "full charge: 12 px/frame")
+	assert_almost_eq(PlayerMotion.spin_dash_speed(3.9, physics), 15.0 + 3.0 * 0.9375, 1e-6, "only whole charge counts")
+
+
+func test_spin_dash_charge_bleeds_off_at_the_classic_rate() -> void:
+	var one_frame := PlayerMotion.decay_charge(8.0, 1.0 / 60.0)
+	assert_almost_eq(one_frame, 8.0 * 31.0 / 32.0, 1e-5, "1/32 per classic frame")
+	var two_ticks := PlayerMotion.decay_charge(PlayerMotion.decay_charge(8.0, TICK), TICK)
+	assert_almost_eq(two_ticks, one_frame, 1e-5, "same at 120 Hz")
+
+
+## Normal of a slope that rises toward -Z at `degrees` from flat.
+func _slope_normal(degrees: float) -> Vector3:
+	return Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(degrees))
+
+
 ## Height of a jump simulated tick by tick the way the player does it: the jump tick moves at
 ## full jump speed, then each tick applies the release cap (if not held) and gravity.
 func _jump_apex(hold_jump: bool) -> float:

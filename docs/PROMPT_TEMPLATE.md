@@ -105,7 +105,7 @@ MODERN
 - **Tick rate:** 120 Hz physics. Classic values are per-frame at 60 fps, so constants are stored in SI units and converted.
 - **Units:** `PIXELS_PER_METER = [[FILL: 32]]`. Classic px/frame values convert to m/s as `value × 60 / PIXELS_PER_METER`.
 - **Ground speed model:** the player stores **`ground_speed`** (a scalar along the surface) plus a **surface-tangent heading**. Velocity is derived from these while grounded, and is free 3D velocity while airborne.
-- **Surface alignment:** the player's up vector follows the ground normal (smoothed). Loops and wall-running come from this, not from scripted animations. `[[CHOOSE: allow full 360° surfaces (DEFAULT) | only on tagged "loop" geometry]]`
+- **Surface alignment:** the player's up vector follows the ground normal (smoothed). Loops and wall-running come from this, not from scripted animations. Full 360° surfaces (decided 2026-10-29).
 - **Ground snapping:** while grounded and speed is high, cast toward `-up` up to `[[FILL: 0.5]]` m to stay attached over crests. Detach when the angle change between frames exceeds `[[FILL: 45]]`°.
 - **Slip / fall:** if `|ground_speed|` is below the slip threshold on a surface steeper than `[[FILL: 46]]`°, lock horizontal input for `[[FILL: 30]]` frames. Past `[[FILL: 90]]`°, detach and fall.
 - **Landing:** on landing, project air velocity onto the surface to get `ground_speed` (classic angle-range rules, generalised to 3D).
@@ -135,7 +135,7 @@ MODERN
 | `slip_threshold` | 2.5 | Below this speed on steep surfaces → slip | |
 | `max_ground_speed` | 16.0 | Absolute speed cap (safety and collision stability) | |
 | `turn_rate_low` / `turn_rate_high` | — | 3D only: turn speed at low and high speed (deg/s) | 720 / 180 |
-| `ground_magnetism` | `[[FILL]]` | 3D only: extra stick force on curved surfaces | |
+| `ground_magnetism` | — | 3D only: extra stick force on curved surfaces | 0 (classic) |
 
 ### 5.4 Moves (toggle and tune)
 
@@ -145,9 +145,9 @@ MODERN
 | Spin Dash | Y | Classic: release speed `8 + floor(charge)/2`, charge capped at 8 |
 | Drop Dash | Y | Mania-style. Hold jump in the air for `[[20]]` frames |
 | Super Peel Out | Y | |
-| Homing Attack | Y | Lock-on range `[[FILL]] m`, cone `[[FILL]]°` |
+| Homing Attack | Y | Lock-on range 12 m, cone 90° (decided 2026-10-29) |
 | Air Dash / Jump Dash | Y | |
-| Light Speed Dash (ring trails) | Y/N | |
+| Light Speed Dash (ring trails) | Y | Decided 2026-10-29. Built once rings exist. |
 | Boost | Y | Gauge filled by rings and enemies. Built after Milestone 2, once the camera and rings exist (decided 2026-10-29). |
 | Stomp / Bounce | Y | |
 | Grind rails | Y | `Path3D`-driven; balance optional |
@@ -315,7 +315,7 @@ res://
 **Milestone roadmap (DEFAULT order):**
 1. ~~Project setup: repo, licenses, folder layout, Jolt, input map, CI skeleton.~~ **Done 2026-10-29.**
 2. ~~Player physics v1: flat ground, acc/dec/frc, jump, gravity, debug overlay, test room.~~ **Done 2026-10-29.**
-3. Slopes, surface alignment, loops, slip/fall, rolling, spindash.
+3. ~~Slopes, surface alignment, loops, slip/fall, rolling, spindash.~~ **Done 2026-10-29.**
 4. Camera v1 plus camera volumes.
 5. Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.
 6. Greybox Zone 1 Act 1 plus a playtest build.

@@ -1,11 +1,12 @@
 class_name PlayerMotion
 extends RefCounted
 ## Movement math for the player controller, kept free of nodes so the unit tests can call it.
-## Every function takes the tick length, so results are the same at any tick rate.
+## Anything that changes over time takes the tick length, so results are the same at any tick rate.
 
 const AIR_DRAG_MAX_RISE := 4.0 * PlayerPhysics.SPEED  ## Air drag only applies while rising slower than this (m/s).
 const AIR_DRAG_MIN_SPEED := 0.125 * PlayerPhysics.SPEED  ## ...and moving horizontally at least this fast (m/s).
 const AIR_DRAG_KEEP_PER_FRAME := 1.0 - 1.0 / 32.0  ## Share of horizontal speed kept per classic frame (1/60 s).
+const SPIN_CHARGE_KEEP_PER_FRAME := 1.0 - 1.0 / 32.0  ## Share of spin dash charge kept per classic frame (1/60 s).
 
 
 ## Ground speed after one tick of running. `input_strength` (0 to 1) is how far the stick is
@@ -74,3 +75,57 @@ static func air_drag(horizontal: Vector3, vertical: float, delta: float) -> Vect
 	if horizontal.length() < AIR_DRAG_MIN_SPEED:
 		return horizontal
 	return horizontal * pow(AIR_DRAG_KEEP_PER_FRAME, delta * PlayerPhysics.CLASSIC_FPS)
+
+
+## The pull of gravity along a surface with this normal, as a vector along the surface pointing
+## downhill. Its length is the sine of the slope: 0 on flat ground and ceilings, 1 on a wall.
+static func downhill(normal: Vector3) -> Vector3:
+	return Vector3.DOWN + normal * normal.dot(Vector3.UP)
+
+
+## Whether a slope is steep enough to drag a runner who is standing still: classic games let you
+## stand on gentle slopes because friction wins there.
+static func slope_beats_friction(normal: Vector3, physics: PlayerPhysics) -> bool:
+	return downhill(normal).length() * physics.slp > physics.frc
+
+
+## Angle between a surface and flat ground, in degrees: 0 for floors, 90 for walls, 180 for ceilings.
+static func steepness(normal: Vector3) -> float:
+	return rad_to_deg(normal.angle_to(Vector3.UP))
+
+
+## Whether a player this slow on a surface this steep starts to slip.
+static func slips(speed: float, normal: Vector3, physics: PlayerPhysics) -> bool:
+	return speed < physics.slip_threshold and steepness(normal) > physics.slip_angle
+
+
+## Whether the player drops off an overhang. Past vertical, gravity pulls them away from the
+## surface, and only speed and ground_magnetism hold them on. At the classic slip speed they hold
+## on even upside down; slower than that, steeper overhangs need more speed.
+static func falls_off(speed: float, normal: Vector3, physics: PlayerPhysics) -> bool:
+	var pull := physics.grv * -normal.dot(Vector3.UP)
+	if pull <= 0.0:
+		return false
+	var hold := physics.grv * pow(speed / physics.slip_threshold, 2.0) + physics.ground_magnetism
+	return hold < pull
+
+
+## The part of `velocity` that runs along a surface with this normal, used when landing.
+static func along_surface(velocity: Vector3, normal: Vector3) -> Vector3:
+	return velocity - normal * normal.dot(velocity)
+
+
+## Ground speed after one tick of rolling: roll friction always applies, plus roll_dec when braking.
+static func roll_speed(speed: float, braking: bool, physics: PlayerPhysics, delta: float) -> float:
+	var slowdown := physics.roll_frc + (physics.roll_dec if braking else 0.0)
+	return maxf(speed - slowdown * delta, 0.0)
+
+
+## Launch speed of a spin dash: the classic 8 + floor(charge) / 2 px/frame.
+static func spin_dash_speed(charge: float, physics: PlayerPhysics) -> float:
+	return physics.spin_dash_speed + floorf(charge) * physics.spin_dash_charge_speed
+
+
+## Spin dash charge after one tick: it bleeds off by 1/32 per 60 fps frame, as in the classic games.
+static func decay_charge(charge: float, delta: float) -> float:
+	return charge * pow(SPIN_CHARGE_KEEP_PER_FRAME, delta * PlayerPhysics.CLASSIC_FPS)
