@@ -1,8 +1,11 @@
 class_name Stage
 extends Node3D
 ## Root script for a playable stage. It reports the stage to GameState, restarts it from the last
-## checkpoint after a player dies, ends the game when the lives run out, and goes back to the title
-## screen on pause.
+## checkpoint after a player dies, ends the game when the lives run out, moves on after the goal's
+## results, and goes back to the title screen on pause.
+
+@export var title: String = ""  ## Name shown as the stage starts and on its results, such as "Act 1: Sunny Beachfront".
+@export_file("*.tscn") var next_scene: String = ""  ## Where the goal leads. Empty goes back to the title screen.
 
 var _ending := false
 
@@ -15,6 +18,7 @@ func _enter_tree() -> void:
 func _ready() -> void:
 	for node in get_tree().get_nodes_in_group(Player.GROUP):
 		(node as Player).died.connect(_on_player_died)
+	GameState.stage_cleared.connect(_on_stage_cleared)
 
 
 func _exit_tree() -> void:
@@ -37,6 +41,11 @@ func _on_player_died() -> void:
 	get_tree().create_timer(GameState.rules.restart_delay).timeout.connect(next)
 
 
+func _on_stage_cleared() -> void:
+	_ending = true
+	get_tree().create_timer(GameState.rules.results_time).timeout.connect(_move_on)
+
+
 func _restart() -> void:
 	get_tree().reload_current_scene()
 
@@ -49,6 +58,13 @@ func _game_over() -> void:
 func _end_game() -> void:
 	GameState.new_game()
 	_to_title()
+
+
+func _move_on() -> void:
+	if next_scene != "":
+		get_tree().change_scene_to_file(next_scene)
+	else:
+		_to_title()
 
 
 func _to_title() -> void:

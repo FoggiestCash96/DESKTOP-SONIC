@@ -1,9 +1,12 @@
 extends CanvasLayer
 ## Placeholder heads-up display for the greybox stages: rings, time, lives, red rings and the
-## power-ups running, plus the game-over message. Milestone 9 decides its real style.
+## power-ups running, the stage's title card, its results at the goal, and the game-over message.
+## Milestone 9 decides its real style.
 
 const WARNING := Color(1.0, 0.3, 0.25)
 const WARNING_PERIOD := 1.0  ## Seconds per flash of the ring count while it is zero.
+const TITLE_TIME := 2.5  ## Seconds the stage's title shows as it starts...
+const TITLE_FADE := 0.6  ## ...before fading out over this long.
 
 @export var target: Player  ## The player whose rings and power-ups are shown.
 
@@ -12,12 +15,25 @@ const WARNING_PERIOD := 1.0  ## Seconds per flash of the ring count while it is 
 @onready var _red_rings: Label = %RedRings
 @onready var _lives: Label = %Lives
 @onready var _power_ups: Label = %PowerUps
+@onready var _stage_title: Label = %StageTitle
+@onready var _results: Control = %Results
+@onready var _results_title: Label = %ResultsTitle
+@onready var _result_time: Label = %ResultTime
+@onready var _result_rings: Label = %ResultRings
+@onready var _result_red_rings: Label = %ResultRedRings
 @onready var _game_over: Label = %GameOver
 
 
 func _ready() -> void:
 	_game_over.visible = false
+	_results.visible = false
 	GameState.game_over.connect(func() -> void: _game_over.visible = true)
+	GameState.stage_cleared.connect(_show_results)
+	var stage := owner as Stage
+	_stage_title.text = stage.title if stage else ""
+	var fade := create_tween()
+	fade.tween_interval(TITLE_TIME)
+	fade.tween_property(_stage_title, "modulate:a", 0.0, TITLE_FADE)
 
 
 func _process(_delta: float) -> void:
@@ -32,6 +48,15 @@ func _process(_delta: float) -> void:
 	var flash := target.rings == 0 and fmod(Time.get_ticks_msec() / 1000.0, WARNING_PERIOD) < WARNING_PERIOD * 0.5
 	_rings.modulate = WARNING if flash else Color.WHITE
 	_power_ups.text = _describe_power_ups()
+
+
+func _show_results() -> void:
+	var stage := owner as Stage
+	_results_title.text = "%s CLEAR" % stage.title.to_upper() if stage and stage.title != "" else "CLEAR"
+	_result_time.text = "TIME   %s" % GameState.format_time(GameState.time)
+	_result_rings.text = "RINGS   %d" % GameState.cleared_rings
+	_result_red_rings.text = "RED RINGS   %d / %d" % [GameState.hidden_found, GameState.hidden_total]
+	_results.visible = true
 
 
 func _describe_power_ups() -> String:

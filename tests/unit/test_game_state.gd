@@ -97,6 +97,25 @@ func test_a_new_game_clears_all_progress() -> void:
 	assert_false(_game.is_found("RedRing1"))
 
 
+func test_reaching_the_goal_stops_the_clock_once() -> void:
+	_game.enter_stage("res://a.tscn")
+	_game.time = 81.5
+	_game.clear_stage(42)
+	assert_true(_game.cleared)
+	assert_false(_game.clock_running, "clock stopped")
+	assert_eq(_game.cleared_rings, 42)
+	_game.clear_stage(7)
+	assert_eq(_game.cleared_rings, 42, "only the first goal counts")
+
+
+func test_a_restart_after_clearing_is_a_fresh_attempt() -> void:
+	_game.enter_stage("res://a.tscn")
+	_game.clear_stage(10)
+	_game.enter_stage("res://a.tscn")
+	assert_false(_game.cleared)
+	assert_true(_game.clock_running)
+
+
 func test_times_show_minutes_seconds_and_hundredths() -> void:
 	assert_eq(_game.format_time(0.0), "0:00.00")
 	assert_eq(_game.format_time(65.32), "1:05.32")

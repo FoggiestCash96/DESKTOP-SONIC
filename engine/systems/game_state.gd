@@ -4,6 +4,7 @@ extends Node
 ## loads; after a death it reloads and resumes from the last checkpoint touched.
 
 signal game_over  ## The last life was lost. The title screen returns after rules.game_over_time.
+signal stage_cleared  ## The goal was reached. The results show for rules.results_time.
 
 @export var rules: GameRules = preload("res://engine/systems/game_rules.tres")
 
@@ -16,6 +17,8 @@ var checkpoint_spawn := Transform3D.IDENTITY  ## Where the player restarts from 
 var checkpoint_time := 0.0  ## The stage clock when that checkpoint was touched.
 var hidden_total := 0  ## Hidden collectibles in the current stage. Each one counts itself in as it loads.
 var hidden_found := 0  ## Hidden collectibles found on this visit to the stage.
+var cleared := false  ## The current stage's goal was reached.
+var cleared_rings := 0  ## Rings the player had at the goal.
 
 var _touched: Dictionary[String, bool] = {}  # Checkpoints touched on this visit to the stage.
 var _found: Dictionary[String, bool] = {}  # Unique items (hidden collectibles, extra lives) found on this visit.
@@ -46,6 +49,7 @@ func enter_stage(path: String) -> void:
 		_clear_stage()
 	time = checkpoint_time
 	hidden_total = 0
+	cleared = false
 	clock_running = true
 
 
@@ -104,6 +108,16 @@ func end_game() -> void:
 	game_over.emit()
 
 
+## Ends the stage at its goal: stops the clock and announces the results. Only the first call counts.
+func clear_stage(rings: int) -> void:
+	if cleared:
+		return
+	cleared = true
+	cleared_rings = rings
+	clock_running = false
+	stage_cleared.emit()
+
+
 ## A name for a node that stays the same when its stage reloads: its path from the stage root.
 func id_of(node: Node) -> String:
 	return str(node.owner.get_path_to(node)) if node.owner else str(node.get_path())
@@ -123,6 +137,8 @@ func _clear_stage() -> void:
 	clock_running = false
 	hidden_total = 0
 	hidden_found = 0
+	cleared = false
+	cleared_rings = 0
 	_touched.clear()
 	_found.clear()
 

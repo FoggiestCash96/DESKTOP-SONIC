@@ -3,8 +3,8 @@ extends CharacterBody3D
 ## Kinematic player controller with classic momentum physics: speed along the surface, slopes
 ## that add and take away speed, walls and loops through surface alignment, rolling and the spin
 ## dash, and free 3D velocity in the air. Each movement state is a script in engine/player/states/;
-## the shared surface handling lives here, along with rings, hits and power-ups. Input is relative
-## to the active camera, and all tuning lives in `physics`.
+## the shared surface handling lives here, along with rings, hits, power-ups and staying on 2.5D
+## paths. Input is relative to the active camera, and all tuning lives in `physics`.
 
 signal died  ## The player died. The stage restarts, or the game ends, a moment later.
 
@@ -55,6 +55,8 @@ var _shoes_timer := 0.0
 var _invincible_timer := 0.0
 var _magnet_timer := 0.0
 var _magnet_query := PhysicsShapeQueryParameters3D.new()
+var _input_enabled := true
+var _lane: CameraVolume  # The 2.5D section holding the player to its path, if any.
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -108,10 +110,12 @@ func _exit_tree() -> void:
 
 
 func _physics_process(delta: float) -> void:
+	_lane = _find_lane()
 	_read_input()
 	state.tick(delta)
 	move_and_slide()
 	state.after_move(delta)
+	_hold_to_lane(delta)
 	_count_down(delta)
 	if _magnet_timer > 0.0:
 		_pull_rings()
@@ -377,6 +381,28 @@ func bounce() -> void:
 		air_state.rising = air_state.jumped
 
 
+## Moving water pushing the player along `direction` (a horizontal unit vector): it speeds them up
+## along it by `amount` (m/s), but not past `max_speed`, and slows them down against it.
+func push(direction: Vector3, max_speed: float, amount: float) -> void:
+	if state == death_state:
+		return
+	if not is_grounded():
+		velocity = PlayerMotion.pushed(velocity, direction, max_speed, amount)
+		return
+	var along_ground := _on_plane(direction, ground_normal, Vector3.ZERO)
+	var motion := PlayerMotion.pushed(heading * ground_speed, along_ground, max_speed, amount)
+	ground_speed = motion.length()
+	if ground_speed > 1e-4:
+		heading = motion / ground_speed
+	else:
+		ground_speed = 0.0
+
+
+## Turns the player's controls off, as at the goal, or back on.
+func set_input_enabled(on: bool) -> void:
+	_input_enabled = on
+
+
 # --- Rings, damage and power-ups ----------------------------------------------------------
 
 func collect_rings(amount: int) -> void:
@@ -614,13 +640,53 @@ func _end_power_ups() -> void:
 	physics = _base_physics
 
 
+## The 2.5D section (a camera volume with lock_depth) the player is in, if any.
+func _find_lane() -> CameraVolume:
+	for node in get_tree().get_nodes_in_group(CameraVolume.GROUP):
+		var volume := node as CameraVolume
+		if volume and volume.lock_depth and volume.contains(global_position):
+			return volume
+	return null
+
+
+## In a 2.5D section: eases the player onto the path's plane and drops any motion across it, so
+## they can't step off the path into depth. On the ground they run along the path.
+func _hold_to_lane(delta: float) -> void:
+	if _lane == null or state == death_state:
+		return
+	var across := _lane.depth_axis()
+	var offset := (global_position - _lane.global_position).dot(across)
+	if absf(offset) > 1e-4:
+		var step := physics.lane_pull_speed * delta
+		move_and_collide(-across * clampf(offset, -step, step))
+	velocity -= across * velocity.dot(across)
+	if not is_grounded():
+		return
+	var along := across.cross(ground_normal)
+	if along.length_squared() > 1e-6:
+		along = along.normalized()
+		heading = along if heading.dot(along) >= 0.0 else -along
+		if not _is_steep():
+			_flat_heading = _flat(heading, _flat_heading)
+
+
 func _read_input() -> void:
+	if not _input_enabled:
+		jump_pressed = false
+		jump_held = false
+		crouch_held = false
+		wish = Vector3.ZERO
+		return
 	jump_pressed = Input.is_action_just_pressed("jump")
 	jump_held = Input.is_action_pressed("jump")
 	crouch_held = Input.is_action_pressed("crouch")
 	if jump_pressed:
 		_jump_buffer_timer = physics.jump_buffer_time
 	wish = _camera_wish()
+	if _lane:
+		# In a 2.5D section the stick only moves the player along the path.
+		var along := _lane.path_axis()
+		wish = along * wish.dot(along)
 
 
 ## The stick direction on the horizontal plane, relative to the active camera. Its length (0 to 1)

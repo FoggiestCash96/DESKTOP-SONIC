@@ -28,6 +28,7 @@ size = Vector3(0.3, 3, 0.3)
 
 [node name="TestRoom" type="Node3D" unique_id=1758518970]
 script = ExtResource("1_3v71b")
+title = "Greybox test room"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2066380012]
 environment = ExtResource("2_e7fp2")

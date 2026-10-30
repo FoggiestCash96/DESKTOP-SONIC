@@ -75,7 +75,7 @@ Controller first. Every gameplay action has both a keyboard and a controller bin
 - **Dimension:** hybrid 3D with 2.5D path sections.
 - **Stage style:** mixed per zone.
 - **Hub:** world map.
-- **Acts:** each act has its own focus (speed, platforming or combat). Each world ends with its boss.
+- **Acts:** each act has its own focus (speed, platforming or combat). Each world ends with its boss. Emerald Shore Act 1 is a speed act (decided 2026-10-30).
 - **Routes:** 1 to 3 per act. High routes reward skill, low routes are safer.
 - **Save system:** per-slot JSON in `user://` with zone progress, collectibles, best times and settings.
 
@@ -207,6 +207,9 @@ All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and ev
 - **Dash panels** send a grounded player along the panel's −Z axis at 30 m/s (the classic speed booster, 16 px/frame), or faster if they already were, and lock the stick for 0.25 s.
 - **Spikes** hurt on touch, and again once the flashing runs out if the player is still on them.
 - **Ring rows** (`RingLine`) place rings along a line, straight or arched over a jump.
+- **Checkpoints** count as passed anywhere through a gate around the post (`gate_width`), so a checkpoint can span the whole course and no route misses it.
+- **Goal** (Milestone 6): running through it stops the clock and takes the controls away while the player coasts to a stop. The results (time, rings, red rings) show for 6 s, then the stage moves on: to its `next_scene`, or the title screen until the world map exists.
+- **Tidal waves** (Milestone 6, Emerald Shore's Tidal Surge, decided 2026-10-30 as waves that push, with swimming later): a `TidalWave` washes along its −Z axis on a timer. The surge carries the player toward 17 m/s at 25 m/s², faster than running, so riding one gets up slopes too steep to run up. Then the water drains back as a deeper sheet, dragging toward the shore at up to 6 m/s at 8 m/s²: more than friction, so it moves a player standing still, while a runner only slows down. Then it rests. The water hugs the ground under it.
 - **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
 - **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
 
@@ -228,8 +231,7 @@ All three modes are needed because stages are hybrid:
 - **Camera volumes** (`engine/camera/camera_volume.gd`): boxes that take over while the player is inside. The camera faces the volume's −Z axis (turn the node to aim it), with its own pitch, distance, optional fixed field of view and blend time. Side-view volumes are for 2.5D paths along the box's X axis and only look ahead along it. `avoid_walls` can be turned off where the view looks through geometry on purpose, such as the side of a loop. Overlapping volumes: the highest priority wins. Leaving a volume, free mode carries on from the volume's view.
 - **Input during a switch:** movement is relative to the camera, but when a volume switches the view while the stick is held, input stays relative to the old view until the stick is let go. Running straight into a side-view section doesn't turn the player.
 - The test room has a side-on loop view and a 2.5D side-view stretch at the far end of the runway (z −910 to −990).
-
-Not built yet: constraining the player to the path in 2.5D sections. Side-view volumes only set the camera, so the player can still step off the path into depth. That belongs with the first act that has a 2.5D section.
+- **2.5D path lock** (Milestone 6): a camera volume with `lock_depth` also holds the player to the box's middle plane while they are inside. They are eased onto it at up to 8 m/s (`lane_pull_speed`), any motion across it is dropped, on the ground they run along the path, and the stick only moves them along it. The path is the box's X axis, so 2.5D sections are straight for now; curved ones would follow a `Path3D`. A loop inside such a section would need no sideways shift (`exit_offset` 0).
 
 ## 7. Worlds
 
@@ -246,7 +248,24 @@ Not built yet: constraining the player to the path in 2.5D sections. Side-view v
 
 **Greybox first:** every act starts as blockout geometry plus gimmicks, gets playtested, then gets an art pass in Blender. Collision uses simplified meshes (`-col` suffix on import), never the render mesh.
 
-**Loops:** `engine/gimmicks/loop_track.gd` generates a loop from its radius, width and exit offset, in the editor as well as in the game. The exit comes back down beside the entry, and low curbs along both edges keep the player on the track as it shifts sideways. The test room's loop has a 4 m radius, which a runner at top speed clears with about 5 m/s to spare at the top; anything slower doesn't make it.
+**Level building** (decided 2026-10-30): **Godot greybox, then Blender.** Acts are blocked out in the Godot editor with CSG shapes (`use_collision` on) and the generated pieces (loops, ring rows), playtested there, and remodelled in Blender for the art pass.
+
+**Loops:** `engine/gimmicks/loop_track.gd` generates a loop from its radius, width and exit offset, in the editor as well as in the game. The exit comes back down beside the entry, and low curbs along both edges keep the player on the track as it shifts sideways. Players ride the inside curb as it shifts, so a red ring at the top goes on that line, not the middle. The curbs rise from nothing over the first and last 30° of the loop, so their ends can't snag a player running in. The test room's loop has a 4 m radius, which a runner at top speed clears with about 5 m/s to spare at the top; anything slower doesn't make it.
+
+### 7.1 Emerald Shore Act 1: Sunny Beachfront (greybox, Milestone 6)
+
+`content/sonic/stages/emerald_shore/act_1.tscn`, about 1.2 km long: a speedy run takes about 80 s. Two legs with a right turn between them:
+
+1. **Beach start** (heading −Z): a ring row, a monitor, and a dash panel off to the side whose speed lasts into the first loop.
+2. **First loop** (5 m radius) at the bottom of a downhill, with a red ring at its top.
+3. **Tidal flats:** a wide beach where a wave washes up every 15.5 s, toward a 25° slope too steep to run up. Ride a wave (or spin dash) up it.
+4. **Two routes from the crest:** jump a 9 m gap on the left to a high deck (a red ring over the gap, speed shoes, a dash panel), or run down the right to the low road (a shield, spikes, rings). The deck drops onto the ramp the low road climbs, and the routes meet at checkpoint 1.
+5. **The corner:** a dash panel turns the run right (+X).
+6. **2.5D pier:** a side view along a 4 m wide pier with gaps to the sea, spikes, and a red spring up to a high plank with a red ring.
+7. **Second loop and rollers:** down to a second loop with a red ring at its top, up to checkpoint 2, over two humps, past a secret spring and an extra life high above another.
+8. **Goal**, then a wall to stop against.
+
+Falling into the sea (below y = −30) costs a life. The five red rings: the two loop tops, the gap to the deck, the plank, and one over a yellow spring by the rollers that needs you to stand still on it.
 
 ---
 
@@ -258,7 +277,6 @@ Each one is grouped by the milestone where it starts to block work.
 |---|---|
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
-| **M6 (first act)** | Level-building workflow: Blender stages, CSG greybox → Blender, or TrenchBroom |
 | **M7 (art)** | Art style, poly budgets, outline and speed-line shaders, low-end performance target |
 | **M8 (enemies)** | Badnik roster and boss concepts per world |
 | **M9 (menus)** | HUD style; accessibility extras (game speed slider, assist mode) |
@@ -273,8 +291,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | **Done** |
 | 4 | Camera v1 plus camera volumes | **Done** |
 | 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | **Done** |
-| 6 | Greybox Emerald Shore Act 1 plus a playtest build | Next |
-| 7 | Character art pipeline: Blender → glTF → AnimationTree | |
+| 6 | Greybox Emerald Shore Act 1 plus a playtest build | **Done** |
+| 7 | Character art pipeline: Blender → glTF → AnimationTree | Next |
 | 8 | Enemies and the first boss | |
 | 9 | Menus, save system, settings, accessibility | |
 | 10 | Art and audio pass, then a public demo release | |

@@ -229,6 +229,20 @@ func test_scattered_rings_fan_out_evenly_all_around() -> void:
 	assert_almost_eq(sideways.length(), 0.0, 1e-4, "no direction is favoured")
 
 
+func test_a_push_speeds_the_player_up_but_only_to_its_own_speed() -> void:
+	var pushed := PlayerMotion.pushed(Vector3(0.0, 0.0, -10.0), Vector3.FORWARD, 17.0, 2.0)
+	assert_true(pushed.is_equal_approx(Vector3(0.0, 0.0, -12.0)), "carried faster: %s" % pushed)
+	pushed = PlayerMotion.pushed(Vector3(0.0, 0.0, -16.5), Vector3.FORWARD, 17.0, 2.0)
+	assert_true(pushed.is_equal_approx(Vector3(0.0, 0.0, -17.0)), "but no faster than the water: %s" % pushed)
+	pushed = PlayerMotion.pushed(Vector3(0.0, 0.0, -20.0), Vector3.FORWARD, 17.0, 2.0)
+	assert_true(pushed.is_equal_approx(Vector3(0.0, 0.0, -20.0)), "a faster player is left alone: %s" % pushed)
+
+
+func test_a_push_against_the_player_slows_them_down() -> void:
+	var pushed := PlayerMotion.pushed(Vector3(0.0, 0.0, -10.0), Vector3.BACK, 6.0, 1.0)
+	assert_true(pushed.is_equal_approx(Vector3(0.0, 0.0, -9.0)), str(pushed))
+
+
 func test_speed_shoes_double_the_classic_values() -> void:
 	var fast := PlayerMotion.with_speed_shoes(physics)
 	assert_almost_eq(fast.top, 22.5, 1e-5, "12 px/frame")

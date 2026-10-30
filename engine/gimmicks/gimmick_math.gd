@@ -1,6 +1,6 @@
 class_name GimmickMath
 extends RefCounted
-## Math for springs and bouncing objects, kept free of nodes so the unit tests can call it.
+## Math for springs, bouncing objects and tidal waves, kept free of nodes so the unit tests can call it.
 
 const ALONG_GROUND := 0.5  ## A launch direction this close to the surface (cosine from its normal, about 60°) runs along the ground.
 
@@ -26,3 +26,16 @@ static func bounce(velocity: Vector3, normal: Vector3, restitution: float) -> Ve
 	if into >= 0.0:
 		return velocity
 	return velocity - normal * into * (1.0 + restitution)
+
+
+## Where a tidal wave is `time` seconds into its cycle of a surge, a backwash and a rest: x is how
+## far along its run the water is (0 at the shore, 1 at the top of its reach), and y which way it
+## is moving (1 surging up, -1 draining back, 0 resting).
+static func wave_cycle(time: float, surge_time: float, backwash_time: float, rest_time: float) -> Vector2:
+	var t := fposmod(time, surge_time + backwash_time + rest_time)
+	if t < surge_time:
+		return Vector2(t / surge_time, 1.0)
+	t -= surge_time
+	if t < backwash_time:
+		return Vector2(1.0 - t / backwash_time, -1.0)
+	return Vector2.ZERO
