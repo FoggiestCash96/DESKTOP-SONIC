@@ -27,18 +27,22 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 - **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to load the greybox test room.
 - **F6** runs whichever scene is open. Open `stages/greybox/test_room.tscn` to go straight to the test room.
 
-Until the player arrives in Milestone 2, the test room uses a free-flying developer camera:
+In the test room you control the player (a white capsule for now), followed by a basic camera:
 
 | Action | Keyboard and mouse | Controller |
 |---|---|---|
-| Move | W A S D | Left stick |
-| Look | Mouse or arrow keys | Right stick |
-| Rise / sink | Space / Ctrl | A / B |
-| Move faster | Shift | X or RT |
-| Debug overlay | F3 | |
+| Move (relative to the camera) | W A S D | Left stick |
+| Jump (hold for a higher jump) | Space | A |
+| Orbit the camera | Mouse or arrow keys | Right stick |
+| Swing the camera behind the player | Middle mouse button | Right stick click |
+| Debug overlay (player state, speed, heading) | F3 | |
 | Back to the title screen | Esc | Start |
 
-The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again.
+The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again. Falling off the edge of the floor puts the player back at the start.
+
+### Tuning the player
+
+Movement values live in `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
 
 ## Checks and tests
 
@@ -70,8 +74,8 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 
 ```
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
-  player/         Player controller and physics (Milestone 2)
-  camera/         Follow camera and camera volumes (Milestone 4)
+  player/         Player controller, movement math and tuning resource
+  camera/         Basic follow camera (full camera and volumes in Milestone 4)
   gimmicks/       Springs, dash panels, rails... (Milestone 5)
   enemies/base/   Enemy base classes (Milestone 8)
   systems/        Save, settings, audio, scene loading

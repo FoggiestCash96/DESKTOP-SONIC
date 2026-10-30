@@ -34,6 +34,10 @@ godot --headless --path . --script res://tests/check_scripts.gd
 godot --headless --path . --script res://tests/run_tests.gd
 ```
 
+## Gotchas
+
+- A `--script` tool that names a class in a type (for example `var p: Player`) compiles that class before autoloads exist, so the class's uses of `DebugOverlay` fail to compile. In tool scripts, find such nodes at runtime and access them without the class type.
+
 ## Layout
 
 - `engine/`: reusable, franchise-free platformer engine (player, camera, gimmicks, enemies, systems, debug, greybox).

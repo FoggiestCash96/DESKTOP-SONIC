@@ -2,7 +2,8 @@
 
 [ext_resource type="Script" path="res://stages/greybox/test_room.gd" id="1_3v71b"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_e7fp2"]
-[ext_resource type="Script" path="res://engine/debug/fly_camera.gd" id="3_bebbj"]
+[ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_e7fp2"]
+[ext_resource type="PackedScene" path="res://engine/camera/follow_camera.tscn" id="4_bebbj"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="4_tyqwl"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="5_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="6_x61iv"]
@@ -25,11 +26,11 @@ transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81
 shadow_enabled = true
 directional_shadow_max_distance = 150.0
 
-[node name="FlyCamera" type="Camera3D" parent="." unique_id=100056698]
-transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 7, 30)
-current = true
-fov = 70.0
-script = ExtResource("3_bebbj")
+[node name="Player" parent="." unique_id=1508176083 instance=ExtResource("3_e7fp2")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+
+[node name="FollowCamera" parent="." unique_id=1393445948 node_paths=PackedStringArray("target") instance=ExtResource("4_bebbj")]
+target = NodePath("../Player")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=52010258]
 
@@ -658,6 +659,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -6)
 pixel_size = 0.01
 billboard = 1
 text = "Greybox Test Room
+Move: WASD / left stick  ·  Jump: Space / A
 Runway ahead: posts every 25 m
 F3 debug overlay  ·  Esc title screen"
 font_size = 96

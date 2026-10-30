@@ -134,7 +134,7 @@ MODERN
 | `max_fall` | 16.0 | Terminal fall speed | |
 | `slip_threshold` | 2.5 | Below this speed on steep surfaces → slip | |
 | `max_ground_speed` | 16.0 | Absolute speed cap (safety and collision stability) | |
-| `turn_rate_low` / `turn_rate_high` | `[[FILL]]` | 3D only: turn speed at low and high speed (deg/s) | |
+| `turn_rate_low` / `turn_rate_high` | — | 3D only: turn speed at low and high speed (deg/s) | 720 / 180 |
 | `ground_magnetism` | `[[FILL]]` | 3D only: extra stick force on curved surfaces | |
 
 ### 5.4 Moves (toggle and tune)
@@ -148,7 +148,7 @@ MODERN
 | Homing Attack | Y | Lock-on range `[[FILL]] m`, cone `[[FILL]]°` |
 | Air Dash / Jump Dash | Y | |
 | Light Speed Dash (ring trails) | Y/N | |
-| Boost | Y | Gauge filled by rings and enemies |
+| Boost | Y | Gauge filled by rings and enemies. Built after Milestone 2, once the camera and rings exist (decided 2026-10-29). |
 | Stomp / Bounce | Y | |
 | Grind rails | Y | `Path3D`-driven; balance optional |
 | Wall-run / wall-jump | Y | |
@@ -314,7 +314,7 @@ res://
 
 **Milestone roadmap (DEFAULT order):**
 1. ~~Project setup: repo, licenses, folder layout, Jolt, input map, CI skeleton.~~ **Done 2026-10-29.**
-2. Player physics v1: flat ground, acc/dec/frc, jump, gravity, debug overlay, test room.
+2. ~~Player physics v1: flat ground, acc/dec/frc, jump, gravity, debug overlay, test room.~~ **Done 2026-10-29.**
 3. Slopes, surface alignment, loops, slip/fall, rolling, spindash.
 4. Camera v1 plus camera volumes.
 5. Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.
