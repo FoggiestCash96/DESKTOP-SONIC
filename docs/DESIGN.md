@@ -97,11 +97,13 @@ The **boost gauge** fills from rings and special boost items placed in acts, and
 | Ground snap | Cast down up to 0.5 m. Detach if the angle changes by more than 45° in one tick. |
 | Slip | Below `slip_threshold` on a surface steeper than 46°, horizontal input locks for 0.5 s |
 | Fall | Detach when the surface is steeper than 90° |
-| Input | Relative to the camera, projected onto the surface. Turn rate drops as speed rises. |
+| Input | Relative to the camera, projected onto the surface. Turn rate eases from 720°/s at rest to 180°/s at top speed. Input more than 135° from the heading brakes, and after stopping the player turns around at 0.94 m/s. |
 
 ### 5.3 Constants
 
-The classic values come from the Sonic Physics Guide (px/frame at 60 fps), converted to SI units with `PIXELS_PER_METER = 32`. Speeds use `× 60 / 32` and accelerations use `× 3600 / 32`. Milestone 2 puts these into `engine/player/player_physics.tres`. The boost-era values (boost speed, boost gauge rates, quickstep distance) are set during Milestone 2 tuning.
+The classic values come from the Sonic Physics Guide (px/frame at 60 fps), converted to SI units with `PIXELS_PER_METER = 32`. Speeds use `× 60 / 32` and accelerations use `× 3600 / 32`.
+
+`engine/player/player_physics.gd` defines each constant, with the converted classic value as its default. `engine/player/player_physics.tres` is the copy the game uses, and the one to tune. Milestone 2 added the ground, turning, air and assist values. The slope and rolling values (`slp`, `slp_roll_*`, `roll_*`, `slip_threshold`) arrive with slope physics in Milestone 3. The boost-era values (boost speed, gauge rates, quickstep distance) are set when the boost is built, after Milestone 2.
 
 | Constant | Classic (px/frame) | SI default | Meaning |
 |---|---|---|---|
@@ -122,6 +124,12 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 | `max_fall` | 16.0 | 30.0 m/s | Terminal fall speed |
 | `slip_threshold` | 2.5 | 4.688 m/s | Below this on steep surfaces, the player slips |
 | `max_ground_speed` | 16.0 | 30.0 m/s | Absolute cap, for collision safety |
+| `turnaround_speed` | 0.5 | 0.9375 m/s | Speed in the new direction after braking to a stop |
+| `turn_rate_low` | — | 720°/s | Turn rate at rest (3D only) |
+| `turn_rate_high` | — | 180°/s | Turn rate at top speed and above (3D only) |
+| `brake_angle` | — | 135° | Input further than this from the heading brakes instead of turning (3D only) |
+| `coyote_time` | — | 0.1 s | A jump still works this long after running off a ledge |
+| `jump_buffer_time` | — | 0.1 s | A jump pressed this long before landing still happens |
 
 ### 5.4 Moves
 
@@ -129,7 +137,8 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 |---|---|
 | Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes |
 | Homing attack, air dash | Yes (lock-on range and cone not set yet) |
-| Boost, stomp/bounce | Yes |
+| Boost | Yes, built after Milestone 2, once the camera's speed effects and rings exist |
+| Stomp/bounce | Yes |
 | Grind rails (`Path3D`), wall-run and wall-jump | Yes |
 | Swimming (half acc/dec/frc/top and gravity, air timer) | Yes |
 | Light speed dash | **Undecided** |
@@ -141,6 +150,17 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 - When hit with no rings, lose a life. You start with **5 lives**. Extra lives come from a unique hidden 1-up collectible in acts.
 - Crush deaths and pit deaths are on.
 
+### 5.6 Player controller (Milestone 2)
+
+- `engine/player/player.tscn` is a `CharacterBody3D` with a capsule 1.0 m tall and 0.3 m in radius, on the `player` layer and colliding with `world`. Its origin is at its feet.
+- There are two states so far, ground and air. When more arrive (roll, spin dash, grind), each gets its own script in `engine/player/states/`, starting in Milestone 3.
+- On the ground, `ground_speed` and `heading` set the velocity, and `move_and_slide()` resolves collisions with a 0.5 m floor snap. In the air, velocity is free 3D.
+- Walls: a head-on hit stops the player. A glancing hit slides along the wall, keeping only the part of the speed that wasn't pointing into it.
+- Variable jump height: while jump is not held, upward speed is capped at `jmp_release_cap`.
+- Falling below `kill_height` (y = −50 m) respawns the player where it started.
+- `engine/player/player_motion.gd` holds the movement math as static functions, so `tests/unit/test_player_motion.gd` can check it against the classic values without running a scene.
+- The F3 overlay shows the state, ground speed, velocity, heading with the current turn rate, and position.
+
 ## 6. Camera
 
 All three modes are needed because stages are hybrid:
@@ -150,6 +170,8 @@ All three modes are needed because stages are hybrid:
 3. Side view on 2.5D path sections
 
 Look-ahead is 0.3 × velocity (smoothed). Field of view goes from 70° at rest to 85° at top speed. During loops the camera keeps world-up unless a volume overrides it, and a smoothed spring arm keeps it out of walls.
+
+Until Milestone 4, `engine/camera/follow_camera.tscn` stands in. It orbits the player with the mouse or right stick, swings behind the player on `camera_recenter`, and uses a spring arm to stay out of walls. It has no look-ahead, speed FOV or camera volumes.
 
 ## 7. Worlds
 
@@ -174,7 +196,8 @@ Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
-| **M2–M3 (physics)** | Turn rate at low and high speed; ground magnetism; homing lock-on range and cone; boost speed and gauge rates; light speed dash yes or no |
+| **M3 (physics)** | Ground magnetism; homing lock-on range and cone; light speed dash yes or no |
+| **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
 | **M5 (gimmicks)** | Item monitor list; hidden collectible type (red rings, emblems or medals) and count per act |
 | **M6 (first act)** | Level-building workflow: Blender stages, CSG greybox → Blender, or TrenchBroom |
@@ -188,8 +211,8 @@ Each one is grouped by the milestone where it starts to block work.
 | # | Milestone | Status |
 |---|---|---|
 | 1 | Project setup: repo, licenses, folder layout, Jolt, input map, CI, tests, title screen, greybox test room, debug overlay | **Done** |
-| 2 | Player physics v1: flat ground, acc/dec/frc, jump, gravity, player values in the debug overlay | Next |
-| 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | |
+| 2 | Player physics v1: flat ground, acc/dec/frc, jump, gravity, player values in the debug overlay | **Done** |
+| 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | Next |
 | 4 | Camera v1 plus camera volumes | |
 | 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | |
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | |
