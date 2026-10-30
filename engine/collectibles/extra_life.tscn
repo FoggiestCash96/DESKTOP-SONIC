@@ -1,0 +1,37 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/collectibles/extra_life.gd" id="1_3otrv"]
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_ifrok"]
+radius = 0.6
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0x7ki"]
+albedo_color = Color(0.35, 1, 0.45, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.35, 1, 0.45, 1)
+emission_energy_multiplier = 1.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_o2kvg"]
+radius = 0.35
+height = 0.7
+
+[node name="ExtraLife" type="Area3D" unique_id=1036461689]
+collision_layer = 16
+collision_mask = 2
+script = ExtResource("1_3otrv")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=942932077]
+shape = SubResource("SphereShape3D_ifrok")
+
+[node name="Orb" type="MeshInstance3D" parent="." unique_id=1482948446]
+material_override = SubResource("StandardMaterial3D_0x7ki")
+mesh = SubResource("SphereMesh_o2kvg")
+
+[node name="Label" type="Label3D" parent="." unique_id=1473060598]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+pixel_size = 0.008
+billboard = 1
+modulate = Color(0.7, 1, 0.7, 1)
+text = "1UP"
+font_size = 64

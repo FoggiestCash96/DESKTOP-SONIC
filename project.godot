@@ -21,6 +21,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 DebugOverlay="*res://engine/debug/debug_overlay.tscn"
+GameState="*res://engine/systems/game_state.gd"
 
 [debug]
 

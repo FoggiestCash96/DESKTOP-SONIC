@@ -3,8 +3,9 @@ extends Camera3D
 ## The game camera. It orbits the player, swings behind them as they run, aims ahead along their
 ## motion, widens the field of view with speed, keeps world-up through loops, and never sits inside
 ## geometry. Camera volumes take over with fixed or side-on views for set pieces and 2.5D sections.
-## Orbit with the mouse (captured while playing; click to recapture) or the camera_* actions;
-## camera_recenter swings the camera behind the player. All tuning lives in `settings`.
+## When the player dies it stops following and watches them fall. Orbit with the mouse (captured
+## while playing; click to recapture) or the camera_* actions; camera_recenter swings the camera
+## behind the player. All tuning lives in `settings`.
 
 const COLLISION_MASK := (1 << 0) | (1 << 7)  # world, camera_collision
 
@@ -68,6 +69,9 @@ func _unhandled_input(event: InputEvent) -> void:
 
 func _process(delta: float) -> void:
 	if target == null:
+		return
+	if target.is_dead():
+		_watch_fall()
 		return
 	_read_camera_input(delta)
 	_update_volume()
@@ -182,6 +186,13 @@ func _place(delta: float) -> void:
 	if aim.length_squared() > 1e-4 and absf(aim.normalized().dot(Vector3.UP)) < 0.999:
 		look_at(global_position + aim, Vector3.UP)
 	fov = lerpf(fov, _view.w, CameraMath.smoothing(settings.fov_smoothing, delta))
+
+
+## While the player is dead the camera stays put and watches them fall.
+func _watch_fall() -> void:
+	var to := target.get_global_transform_interpolated().origin - global_position
+	if to.length_squared() > 1e-4 and absf(to.normalized().dot(Vector3.UP)) < 0.999:
+		look_at(global_position + to, Vector3.UP)
 
 
 ## How far from the pivot the camera can sit along `offset` without being inside or behind a wall.

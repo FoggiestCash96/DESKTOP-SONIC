@@ -1,8 +1,8 @@
 class_name PlayerPhysics
 extends Resource
-## Movement constants for a player character, in SI units (m, m/s, m/s², s, degrees per second).
-## The defaults are the classic 60 fps platformer values (px/frame and px/frame²), converted
-## with PIXELS_PER_METER: speeds × 60 / 32, accelerations × 3600 / 32.
+## Movement, damage and power-up values for a player character, in SI units (m, m/s, m/s², s,
+## degrees per second). The defaults are the classic 60 fps platformer values (px/frame and
+## px/frame²), converted with PIXELS_PER_METER: speeds × 60 / 32, accelerations × 3600 / 32.
 
 const PIXELS_PER_METER := 32.0
 const CLASSIC_FPS := 60.0
@@ -58,3 +58,27 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export_group("Assists")
 @export var coyote_time: float = 0.1  ## Seconds after running off a ledge during which a jump still works.
 @export var jump_buffer_time: float = 0.1  ## Seconds a jump press is remembered before landing.
+
+@export_group("Damage")
+@export var hurt_speed: float = 2.0 * SPEED  ## Speed of the knockback from a hit, away from what hurt the player (m/s).
+@export var hurt_rise: float = 4.0 * SPEED  ## Upward speed of that knockback (m/s).
+@export var hurt_gravity: float = 0.1875 * ACCEL  ## Gravity while knocked back, lighter than normal (m/s²).
+@export var invulnerable_time: float = 120.0 / CLASSIC_FPS  ## Seconds of flashing invulnerability after a hit.
+@export var death_rise: float = 7.0 * SPEED  ## Upward speed of the hop on dying (m/s).
+
+@export_group("Ring loss")
+@export var max_lost_rings: int = 32  ## Most rings a hit scatters. Any more are lost outright.
+@export var lost_ring_speed_fast: float = 4.0 * SPEED  ## Launch speed of the first 16 scattered rings (m/s).
+@export var lost_ring_speed_slow: float = 2.0 * SPEED  ## Launch speed of the rest (m/s).
+@export var lost_ring_gravity: float = 0.09375 * ACCEL  ## Gravity on scattered rings (m/s²).
+@export_range(0.0, 1.0) var lost_ring_bounce: float = 0.75  ## Share of a scattered ring's speed into a surface that it bounces back with.
+@export var lost_ring_pickup_delay: float = 64.0 / CLASSIC_FPS  ## Seconds before scattered rings can be collected.
+@export var lost_ring_lifetime: float = 256.0 / CLASSIC_FPS  ## Seconds before scattered rings vanish.
+
+@export_group("Power-ups")
+@export var speed_shoes_time: float = 20.0  ## Seconds speed shoes last.
+@export var speed_shoes_factor: float = 2.0  ## Speed shoes multiply acc, frc, top, air_acc and roll_frc by this.
+@export var invincibility_time: float = 20.0  ## Seconds invincibility lasts.
+@export var magnet_time: float = 20.0  ## Seconds the ring magnet lasts.
+@export var magnet_range: float = 5.0  ## Rings this close (m) fly to a player with the magnet.
+@export var magnet_pull_speed: float = 15.0  ## How much faster than the player a pulled ring flies (m/s).

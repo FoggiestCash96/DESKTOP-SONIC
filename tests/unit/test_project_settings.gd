@@ -56,3 +56,7 @@ func test_main_scene_exists() -> void:
 
 func test_debug_overlay_is_autoloaded() -> void:
 	assert_true(ProjectSettings.has_setting("autoload/DebugOverlay"), "DebugOverlay autoload missing")
+
+
+func test_game_state_is_autoloaded() -> void:
+	assert_true(ProjectSettings.has_setting("autoload/GameState"), "GameState autoload missing")

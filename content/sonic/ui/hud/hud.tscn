@@ -1,0 +1,77 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://content/sonic/ui/hud/hud.gd" id="1_taxje"]
+
+[node name="HUD" type="CanvasLayer" unique_id=95572930]
+script = ExtResource("1_taxje")
+
+[node name="Margin" type="MarginContainer" parent="." unique_id=428136070]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+theme_override_constants/margin_left = 28
+theme_override_constants/margin_top = 28
+theme_override_constants/margin_right = 28
+theme_override_constants/margin_bottom = 28
+
+[node name="TopLeft" type="VBoxContainer" parent="Margin" unique_id=2064632068]
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 0
+
+[node name="Rings" type="Label" parent="Margin/TopLeft" unique_id=1014634010]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 7
+text = "RINGS   0"
+
+[node name="Time" type="Label" parent="Margin/TopLeft" unique_id=1053675990]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 7
+text = "TIME    0:00.00"
+
+[node name="RedRings" type="Label" parent="Margin/TopLeft" unique_id=906733505]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+text = "RED RINGS   0 / 5"
+
+[node name="PowerUps" type="Label" parent="Margin" unique_id=1556273683]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 8
+size_flags_vertical = 0
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 6
+horizontal_alignment = 2
+
+[node name="Lives" type="Label" parent="Margin" unique_id=1099500032]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 0
+size_flags_vertical = 8
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 7
+text = "LIVES   5"
+
+[node name="GameOver" type="Label" parent="." unique_id=1281545037]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 96
+theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_constants/outline_size = 24
+text = "GAME OVER"
+horizontal_alignment = 1
+vertical_alignment = 1

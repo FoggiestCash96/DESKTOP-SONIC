@@ -10,6 +10,15 @@
 [ext_resource type="Material" path="res://engine/greybox/greybox_marker.tres" id="7_npbbw"]
 [ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="8_bebbj"]
 [ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="10_x61iv"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="11_dipap"]
+[ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="12_aqf77"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="13_uxjj7"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="14_kyf5d"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spikes.tscn" id="15_yrry1"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="16_y7hr1"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="17_302h5"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="18_qajct"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="19_ysvsk"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -724,3 +733,171 @@ billboard = 1
 text = "Side-view section"
 font_size = 96
 outline_size = 18
+
+[node name="HUD" parent="." unique_id=95572930 node_paths=PackedStringArray("target") instance=ExtResource("11_dipap")]
+target = NodePath("../Player")
+
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1063900583]
+
+[node name="SignGimmicks" type="Label3D" parent="Gimmicks" unique_id=852429472]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 3.2, 8)
+pixel_size = 0.01
+billboard = 1
+text = "Gimmicks  →"
+font_size = 96
+outline_size = 18
+
+[node name="RingTrail" type="Node3D" parent="Gimmicks" unique_id=444089635]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 0.8, 8)
+script = ExtResource("12_aqf77")
+count = 23
+spacing = 4.0
+
+[node name="LabelDash" type="Label3D" parent="Gimmicks" unique_id=1715915607]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 3.2, 24)
+pixel_size = 0.01
+billboard = 1
+text = "Dash panel"
+font_size = 96
+outline_size = 18
+
+[node name="RingsBeforeDash" type="Node3D" parent="Gimmicks" unique_id=1097439154]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0.8, 40)
+script = ExtResource("12_aqf77")
+count = 8
+spacing = 2.0
+
+[node name="DashPanel" parent="Gimmicks" unique_id=1646487028 instance=ExtResource("13_uxjj7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, 18)
+
+[node name="RingsAfterDash" type="Node3D" parent="Gimmicks" unique_id=1621903026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0.8, 8)
+script = ExtResource("12_aqf77")
+count = 10
+spacing = 4.0
+
+[node name="Checkpoint" parent="Gimmicks" unique_id=2131578673 instance=ExtResource("14_kyf5d")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -40)
+
+[node name="LabelCheckpoint" type="Label3D" parent="Gimmicks" unique_id=1015532927]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 103, 3.2, -40)
+pixel_size = 0.01
+billboard = 1
+text = "Checkpoint"
+font_size = 96
+outline_size = 18
+
+[node name="SpikesLane1" parent="Gimmicks" unique_id=119470117 instance=ExtResource("15_yrry1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 0, -60)
+size = Vector2(6, 3)
+
+[node name="LabelSpikes" type="Label3D" parent="Gimmicks" unique_id=1799868430]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 100, 2.5, -60)
+pixel_size = 0.01
+billboard = 1
+text = "Spikes"
+font_size = 96
+outline_size = 18
+
+[node name="LabelSprings" type="Label3D" parent="Gimmicks" unique_id=1393252407]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 3.5, 32)
+pixel_size = 0.01
+billboard = 1
+text = "Springs"
+font_size = 96
+outline_size = 18
+
+[node name="YellowSpring" parent="Gimmicks" unique_id=1587388821 instance=ExtResource("16_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 0, 24)
+
+[node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("17_302h5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 6.6, 24)
+
+[node name="RedSpring" parent="Gimmicks" unique_id=1813108701 instance=ExtResource("16_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 0, 10)
+speed = 30.0
+
+[node name="RingsAboveRedSpring" type="Node3D" parent="Gimmicks" unique_id=317928816]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, -1, 0, 1, -4.371139e-08, 115, 3, 10)
+script = ExtResource("12_aqf77")
+count = 7
+spacing = 2.0
+
+[node name="RedRing1" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("18_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 17.5, 10)
+
+[node name="DiagonalSpring" parent="Gimmicks" unique_id=325586330 instance=ExtResource("16_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 0.70710677, 0.70710677, 0, -0.70710677, 0.70710677, 115, 0, -6)
+keep_momentum = false
+control_lock = 0.5
+
+[node name="SpringLedge" type="CSGBox3D" parent="Gimmicks" unique_id=1750384015]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 1.5, -16)
+use_collision = true
+size = Vector3(6, 3, 8)
+material = ExtResource("6_x61iv")
+
+[node name="RedRing2" parent="Gimmicks" unique_id=1600864039 instance=ExtResource("18_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 4.2, -18)
+
+[node name="SidewaysSpring" parent="Gimmicks" unique_id=1430454410 instance=ExtResource("16_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 115, 0.5, -40)
+control_lock = 0.27
+
+[node name="LabelSideways" type="Label3D" parent="Gimmicks" unique_id=1238018039]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 115, 2.8, -42)
+pixel_size = 0.01
+billboard = 1
+text = "Sideways spring  (run at it from beyond)"
+font_size = 96
+outline_size = 18
+
+[node name="LabelMonitors" type="Label3D" parent="Gimmicks" unique_id=305861152]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 3.2, 32)
+pixel_size = 0.01
+billboard = 1
+text = "Item monitors"
+font_size = 96
+outline_size = 18
+
+[node name="RingsBeforeMonitors" type="Node3D" parent="Gimmicks" unique_id=444748681]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0.8, 46)
+script = ExtResource("12_aqf77")
+spacing = 2.0
+
+[node name="MonitorRings" parent="Gimmicks" unique_id=1656777354 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, 22)
+
+[node name="MonitorShield" parent="Gimmicks" unique_id=458248263 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, 14)
+item = 1
+
+[node name="MonitorSpeedShoes" parent="Gimmicks" unique_id=1913906379 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, 6)
+item = 2
+
+[node name="MonitorInvincibility" parent="Gimmicks" unique_id=335359325 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, -2)
+item = 3
+
+[node name="MonitorMagnet" parent="Gimmicks" unique_id=433375485 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, -10)
+item = 4
+
+[node name="RingsForMagnet" type="Node3D" parent="Gimmicks" unique_id=1301960507]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 134, 0.8, -16)
+script = ExtResource("12_aqf77")
+count = 8
+
+[node name="SpikesLane3" parent="Gimmicks" unique_id=532265652 instance=ExtResource("15_yrry1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 130, 0, -34)
+size = Vector2(4, 2)
+
+[node name="RedRing3" parent="Gimmicks" unique_id=1479966297 instance=ExtResource("18_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -15.5, 1, -100)
+
+[node name="RedRing4" parent="Gimmicks" unique_id=1649654984 instance=ExtResource("18_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 16, -46)
+
+[node name="RedRing5" parent="Gimmicks" unique_id=2091775321 instance=ExtResource("18_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.5, 7.3, -30)

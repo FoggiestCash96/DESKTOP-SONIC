@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/checkpoint.gd" id="1_rlkci"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_gjrua"]
+size = Vector3(4, 3, 0.8)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sj5mf"]
+albedo_color = Color(0.55, 0.56, 0.6, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_14tkv"]
+top_radius = 0.25
+bottom_radius = 0.25
+height = 0.1
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ecw5u"]
+top_radius = 0.06
+bottom_radius = 0.06
+height = 1.7
+
+[sub_resource type="SphereMesh" id="SphereMesh_bjhe5"]
+radius = 0.1
+height = 0.2
+
+[sub_resource type="SphereMesh" id="SphereMesh_kjxyg"]
+radius = 0.14
+height = 0.28
+
+[node name="Checkpoint" type="Area3D" unique_id=2131578673]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_rlkci")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=2095948716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, 0)
+shape = SubResource("BoxShape3D_gjrua")
+
+[node name="Foot" type="MeshInstance3D" parent="." unique_id=735705789]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.05, 0)
+material_override = SubResource("StandardMaterial3D_sj5mf")
+mesh = SubResource("CylinderMesh_14tkv")
+
+[node name="Pole" type="MeshInstance3D" parent="." unique_id=2116819196]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.85, 0)
+material_override = SubResource("StandardMaterial3D_sj5mf")
+mesh = SubResource("CylinderMesh_ecw5u")
+
+[node name="Head" type="Node3D" parent="." unique_id=1692977650]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.75, 0)
+
+[node name="Cap" type="MeshInstance3D" parent="Head" unique_id=1363571530]
+material_override = SubResource("StandardMaterial3D_sj5mf")
+mesh = SubResource("SphereMesh_bjhe5")
+
+[node name="Lamp" type="MeshInstance3D" parent="Head" unique_id=1262990559]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.2, 0, 0)
+mesh = SubResource("SphereMesh_kjxyg")

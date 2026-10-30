@@ -20,4 +20,5 @@ func _ready() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("jump") or event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
+		GameState.new_game()
 		get_tree().change_scene_to_file(first_scene)

@@ -1,0 +1,50 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/dash_panel.gd" id="1_7ou2b"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_ovq5f"]
+size = Vector3(2, 0.5, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vbhh5"]
+albedo_color = Color(0.15, 0.35, 0.9, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.15, 0.35, 0.9, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_7yp60"]
+size = Vector3(2, 0.04, 3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_18al1"]
+albedo_color = Color(1, 0.85, 0.2, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.85, 0.2, 1)
+emission_energy_multiplier = 1.2
+
+[sub_resource type="PrismMesh" id="PrismMesh_f6h47"]
+size = Vector3(1.2, 0.9, 0.03)
+
+[node name="DashPanel" type="Area3D" unique_id=1646487028]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_7ou2b")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=500253950]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+shape = SubResource("BoxShape3D_ovq5f")
+
+[node name="Plate" type="MeshInstance3D" parent="." unique_id=517959489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.02, 0)
+material_override = SubResource("StandardMaterial3D_vbhh5")
+mesh = SubResource("BoxMesh_7yp60")
+
+[node name="Arrow1" type="MeshInstance3D" parent="." unique_id=1965310980]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.05, 0.6)
+material_override = SubResource("StandardMaterial3D_18al1")
+mesh = SubResource("PrismMesh_f6h47")
+
+[node name="Arrow2" type="MeshInstance3D" parent="." unique_id=330388771]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.05, -0.5)
+material_override = SubResource("StandardMaterial3D_18al1")
+mesh = SubResource("PrismMesh_f6h47")

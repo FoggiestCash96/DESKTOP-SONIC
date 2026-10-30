@@ -1,0 +1,51 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/spring.gd" id="1_3a0f2"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_wkpeg"]
+size = Vector3(1, 0.8, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_al4i3"]
+albedo_color = Color(0.3, 0.3, 0.33, 1)
+roughness = 0.6
+
+[sub_resource type="BoxMesh" id="BoxMesh_5fhr1"]
+size = Vector3(1, 0.2, 1)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ik7uu"]
+albedo_color = Color(0.6, 0.6, 0.64, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_g0pvc"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_y6uvr"]
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.12
+
+[node name="Spring" type="Area3D" unique_id=1587388821]
+collision_layer = 8
+collision_mask = 2
+script = ExtResource("1_3a0f2")
+
+[node name="Shape" type="CollisionShape3D" parent="." unique_id=1950453388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.4, 0)
+shape = SubResource("BoxShape3D_wkpeg")
+
+[node name="Base" type="MeshInstance3D" parent="." unique_id=271641920]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_al4i3")
+mesh = SubResource("BoxMesh_5fhr1")
+
+[node name="Coil" type="MeshInstance3D" parent="." unique_id=1207022229]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.25, 0)
+material_override = SubResource("StandardMaterial3D_ik7uu")
+mesh = SubResource("CylinderMesh_g0pvc")
+
+[node name="Pad" type="MeshInstance3D" parent="." unique_id=1072389861]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.38, 0)
+mesh = SubResource("CylinderMesh_y6uvr")

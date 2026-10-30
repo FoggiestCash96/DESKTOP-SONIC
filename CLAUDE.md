@@ -36,7 +36,8 @@ godot --headless --path . --script res://tests/run_tests.gd
 
 ## Gotchas
 
-- A `--script` tool that names a class in a type (for example `var p: Player`) compiles that class before autoloads exist, so the class's uses of `DebugOverlay` fail to compile. In tool scripts, find such nodes at runtime and access them without the class type.
+- A `--script` tool that names a class in a type (for example `var p: Player`) compiles that class before autoloads exist, so the class's uses of `DebugOverlay` and `GameState` fail to compile. In tool scripts, find such nodes at runtime and access them without the class type (a built-in type such as `CharacterBody3D` is fine).
+- Gimmicks that act on the player (springs, dash panels, spikes, item monitors) check `get_overlapping_bodies()` in `_physics_process` instead of acting in `body_entered`. That lets them keep acting while the player stays in contact (spikes once the flashing ends, a dash panel the player lands on), and the ones with `process_physics_priority = -1` act before the player moves that tick. The flip side: overlaps are from the last physics step, so a player teleported off a gimmick still counts as touching it for one more tick.
 
 ## Layout
 
