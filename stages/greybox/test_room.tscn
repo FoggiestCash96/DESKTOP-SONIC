@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://stages/greybox/test_room.gd" id="1_3v71b"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_e7fp2"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_e7fp2"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_aqf77"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="4_tyqwl"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="5_k0xv2"]
@@ -40,6 +41,7 @@ directional_shadow_max_distance = 150.0
 
 [node name="Player" parent="." unique_id=1508176083 instance=ExtResource("3_e7fp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+character = ExtResource("4_aqf77")
 
 [node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("4_k0xv2")]
 target = NodePath("../Player")

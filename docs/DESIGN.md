@@ -35,7 +35,7 @@ The record of every decision made so far. The session prompt lives in [PROMPT_TE
 | Renderer | Forward+ (desktop). ETC2/ASTC import is on because universal macOS builds need it. |
 | Units | 1 Godot unit = 1 m. Physics constants are stored in **SI units** (m/s, m/s², seconds), so the tick rate can change without retuning. Classic values convert with `PIXELS_PER_METER = 32`. |
 | Player collision | Custom kinematic controller on `CharacterBody3D` (Milestone 2). Never a `RigidBody3D`. |
-| Assets | Blender 5.0 → glTF 2.0 (`.glb`). Commit both `.blend` and `.glb` (Git LFS). |
+| Assets | Blender 5.0 → glTF 2.0 (`.glb`). Commit both `.blend` and `.glb` (Git LFS). Godot's own `.blend` import is switched off (`filesystem/import/blender/enabled`), so the game always uses the exported `.glb`. |
 | Tests | `tests/check_scripts.gd` makes every script compile with zero warnings, and `tests/run_tests.gd` runs the headless unit tests. No addons needed. |
 | CI | GitHub Actions: tests on every push and pull request. Windows, Linux and macOS exports on `v*` tags and on manual runs. |
 
@@ -198,6 +198,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 - Falling below `kill_height` (y = −50 m) costs a life (§5.5).
 - `engine/player/player_motion.gd` holds the movement math as static functions, so `tests/unit/test_player_motion.gd` can check it against the classic values without running a scene.
 - The F3 overlay shows the state, ground speed, velocity, surface angle (and any time the stick is locked), heading with the current turn rate, position, and rings and power-ups. A "Game" line shows lives, the stage clock and the last checkpoint.
+- Since Milestone 7 the Player takes a `character` (a CharacterDef). Its model replaces the stand-in capsule and ball, and animates from the player's state (§8.2).
 
 ### 5.7 Gimmicks (Milestone 5)
 
@@ -267,9 +268,38 @@ All three modes are needed because stages are hybrid:
 
 Falling into the sea (below y = −30) costs a life. The five red rings: the two loop tops, the gap to the deck, the plank, and one over a yellow spring by the rollers that needs you to stand still on it.
 
+## 8. Art and characters
+
+### 8.1 Art direction (decided 2026-10-30)
+
+| | |
+|---|---|
+| Style | **Stylised toon**: cel shading (Godot's toon diffuse and specular modes) on flat colours. No ink outlines. |
+| Speed lines | **Yes**, in the style of Sonic Colors: streaks flow out along the screen edges at high speed, and with the boost once it exists. They start at 12 m/s and are full by 26 m/s. |
+| Motion blur | **Yes**, a full-screen radial blur at high speed (and boosting, later), from 16 m/s to full at 30 m/s. Some players find it uncomfortable, so it has an off switch (`motion_blur` in the camera settings now, the settings menu in Milestone 9). |
+| Poly budgets | Player **30k** triangles, enemies **6k**, stage chunks **100k** per visible region |
+| Low-end target | **60 fps at 1080p on a GTX 1060-class GPU**, with the Forward+ renderer |
+
+Both speed effects live on the player camera (`engine/camera/speed_effects.gdshader`), drawn over the 3D view and under the HUD, and switch off entirely when there is nothing to show.
+
+### 8.2 Character pipeline (Milestone 7)
+
+From Blender to the game:
+
+1. **Model in Blender** at 1 unit = 1 m, about 1 m tall to match the collision capsule, feet at the origin, facing +Y (glTF turns that into Godot's −Z). Give the armature the standard bones: `root` (the ball spins around it, 0.3 m up), `hips`, `chest`, `head`, and `upper_arm`, `forearm`, `hand`, `thigh`, `shin` and `foot`, each with `.L` and `.R`.
+2. **Animate** one action per animation, with exactly these names: `idle`, `walk`, `jog`, `run`, `max_run`, `skid`, `ball`, `spring`, `fall`, `push`, `hurt`, `death`, `victory`.
+3. **Export** with `tools/blender/export_glb.py`: binary glTF, skin kept, every action as its own animation.
+4. **Import** in Godot with `engine/player/character_import.gd` as the `.glb`'s import script. It gives every material the toon look and loops the cyclic animations.
+5. **Character scene**: the imported model under a root with `engine/player/character_model.gd`, plus an AnimationTree. On the ground the run cycle blends by speed: idle at 0, walk at 2, jog at 5, run at 10 and max run at 18 m/s, playing faster beyond that. The other poses are inputs of a transition with a 0.12 s crossfade, and the ball spins faster the faster the player moves.
+6. **CharacterDef** (`engine/player/character_def.gd`): the character's name, model and, if it moves differently, its own `PlayerPhysics`. A stage gives one to its Player's `character`. Without one, the player is the stand-in capsule.
+
+The model shows, in order of priority: death, hurt, the ball (jumping, rolling or spin dashing), spring (rising after a spring), fall (in the air otherwise), victory (stopped after the goal), skid (braking), push (pressing into a wall), and otherwise the run cycle (`PlayerMotion.pose()`).
+
+**The stand-in Sonic** (`content/sonic/characters/sonic/`) is built entirely by `build_sonic.py`: simple shapes, each bound rigidly to one bone, in 3,526 triangles with 16 bones and all 13 animations. It proves the pipeline before real art exists. A hand-made model replaces it by keeping the bone names, animation names and conventions above.
+
 ---
 
-## 8. Open decisions
+## 9. Open decisions
 
 Each one is grouped by the milestone where it starts to block work.
 
@@ -277,12 +307,11 @@ Each one is grouped by the milestone where it starts to block work.
 |---|---|
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
-| **M7 (art)** | Art style, poly budgets, outline and speed-line shaders, low-end performance target |
 | **M8 (enemies)** | Badnik roster and boss concepts per world |
 | **M9 (menus)** | HUD style; accessibility extras (game speed slider, assist mode) |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; music tool; 2D art tool; community channel; GameJolt |
 
-## 9. Roadmap
+## 10. Roadmap
 
 | # | Milestone | Status |
 |---|---|---|
@@ -292,8 +321,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 4 | Camera v1 plus camera volumes | **Done** |
 | 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | **Done** |
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | **Done** |
-| 7 | Character art pipeline: Blender → glTF → AnimationTree | Next |
-| 8 | Enemies and the first boss | |
+| 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
+| 8 | Enemies and the first boss | Next |
 | 9 | Menus, save system, settings, accessibility | |
 | 10 | Art and audio pass, then a public demo release | |
 

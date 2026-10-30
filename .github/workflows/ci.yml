@@ -17,6 +17,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
+        with:
+          lfs: true  # Models such as the character .glb are LFS files; without them the import fails.
 
       - name: Install Godot ${{ env.GODOT_VERSION }}
         run: |

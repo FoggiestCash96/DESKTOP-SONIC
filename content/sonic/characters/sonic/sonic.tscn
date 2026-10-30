@@ -1,0 +1,148 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/player/character_model.gd" id="1_8rvsj"]
+[ext_resource type="PackedScene" path="res://content/sonic/characters/sonic/sonic.glb" id="2_0sh5h"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_sg6q3"]
+animation = &"ball"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_1o6ej"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jx0u1"]
+animation = &"death"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_x2awq"]
+animation = &"fall"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_f60a2"]
+animation = &"hurt"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_elhdq"]
+animation = &"push"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_jxkx6"]
+animation = &"idle"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kihn7"]
+animation = &"walk"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_44vx4"]
+animation = &"jog"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_kbciy"]
+animation = &"run"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_vkc10"]
+animation = &"max_run"
+
+[sub_resource type="AnimationNodeBlendSpace1D" id="AnimationNodeBlendSpace1D_x3rgm"]
+min_space = 0.0
+max_space = 40.0
+blend_point_0/node = SubResource("AnimationNodeAnimation_jxkx6")
+blend_point_0/pos = 0.0
+blend_point_0/name = &"idle"
+blend_point_1/node = SubResource("AnimationNodeAnimation_kihn7")
+blend_point_1/pos = 2.0
+blend_point_1/name = &"walk"
+blend_point_2/node = SubResource("AnimationNodeAnimation_44vx4")
+blend_point_2/pos = 5.0
+blend_point_2/name = &"jog"
+blend_point_3/node = SubResource("AnimationNodeAnimation_kbciy")
+blend_point_3/pos = 10.0
+blend_point_3/name = &"run"
+blend_point_4/node = SubResource("AnimationNodeAnimation_vkc10")
+blend_point_4/pos = 18.0
+blend_point_4/name = &"max_run"
+
+[sub_resource type="AnimationNodeTimeScale" id="AnimationNodeTimeScale_i4k48"]
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_h2dhs"]
+animation = &"skid"
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_nib0m"]
+animation = &"spring"
+
+[sub_resource type="AnimationNodeTransition" id="AnimationNodeTransition_q7dxn"]
+xfade_time = 0.12
+input_0/name = "ground"
+input_0/auto_advance = false
+input_0/break_loop_at_end = false
+input_0/reset = true
+input_1/name = "ball"
+input_1/auto_advance = false
+input_1/break_loop_at_end = false
+input_1/reset = true
+input_2/name = "spring"
+input_2/auto_advance = false
+input_2/break_loop_at_end = false
+input_2/reset = true
+input_3/name = "fall"
+input_3/auto_advance = false
+input_3/break_loop_at_end = false
+input_3/reset = true
+input_4/name = "skid"
+input_4/auto_advance = false
+input_4/break_loop_at_end = false
+input_4/reset = true
+input_5/name = "push"
+input_5/auto_advance = false
+input_5/break_loop_at_end = false
+input_5/reset = true
+input_6/name = "hurt"
+input_6/auto_advance = false
+input_6/break_loop_at_end = false
+input_6/reset = true
+input_7/name = "death"
+input_7/auto_advance = false
+input_7/break_loop_at_end = false
+input_7/reset = true
+input_8/name = "victory"
+input_8/auto_advance = false
+input_8/break_loop_at_end = false
+input_8/reset = true
+
+[sub_resource type="AnimationNodeAnimation" id="AnimationNodeAnimation_2a2j1"]
+animation = &"victory"
+
+[sub_resource type="AnimationNodeBlendTree" id="AnimationNodeBlendTree_xlckv"]
+nodes/run_cycle/node = SubResource("AnimationNodeBlendSpace1D_x3rgm")
+nodes/run_cycle/position = Vector2(-400, -200)
+nodes/run_cycle_speed/node = SubResource("AnimationNodeTimeScale_i4k48")
+nodes/run_cycle_speed/position = Vector2(-200, -200)
+nodes/ball/node = SubResource("AnimationNodeAnimation_sg6q3")
+nodes/ball/position = Vector2(-400, -60)
+nodes/ball_speed/node = SubResource("AnimationNodeTimeScale_1o6ej")
+nodes/ball_speed/position = Vector2(-200, -60)
+nodes/state/node = SubResource("AnimationNodeTransition_q7dxn")
+nodes/state/position = Vector2(100, 0)
+nodes/spring/node = SubResource("AnimationNodeAnimation_nib0m")
+nodes/spring/position = Vector2(-200, 160)
+nodes/fall/node = SubResource("AnimationNodeAnimation_x2awq")
+nodes/fall/position = Vector2(-200, 240)
+nodes/skid/node = SubResource("AnimationNodeAnimation_h2dhs")
+nodes/skid/position = Vector2(-200, 320)
+nodes/push/node = SubResource("AnimationNodeAnimation_elhdq")
+nodes/push/position = Vector2(-200, 400)
+nodes/hurt/node = SubResource("AnimationNodeAnimation_f60a2")
+nodes/hurt/position = Vector2(-200, 480)
+nodes/death/node = SubResource("AnimationNodeAnimation_jx0u1")
+nodes/death/position = Vector2(-200, 560)
+nodes/victory/node = SubResource("AnimationNodeAnimation_2a2j1")
+nodes/victory/position = Vector2(-200, 640)
+node_connections = [&"output", 0, &"state", &"run_cycle_speed", 0, &"run_cycle", &"ball_speed", 0, &"ball", &"state", 0, &"run_cycle_speed", &"state", 1, &"ball_speed", &"state", 2, &"spring", &"state", 3, &"fall", &"state", 4, &"skid", &"state", 5, &"push", &"state", 6, &"hurt", &"state", 7, &"death", &"state", 8, &"victory"]
+
+[node name="SonicModel" type="Node3D" unique_id=453513762]
+script = ExtResource("1_8rvsj")
+
+[node name="Model" parent="." unique_id=1779417527 instance=ExtResource("2_0sh5h")]
+
+[node name="AnimationTree" type="AnimationTree" parent="." unique_id=1252947309]
+unique_name_in_owner = true
+tree_root = SubResource("AnimationNodeBlendTree_xlckv")
+anim_player = NodePath("../Model/AnimationPlayer")
+parameters/run_cycle/blend_position = 0.0
+parameters/run_cycle_speed/scale = 1.0
+parameters/ball_speed/scale = 1.0
+parameters/state/current_state = ""
+parameters/state/transition_request = ""
+parameters/state/current_index = -1

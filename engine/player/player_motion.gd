@@ -155,6 +155,27 @@ static func ring_scatter(count: int, physics: PlayerPhysics) -> Array[Vector3]:
 	return velocities
 
 
+## Which of CharacterModel.POSES a player's model shows, in order of priority: dead, hurt, curled
+## into a ball, in the air (still rising from a spring, or falling), stopped after the goal,
+## skidding, pushing a wall, and otherwise the run cycle.
+static func pose(dead: bool, hurt: bool, curled: bool, grounded: bool, sprung: bool, finished: bool, braking: bool, pushing: bool) -> StringName:
+	if dead:
+		return &"death"
+	if hurt:
+		return &"hurt"
+	if curled:
+		return &"ball"
+	if not grounded:
+		return &"spring" if sprung else &"fall"
+	if finished:
+		return &"victory"
+	if braking:
+		return &"skid"
+	if pushing:
+		return &"push"
+	return &"ground"
+
+
 ## `velocity` after a push along `direction` (a unit vector) by `amount` (m/s), as from moving
 ## water: it adds speed along the push, but never past `max_speed` along it. Against the push it
 ## slows the player down.

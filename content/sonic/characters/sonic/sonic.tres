@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="CharacterDef" format=3]
+
+[ext_resource type="PackedScene" path="res://content/sonic/characters/sonic/sonic.tscn" id="1_hre70"]
+[ext_resource type="Script" path="res://engine/player/character_def.gd" id="2_tqowt"]
+
+[resource]
+script = ExtResource("2_tqowt")
+display_name = "Sonic"
+model = ExtResource("1_hre70")

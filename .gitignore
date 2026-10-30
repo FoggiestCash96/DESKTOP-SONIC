@@ -21,5 +21,9 @@ desktop.ini
 .vscode/
 .idea/
 
+# Python caches (Blender scripts)
+__pycache__/
+*.pyc
+
 # Logs
 *.log

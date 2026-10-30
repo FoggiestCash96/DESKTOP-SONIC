@@ -6,7 +6,7 @@ Sonic and all related characters and trademarks belong to SEGA. Our original fil
 
 | Folder | Contents |
 |---|---|
-| `characters/sonic/` | Sonic's model, animations and character definition (Milestone 7) |
+| `characters/sonic/` | Sonic's character definition (`sonic.tres`), his character scene with its AnimationTree (`sonic.tscn`), and the stand-in model (`sonic.glb`, from `sonic.blend`). `build_sonic.py` builds the model in Blender (Milestone 7). |
 | `stages/` | One folder per world (`emerald_shore/`, `toxic_citadel/`...), one scene per act. `emerald_shore/act_1.tscn` is the first, as a greybox. |
 | `ui/title/` | Title screen with the fan-game disclaimer |
 | `ui/hud/` | Placeholder HUD: rings, time, lives, red rings and power-ups (final style in Milestone 9) |
