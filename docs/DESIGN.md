@@ -183,12 +183,21 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 All three modes are needed because stages are hybrid:
 
 1. Free orbit with auto-follow (the default)
-2. `CameraVolume` triggers that blend to scripted angles for set pieces
-3. Side view on 2.5D path sections
+2. `CameraVolume` boxes that blend to set angles for set pieces
+3. Side view on 2.5D path sections, as a kind of camera volume
 
-Look-ahead is 0.3 × velocity (smoothed). Field of view goes from 70° at rest to 85° at top speed. During loops the camera keeps world-up unless a volume overrides it, and a smoothed spring arm keeps it out of walls.
+`engine/camera/player_camera.tscn` (Milestone 4) does all three. Its tuning lives in `engine/camera/camera_settings.tres`.
 
-Until Milestone 4, `engine/camera/follow_camera.tscn` stands in. It orbits the player with the mouse or right stick, swings behind the player on `camera_recenter`, and uses a spring arm to stay out of walls. It has no look-ahead, speed FOV or camera volumes.
+- **Free mode:** the camera orbits 6 m from a point 1 m above the player's feet, at −15° pitch by default. The mouse or right stick orbits it. One second after the player last touched the camera, it eases round behind them as they run, at up to 90°/s at top running speed. It leaves them alone when they run at the camera (more than 135° off), so they can come back toward it. `camera_recenter` swings it behind them in 0.25 s.
+- **Look-ahead:** the camera aims 0.3 s of the player's velocity ahead of them (smoothed, at most 6 m). It only aims ahead; it doesn't move ahead, which could put it in front of a fast player.
+- **Field of view:** 70° standing still, widening linearly to 85° at the player's top running speed (`top`), smoothed.
+- **Loops:** the camera keeps world-up and never rolls. On steep surfaces it follows the direction the player was going before it got steep.
+- **Walls:** a sphere cast from the player to the camera pulls it in front of anything in the way at once, then lets it ease back out at 6 m/s. It never sits inside geometry. If a wall pushes it closer than 1 m, the player's model is hidden.
+- **Camera volumes** (`engine/camera/camera_volume.gd`): boxes that take over while the player is inside. The camera faces the volume's −Z axis (turn the node to aim it), with its own pitch, distance, optional fixed field of view and blend time. Side-view volumes are for 2.5D paths along the box's X axis and only look ahead along it. `avoid_walls` can be turned off where the view looks through geometry on purpose, such as the side of a loop. Overlapping volumes: the highest priority wins. Leaving a volume, free mode carries on from the volume's view.
+- **Input during a switch:** movement is relative to the camera, but when a volume switches the view while the stick is held, input stays relative to the old view until the stick is let go. Running straight into a side-view section doesn't turn the player.
+- The test room has a side-on loop view and a 2.5D side-view stretch at the far end of the runway (z −910 to −990).
+
+Not built yet: constraining the player to the path in 2.5D sections. Side-view volumes only set the camera, so the player can still step off the path into depth. That belongs with the first act that has a 2.5D section.
 
 ## 7. Worlds
 
@@ -231,8 +240,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 1 | Project setup: repo, licenses, folder layout, Jolt, input map, CI, tests, title screen, greybox test room, debug overlay | **Done** |
 | 2 | Player physics v1: flat ground, acc/dec/frc, jump, gravity, player values in the debug overlay | **Done** |
 | 3 | Slopes, surface alignment, loops, slip/fall, rolling, spin dash | **Done** |
-| 4 | Camera v1 plus camera volumes | Next |
-| 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | |
+| 4 | Camera v1 plus camera volumes | **Done** |
+| 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | Next |
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | |
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | |
 | 8 | Enemies and the first boss | |

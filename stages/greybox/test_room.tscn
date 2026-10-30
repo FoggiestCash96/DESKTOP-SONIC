@@ -3,12 +3,13 @@
 [ext_resource type="Script" path="res://stages/greybox/test_room.gd" id="1_3v71b"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_e7fp2"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_e7fp2"]
-[ext_resource type="PackedScene" path="res://engine/camera/follow_camera.tscn" id="4_bebbj"]
+[ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="4_tyqwl"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="5_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="6_x61iv"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_marker.tres" id="7_npbbw"]
 [ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="8_bebbj"]
+[ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="10_x61iv"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -30,7 +31,7 @@ directional_shadow_max_distance = 150.0
 [node name="Player" parent="." unique_id=1508176083 instance=ExtResource("3_e7fp2")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
 
-[node name="FollowCamera" parent="." unique_id=1393445948 node_paths=PackedStringArray("target") instance=ExtResource("4_bebbj")]
+[node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("4_k0xv2")]
 target = NodePath("../Player")
 
 [node name="Geometry" type="Node3D" parent="." unique_id=52010258]
@@ -692,5 +693,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 17.5, -20.606081)
 pixel_size = 0.01
 billboard = 1
 text = "Hill  20°"
+font_size = 96
+outline_size = 18
+
+[node name="CameraVolumes" type="Node3D" parent="." unique_id=2041476657]
+
+[node name="LoopSideView" type="Node3D" parent="CameraVolumes" unique_id=1926683858]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 72.5, 4, -30)
+script = ExtResource("10_x61iv")
+size = Vector3(16, 14, 14)
+pitch_degrees = -5.0
+distance = 14.0
+fov = 70.0
+blend_time = 0.4
+side_view = true
+avoid_walls = false
+
+[node name="RunwaySideView" type="Node3D" parent="CameraVolumes" unique_id=617455828]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 4, -950)
+script = ExtResource("10_x61iv")
+size = Vector3(80, 14, 16)
+pitch_degrees = -5.0
+distance = 12.0
+side_view = true
+
+[node name="LabelSideView" type="Label3D" parent="." unique_id=1307381068]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 4.5, -908)
+pixel_size = 0.01
+billboard = 1
+text = "Side-view section"
 font_size = 96
 outline_size = 18

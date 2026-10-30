@@ -1,0 +1,8 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/camera/player_camera.gd" id="1_c0d6a"]
+
+[node name="PlayerCamera" type="Camera3D" unique_id=612909978]
+current = true
+fov = 70.0
+script = ExtResource("1_c0d6a")
