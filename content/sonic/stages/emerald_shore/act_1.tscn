@@ -3,6 +3,7 @@
 [ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_4hkn0"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_b5b7m"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_n0or1"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_b5b7m"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_l8lpn"]
 [ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="5_eupqa"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="6_lm72i"]
@@ -45,6 +46,7 @@ transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81
 shadow_enabled = true
 
 [node name="Player" parent="." unique_id=719696558 instance=ExtResource("3_n0or1")]
+character = ExtResource("4_b5b7m")
 kill_height = -30.0
 
 [node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("4_l8lpn")]

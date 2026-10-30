@@ -3,9 +3,10 @@ extends Camera3D
 ## The game camera. It orbits the player, swings behind them as they run, aims ahead along their
 ## motion, widens the field of view with speed, keeps world-up through loops, and never sits inside
 ## geometry. Camera volumes take over with fixed or side-on views for set pieces and 2.5D sections.
-## When the player dies it stops following and watches them fall. Orbit with the mouse (captured
-## while playing; click to recapture) or the camera_* actions; camera_recenter swings the camera
-## behind the player. All tuning lives in `settings`.
+## When the player dies it stops following and watches them fall. At high speed it adds speed lines
+## and a radial motion blur (%SpeedEffects). Orbit with the mouse (captured while playing; click to
+## recapture) or the camera_* actions; camera_recenter swings the camera behind the player. All
+## tuning lives in `settings`.
 
 const COLLISION_MASK := (1 << 0) | (1 << 7)  # world, camera_collision
 
@@ -27,6 +28,10 @@ var _aim_ahead := Vector3.ZERO
 var _input_yaw := 0.0
 var _input_held := false  # The stick has been held since the camera last switched views.
 var _probe := PhysicsShapeQueryParameters3D.new()
+var _speed_lines := 0.0  # Strength of the speed effects, smoothed.
+var _blur := 0.0
+
+@onready var _effects: ColorRect = %SpeedEffects
 
 
 func _ready() -> void:
@@ -70,6 +75,7 @@ func _unhandled_input(event: InputEvent) -> void:
 func _process(delta: float) -> void:
 	if target == null:
 		return
+	_update_speed_effects(delta)
 	if target.is_dead():
 		_watch_fall()
 		return
@@ -186,6 +192,26 @@ func _place(delta: float) -> void:
 	if aim.length_squared() > 1e-4 and absf(aim.normalized().dot(Vector3.UP)) < 0.999:
 		look_at(global_position + aim, Vector3.UP)
 	fov = lerpf(fov, _view.w, CameraMath.smoothing(settings.fov_smoothing, delta))
+
+
+## Speed lines and motion blur grow with the player's speed, and switch off entirely when both are
+## at nothing, so they cost nothing at normal speeds.
+func _update_speed_effects(delta: float) -> void:
+	var speed := target.velocity.length()
+	var lines := CameraMath.effect_amount(speed, settings.lines_start, settings.lines_full) if settings.speed_lines and not target.is_dead() else 0.0
+	var blur := CameraMath.effect_amount(speed, settings.blur_start, settings.blur_full) * settings.blur_strength if settings.motion_blur and not target.is_dead() else 0.0
+	var weight := CameraMath.smoothing(settings.effects_smoothing, delta)
+	_speed_lines = lerpf(_speed_lines, lines, weight)
+	_blur = lerpf(_blur, blur, weight)
+	_effects.visible = _speed_lines > 0.005 or _blur > 0.005
+	var material := _effects.material as ShaderMaterial
+	material.set_shader_parameter("lines_amount", _speed_lines)
+	material.set_shader_parameter("blur_amount", _blur)
+
+
+## How strong the speed lines and motion blur are right now (0 to 1 each), for tests and tools.
+func speed_effects() -> Vector2:
+	return Vector2(_speed_lines, _blur)
 
 
 ## While the player is dead the camera stays put and watches them fall.

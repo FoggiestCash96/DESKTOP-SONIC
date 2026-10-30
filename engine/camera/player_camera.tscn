@@ -1,8 +1,29 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://engine/camera/player_camera.gd" id="1_c0d6a"]
+[ext_resource type="Shader" path="res://engine/camera/speed_effects.gdshader" id="2_ykctd"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_ykctd"]
+shader = ExtResource("2_ykctd")
+shader_parameter/blur_amount = null
+shader_parameter/lines_amount = null
+shader_parameter/blur_reach = null
+shader_parameter/line_density = null
+shader_parameter/line_flow = null
 
 [node name="PlayerCamera" type="Camera3D" unique_id=612909978]
 current = true
 fov = 70.0
 script = ExtResource("1_c0d6a")
+
+[node name="Effects" type="CanvasLayer" parent="." unique_id=1478645052]
+layer = 0
+
+[node name="SpeedEffects" type="ColorRect" parent="Effects" unique_id=706984968]
+unique_name_in_owner = true
+visible = false
+material = SubResource("ShaderMaterial_ykctd")
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2

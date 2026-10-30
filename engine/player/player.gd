@@ -14,10 +14,14 @@ const NEAR_VERTICAL := 75.0  ## Running off the top of a surface this steep (deg
 const COLLECTIBLES_LAYER := 1 << 4  ## Physics layer the ring magnet searches.
 const MAGNET_MAX_RINGS := 64  ## Most rings the magnet can start pulling in one tick.
 const FLASH_PERIOD := 0.1  ## Seconds per flash while invulnerable or invincible.
+const PUSH_INPUT := 0.5  ## The stick must point at least this squarely into a wall to push against it...
+const PUSH_SPEED := 1.0  ## ...with the player moving slower than this (m/s).
+const FINISH_SPEED := 1.0  ## After the goal, the victory pose starts below this speed (m/s).
 const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
+@export var character: CharacterDef  ## Who the player is: their model and, optionally, movement values. Empty plays the stand-in capsule.
 @export var physics: PlayerPhysics = preload("res://engine/player/player_physics.tres")  ## Swapped for a faster copy while speed shoes last.
 @export var kill_height: float = -50.0  ## Falling below this height (m) costs a life.
 
@@ -57,6 +61,10 @@ var _magnet_timer := 0.0
 var _magnet_query := PhysicsShapeQueryParameters3D.new()
 var _input_enabled := true
 var _lane: CameraVolume  # The 2.5D section holding the player to its path, if any.
+var _model: CharacterModel  # The character's model, if `character` has one.
+var _braking := false  # Braking against the direction of travel this tick.
+var _pushing := false  # Pushing against a wall this tick.
+var _sprung := false  # Launched by a spring and not landed since.
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -76,6 +84,12 @@ func _ready() -> void:
 	air_state = AirState.new(self)
 	hurt_state = HurtState.new(self)
 	death_state = DeathState.new(self)
+	if character:
+		if character.physics:
+			physics = character.physics
+		if character.model:
+			_model = character.model.instantiate() as CharacterModel
+			_visual.add_child(_model)
 	_base_physics = physics
 	floor_snap_length = physics.snap_length
 	floor_max_angle = deg_to_rad(physics.surface_step_angle)
@@ -111,6 +125,8 @@ func _exit_tree() -> void:
 
 func _physics_process(delta: float) -> void:
 	_lane = _find_lane()
+	_braking = false
+	_pushing = false
 	_read_input()
 	state.tick(delta)
 	move_and_slide()
@@ -125,6 +141,15 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	_update_visual()
+	if _model:
+		_model.animate(pose(), ground_speed if is_grounded() else velocity.length())
+
+
+## Which of CharacterModel.POSES the player's model should show right now.
+func pose() -> StringName:
+	var finished := not _input_enabled and is_grounded() and absf(ground_speed) < FINISH_SPEED
+	var sprung := _sprung and state == air_state and velocity.y > 0.0
+	return PlayerMotion.pose(state == death_state, state == hurt_state, is_attacking(), is_grounded(), sprung, finished, _braking, _pushing)
 
 
 ## Leaves the current state and enters `next`.
@@ -232,6 +257,7 @@ func run(delta: float) -> void:
 		return
 	var direction := input / strength
 	if ground_speed > 0.0 and rad_to_deg(heading.angle_to(direction)) > physics.brake_angle:
+		_braking = true
 		ground_speed = PlayerMotion.brake_speed(ground_speed, physics, delta)
 		if ground_speed < 0.0:  # Braked to a stop: turn around.
 			heading = direction
@@ -339,6 +365,7 @@ func land() -> void:
 		along = heading
 	heading = _on_plane(along, ground_normal, _any_perpendicular(ground_normal))
 	_flat_heading = _flat(heading, _flat_heading)
+	_sprung = false
 	change_state(ground_state)
 
 
@@ -355,6 +382,7 @@ func launch(new_velocity: Vector3, lock_time: float) -> void:
 	air_state.jumped = false
 	air_state.rising = false
 	set_ball(false)
+	_sprung = true
 	_coyote_timer = 0.0
 	lock_controls(lock_time)
 
@@ -505,12 +533,13 @@ func set_model_visible(on: bool) -> void:
 	_update_visual()
 
 
-## Switches between standing and curled into a ball (rolling, spin dash, jumping).
+## Switches between standing and curled into a ball (rolling, spin dash, jumping). A character
+## model curls up through its animations; the stand-in capsule swaps for a sphere.
 func set_ball(on: bool) -> void:
 	_curled = on
 	_update_shapes()
-	_body_mesh.visible = not on
-	_ball_mesh.visible = on
+	_body_mesh.visible = not on and _model == null
+	_ball_mesh.visible = on and _model == null
 
 
 ## Makes the player pass through everything, as when dead, or solid again.
@@ -589,6 +618,7 @@ func _slide_along_walls() -> void:
 	if not is_on_wall():
 		return
 	var normal := _on_plane(get_wall_normal(), ground_normal, Vector3.ZERO)
+	_pushing = wish.dot(-normal) > PUSH_INPUT and ground_speed < PUSH_SPEED
 	var into := heading.dot(normal)
 	if into >= 0.0:
 		return

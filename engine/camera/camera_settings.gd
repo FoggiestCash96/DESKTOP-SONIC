@@ -31,3 +31,13 @@ extends Resource
 @export var collision_margin: float = 0.2  ## Gap kept between the camera and a wall in the way (m).
 @export var ease_out_speed: float = 6.0  ## How fast the camera moves back out once a wall stops being in the way (m/s).
 @export var hide_player_distance: float = 1.0  ## Hides the player's model when a wall pushes the camera closer than this (m).
+
+@export_group("Speed effects")
+@export var speed_lines: bool = true  ## Streaks at the screen edges at high speed.
+@export var lines_start: float = 12.0  ## Speed lines start to show at this speed (m/s), just above top running speed...
+@export var lines_full: float = 26.0  ## ...and are at full strength by this speed (m/s).
+@export var motion_blur: bool = true  ## Radial blur at high speed. Some players find it uncomfortable, so the settings menu will have a switch.
+@export var blur_start: float = 16.0  ## Motion blur starts at this speed (m/s)...
+@export var blur_full: float = 30.0  ## ...and is at full strength by this speed (m/s).
+@export_range(0.0, 2.0) var blur_strength: float = 1.0  ## How strong full motion blur is.
+@export var effects_smoothing: float = 0.25  ## Seconds for the effects to catch up with a change of speed.

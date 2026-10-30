@@ -8,7 +8,7 @@ How to set up, run, test and release Sonic Velocity Run. Design decisions are in
 |---|---|---|
 | [Godot](https://github.com/godotengine/godot/releases/tag/4.7.2-stable) | **4.7.2 stable, standard build** (not .NET) | The CI uses the same version (`GODOT_VERSION` in `.github/workflows/ci.yml`). |
 | Git and [Git LFS](https://git-lfs.com/) | Any recent version | Run `git lfs install` once, before cloning. |
-| [Blender](https://www.blender.org/) | 5.0 or newer | Only needed for 3D assets. |
+| [Blender](https://www.blender.org/) | 5.0 or newer | Only needed for 3D assets, such as rebuilding or replacing the character model. |
 
 ## Get the code
 
@@ -27,7 +27,7 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 - **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to play Emerald Shore Act 1, or F (Y on a controller) for the greybox test room.
 - **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn` or `stages/greybox/test_room.tscn` to go straight there.
 
-You control the player (a white capsule for now). The camera follows behind as you run, and you can turn it yourself at any time:
+You play a stand-in Sonic built from simple shapes, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
 
 | Action | Keyboard and mouse | Controller |
 |---|---|---|
@@ -64,7 +64,7 @@ Five red rings are hidden around the room, and an extra life floats over the yel
 ### Tuning
 
 - **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
-- **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow and wall handling.
+- **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow, wall handling, and the speed lines and motion blur (each can be switched off).
 - **Lives and restarts:** `engine/systems/game_rules.tres`: starting lives, the delay before a restart, and how long GAME OVER shows.
 - **Gimmicks:** each spring, dash panel, monitor and ring row has its own settings in the Inspector.
 
@@ -96,11 +96,32 @@ A checkpoint counts anywhere through its gate: set `gate_width` to the width of 
 Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and remodelled in Blender later. An act needs:
 
 - A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results) and `next_scene`.
-- An instance of `engine/player/player.tscn`. Set `kill_height` a little below the lowest ground.
+- An instance of `engine/player/player.tscn`. Set its `character` (`content/sonic/characters/sonic/sonic.tres` for Sonic) and a `kill_height` a little below the lowest ground.
 - `engine/camera/player_camera.tscn` (its `target` is the player) and `content/sonic/ui/hud/hud.tscn` (its `target` too).
 - The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.
 
 Then add gimmicks, checkpoints, five red rings, one extra life and a goal. Play it, and keep at least one route open to players who aren't fast.
+
+### Characters: from Blender to Godot
+
+The stand-in Sonic is built entirely by a script, so rebuilding it is one command (from the repository root):
+
+```bash
+blender --background --factory-startup --python content/sonic/characters/sonic/build_sonic.py
+```
+
+It writes `sonic.blend` and `sonic.glb`, and Godot re-imports the `.glb` the next time the editor or `--import` runs. To make or replace a character by hand, follow the conventions in [docs/DESIGN.md](docs/DESIGN.md#82-character-pipeline-milestone-7):
+
+1. Model at 1 m per unit, feet at the origin, facing +Y in Blender, with the standard bone and animation names.
+2. Export the `.blend` with the project's settings:
+
+   ```bash
+   blender path/to/model.blend --background --python tools/blender/export_glb.py -- path/to/model.glb
+   ```
+
+3. In Godot, select the `.glb`, set **Import Script** in the Import dock to `engine/player/character_import.gd`, and click **Reimport**. Materials become cel-shaded and the cycles loop.
+4. Make a character scene like `content/sonic/characters/sonic/sonic.tscn`: a root with `engine/player/character_model.gd`, the model, and the same AnimationTree.
+5. Make a `CharacterDef` resource (like `sonic.tres`) pointing at that scene, and set it as the Player's `character`.
 
 Rings sit about 0.8 m above the ground, so both a standing and a rolling player collect them.
 
@@ -145,6 +166,7 @@ engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a tes
 content/sonic/    Sonic-specific characters, stages (Emerald Shore Act 1) and UI (title screen, placeholder HUD)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
+tools/blender/    Blender scripts, such as the project's glTF export
 docs/             Design decisions and the AI session prompt
 ```
 
@@ -170,7 +192,8 @@ docs/             Design decisions and the AI session prompt
 - The grid is world-space: 1 square = 1 m, with a thick line every 5 m. Instance `greybox_environment.tres` for lighting and sky.
 
 **3D assets**
-- Model in Blender at 1 unit = 1 m, apply transforms, and export glTF 2.0 (`.glb`). Commit the `.blend` next to the `.glb`.
+- Model in Blender at 1 unit = 1 m, apply transforms, and export glTF 2.0 (`.glb`). Commit the `.blend` next to the `.glb`. Godot doesn't import `.blend` files itself (that's switched off), so always export.
+- The art style is stylised toon (cel shading, flat colours). Budgets: player 30k triangles, enemies 6k, stage chunks 100k per visible region. Target: 60 fps at 1080p on a GTX 1060-class GPU.
 - Give collision meshes the `-col` suffix so Godot generates simplified collision on import.
 - Binary assets go through Git LFS automatically (see `.gitattributes`).
 

@@ -229,6 +229,29 @@ func test_scattered_rings_fan_out_evenly_all_around() -> void:
 	assert_almost_eq(sideways.length(), 0.0, 1e-4, "no direction is favoured")
 
 
+func test_the_model_pose_follows_the_players_situation() -> void:
+	# pose(dead, hurt, curled, grounded, sprung, finished, braking, pushing)
+	assert_eq(PlayerMotion.pose(false, false, false, true, false, false, false, false), &"ground", "running or standing")
+	assert_eq(PlayerMotion.pose(false, false, true, true, false, false, false, false), &"ball", "rolling")
+	assert_eq(PlayerMotion.pose(false, false, true, false, false, false, false, false), &"ball", "jumping")
+	assert_eq(PlayerMotion.pose(false, false, false, false, true, false, false, false), &"spring", "rising from a spring")
+	assert_eq(PlayerMotion.pose(false, false, false, false, false, false, false, false), &"fall", "falling uncurled")
+	assert_eq(PlayerMotion.pose(false, false, false, true, false, false, true, false), &"skid", "braking")
+	assert_eq(PlayerMotion.pose(false, false, false, true, false, false, false, true), &"push", "pushing a wall")
+	assert_eq(PlayerMotion.pose(false, false, false, true, false, true, false, false), &"victory", "stopped after the goal")
+
+
+func test_being_hit_or_dying_outranks_everything_else() -> void:
+	assert_eq(PlayerMotion.pose(false, true, true, false, true, false, true, true), &"hurt")
+	assert_eq(PlayerMotion.pose(true, true, true, false, true, true, true, true), &"death")
+
+
+func test_the_run_cycle_only_speeds_up_beyond_the_max_run() -> void:
+	assert_almost_eq(CharacterModel.run_cycle_rate(10.0), 1.0, 1e-6, "normal rate at running speed")
+	assert_almost_eq(CharacterModel.run_cycle_rate(18.0), 1.0, 1e-6, "normal at the max run's speed")
+	assert_almost_eq(CharacterModel.run_cycle_rate(27.0), 1.5, 1e-6, "half again as fast at 27 m/s")
+
+
 func test_a_push_speeds_the_player_up_but_only_to_its_own_speed() -> void:
 	var pushed := PlayerMotion.pushed(Vector3(0.0, 0.0, -10.0), Vector3.FORWARD, 17.0, 2.0)
 	assert_true(pushed.is_equal_approx(Vector3(0.0, 0.0, -12.0)), "carried faster: %s" % pushed)

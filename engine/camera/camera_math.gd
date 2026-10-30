@@ -33,6 +33,11 @@ static func speed_fov(speed: float, top: float, rest: float, fast: float) -> flo
 	return lerpf(rest, fast, clampf(speed / top, 0.0, 1.0))
 
 
+## Strength (0 to 1) of a speed effect at `speed`: nothing below `start`, full from `full`, easing between.
+static func effect_amount(speed: float, start: float, full: float) -> float:
+	return smoothstep(start, full, speed)
+
+
 ## How far ahead of the player to aim: `seconds` of their velocity, but no more than `max_distance`.
 static func look_ahead(velocity: Vector3, seconds: float, max_distance: float) -> Vector3:
 	return (velocity * seconds).limit_length(max_distance)

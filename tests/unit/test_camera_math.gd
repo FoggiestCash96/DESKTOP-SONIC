@@ -60,3 +60,9 @@ func test_box_contains_follows_the_box_rotation() -> void:
 	var size := Vector3(40.0, 10.0, 4.0)  # Long along local X, which this turn points along world +Z.
 	assert_true(CameraMath.box_contains(box, size, Vector3(0.0, 0.0, -85.0)), "15 m along the box's length")
 	assert_false(CameraMath.box_contains(box, size, Vector3(15.0, 0.0, -100.0)), "15 m across its width")
+
+
+func test_speed_effects_ease_in_between_their_start_and_full_speeds() -> void:
+	assert_almost_eq(CameraMath.effect_amount(10.0, 12.0, 26.0), 0.0, 1e-6, "nothing below the start")
+	assert_almost_eq(CameraMath.effect_amount(19.0, 12.0, 26.0), 0.5, 1e-6, "half way")
+	assert_almost_eq(CameraMath.effect_amount(30.0, 12.0, 26.0), 1.0, 1e-6, "full from the full speed on")

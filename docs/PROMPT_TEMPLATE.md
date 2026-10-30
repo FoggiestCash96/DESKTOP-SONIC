@@ -177,6 +177,8 @@ Character: [[FILL: Sonic]]
   Animation blend driven by: ground_speed (BlendSpace1D), on_ground, state
 ```
 
+Built in Milestone 7: `CharacterDef` is `engine/player/character_def.gd`, and Sonic's is `content/sonic/characters/sonic/sonic.tres`. A scripted stand-in model has the animations `idle`, `walk`, `jog`, `run`, `max_run`, `skid`, `ball` (jumping, rolling and the spin dash share it), `spring`, `fall`, `push`, `hurt`, `death` and `victory`. The pipeline is in DESIGN.md §8.2.
+
 Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuckles (`[[glide + climb, lower jmp 6.0]]`), Amy (`[[hammer]]`), original characters (`[[FILL]]`).
 
 ---
@@ -233,12 +235,12 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §11 Art direction
 
-- **Style:** `[[CHOOSE: Low-poly Saturn/DC homage | Stylised toon (cel shading) | Modern PBR | Pixel-art 2D]]`
-- **Poly budget:** player `[[15k]]` tris, enemies `[[3k]]`, stage chunks `[[50k]]` per visible region.
+- **Style:** **Stylised toon (cel shading)** (decided 2026-10-30).
+- **Poly budget:** player **30k** tris, enemies **6k**, stage chunks **100k** per visible region (decided 2026-10-30).
 - **Textures:** `[[1024]]` max for characters, trim-sheets and atlases for stages.
-- **Shaders:** toon outline `[[Y/N]]`, speed lines `[[Y/N]]`, motion blur `[[Y/N]]`.
+- **Shaders:** toon outline **N**, speed lines **Y** (Sonic Colors-style streaks along the screen edges at high speed and when boosting), motion blur **Y** (full-screen radial blur at high speed and when boosting, with an off switch). Decided 2026-10-30.
 - **Blender export conventions:** +Y-up handled by the glTF exporter; scale 1 unit = 1 m; apply transforms; name actions to match animation names in §6.
-- **Low-end target:** `[[FILL: e.g. 60 fps on integrated graphics at 1080p, Compatibility renderer fallback]]`.
+- **Low-end target:** **60 fps at 1080p on a GTX 1060-class GPU**, Forward+ (decided 2026-10-30).
 
 ---
 
@@ -320,7 +322,7 @@ res://
 4. ~~Camera v1 plus camera volumes.~~ **Done 2026-10-30.**
 5. ~~Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.~~ **Done 2026-10-30.**
 6. ~~Greybox Zone 1 Act 1 plus a playtest build.~~ **Done 2026-10-30.** Act 1 is a speed act with Tidal Surge waves that push (swimming later) and a short 2.5D pier.
-7. Character art pipeline: Blender → glTF → AnimationTree.
+7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
 8. Enemies and the first boss.
 9. Menus, save system, settings, accessibility.
 10. Art and audio pass, then a public demo release.
