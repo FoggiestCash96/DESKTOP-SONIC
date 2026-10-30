@@ -1,0 +1,39 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/debug/debug_overlay.gd" id="1_1a4rg"]
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_1a4rg"]
+content_margin_left = 10.0
+content_margin_top = 10.0
+content_margin_right = 10.0
+content_margin_bottom = 10.0
+bg_color = Color(0, 0, 0, 0.65)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
+
+[sub_resource type="SystemFont" id="SystemFont_kcd45"]
+font_names = PackedStringArray("Consolas", "DejaVu Sans Mono", "Menlo", "monospace")
+
+[sub_resource type="LabelSettings" id="LabelSettings_mfo5s"]
+font = SubResource("SystemFont_kcd45")
+font_size = 18
+font_color = Color(0.88, 1, 0.88, 1)
+
+[node name="DebugOverlay" type="CanvasLayer" unique_id=2104747961]
+process_mode = 3
+layer = 100
+script = ExtResource("1_1a4rg")
+
+[node name="Panel" type="PanelContainer" parent="." unique_id=2019811693]
+offset_left = 12.0
+offset_top = 12.0
+mouse_filter = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_1a4rg")
+
+[node name="Text" type="Label" parent="Panel" unique_id=854120614]
+unique_name_in_owner = true
+layout_mode = 2
+text = "Debug overlay"
+label_settings = SubResource("LabelSettings_mfo5s")

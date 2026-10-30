@@ -1,0 +1,128 @@
+# Developer guide
+
+How to set up, run, test and release Sonic Velocity Run. Design decisions are in [docs/DESIGN.md](docs/DESIGN.md), and contribution rules are in [CONTRIBUTING.md](CONTRIBUTING.md).
+
+## Requirements
+
+| Tool | Version | Notes |
+|---|---|---|
+| [Godot](https://github.com/godotengine/godot/releases/tag/4.7.2-stable) | **4.7.2 stable, standard build** (not .NET) | The CI uses the same version (`GODOT_VERSION` in `.github/workflows/ci.yml`). |
+| Git and [Git LFS](https://git-lfs.com/) | Any recent version | Run `git lfs install` once, before cloning. |
+| [Blender](https://www.blender.org/) | 5.0 or newer | Only needed for 3D assets. |
+
+## Get the code
+
+```bash
+git lfs install
+```
+
+```bash
+git clone https://github.com/FoggiestCash96/DESKTOP-SONIC.git
+```
+
+In the Godot Project Manager, choose **Import**, select `project.godot`, and open the project. The first import takes a moment.
+
+## Run the game
+
+- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to load the greybox test room.
+- **F6** runs whichever scene is open. Open `stages/greybox/test_room.tscn` to go straight to the test room.
+
+Until the player arrives in Milestone 2, the test room uses a free-flying developer camera:
+
+| Action | Keyboard and mouse | Controller |
+|---|---|---|
+| Move | W A S D | Left stick |
+| Look | Mouse or arrow keys | Right stick |
+| Rise / sink | Space / Ctrl | A / B |
+| Move faster | Shift | X or RT |
+| Debug overlay | F3 | |
+| Back to the title screen | Esc | Start |
+
+The mouse is captured while the test room runs. If you alt-tab away, click the window to capture it again.
+
+## Checks and tests
+
+Run both before opening a pull request. CI runs them on every push. On Windows, use the `Godot_v4.7.2-stable_win64_console.exe` binary so output appears in the terminal.
+
+```bash
+godot --headless --path . --script res://tests/check_scripts.gd
+```
+
+```bash
+godot --headless --path . --script res://tests/run_tests.gd
+```
+
+- **`check_scripts.gd`** compiles every script with all warnings raised to errors. The project rule is zero warnings. It temporarily writes `override.cfg` to do this, and deletes it afterwards.
+- **`run_tests.gd`** runs every `tests/unit/test_*.gd` file. CI also fails if any `SCRIPT ERROR` appears in the output.
+
+### Writing a test
+
+```gdscript
+extends "res://tests/test_suite.gd"
+
+func test_spin_dash_release_speed() -> void:
+	assert_almost_eq(SpinDash.release_speed(8.0), 22.5, 0.001)
+```
+
+Each `test_*` method gets a fresh instance. The available helpers are `assert_true`, `assert_false`, `assert_eq`, `assert_almost_eq` and `fail`. Override `before_each()` and `after_each()` for setup and cleanup.
+
+## Project layout
+
+```
+engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
+  player/         Player controller and physics (Milestone 2)
+  camera/         Follow camera and camera volumes (Milestone 4)
+  gimmicks/       Springs, dash panels, rails... (Milestone 5)
+  enemies/base/   Enemy base classes (Milestone 8)
+  systems/        Save, settings, audio, scene loading
+  debug/          F3 overlay (autoload "DebugOverlay") and fly camera
+  greybox/        Grid shader, blockout materials and environment
+content/sonic/    Sonic-specific characters, stages and UI (title screen)
+stages/greybox/   Blockout and test scenes
+tests/            Script checker, test runner, base class, unit tests
+docs/             Design decisions and the AI session prompt
+```
+
+## Conventions
+
+**Units and physics**
+- 1 unit = 1 metre. Gameplay values are stored in SI units (m/s, m/s², seconds) in `.tres` resources, never hard-coded.
+- Physics runs at a fixed **120 Hz** with **Jolt**. Move physics bodies only in `_physics_process`.
+- **Physics interpolation is on.** Anything moved in `_process` (cameras, visual followers) must set `physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF` and read targets with `get_global_transform_interpolated()`. Otherwise it will stutter. `engine/debug/fly_camera.gd` is an example.
+- Collision layers and input actions are listed in [docs/DESIGN.md](docs/DESIGN.md#collision-layers). Use the named layers. Don't invent new ones without adding them there and in Project Settings.
+
+**Engine and content split**
+- Nothing under `engine/` may name or depict SEGA characters or trademarks, including in file names and comments. `tests/unit/test_engine_ip_split.gd` enforces this.
+- `engine/` must never depend on `content/`.
+
+**GDScript**
+- Follow the [GDScript style guide](https://docs.godotengine.org/en/stable/tutorials/scripting/gdscript/gdscript_styleguide.html), with static types everywhere.
+- Access scene nodes through typed unique names, e.g. `@onready var _label: Label = %Label`, not `$Path.property`.
+- Document scripts and exported properties with `##` doc comments.
+
+**Greybox scenes**
+- Build blockouts with CSG nodes (`use_collision = true`) and the materials in `engine/greybox/`: grey floor, orange slopes, blue walls.
+- The grid is world-space: 1 square = 1 m, with a thick line every 5 m. Instance `greybox_environment.tres` for lighting and sky.
+
+**3D assets**
+- Model in Blender at 1 unit = 1 m, apply transforms, and export glTF 2.0 (`.glb`). Commit the `.blend` next to the `.glb`.
+- Give collision meshes the `-col` suffix so Godot generates simplified collision on import.
+- Binary assets go through Git LFS automatically (see `.gitattributes`).
+
+## Releases
+
+- **Test build:** on GitHub, go to **Actions → CI → Run workflow**. The Windows, Linux and macOS builds appear as a downloadable artifact on the run page.
+- **Release:** bump `application/config/version` in Project Settings, commit, then tag and push:
+
+```bash
+git tag v0.1.0
+```
+
+```bash
+git push origin v0.1.0
+```
+
+CI exports all three platforms and publishes a GitHub pre-release with generated notes.
+
+- When upgrading Godot, change `GODOT_VERSION` in `.github/workflows/ci.yml` and the version in this file together.
+- Release builds check out LFS files. GitHub meters LFS storage and bandwidth, so keep large source files (such as `.blend`) reasonably sized.

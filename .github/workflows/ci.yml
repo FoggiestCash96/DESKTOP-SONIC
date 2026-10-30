@@ -1,0 +1,119 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  pull_request:
+  workflow_dispatch:
+
+env:
+  # Keep in sync with the editor version in DEVELOPER.md.
+  GODOT_VERSION: "4.7.2"
+
+jobs:
+  test:
+    name: Script check and unit tests
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        run: |
+          curl -fsSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          sudo mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" /usr/local/bin/godot
+          godot --version
+
+      - name: Import project
+        run: godot --headless --path . --import
+
+      - name: Check scripts (warnings count as errors)
+        run: godot --headless --path . --script res://tests/check_scripts.gd
+
+      - name: Run unit tests
+        run: |
+          godot --headless --path . --script res://tests/run_tests.gd 2>&1 | tee test.log
+          status=${PIPESTATUS[0]}
+          if grep -q "SCRIPT ERROR" test.log; then
+            echo "::error::Script errors while running tests"
+            exit 1
+          fi
+          exit "$status"
+
+  export:
+    name: Export Windows, Linux and macOS builds
+    needs: test
+    # Tagged releases publish a GitHub release; manual runs only upload build artifacts.
+    if: startsWith(github.ref, 'refs/tags/v') || github.event_name == 'workflow_dispatch'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          lfs: true
+
+      - name: Install Godot ${{ env.GODOT_VERSION }}
+        run: |
+          curl -fsSL -o godot.zip "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_linux.x86_64.zip"
+          unzip -q godot.zip
+          sudo mv "Godot_v${GODOT_VERSION}-stable_linux.x86_64" /usr/local/bin/godot
+
+      - name: Cache export templates
+        id: templates
+        uses: actions/cache@v6
+        with:
+          path: ~/.local/share/godot/export_templates/${{ env.GODOT_VERSION }}.stable
+          key: godot-export-templates-${{ env.GODOT_VERSION }}
+
+      - name: Download export templates
+        if: steps.templates.outputs.cache-hit != 'true'
+        run: |
+          curl -fsSL -o templates.tpz "https://github.com/godotengine/godot/releases/download/${GODOT_VERSION}-stable/Godot_v${GODOT_VERSION}-stable_export_templates.tpz"
+          unzip -q templates.tpz
+          dest="$HOME/.local/share/godot/export_templates/${GODOT_VERSION}.stable"
+          mkdir -p "$dest"
+          mv templates/* "$dest/"
+
+      - name: Import project
+        run: godot --headless --path . --import
+
+      - name: Export
+        run: |
+          mkdir -p build/windows build/linux build/macos
+          godot --headless --path . --export-release "Windows Desktop" build/windows/SonicVelocityRun.exe
+          godot --headless --path . --export-release "Linux" build/linux/SonicVelocityRun.x86_64
+          godot --headless --path . --export-release "macOS" build/macos/SonicVelocityRun.zip
+
+      - name: Package
+        run: |
+          for platform in windows linux; do
+            cp LICENSE LICENSE-ASSETS.md README.md "build/$platform/"
+          done
+          (cd build/windows && zip -qr ../SonicVelocityRun-windows.zip .)
+          tar -czf build/SonicVelocityRun-linux.tar.gz -C build/linux .
+          mv build/macos/SonicVelocityRun.zip build/SonicVelocityRun-macos.zip
+          ls -lh build/
+
+      - uses: actions/upload-artifact@v7
+        with:
+          name: SonicVelocityRun-build-${{ github.run_number }}
+          path: |
+            build/SonicVelocityRun-windows.zip
+            build/SonicVelocityRun-linux.tar.gz
+            build/SonicVelocityRun-macos.zip
+
+      - name: Publish GitHub release
+        if: startsWith(github.ref, 'refs/tags/v')
+        env:
+          GH_TOKEN: ${{ github.token }}
+        # Marked as a pre-release while the game is in 0.x.
+        run: |
+          gh release create "$GITHUB_REF_NAME" \
+            build/SonicVelocityRun-windows.zip \
+            build/SonicVelocityRun-linux.tar.gz \
+            build/SonicVelocityRun-macos.zip \
+            --title "Sonic Velocity Run $GITHUB_REF_NAME" \
+            --generate-notes \
+            --prerelease
