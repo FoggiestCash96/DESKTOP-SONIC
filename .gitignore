@@ -1,0 +1,25 @@
+# Godot 4 cache and generated files
+.godot/
+/android/
+*.translation
+# Written temporarily by tests/check_scripts.gd
+/override.cfg
+
+# Exported builds
+/build/
+
+# Blender autosaves and backups
+*.blend1
+*.blend2
+*.blend@
+
+# OS and editor clutter
+.DS_Store
+Thumbs.db
+desktop.ini
+*.tmp
+.vscode/
+.idea/
+
+# Logs
+*.log

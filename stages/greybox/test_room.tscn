@@ -1,0 +1,664 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://stages/greybox/test_room.gd" id="1_3v71b"]
+[ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_e7fp2"]
+[ext_resource type="Script" path="res://engine/debug/fly_camera.gd" id="3_bebbj"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="4_tyqwl"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="5_k0xv2"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="6_x61iv"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_marker.tres" id="7_npbbw"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
+size = Vector3(0.3, 1.5, 0.3)
+
+[sub_resource type="BoxMesh" id="BoxMesh_rnj5a"]
+size = Vector3(0.3, 3, 0.3)
+
+[node name="TestRoom" type="Node3D" unique_id=1758518970]
+script = ExtResource("1_3v71b")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2066380012]
+environment = ExtResource("2_e7fp2")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1645960948]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="FlyCamera" type="Camera3D" parent="." unique_id=100056698]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, 0.2079117, 0, -0.2079117, 0.9781476, 0, 7, 30)
+current = true
+fov = 70.0
+script = ExtResource("3_bebbj")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=52010258]
+
+[node name="Floor" type="CSGBox3D" parent="Geometry" unique_id=567049643]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.5, -500)
+use_collision = true
+size = Vector3(400, 1, 1200)
+material = ExtResource("4_tyqwl")
+
+[node name="Ramp15" type="CSGPolygon3D" parent="Geometry" unique_id=1238642260]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -18, 0, -10)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 22, 0, 22, 4.287187, 16, 4.287187)
+depth = 8.0
+material = ExtResource("5_k0xv2")
+
+[node name="Ramp30" type="CSGPolygon3D" parent="Geometry" unique_id=1782293210]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -28, 0, -10)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 18, 0, 18, 6.928203, 12, 6.928203)
+depth = 8.0
+material = ExtResource("5_k0xv2")
+
+[node name="Ramp45" type="CSGPolygon3D" parent="Geometry" unique_id=456233567]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, -38, 0, -10)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 14, 0, 14, 8, 8, 8)
+depth = 8.0
+material = ExtResource("5_k0xv2")
+
+[node name="HalfPipeRight" type="CSGPolygon3D" parent="Geometry" unique_id=1862745738]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 42, 0, -10)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0.523225, 0.017128615, 1.0442095, 0.06844111, 1.5607226, 0.15371776, 2.0705523, 0.27259338, 2.5715158, 0.42455897, 3.0614674, 0.6089637, 3.5383096, 0.82501805, 4, 1.0717968, 4.444562, 1.3482431, 4.8700914, 1.6531733, 5.2747664, 1.9852816, 5.656854, 2.3431458, 6.0147185, 2.7252336, 6.3468266, 3.1299086, 6.651757, 3.555438, 6.928203, 4, 7.174982, 4.4616904, 7.391036, 4.9385324, 7.575441, 5.4284844, 7.7274065, 5.9294477, 7.846282, 6.4392776, 7.931559, 6.9557905, 7.9828715, 7.476775, 8, 8, 9, 8, 9, 0)
+depth = 30.0
+material = ExtResource("5_k0xv2")
+
+[node name="HalfPipeLeft" type="CSGPolygon3D" parent="Geometry" unique_id=804858722]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 30, 0, -40)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 0.523225, 0.017128615, 1.0442095, 0.06844111, 1.5607226, 0.15371776, 2.0705523, 0.27259338, 2.5715158, 0.42455897, 3.0614674, 0.6089637, 3.5383096, 0.82501805, 4, 1.0717968, 4.444562, 1.3482431, 4.8700914, 1.6531733, 5.2747664, 1.9852816, 5.656854, 2.3431458, 6.0147185, 2.7252336, 6.3468266, 3.1299086, 6.651757, 3.555438, 6.928203, 4, 7.174982, 4.4616904, 7.391036, 4.9385324, 7.575441, 5.4284844, 7.7274065, 5.9294477, 7.846282, 6.4392776, 7.931559, 6.9557905, 7.9828715, 7.476775, 8, 8, 9, 8, 9, 0)
+depth = 30.0
+material = ExtResource("5_k0xv2")
+
+[node name="Steps" type="CSGCombiner3D" parent="Geometry" unique_id=2020380909]
+use_collision = true
+
+[node name="Step1" type="CSGBox3D" parent="Geometry/Steps" unique_id=31053677]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.125, -10.5)
+size = Vector3(6, 0.25, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step2" type="CSGBox3D" parent="Geometry/Steps" unique_id=623892175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.25, -11.5)
+size = Vector3(6, 0.5, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step3" type="CSGBox3D" parent="Geometry/Steps" unique_id=806691680]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.375, -12.5)
+size = Vector3(6, 0.75, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step4" type="CSGBox3D" parent="Geometry/Steps" unique_id=1110756408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.5, -13.5)
+size = Vector3(6, 1, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step5" type="CSGBox3D" parent="Geometry/Steps" unique_id=1113313026]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.625, -14.5)
+size = Vector3(6, 1.25, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step6" type="CSGBox3D" parent="Geometry/Steps" unique_id=1683457898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.75, -15.5)
+size = Vector3(6, 1.5, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step7" type="CSGBox3D" parent="Geometry/Steps" unique_id=1658954335]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0.875, -16.5)
+size = Vector3(6, 1.75, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Step8" type="CSGBox3D" parent="Geometry/Steps" unique_id=1627257758]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 1, -17.5)
+size = Vector3(6, 2, 1)
+material = ExtResource("6_x61iv")
+
+[node name="Wall" type="CSGBox3D" parent="Geometry" unique_id=78682164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 5, -100)
+use_collision = true
+size = Vector3(1, 10, 80)
+material = ExtResource("6_x61iv")
+
+[node name="Label15" type="Label3D" parent="." unique_id=1259574177]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -22, 4.1435933, -18)
+pixel_size = 0.01
+billboard = 1
+text = "15°"
+font_size = 96
+outline_size = 18
+
+[node name="Label30" type="Label3D" parent="." unique_id=1952735574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32, 5.464102, -16)
+pixel_size = 0.01
+billboard = 1
+text = "30°"
+font_size = 96
+outline_size = 18
+
+[node name="Label45" type="Label3D" parent="." unique_id=2090424663]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -42, 6, -14)
+pixel_size = 0.01
+billboard = 1
+text = "45°"
+font_size = 96
+outline_size = 18
+
+[node name="LabelHalfPipe" type="Label3D" parent="." unique_id=2042200685]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 36, 4, -25)
+pixel_size = 0.01
+billboard = 1
+text = "Half-pipe  r = 8 m"
+font_size = 96
+outline_size = 18
+
+[node name="LabelSteps" type="Label3D" parent="." unique_id=1548690714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 3.5, -14)
+pixel_size = 0.01
+billboard = 1
+text = "Steps  0.25 m"
+font_size = 96
+outline_size = 18
+
+[node name="LabelWall" type="Label3D" parent="." unique_id=707272431]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 11.5, -58)
+pixel_size = 0.01
+billboard = 1
+text = "Wall  10 m"
+font_size = 96
+outline_size = 18
+
+[node name="Runway" type="Node3D" parent="." unique_id=486171638]
+
+[node name="Post25L" type="MeshInstance3D" parent="Runway" unique_id=1008748641]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -25)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post25R" type="MeshInstance3D" parent="Runway" unique_id=775820131]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -25)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post50L" type="MeshInstance3D" parent="Runway" unique_id=2111645473]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -50)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post50R" type="MeshInstance3D" parent="Runway" unique_id=2028980526]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -50)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post75L" type="MeshInstance3D" parent="Runway" unique_id=654815045]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -75)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post75R" type="MeshInstance3D" parent="Runway" unique_id=912233890]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -75)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post100L" type="MeshInstance3D" parent="Runway" unique_id=604464318]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -100)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post100R" type="MeshInstance3D" parent="Runway" unique_id=1691839259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -100)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker100" type="Label3D" parent="Runway" unique_id=1637754981]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -100)
+pixel_size = 0.01
+billboard = 1
+text = "100 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post125L" type="MeshInstance3D" parent="Runway" unique_id=1568187319]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -125)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post125R" type="MeshInstance3D" parent="Runway" unique_id=817119465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -125)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post150L" type="MeshInstance3D" parent="Runway" unique_id=411312244]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -150)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post150R" type="MeshInstance3D" parent="Runway" unique_id=2132571378]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -150)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post175L" type="MeshInstance3D" parent="Runway" unique_id=1802564324]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -175)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post175R" type="MeshInstance3D" parent="Runway" unique_id=367571165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -175)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post200L" type="MeshInstance3D" parent="Runway" unique_id=47358210]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -200)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post200R" type="MeshInstance3D" parent="Runway" unique_id=190054183]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -200)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker200" type="Label3D" parent="Runway" unique_id=1737351111]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -200)
+pixel_size = 0.01
+billboard = 1
+text = "200 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post225L" type="MeshInstance3D" parent="Runway" unique_id=123632242]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -225)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post225R" type="MeshInstance3D" parent="Runway" unique_id=505815374]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -225)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post250L" type="MeshInstance3D" parent="Runway" unique_id=1287379117]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -250)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post250R" type="MeshInstance3D" parent="Runway" unique_id=1026695461]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -250)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post275L" type="MeshInstance3D" parent="Runway" unique_id=2145103035]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -275)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post275R" type="MeshInstance3D" parent="Runway" unique_id=759124621]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -275)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post300L" type="MeshInstance3D" parent="Runway" unique_id=1589438886]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -300)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post300R" type="MeshInstance3D" parent="Runway" unique_id=295770346]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -300)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker300" type="Label3D" parent="Runway" unique_id=1584966135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -300)
+pixel_size = 0.01
+billboard = 1
+text = "300 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post325L" type="MeshInstance3D" parent="Runway" unique_id=109576476]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -325)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post325R" type="MeshInstance3D" parent="Runway" unique_id=1162843946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -325)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post350L" type="MeshInstance3D" parent="Runway" unique_id=1900110794]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -350)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post350R" type="MeshInstance3D" parent="Runway" unique_id=611026063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -350)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post375L" type="MeshInstance3D" parent="Runway" unique_id=1570857135]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -375)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post375R" type="MeshInstance3D" parent="Runway" unique_id=1947392973]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -375)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post400L" type="MeshInstance3D" parent="Runway" unique_id=1236308714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -400)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post400R" type="MeshInstance3D" parent="Runway" unique_id=737040942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -400)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker400" type="Label3D" parent="Runway" unique_id=950034710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -400)
+pixel_size = 0.01
+billboard = 1
+text = "400 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post425L" type="MeshInstance3D" parent="Runway" unique_id=411289522]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -425)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post425R" type="MeshInstance3D" parent="Runway" unique_id=719473627]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -425)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post450L" type="MeshInstance3D" parent="Runway" unique_id=1836654005]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -450)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post450R" type="MeshInstance3D" parent="Runway" unique_id=581504946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -450)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post475L" type="MeshInstance3D" parent="Runway" unique_id=705087712]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -475)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post475R" type="MeshInstance3D" parent="Runway" unique_id=1241872204]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -475)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post500L" type="MeshInstance3D" parent="Runway" unique_id=247148708]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -500)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post500R" type="MeshInstance3D" parent="Runway" unique_id=1140375889]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -500)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker500" type="Label3D" parent="Runway" unique_id=827024854]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -500)
+pixel_size = 0.01
+billboard = 1
+text = "500 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post525L" type="MeshInstance3D" parent="Runway" unique_id=39461788]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -525)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post525R" type="MeshInstance3D" parent="Runway" unique_id=1661200223]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -525)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post550L" type="MeshInstance3D" parent="Runway" unique_id=1782108595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -550)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post550R" type="MeshInstance3D" parent="Runway" unique_id=179488822]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -550)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post575L" type="MeshInstance3D" parent="Runway" unique_id=310197058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -575)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post575R" type="MeshInstance3D" parent="Runway" unique_id=1385507714]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -575)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post600L" type="MeshInstance3D" parent="Runway" unique_id=1471409793]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -600)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post600R" type="MeshInstance3D" parent="Runway" unique_id=1714444457]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -600)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker600" type="Label3D" parent="Runway" unique_id=2121414489]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -600)
+pixel_size = 0.01
+billboard = 1
+text = "600 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post625L" type="MeshInstance3D" parent="Runway" unique_id=1333600421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -625)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post625R" type="MeshInstance3D" parent="Runway" unique_id=1096325159]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -625)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post650L" type="MeshInstance3D" parent="Runway" unique_id=652617659]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -650)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post650R" type="MeshInstance3D" parent="Runway" unique_id=368150986]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -650)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post675L" type="MeshInstance3D" parent="Runway" unique_id=2077118012]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -675)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post675R" type="MeshInstance3D" parent="Runway" unique_id=829987265]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -675)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post700L" type="MeshInstance3D" parent="Runway" unique_id=959226780]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -700)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post700R" type="MeshInstance3D" parent="Runway" unique_id=717526543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -700)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker700" type="Label3D" parent="Runway" unique_id=1090556678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -700)
+pixel_size = 0.01
+billboard = 1
+text = "700 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post725L" type="MeshInstance3D" parent="Runway" unique_id=251942104]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -725)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post725R" type="MeshInstance3D" parent="Runway" unique_id=384757108]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -725)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post750L" type="MeshInstance3D" parent="Runway" unique_id=1706130160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -750)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post750R" type="MeshInstance3D" parent="Runway" unique_id=1952248416]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -750)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post775L" type="MeshInstance3D" parent="Runway" unique_id=1697045091]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -775)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post775R" type="MeshInstance3D" parent="Runway" unique_id=1100737076]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -775)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post800L" type="MeshInstance3D" parent="Runway" unique_id=560026630]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -800)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post800R" type="MeshInstance3D" parent="Runway" unique_id=363085771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -800)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker800" type="Label3D" parent="Runway" unique_id=1505686308]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -800)
+pixel_size = 0.01
+billboard = 1
+text = "800 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post825L" type="MeshInstance3D" parent="Runway" unique_id=1633861133]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -825)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post825R" type="MeshInstance3D" parent="Runway" unique_id=1997046437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -825)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post850L" type="MeshInstance3D" parent="Runway" unique_id=803632622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -850)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post850R" type="MeshInstance3D" parent="Runway" unique_id=2108557105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -850)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post875L" type="MeshInstance3D" parent="Runway" unique_id=1603101409]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -875)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post875R" type="MeshInstance3D" parent="Runway" unique_id=1325847773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -875)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post900L" type="MeshInstance3D" parent="Runway" unique_id=723366121]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -900)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post900R" type="MeshInstance3D" parent="Runway" unique_id=846954379]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -900)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker900" type="Label3D" parent="Runway" unique_id=262480968]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -900)
+pixel_size = 0.01
+billboard = 1
+text = "900 m"
+font_size = 96
+outline_size = 18
+
+[node name="Post925L" type="MeshInstance3D" parent="Runway" unique_id=161803348]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -925)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post925R" type="MeshInstance3D" parent="Runway" unique_id=437410028]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -925)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post950L" type="MeshInstance3D" parent="Runway" unique_id=3831595]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -950)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post950R" type="MeshInstance3D" parent="Runway" unique_id=725392093]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -950)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post975L" type="MeshInstance3D" parent="Runway" unique_id=1449009710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.75, -975)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post975R" type="MeshInstance3D" parent="Runway" unique_id=766001716]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0.75, -975)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_5u85v")
+
+[node name="Post1000L" type="MeshInstance3D" parent="Runway" unique_id=1979560971]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 1.5, -1000)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Post1000R" type="MeshInstance3D" parent="Runway" unique_id=2084752929]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 1.5, -1000)
+material_override = ExtResource("7_npbbw")
+mesh = SubResource("BoxMesh_rnj5a")
+
+[node name="Marker1000" type="Label3D" parent="Runway" unique_id=1368287984]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 3.8, -1000)
+pixel_size = 0.01
+billboard = 1
+text = "1000 m"
+font_size = 96
+outline_size = 18
+
+[node name="LabelWelcome" type="Label3D" parent="." unique_id=1396258114]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4, -6)
+pixel_size = 0.01
+billboard = 1
+text = "Greybox Test Room
+Runway ahead: posts every 25 m
+F3 debug overlay  ·  Esc title screen"
+font_size = 96
+outline_size = 18
