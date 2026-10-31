@@ -3,7 +3,7 @@ extends Node
 ## items found on this visit to the stage. Autoloaded as GameState. A Stage reports itself as it
 ## loads; after a death it reloads and resumes from the last checkpoint touched.
 
-signal game_over  ## The last life was lost. The title screen returns after rules.game_over_time.
+signal game_over  ## The last life was lost. The world map (or the title screen) returns after rules.game_over_time.
 signal stage_cleared  ## The goal was reached. The results show for rules.results_time.
 
 @export var rules: GameRules = preload("res://engine/systems/game_rules.tres")
@@ -22,6 +22,7 @@ var cleared_rings := 0  ## Rings the player had at the goal.
 
 var _touched: Dictionary[String, bool] = {}  # Checkpoints touched on this visit to the stage.
 var _found: Dictionary[String, bool] = {}  # Unique items (hidden collectibles, extra lives) found on this visit.
+var _found_hidden: PackedStringArray = []  # The hidden collectibles among them.
 
 
 func _ready() -> void:
@@ -85,11 +86,28 @@ func find(id: String, hidden: bool) -> bool:
 	_found[id] = true
 	if hidden:
 		hidden_found += 1
+		_found_hidden.append(id)
 	return true
 
 
 func is_found(id: String) -> bool:
 	return _found.has(id)
+
+
+## Ids of the hidden collectibles found on this visit to the stage.
+func hidden_found_ids() -> PackedStringArray:
+	return _found_hidden.duplicate()
+
+
+## Starts the current stage over: no checkpoints, nothing found, the clock back to zero.
+func reset_stage() -> void:
+	_clear_stage()
+
+
+## Forgets the stage being played, so the next one entered starts fresh even if it is the same one.
+func leave_stage() -> void:
+	stage = ""
+	_clear_stage()
 
 
 func add_life() -> void:
@@ -141,6 +159,7 @@ func _clear_stage() -> void:
 	cleared_rings = 0
 	_touched.clear()
 	_found.clear()
+	_found_hidden.clear()
 
 
 func _describe() -> String:

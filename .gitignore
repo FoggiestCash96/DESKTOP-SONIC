@@ -2,6 +2,8 @@
 .godot/
 /android/
 *.translation
+# ...except the game's own: project.godot loads them at start-up, before an import could make them.
+!/content/sonic/ui/translations/*.translation
 # Written temporarily by tests/check_scripts.gd
 /override.cfg
 

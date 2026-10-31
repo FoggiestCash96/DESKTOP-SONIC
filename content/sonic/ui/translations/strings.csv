@@ -1,0 +1,100 @@
+keys,en
+TITLE_SUBTITLE,An open-source fan game
+TITLE_PRESS_START,Press Enter or Start
+TITLE_DISCLAIMER,"Sonic Velocity Run is a free, non-commercial fan game. It is not affiliated with, endorsed or sponsored by SEGA. Sonic the Hedgehog and all related characters and trademarks belong to SEGA."
+MENU_PLAY,Play
+MENU_OPTIONS,Options
+MENU_TEST_ROOM,Test room
+MENU_QUIT,Quit
+SAVE_TITLE,Choose a save slot
+SAVE_SLOT,Slot %d
+SAVE_NEW,New game
+SAVE_PROGRESS,"%d acts cleared  ·  %d red rings  ·  %s played"
+SAVE_HINT,"Jump: play    Special (F or Y): delete    Back: title screen"
+SAVE_DELETE_CONFIRM,Delete slot %d? This can't be undone.
+SAVE_DELETE_YES,Delete
+SAVE_DELETE_NO,Keep it
+MAP_TITLE,World map
+MAP_HINT,"Left and right: world    Jump: play    Back: save slots"
+MAP_LOCKED,Locked
+MAP_COMING,Coming later
+MAP_CLEARED,Cleared
+MAP_BOSS,Boss
+MAP_WORLD_LOCKED,Beat the world before this one to reach it.
+MAP_NOT_BUILT,This act isn't built yet.
+MAP_UNLOCK_HINT,Clear the act before this one to unlock it.
+MAP_NOT_CLEARED,Not cleared yet.
+MAP_BEST_TIME,Best time %s
+MAP_ASSISTED,(with assists)
+MAP_BEST_RINGS,Most rings %d
+MAP_RED_RINGS,Red rings %d / %d
+OPT_TITLE,Options
+OPT_HINT,"LB and RB (or Q and E): switch tabs    Back: save and close"
+OPT_BACK,Save and close
+OPT_VIDEO,Video
+OPT_AUDIO,Audio
+OPT_CAMERA,Camera
+OPT_CONTROLS,Controls
+OPT_ACCESSIBILITY,Accessibility
+OPT_FULLSCREEN,Fullscreen
+OPT_VSYNC,V-sync
+OPT_RENDER_SCALE,3D resolution
+OPT_FPS_LIMIT,Frame rate limit
+OPT_UNLIMITED,Unlimited
+OPT_MASTER,Master volume
+OPT_MUSIC,Music volume
+OPT_SFX,Sound effects volume
+OPT_VOICE,Voice volume
+OPT_SENSITIVITY,Camera sensitivity
+OPT_INVERT_X,Invert camera left and right
+OPT_INVERT_Y,Invert camera up and down
+OPT_SPEED_LINES,Speed lines
+OPT_MOTION_BLUR,Motion blur
+OPT_SCREEN_SHAKE,Screen shake
+OPT_KEYBOARD,Keyboard and mouse
+OPT_CONTROLLER,Controller
+OPT_STICK,Stick and D-pad
+OPT_PRESS_KEY,Press a key… (Esc cancels)
+OPT_PRESS_BUTTON,Press a button… (Esc cancels)
+OPT_RESET_CONTROLS,Reset controls to defaults
+OPT_GAME_SPEED,Game speed
+OPT_ASSIST,Invincibility assist
+OPT_HUD_SIZE,HUD size
+OPT_ASSIST_NOTE,"A slower game speed gives you more time to react. With the invincibility assist, hits never hurt, and falling into a pit puts you back on solid ground. Best times set with either show as assisted."
+ACTION_MOVE_FORWARD,Move forward
+ACTION_MOVE_BACK,Move back
+ACTION_MOVE_LEFT,Move left
+ACTION_MOVE_RIGHT,Move right
+ACTION_JUMP,Jump
+ACTION_BOOST,Boost
+ACTION_CROUCH,"Roll, spin dash"
+ACTION_DRIFT,Drift
+ACTION_QUICKSTEP_LEFT,Quickstep left
+ACTION_QUICKSTEP_RIGHT,Quickstep right
+ACTION_SPECIAL,Special
+ACTION_CAMERA_UP,Camera up
+ACTION_CAMERA_DOWN,Camera down
+ACTION_CAMERA_LEFT,Camera left
+ACTION_CAMERA_RIGHT,Camera right
+ACTION_CAMERA_RECENTER,Camera behind the player
+ACTION_PAUSE,Pause
+PAUSE_TITLE,Paused
+PAUSE_RESUME,Resume
+PAUSE_RESTART_CHECKPOINT,Restart from the checkpoint
+PAUSE_RESTART_ACT,Restart the act
+PAUSE_OPTIONS,Options
+PAUSE_QUIT_MAP,Quit to the world map
+PAUSE_QUIT_TITLE,Quit to the title screen
+HUD_TIME,TIME
+HUD_RINGS,RINGS
+HUD_ASSIST,ASSIST
+HUD_SPEED,SPEED %d%%
+HUD_SHIELD,SHIELD
+HUD_SHOES,SPEED SHOES
+HUD_INVINCIBLE,INVINCIBLE
+HUD_MAGNET,MAGNET
+HUD_GAME_OVER,GAME OVER
+RESULTS_CLEAR,%s CLEAR
+RESULTS_RED_RINGS,RED RINGS   %d / %d
+RESULTS_NEW_RECORD,NEW RECORD!
+RESULTS_CONTINUE,Jump to continue

@@ -62,8 +62,9 @@ func _exit_tree() -> void:
 func _unhandled_input(event: InputEvent) -> void:
 	var motion := event as InputEventMouseMotion
 	if motion and Input.mouse_mode == Input.MOUSE_MODE_CAPTURED:
-		_yaw -= deg_to_rad(motion.relative.x * settings.mouse_sensitivity)
-		_pitch -= deg_to_rad(motion.relative.y * settings.mouse_sensitivity)
+		var turn := motion.relative * settings.mouse_sensitivity * GameSettings.camera_sensitivity * _inversion()
+		_yaw -= deg_to_rad(turn.x)
+		_pitch -= deg_to_rad(turn.y)
 		_since_manual = 0.0
 		return
 
@@ -94,10 +95,11 @@ func input_yaw() -> float:
 
 
 func _read_camera_input(delta: float) -> void:
-	var look := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down")
+	var look := Input.get_vector("camera_left", "camera_right", "camera_up", "camera_down") * _inversion()
 	if look != Vector2.ZERO:
-		_yaw -= look.x * deg_to_rad(settings.look_speed) * delta
-		_pitch -= look.y * deg_to_rad(settings.look_speed) * delta
+		var speed := deg_to_rad(settings.look_speed * GameSettings.camera_sensitivity) * delta
+		_yaw -= look.x * speed
+		_pitch -= look.y * speed
 		_since_manual = 0.0
 	else:
 		_since_manual += delta
@@ -212,8 +214,10 @@ func _place(delta: float) -> void:
 ## at nothing, so they cost nothing at normal speeds.
 func _update_speed_effects(delta: float) -> void:
 	var speed := target.velocity.length()
-	var lines := CameraMath.effect_amount(speed, settings.lines_start, settings.lines_full) if settings.speed_lines and not target.is_dead() else 0.0
-	var blur := CameraMath.effect_amount(speed, settings.blur_start, settings.blur_full) * settings.blur_strength if settings.motion_blur and not target.is_dead() else 0.0
+	var lines_on := settings.speed_lines and GameSettings.speed_lines and not target.is_dead()
+	var blur_on := settings.motion_blur and GameSettings.motion_blur and not target.is_dead()
+	var lines := CameraMath.effect_amount(speed, settings.lines_start, settings.lines_full) if lines_on else 0.0
+	var blur := CameraMath.effect_amount(speed, settings.blur_start, settings.blur_full) * settings.blur_strength if blur_on else 0.0
 	var weight := CameraMath.smoothing(settings.effects_smoothing, delta)
 	_speed_lines = lerpf(_speed_lines, lines, weight)
 	_blur = lerpf(_blur, blur, weight)
@@ -244,6 +248,11 @@ func _clear_distance(pivot: Vector3, offset: Vector3) -> float:
 	if safe >= 1.0:
 		return offset.length()
 	return maxf(offset.length() * safe - settings.collision_margin, 0.0)
+
+
+## -1 on each axis the player has inverted in the settings, else 1.
+func _inversion() -> Vector2:
+	return Vector2(-1.0 if GameSettings.invert_x else 1.0, -1.0 if GameSettings.invert_y else 1.0)
 
 
 func _stick_held() -> bool:

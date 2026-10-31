@@ -74,11 +74,11 @@ Controller first. Every gameplay action has both a keyboard and a controller bin
 
 - **Dimension:** hybrid 3D with 2.5D path sections.
 - **Stage style:** mixed per zone.
-- **Hub:** world map.
+- **Hub:** world map: for now a menu map of the six worlds (decided 2026-10-31, §10.1). A grander one comes with the art pass.
 - **Acts:** each act has its own focus (speed, platforming or combat). Emerald Shore Act 1 is a speed act (decided 2026-10-30).
 - **Bosses** (decided 2026-10-30): each world's boss waits at the end of its **Act 8**, a short run that ends in the boss arena (§9.3).
 - **Routes:** 1 to 3 per act. High routes reward skill, low routes are safer.
-- **Save system:** per-slot JSON in `user://` with zone progress, collectibles, best times and settings.
+- **Save system:** 10 save slots, each a JSON file in `user://saves/` with its act progress, best times and red rings, saved after every act (decided 2026-10-31). Settings are kept apart, for the whole game (§10.2).
 
 ## 5. Physics
 
@@ -169,7 +169,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 - **Knockback:** a hit throws the player away from what hurt them at 3.75 m/s and up at 7.5 m/s, under lighter gravity (21.09 m/s²) and with no control. Landing stops them dead. Then follow 2.0 s (120 frames) of flashing, during which nothing can hurt them.
 - **Shield:** takes the next hit instead of the rings, with the same knockback and flashing.
 - **Hit with no rings:** the player dies. They hop up at 13.1 m/s and fall through everything, and the camera stops to watch. 2 s later the stage restarts from the last checkpoint, a life down.
-- **Lives:** you start with **5**. Extra lives come only from a unique hidden 1-up object in each act. Each gives a life once per visit, and one found before a death stays found. Losing the last life shows GAME OVER for 3 s, then the title screen returns and the next game starts with 5 lives again.
+- **Lives:** you start with **5**. Extra lives come only from a unique hidden 1-up object in each act. Each gives a life once per visit, and one found before a death stays found. Losing the last life shows GAME OVER for 3 s, then the world map returns (or the title screen, with no save slot) with 5 lives again. Nothing on the save slot is lost.
 - **Pit deaths** are on: falling below `kill_height` (y = −50 m) costs a life the same way. **Crush deaths** are on too, but come with the first moving solid objects, as there is nothing to be crushed by yet.
 - **Item monitors** (decided 2026-10-30):
 
@@ -183,7 +183,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 | Boost refill | Added once the boost exists |
 
   Monitors are solid: a player standing up bumps into them or stands on them. Curled up (jumping, rolling or spin dashing) they break them open. Breaking one from above bounces the player back up: their falling speed turns into rising speed, still cut short if jump is let go.
-- **Hidden collectibles** (decided 2026-10-30): **red rings, 5 per act.** The HUD counts them. One found before a death stays found and shows greyed out after the restart. Saving them for good comes with the save system (Milestone 9).
+- **Hidden collectibles** (decided 2026-10-30): **red rings, 5 per act.** The HUD counts them. One found before a death stays found and shows greyed out after the restart. Clearing the act saves the ones found to the save slot for good (Milestone 9); on later visits they show greyed out, and the HUD and map count them.
 - **Checkpoints:** passing a post saves the spot and the stage clock. After a death the stage restarts 1 m in front of the post, facing the way it points, with the clock as it was then and no rings. The lamp turns from blue to red.
 - **Stage clock:** counts up with no time limit (the modern rule; the classic games had 10 minutes). It stops while the player is dead.
 
@@ -290,7 +290,7 @@ Falling into the sea (below y = −30) costs a life. The five red rings: the two
 |---|---|
 | Style | **Stylised toon**: cel shading (Godot's toon diffuse and specular modes) on flat colours. No ink outlines. |
 | Speed lines | **Yes**, in the style of Sonic Colors: streaks flow out along the screen edges at high speed, and with the boost once it exists. They start at 12 m/s and are full by 26 m/s. |
-| Motion blur | **Yes**, a full-screen radial blur at high speed (and boosting, later), from 16 m/s to full at 30 m/s. Some players find it uncomfortable, so it has an off switch (`motion_blur` in the camera settings now, the settings menu in Milestone 9). |
+| Motion blur | **Yes**, a full-screen radial blur at high speed (and boosting, later), from 16 m/s to full at 30 m/s. Some players find it uncomfortable, so it has an off switch (the Options menu's Camera tab, Milestone 9). |
 | Poly budgets | Player **30k** triangles, enemies **6k**, stage chunks **100k** per visible region |
 | Low-end target | **60 fps at 1080p on a GTX 1060-class GPU**, with the Forward+ renderer |
 
@@ -360,9 +360,52 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 - **Phases:** 1 wave per slam and the core open for 3.5 s at first. From 4 hits left it moves faster, sends 2 waves and opens for 3 s. From 2 left: 3 waves, 2.5 s, and a charge across the beach before each slam. It turns redder with each phase.
 - **Defeat:** it bursts into explosions and collapses, and the act is clear.
 
+## 10. Menus, saves and settings (Milestone 9)
+
+### 10.1 Flow and the world map
+
+- **Title screen:** Enter, A or Start brings up the main menu: Play, Options, Test room and Quit. Two developer shortcuts skip the menus without a save slot: F or Y opens the test room, Shift or X Act 8's boss.
+- **Play** leads to the save slots, then the **world map** (decided 2026-10-31: a menu map for now). The six worlds sit along a path, with the chosen world's eight acts listed beside it: each act's best time, most rings and red rings found (out of 5), whether it is cleared, locked or not built yet, and the boss act marked. Left and right pick a world, up and down an act, and jump plays it.
+- **Unlocking:** a world's first built act is open from the start; each later act opens when the built act before it is cleared, so Act 8 opens after Act 1 until Acts 2 to 7 exist. A world opens once the world before it is beaten (its last built act cleared).
+- **After an act:** the results show for 6 s (a jump press after 1.5 s skips them), then the world map returns with the next act to play chosen. Leaving an act from the pause menu returns to its place on the map. With no save slot, as when a stage is run on its own, the goal leads to the stage's `next_scene` or the title screen instead.
+- **Pause:** Start or Esc pauses the game: resume, restart from the last checkpoint (once one is touched), restart the act, the options, or quit to the world map (the title screen without a save slot). The game can't be paused once the goal is reached or the player has died.
+
+### 10.2 Save slots and settings
+
+- **Save slots** (decided 2026-10-31: 10): each is `user://saves/slot_NN.json`, holding the play time and, for every cleared act, its best time (marked if set with an assist), most rings, and the ids of every red ring found there. Clearing an act saves at once, through a temporary file so a crash can't leave half a save. A slot that can't be read, or comes from a newer version, shows as a new game. The special button (F or Y) deletes a slot, after asking.
+- **Lives** aren't saved: every visit to a slot starts with 5, and a game over sends you back to the map with 5 again.
+- **Settings** are kept apart from the slots, for the whole game, in `user://settings.cfg`, so they apply from the title screen on. They change in the Options menu, from the title screen or the pause menu, take effect at once, and are saved when it closes:
+
+| Tab | Settings |
+|---|---|
+| Video | Fullscreen, v-sync, 3D resolution (50 to 100%, for slower graphics cards), frame rate limit |
+| Audio | Master, music, sound effects and voice volume, one bus each (`default_bus_layout.tres`) |
+| Camera | Camera sensitivity (25 to 200%), invert either axis, speed lines, motion blur, screen shake |
+| Controls | Remap every action's keyboard or mouse binding, and the controller button (or trigger) of every button action; movement and the camera stay on the sticks and D-pad. Reset to defaults. |
+| Accessibility | Game speed, the invincibility assist, HUD size (100, 125 or 150%) |
+
+### 10.3 Accessibility (decided 2026-10-31: both assists)
+
+- **Game speed:** 100, 90, 80 or 70%. Everything in a stage slows down, giving more time to react; menus stay at full speed.
+- **Invincibility assist:** hits never hurt, and falling into a pit puts the player back on solid ground (where they stood a moment before) instead of costing a life.
+- Best times set with either assist are saved marked as assisted, and the HUD tags a stage played with them.
+- Along with camera sensitivity, motion blur and speed lines off, and a HUD that never relies on colour alone.
+
+### 10.4 HUD (decided 2026-10-31: Adventure-style)
+
+- **Top left:** a big ring count beside a ring icon (blinking red at zero, since the next hit is fatal), the time below it, and the act's red rings below that: a bright filled ring for each one found, an outline for each still to find.
+- **Bottom left:** lives beside Sonic's icon, with the assists in use tagged above.
+- **Top right:** the power-ups running and their seconds left. **Bottom right:** kept free for the boost gauge.
+- **Also:** the act's title card as it starts, a boss's name and hits left during its fight, the results (with a new record marked), GAME OVER, and the pause menu.
+- Its size follows the HUD size setting. The icons are drawn in code until the art pass.
+
+### 10.5 Text
+
+All menu and HUD text goes through Godot's translation system, from `content/sonic/ui/translations/strings.csv` (English for now), so the community can add languages by adding a column.
+
 ---
 
-## 10. Open decisions
+## 11. Open decisions
 
 Each one is grouped by the milestone where it starts to block work.
 
@@ -370,10 +413,9 @@ Each one is grouped by the milestone where it starts to block work.
 |---|---|
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
-| **M9 (menus)** | HUD style; accessibility extras (game speed slider, assist mode) |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; music tool; 2D art tool; community channel; GameJolt |
 
-## 11. Roadmap
+## 12. Roadmap
 
 | # | Milestone | Status |
 |---|---|---|
@@ -385,7 +427,7 @@ Each one is grouped by the milestone where it starts to block work.
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | **Done** |
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
 | 8 | Enemies and the first boss | **Done** |
-| 9 | Menus, save system, settings, accessibility | Next |
-| 10 | Art and audio pass, then a public demo release | |
+| 9 | Menus, save system, settings, accessibility | **Done** |
+| 10 | Art and audio pass, then a public demo release | Next |
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

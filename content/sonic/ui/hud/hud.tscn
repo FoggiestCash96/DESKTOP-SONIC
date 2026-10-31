@@ -1,176 +1,359 @@
 [gd_scene format=3]
 
-[ext_resource type="Script" path="res://content/sonic/ui/hud/hud.gd" id="1_taxje"]
+[ext_resource type="Script" path="res://content/sonic/ui/hud/hud.gd" id="1_eoy5h"]
+[ext_resource type="Script" path="res://content/sonic/ui/hud/ring_icon.gd" id="2_seeov"]
+[ext_resource type="Script" path="res://content/sonic/ui/hud/life_icon.gd" id="3_0pxfu"]
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="4_8nl2l"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/menus/pause_menu.tscn" id="5_kqy70"]
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_taxje"]
-bg_color = Color(0.1, 0.1, 0.12, 0.8)
-border_width_left = 2
-border_width_top = 2
-border_width_right = 2
-border_width_bottom = 2
-border_color = Color(1, 1, 1, 0.9)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h5k8y"]
+bg_color = Color(0.03, 0.06, 0.18, 0.85)
+border_width_left = 3
+border_width_top = 3
+border_width_right = 3
+border_width_bottom = 3
+border_color = Color(1, 1, 1, 1)
+corner_radius_top_left = 8
+corner_radius_top_right = 8
+corner_radius_bottom_right = 8
+corner_radius_bottom_left = 8
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wbo5"]
-bg_color = Color(1, 0.35, 0.2, 1)
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_sd0c2"]
+bg_color = Color(1, 0.4, 0.2, 1)
+corner_radius_top_left = 6
+corner_radius_top_right = 6
+corner_radius_bottom_right = 6
+corner_radius_bottom_left = 6
 
-[node name="HUD" type="CanvasLayer" unique_id=95572930]
-script = ExtResource("1_taxje")
+[node name="HUD" type="CanvasLayer" unique_id=661223426]
+script = ExtResource("1_eoy5h")
 
-[node name="Margin" type="MarginContainer" parent="." unique_id=428136070]
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
+[node name="TopLeft" type="Control" parent="." unique_id=651547935]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 0
+offset_left = 48.0
+offset_top = 36.0
+offset_right = 668.0
+offset_bottom = 256.0
 mouse_filter = 2
-theme_override_constants/margin_left = 28
-theme_override_constants/margin_top = 28
-theme_override_constants/margin_right = 28
-theme_override_constants/margin_bottom = 28
 
-[node name="TopLeft" type="VBoxContainer" parent="Margin" unique_id=2064632068]
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 0
+[node name="RingIcon" type="Control" parent="TopLeft" unique_id=306608944]
+anchors_preset = 0
+offset_top = 2.0
+offset_right = 84.0
+offset_bottom = 86.0
+mouse_filter = 2
+script = ExtResource("2_seeov")
 
-[node name="Rings" type="Label" parent="Margin/TopLeft" unique_id=1014634010]
+[node name="Rings" type="Label" parent="TopLeft" unique_id=1973294707]
 unique_name_in_owner = true
-layout_mode = 2
+layout_mode = 0
+offset_left = 100.0
+offset_top = -12.0
+offset_right = 100.0
+offset_bottom = -12.0
+theme_override_font_sizes/font_size = 76
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 15
+text = "0"
+
+[node name="TimeCaption" type="Label" parent="TopLeft" unique_id=448618708]
+layout_mode = 0
+offset_left = 6.0
+offset_top = 100.0
+offset_right = 6.0
+offset_bottom = 100.0
 theme_override_font_sizes/font_size = 30
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 7
-text = "RINGS   0"
-
-[node name="Time" type="Label" parent="Margin/TopLeft" unique_id=1053675990]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 7
-text = "TIME    0:00.00"
-
-[node name="RedRings" type="Label" parent="Margin/TopLeft" unique_id=906733505]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 24
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
 theme_override_constants/outline_size = 6
-text = "RED RINGS   0 / 5"
+text = "HUD_TIME"
 
-[node name="PowerUps" type="Label" parent="Margin" unique_id=1556273683]
+[node name="Time" type="Label" parent="TopLeft" unique_id=703943449]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 8
-size_flags_vertical = 0
+layout_mode = 0
+offset_left = 100.0
+offset_top = 88.0
+offset_right = 100.0
+offset_bottom = 88.0
+theme_override_font_sizes/font_size = 44
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+text = "0:00.00"
+
+[node name="RedRings" type="HBoxContainer" parent="TopLeft" unique_id=1875189907]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 8.0
+offset_top = 158.0
+offset_right = 8.0
+offset_bottom = 158.0
+mouse_filter = 2
+theme_override_constants/separation = 10
+
+[node name="BottomLeft" type="Control" parent="." unique_id=1088212471]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 2
+anchor_top = 1.0
+anchor_bottom = 1.0
+offset_left = 48.0
+offset_top = -176.0
+offset_right = 668.0
+offset_bottom = -36.0
+pivot_offset = Vector2(0, 140)
+mouse_filter = 2
+
+[node name="Tags" type="Label" parent="BottomLeft" unique_id=2051705079]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 4.0
+offset_right = 4.0
 theme_override_font_sizes/font_size = 26
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 6
+
+[node name="LifeIcon" type="Control" parent="BottomLeft" unique_id=1179699633]
+anchors_preset = 0
+offset_top = 40.0
+offset_right = 96.0
+offset_bottom = 136.0
+mouse_filter = 2
+script = ExtResource("3_0pxfu")
+
+[node name="Lives" type="Label" parent="BottomLeft" unique_id=1841340572]
+unique_name_in_owner = true
+layout_mode = 0
+offset_left = 108.0
+offset_top = 54.0
+offset_right = 108.0
+offset_bottom = 54.0
+theme_override_font_sizes/font_size = 52
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 10
+text = "× 5"
+
+[node name="TopRight" type="Control" parent="." unique_id=1094961862]
+unique_name_in_owner = true
+layout_mode = 3
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -508.0
+offset_top = 36.0
+offset_right = -48.0
+offset_bottom = 276.0
+pivot_offset = Vector2(460, 0)
+mouse_filter = 2
+
+[node name="PowerUps" type="Label" parent="TopRight" unique_id=359279369]
+unique_name_in_owner = true
+layout_mode = 0
+offset_right = 460.0
+offset_bottom = 240.0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
 theme_override_constants/outline_size = 6
 horizontal_alignment = 2
 
-[node name="Lives" type="Label" parent="Margin" unique_id=1099500032]
+[node name="BoostSlot" type="Control" parent="." unique_id=1235736528]
 unique_name_in_owner = true
-layout_mode = 2
-size_flags_horizontal = 0
-size_flags_vertical = 8
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 7
-text = "LIVES   5"
-
-[node name="StageTitle" type="Label" parent="." unique_id=2007866767]
-unique_name_in_owner = true
-anchors_preset = 10
-anchor_right = 1.0
-offset_top = 150.0
-offset_bottom = 230.0
-theme_override_font_sizes/font_size = 52
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 13
-horizontal_alignment = 1
-
-[node name="ResultsCenter" type="CenterContainer" parent="." unique_id=199823816]
-anchors_preset = 15
+layout_mode = 3
+anchors_preset = 3
+anchor_left = 1.0
+anchor_top = 1.0
 anchor_right = 1.0
 anchor_bottom = 1.0
+offset_left = -508.0
+offset_top = -176.0
+offset_right = -48.0
+offset_bottom = -36.0
 mouse_filter = 2
 
-[node name="Results" type="VBoxContainer" parent="ResultsCenter" unique_id=412237076]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_constants/separation = 10
-
-[node name="ResultsTitle" type="Label" parent="ResultsCenter/Results" unique_id=506335729]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 56
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 14
-text = "ACT CLEAR"
-horizontal_alignment = 1
-
-[node name="ResultTime" type="Label" parent="ResultsCenter/Results" unique_id=1581084479]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 10
-text = "TIME   0:00.00"
-horizontal_alignment = 1
-
-[node name="ResultRings" type="Label" parent="ResultsCenter/Results" unique_id=968256496]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 10
-text = "RINGS   0"
-horizontal_alignment = 1
-
-[node name="ResultRedRings" type="Label" parent="ResultsCenter/Results" unique_id=421494487]
-unique_name_in_owner = true
-layout_mode = 2
-theme_override_font_sizes/font_size = 38
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 10
-text = "RED RINGS   0 / 5"
-horizontal_alignment = 1
-
-[node name="GameOver" type="Label" parent="." unique_id=1281545037]
-unique_name_in_owner = true
-anchors_preset = 15
-anchor_right = 1.0
-anchor_bottom = 1.0
-theme_override_font_sizes/font_size = 96
-theme_override_colors/font_outline_color = Color(0, 0, 0, 0.85)
-theme_override_constants/outline_size = 24
-text = "GAME OVER"
-horizontal_alignment = 1
-vertical_alignment = 1
-
-[node name="BossBar" type="VBoxContainer" parent="." unique_id=1520761606]
+[node name="BossBar" type="VBoxContainer" parent="." unique_id=1461472193]
 unique_name_in_owner = true
 visible = false
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
-offset_left = -270.0
-offset_top = 28.0
-offset_right = 270.0
-offset_bottom = 100.0
+offset_left = -290.0
+offset_top = 36.0
+offset_right = 290.0
+offset_bottom = 110.0
 mouse_filter = 2
 
-[node name="BossName" type="Label" parent="BossBar" unique_id=1579293458]
+[node name="BossName" type="Label" parent="BossBar" unique_id=231182297]
 unique_name_in_owner = true
 layout_mode = 2
-theme_override_font_sizes/font_size = 30
-theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
-theme_override_constants/outline_size = 8
+theme_override_font_sizes/font_size = 32
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 6
 horizontal_alignment = 1
 
-[node name="BossHits" type="ProgressBar" parent="BossBar" unique_id=997998059]
+[node name="BossHits" type="ProgressBar" parent="BossBar" unique_id=314673255]
 unique_name_in_owner = true
-custom_minimum_size = Vector2(540, 22)
+custom_minimum_size = Vector2(580, 24)
 layout_mode = 2
-theme_override_styles/background = SubResource("StyleBoxFlat_taxje")
-theme_override_styles/fill = SubResource("StyleBoxFlat_7wbo5")
+theme_override_styles/background = SubResource("StyleBoxFlat_h5k8y")
+theme_override_styles/fill = SubResource("StyleBoxFlat_sd0c2")
 max_value = 8.0
 value = 8.0
 show_percentage = false
+
+[node name="StageTitle" type="Label" parent="." unique_id=2036747376]
+unique_name_in_owner = true
+auto_translate_mode = 2
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -900.0
+offset_top = 420.0
+offset_right = 900.0
+offset_bottom = 510.0
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 12
+horizontal_alignment = 1
+
+[node name="ResultsCenter" type="CenterContainer" parent="." unique_id=2112177157]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+
+[node name="Results" type="PanelContainer" parent="ResultsCenter" unique_id=1112302450]
+unique_name_in_owner = true
+layout_mode = 2
+theme = ExtResource("4_8nl2l")
+
+[node name="Lines" type="VBoxContainer" parent="ResultsCenter/Results" unique_id=2015221690]
+layout_mode = 2
+theme_override_constants/separation = 10
+
+[node name="ResultsTitle" type="Label" parent="ResultsCenter/Results/Lines" unique_id=1430082338]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 11
+horizontal_alignment = 1
+
+[node name="ResultTime" type="Label" parent="ResultsCenter/Results/Lines" unique_id=845414728]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+
+[node name="ResultRings" type="Label" parent="ResultsCenter/Results/Lines" unique_id=471612221]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+
+[node name="ResultRedRings" type="Label" parent="ResultsCenter/Results/Lines" unique_id=804935038]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+
+[node name="NewRecord" type="Label" parent="ResultsCenter/Results/Lines" unique_id=1084161610]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 40
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+text = "RESULTS_NEW_RECORD"
+horizontal_alignment = 1
+
+[node name="ContinueHint" type="Label" parent="ResultsCenter/Results/Lines" unique_id=1396995946]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 6
+text = "RESULTS_CONTINUE"
+horizontal_alignment = 1
+
+[node name="GameOver" type="Label" parent="." unique_id=1073529726]
+unique_name_in_owner = true
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme_override_font_sizes/font_size = 112
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 22
+text = "HUD_GAME_OVER"
+horizontal_alignment = 1
+vertical_alignment = 1
+
+[node name="PauseMenu" parent="." unique_id=722191697 instance=ExtResource("5_kqy70")]

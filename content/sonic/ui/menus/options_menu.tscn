@@ -1,0 +1,60 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="1_rqnoj"]
+[ext_resource type="Script" path="res://content/sonic/ui/menus/options_menu.gd" id="2_xtr2i"]
+
+[node name="OptionsMenu" type="Control" unique_id=328426008]
+process_mode = 3
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_rqnoj")
+script = ExtResource("2_xtr2i")
+
+[node name="Dim" type="ColorRect" parent="." unique_id=1834629069]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0.01, 0.03, 0.1, 0.88)
+
+[node name="Center" type="CenterContainer" parent="." unique_id=935375598]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Center" unique_id=1434860196]
+layout_mode = 2
+
+[node name="Box" type="VBoxContainer" parent="Center/Panel" unique_id=1258326155]
+layout_mode = 2
+theme_override_constants/separation = 16
+
+[node name="Title" type="Label" parent="Center/Panel/Box" unique_id=1084623512]
+layout_mode = 2
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 9
+text = "OPT_TITLE"
+horizontal_alignment = 1
+
+[node name="Tabs" type="TabContainer" parent="Center/Panel/Box" unique_id=137104794]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(1320, 640)
+layout_mode = 2
+
+[node name="Hint" type="Label" parent="Center/Panel/Box" unique_id=1086099907]
+layout_mode = 2
+theme_override_font_sizes/font_size = 24
+theme_override_colors/font_color = Color(1, 1, 1, 0.75)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 4
+text = "OPT_HINT"
+horizontal_alignment = 1
+
+[node name="Back" type="Button" parent="Center/Panel/Box" unique_id=548846200]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 4
+text = "OPT_BACK"
