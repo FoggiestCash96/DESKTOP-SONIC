@@ -130,7 +130,7 @@ A boss is a script extending `Boss` (`engine/enemies/base/boss.gd`) with a `Weak
 
 ### Menus and text
 
-The menus live in `content/sonic/ui/`: the title screen, `menus/` (save slots, options, pause), `map/` (the world map) and `hud/`. They share `menu_theme.tres` for their look and `menus/menu_kit.gd` for building buttons and labels. Every piece of text shown to players is a key such as `MENU_PLAY`, translated through `ui/translations/strings.csv`: add a key there for new text, and a column (say `fr`) for a new language. Godot turns the CSV into `.translation` files when it imports, and `project.godot` lists them.
+The menus live in `content/sonic/ui/`: the title screen, `menus/` (save slots, options, pause), `map/` (the world map) and `hud/`. They share `menu_theme.tres` for their look and `menus/menu_kit.gd` for building buttons and labels. Every piece of text shown to players is a key such as `MENU_PLAY`, translated through `ui/translations/strings.csv`: add a key there for new text, and a column (say `fr`) for a new language. Godot turns the CSV into `.translation` files when it imports, and `project.godot` lists them. Commit those too (`.gitignore` lets them through): the game loads them as it starts, before an import could make them, so a checkout without them logs errors.
 
 ### Characters: from Blender to Godot
 
