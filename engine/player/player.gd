@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody3D
 ## Kinematic player controller with classic momentum physics: speed along the surface, slopes
 ## that add and take away speed, walls and loops through surface alignment, rolling and the spin
-## dash, free 3D velocity in the air, and the homing attack and air dash. Each movement state is a script in engine/player/states/;
+## dash, free 3D velocity in the air, the homing attack and air dash, the boost and the quickstep. Each movement state is a script in engine/player/states/;
 ## the shared surface handling lives here, along with rings, hits, power-ups and staying on 2.5D
 ## paths. Input is relative to the active camera, and all tuning lives in `physics`.
 
@@ -18,6 +18,8 @@ const PUSH_INPUT := 0.5  ## The stick must point at least this squarely into a w
 const PUSH_SPEED := 1.0  ## ...with the player moving slower than this (m/s).
 const FINISH_SPEED := 1.0  ## After the goal, the victory pose starts below this speed (m/s).
 const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
+const BOOST_BURST_SCENE := "res://engine/enemies/base/explosion.tscn"
+const BOOST_BURST_COLOR := Color(0.6, 0.85, 1.0, 0.8)
 const WORLD_MASK := 1  ## Physics layer of level geometry, which blocks the homing attack's line of sight.
 const SAFE_SPOT_INTERVAL := 0.5  ## With the assist on, where the player stands is remembered this often (s)...
 const SAFE_GROUND := 0.8  ## ...on ground at least this level (the up component of its normal).
@@ -39,6 +41,11 @@ var wish := Vector3.ZERO  ## Camera-relative stick direction on the horizontal p
 var jump_pressed := false
 var jump_held := false
 var crouch_held := false
+var boost_pressed := false
+var boost_held := false
+var quickstep_pressed := 0  ## -1 for a quickstep left this tick, 1 for right, else 0.
+var boost_gauge := 0.0  ## How much boost is left (percent).
+var boosting := false  ## Boosting: on the ground the boost holds boost_speed. Lasts while the button is held, through jumps.
 
 var state: PlayerState
 var ground_state: GroundState
@@ -72,6 +79,10 @@ var _pushing := false  # Pushing against a wall this tick.
 var _sprung := false  # Launched by a spring and not landed since.
 var _air_action_ready := true  # The homing attack or air dash hasn't been used since the player left the ground.
 var _safe_spots: Array[Transform3D] = []  # Where the player last stood on solid ground, older first, for the assist.
+var _air_boost_timer := 0.0  # Seconds of air boost left.
+var _air_boost_ready := true  # The air boost hasn't been used since the player left the ground.
+var _quickstep_timer := 0.0  # Seconds of quickstep left.
+var _quickstep_side := 0.0  # Which way the quickstep goes: -1 left, 1 right.
 var _safe_timer := 0.0
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
@@ -83,6 +94,7 @@ var _safe_timer := 0.0
 @onready var _sparkle_mesh: Node3D = %Sparkle
 @onready var _magnet_mesh: Node3D = %Magnet
 @onready var _reticle: Node3D = %HomingReticle
+@onready var _boost_aura: Node3D = %BoostAura
 
 
 func _ready() -> void:
@@ -101,6 +113,7 @@ func _ready() -> void:
 			_model = character.model.instantiate() as CharacterModel
 			_visual.add_child(_model)
 	_base_physics = physics
+	boost_gauge = physics.boost_start
 	floor_snap_length = physics.snap_length
 	floor_max_angle = deg_to_rad(physics.surface_step_angle)
 	# The states set velocity themselves; without this a falling body touching an edge would stop dead on it.
@@ -139,9 +152,14 @@ func _physics_process(delta: float) -> void:
 	_braking = false
 	_pushing = false
 	_read_input()
+	_update_boost(delta)
+	_start_quickstep()
 	state.tick(delta)
 	move_and_slide()
 	state.after_move(delta)
+	# Running head-on into a wall stops the boost rather than grinding into it.
+	if boosting and state == ground_state and ground_speed < physics.boost_speed * 0.5:
+		boosting = false
 	_hold_to_lane(delta)
 	_count_down(delta)
 	if _magnet_timer > 0.0:
@@ -157,6 +175,7 @@ func _physics_process(delta: float) -> void:
 
 func _process(_delta: float) -> void:
 	_update_visual()
+	_boost_aura.visible = is_boosting() and _visual.visible
 	_reticle.visible = is_instance_valid(homing_candidate)
 	if _reticle.visible:
 		_reticle.global_position = homing_candidate.get_global_transform_interpolated().origin
@@ -209,10 +228,19 @@ func is_grounded() -> bool:
 	return state == ground_state or state == roll_state or state == spin_dash_state
 
 
-## Whether the player is curled into a ball (jumping, rolling, spin dashing or homing in), which
-## breaks item monitors and destroys enemies.
+## Whether the player is curled into a ball (jumping, rolling, spin dashing or homing in) or
+## boosting, which breaks item monitors and destroys enemies.
 func is_attacking() -> bool:
-	return _curled and not _intangible
+	return (_curled or is_boosting()) and not _intangible
+
+
+## Boosting on the ground or through the air, or in the middle of an air boost.
+func is_boosting() -> bool:
+	return boosting or _air_boost_timer > 0.0
+
+
+func air_boost_time_left() -> float:
+	return _air_boost_timer
 
 
 func is_homing() -> bool:
@@ -326,10 +354,15 @@ func aim() -> void:
 		heading = input.normalized()
 
 
-## Sets this tick's velocity from the ground speed and heading, and stands the body on the surface.
+## Sets this tick's velocity from the ground speed and heading (plus any quickstep), and stands the
+## body on the surface.
 func move_on_ground() -> void:
 	ground_speed = minf(ground_speed, physics.max_ground_speed)
 	velocity = heading * ground_speed
+	if _quickstep_timer > 0.0:
+		# The last tick only covers what's left, so the step is quickstep_distance at any tick rate.
+		var share := minf(_quickstep_timer / get_physics_process_delta_time(), 1.0)
+		velocity += PlayerMotion.quickstep_velocity(heading, ground_normal, _quickstep_side, physics) * share
 	up_direction = ground_normal
 	_orient(ground_normal, heading, 1.0)
 
@@ -396,6 +429,8 @@ func land() -> void:
 	_flat_heading = _flat(heading, _flat_heading)
 	_sprung = false
 	_air_action_ready = true
+	_air_boost_ready = true
+	_air_boost_timer = 0.0
 	change_state(ground_state)
 
 
@@ -414,6 +449,7 @@ func launch(new_velocity: Vector3, lock_time: float) -> void:
 	set_ball(false)
 	_sprung = true
 	_air_action_ready = true
+	_air_boost_ready = true
 	_coyote_timer = 0.0
 	lock_controls(lock_time)
 
@@ -444,6 +480,21 @@ func bounce() -> void:
 
 
 # --- Homing attack and enemies ------------------------------------------------------------
+
+## The boost button in the air: a straight dash at boost_speed where the player faces, for
+## air_boost_time, at the cost of air_boost_cost of the gauge. Once each time the player leaves the
+## ground. Holding the button on, the boost carries on after landing. Returns whether it boosted.
+func try_air_boost() -> bool:
+	if not _air_boost_ready or boost_gauge < physics.air_boost_cost or state != air_state:
+		return false
+	_air_boost_ready = false
+	add_boost(-physics.air_boost_cost)
+	_air_boost_timer = physics.air_boost_time
+	velocity = air_aim() * physics.boost_speed
+	boosting = boost_held
+	set_ball(false)
+	return true
+
 
 ## A second press of jump in the air: a homing attack on the nearest target in reach, or with none,
 ## an air dash ahead. Once each time the player leaves the ground; landing a homing attack gives it
@@ -530,6 +581,45 @@ func _bounce_up(speed: float) -> void:
 		change_state(air_state)
 
 
+## Starts, keeps up or ends the boost. Pressing boost on the ground with gauge left starts it; it
+## lasts while the button is held, through jumps, using boost_drain of the gauge per second on the
+## ground and holding at least boost_speed there. Letting go, running out, a hit, rolling or a spin
+## dash ends it.
+func _update_boost(delta: float) -> void:
+	var stopped := not boost_held or state == hurt_state or state == death_state or state == roll_state or state == spin_dash_state
+	if boosting and (stopped or (is_grounded() and boost_gauge <= 0.0)):
+		boosting = false
+	elif not boosting and boost_pressed and state == ground_state and boost_gauge > 0.0:
+		boosting = true
+		_boost_burst()
+	if boosting and state == ground_state:
+		add_boost(-physics.boost_drain * delta)
+		ground_speed = maxf(ground_speed, physics.boost_speed)
+
+
+## A flash of air as the boost starts.
+func _boost_burst() -> void:
+	var burst := (load(BOOST_BURST_SCENE) as PackedScene).instantiate() as Node3D
+	burst.set("size", 3.0)
+	get_parent().add_child(burst)
+	burst.global_position = ball_center()
+	var ball := burst.get_node_or_null("%Ball") as MeshInstance3D
+	if ball and ball.material_override is StandardMaterial3D:
+		(ball.material_override as StandardMaterial3D).albedo_color = BOOST_BURST_COLOR
+
+
+## A quickstep: on the ground running at least quickstep_min_speed, quickstep_left or quickstep_right
+## shifts the player quickstep_distance sideways over quickstep_time, keeping their speed. Not on a
+## 2.5D path, where there is no sideways.
+func _start_quickstep() -> void:
+	if quickstep_pressed == 0 or _quickstep_timer > 0.0 or state != ground_state or _lane:
+		return
+	if ground_speed < physics.quickstep_min_speed:
+		return
+	_quickstep_side = float(quickstep_pressed)
+	_quickstep_timer = physics.quickstep_time
+
+
 ## With the assist on: every SAFE_SPOT_INTERVAL on solid, fairly level ground, remembers where the
 ## player stands, keeping the last two.
 func _remember_safe_spot(delta: float) -> void:
@@ -587,6 +677,17 @@ func set_input_enabled(on: bool) -> void:
 
 func collect_rings(amount: int) -> void:
 	rings += amount
+	add_boost(amount * physics.boost_per_ring)
+
+
+## Adds `amount` to the boost gauge (percent), as rings, enemies and boost monitors do.
+func add_boost(amount: float) -> void:
+	boost_gauge = PlayerMotion.boost_fill(boost_gauge, amount)
+
+
+## Fills the boost gauge, as a boost monitor does.
+func fill_boost() -> void:
+	boost_gauge = 100.0
 
 
 ## Takes a hit from something at `from`. A shield or the rings soak it up (the rings scatter), with
@@ -674,6 +775,7 @@ func describe_items() -> String:
 		parts.append("magnet %.1f s" % _magnet_timer)
 	if _invulnerable_timer > 0.0:
 		parts.append("flashing %.1f s" % _invulnerable_timer)
+	parts.append("boost %d%%%s" % [roundi(boost_gauge), " (boosting)" if is_boosting() else ""])
 	return "  ".join(parts)
 
 
@@ -803,6 +905,8 @@ func _pull_rings() -> void:
 
 func _count_down(delta: float) -> void:
 	_control_lock = maxf(_control_lock - delta, 0.0)
+	_air_boost_timer = maxf(_air_boost_timer - delta, 0.0)
+	_quickstep_timer = maxf(_quickstep_timer - delta, 0.0)
 	_coyote_timer = maxf(_coyote_timer - delta, 0.0)
 	_jump_buffer_timer = maxf(_jump_buffer_timer - delta, 0.0)
 	_invulnerable_timer = maxf(_invulnerable_timer - delta, 0.0)
@@ -857,11 +961,17 @@ func _read_input() -> void:
 		jump_pressed = false
 		jump_held = false
 		crouch_held = false
+		boost_pressed = false
+		boost_held = false
+		quickstep_pressed = 0
 		wish = Vector3.ZERO
 		return
 	jump_pressed = Input.is_action_just_pressed("jump")
 	jump_held = Input.is_action_pressed("jump")
 	crouch_held = Input.is_action_pressed("crouch")
+	boost_pressed = Input.is_action_just_pressed("boost")
+	boost_held = Input.is_action_pressed("boost")
+	quickstep_pressed = int(Input.is_action_just_pressed("quickstep_right")) - int(Input.is_action_just_pressed("quickstep_left"))
 	if jump_pressed:
 		_jump_buffer_timer = physics.jump_buffer_time
 	wish = _camera_wish()

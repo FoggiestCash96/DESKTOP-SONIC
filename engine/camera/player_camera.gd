@@ -135,6 +135,8 @@ func _update_volume() -> void:
 
 func _goal_view(delta: float) -> Vector4:
 	var speed_fov := CameraMath.speed_fov(target.velocity.length(), target.physics.top, settings.fov_rest, settings.fov_fast)
+	if target.is_boosting():
+		speed_fov = settings.fov_boost
 	if _volume:
 		var volume_fov := _volume.fov if _volume.fov > 0.0 else speed_fov
 		return Vector4(_volume_yaw(delta), deg_to_rad(_volume.pitch_degrees), _volume.distance, volume_fov)
@@ -216,8 +218,10 @@ func _update_speed_effects(delta: float) -> void:
 	var speed := target.velocity.length()
 	var lines_on := settings.speed_lines and GameSettings.speed_lines and not target.is_dead()
 	var blur_on := settings.motion_blur and GameSettings.motion_blur and not target.is_dead()
-	var lines := CameraMath.effect_amount(speed, settings.lines_start, settings.lines_full) if lines_on else 0.0
-	var blur := CameraMath.effect_amount(speed, settings.blur_start, settings.blur_full) * settings.blur_strength if blur_on else 0.0
+	# Boosting shows them at full strength whatever the speed.
+	var boost := 1.0 if target.is_boosting() else 0.0
+	var lines := maxf(CameraMath.effect_amount(speed, settings.lines_start, settings.lines_full), boost) if lines_on else 0.0
+	var blur := maxf(CameraMath.effect_amount(speed, settings.blur_start, settings.blur_full), boost) * settings.blur_strength if blur_on else 0.0
 	var weight := CameraMath.smoothing(settings.effects_smoothing, delta)
 	_speed_lines = lerpf(_speed_lines, lines, weight)
 	_blur = lerpf(_blur, blur, weight)

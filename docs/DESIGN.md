@@ -153,7 +153,9 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 |---|---|
 | Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes |
 | Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built in Milestone 8 (§9.2). |
-| Boost | Yes, built after Milestone 2, once the camera's speed effects and rings exist |
+| Boost, air boost | Yes, built 2026-10-31 (decided then: 30 m/s on the ground and in the air, about 5 s per full gauge), §5.8 |
+| Quickstep | Yes, built with the boost (2.5 m sideways), §5.8 |
+| Drift | Yes, later |
 | Stomp/bounce | Yes |
 | Grind rails (`Path3D`), wall-run and wall-jump | Yes |
 | Swimming (half acc/dec/frc/top and gravity, air timer) | Yes |
@@ -180,7 +182,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 | Speed shoes | 20 s of doubled acceleration, friction, top speed, air acceleration and roll friction, as the classic shoes |
 | Invincibility | 20 s of ignoring hits. Pits still kill. |
 | Ring magnet | 20 s of pulling in rings within 5 m. A pulled ring flies 15 m/s faster than the player, so it always catches up. |
-| Boost refill | Added once the boost exists |
+| Boost refill | Fills the boost gauge |
 
   Monitors are solid: a player standing up bumps into them or stands on them. Curled up (jumping, rolling or spin dashing) they break them open. Breaking one from above bounces the player back up: their falling speed turns into rising speed, still cut short if jump is let go.
 - **Hidden collectibles** (decided 2026-10-30): **red rings, 5 per act.** The HUD counts them. One found before a death stays found and shows greyed out after the restart. Clearing the act saves the ones found to the save slot for good (Milestone 9); on later visits they show greyed out, and the HUD and map count them.
@@ -215,6 +217,16 @@ All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and ev
 - **Rolling waves** (Milestone 8): a single crest that rolls along its −Z axis for `reach` metres, hugging the ground, then sinks away. A player it catches is carried along at its speed; jump it to stay clear. Bosses send them out (§9.3).
 - **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
 - **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
+
+### 5.8 Boost and quickstep
+
+Built after Milestone 9 (decided 2026-10-31). The values are in `player_physics.tres` (the "Boost" and "Quickstep" groups).
+
+- **Boost** (`boost`: Shift, X or RT): pressed on the ground with some gauge left, the player snaps to **30 m/s** (a dash panel's speed, and the most collision handles safely) and holds at least that while the button is held. They can't brake, but steer as at any high speed. It smashes through enemies and breaks monitors as a curled-up player does, but spikes and shots still hurt. Letting go, running out of gauge, a hit, rolling, a spin dash, or running head-on into a wall ends it. It carries on through jumps while held, and picks up again on landing.
+- **Air boost:** pressed in the air, a straight dash at 30 m/s where the player faces (the stick, or their direction of travel), with no gravity for 0.4 s. Once each time they leave the ground, for 10% of the gauge. Held on, the boost carries on after landing.
+- **The gauge** (decided: about 5 s per full gauge): boosting on the ground uses **20% a second**; each act starts **a third full**; each ring adds **2%** (50 rings fill it), each enemy destroyed **10%**, and a boost monitor fills it.
+- **Quickstep** (`quickstep_left` / `quickstep_right`: Q / E, LB / RB): running on the ground at 8 m/s or faster, the player shifts **2.5 m** sideways in 0.12 s, keeping their speed and heading, for dodging at boost speed. Not on 2.5D paths.
+- **Feedback:** while boosting the speed lines and motion blur show at full strength, the view widens to 95°, a shell of light surrounds the player, and a burst of air marks the start. The HUD's boost gauge sits at the bottom right (§10.4).
 
 ## 6. Camera
 
@@ -289,8 +301,8 @@ Falling into the sea (below y = −30) costs a life. The five red rings: the two
 | | |
 |---|---|
 | Style | **Stylised toon**: cel shading (Godot's toon diffuse and specular modes) on flat colours. No ink outlines. |
-| Speed lines | **Yes**, in the style of Sonic Colors: streaks flow out along the screen edges at high speed, and with the boost once it exists. They start at 12 m/s and are full by 26 m/s. |
-| Motion blur | **Yes**, a full-screen radial blur at high speed (and boosting, later), from 16 m/s to full at 30 m/s. Some players find it uncomfortable, so it has an off switch (the Options menu's Camera tab, Milestone 9). |
+| Speed lines | **Yes**, in the style of Sonic Colors: streaks flow out along the screen edges at high speed, and at full strength while boosting. They start at 12 m/s and are full by 26 m/s. |
+| Motion blur | **Yes**, a full-screen radial blur at high speed, from 16 m/s to full at 30 m/s, and at full strength while boosting. Some players find it uncomfortable, so it has an off switch (the Options menu's Camera tab, Milestone 9). |
 | Poly budgets | Player **30k** triangles, enemies **6k**, stage chunks **100k** per visible region |
 | Low-end target | **60 fps at 1080p on a GTX 1060-class GPU**, with the Forward+ renderer |
 
@@ -395,7 +407,7 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 
 - **Top left:** a big ring count beside a ring icon (blinking red at zero, since the next hit is fatal), the time below it, and the act's red rings below that: a bright filled ring for each one found, an outline for each still to find.
 - **Bottom left:** lives beside Sonic's icon, with the assists in use tagged above.
-- **Top right:** the power-ups running and their seconds left. **Bottom right:** kept free for the boost gauge.
+- **Top right:** the power-ups running and their seconds left. **Bottom right:** the boost gauge, ten segments that fill as it does, brighter while boosting and pulsing when full; empty segments stay as outlines.
 - **Also:** the act's title card as it starts, a boss's name and hits left during its fight, the results (with a new record marked), GAME OVER, and the pause menu.
 - Its size follows the HUD size setting. The icons are drawn in code until the art pass.
 
@@ -411,7 +423,6 @@ Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
-| **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; music tool; 2D art tool; community channel; GameJolt |
 

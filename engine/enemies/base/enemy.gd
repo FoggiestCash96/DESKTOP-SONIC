@@ -88,6 +88,7 @@ func destroy(by: Player) -> void:
 	model.visible = false
 	if by:
 		by.rebound_from(center)
+		by.add_boost(by.physics.boost_per_enemy)
 	var stage := get_parent()
 	var explosion := (load(EXPLOSION_SCENE) as PackedScene).instantiate() as Node3D
 	stage.add_child(explosion)

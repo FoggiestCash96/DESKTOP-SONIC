@@ -302,6 +302,23 @@ func test_destroying_an_enemy_rebounds_as_in_the_classic_games() -> void:
 	assert_almost_eq(PlayerMotion.enemy_rebound(-6.0, 0.5, 1.0, slowdown), -4.125, 1e-6, "falling past it from below only slows the fall")
 	assert_almost_eq(PlayerMotion.enemy_rebound(8.0, 0.5, 1.0, slowdown), 6.125, 1e-6, "rising through it only slows the rise")
 
+
+func test_the_boost_gauge_fills_from_rings_and_lasts_five_seconds() -> void:
+	assert_almost_eq(PlayerMotion.boost_fill(0.0, 50 * physics.boost_per_ring), 100.0, 1e-5, "50 rings fill it")
+	assert_almost_eq(PlayerMotion.boost_fill(95.0, physics.boost_per_enemy), 100.0, 1e-5, "it stops at full")
+	assert_almost_eq(PlayerMotion.boost_fill(5.0, -physics.air_boost_cost), 0.0, 1e-5, "and at empty")
+	assert_almost_eq(100.0 / physics.boost_drain, 5.0, 1e-5, "a full gauge lasts 5 s of boosting")
+	assert_almost_eq(physics.boost_speed, 30.0, 1e-5)
+	assert_true(physics.boost_speed <= physics.max_ground_speed, "within the speed collision stays stable at")
+
+
+func test_a_quickstep_moves_sideways_its_distance() -> void:
+	var right := PlayerMotion.quickstep_velocity(Vector3.FORWARD, Vector3.UP, 1.0, physics)
+	assert_true(right.normalized().is_equal_approx(Vector3.RIGHT), "right of a player facing -Z is +X: %s" % right)
+	assert_almost_eq(right.length() * physics.quickstep_time, physics.quickstep_distance, 1e-4, "covers its distance in its time")
+	var left := PlayerMotion.quickstep_velocity(Vector3.FORWARD, Vector3.UP, -1.0, physics)
+	assert_true(left.is_equal_approx(-right), "and the other way to the left")
+
 ## Normal of a slope that rises toward -Z at `degrees` from flat.
 func _slope_normal(degrees: float) -> Vector3:
 	return Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(degrees))

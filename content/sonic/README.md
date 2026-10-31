@@ -13,6 +13,6 @@ Sonic and all related characters and trademarks belong to SEGA. Our original fil
 | `ui/title/` | Title screen with the fan-game disclaimer and the main menu |
 | `ui/menus/` | Save slots, options (with control remapping) and the pause menu, plus `menu_kit.gd`, their shared helpers |
 | `ui/map/` | The world map: a menu map of the six worlds and their acts |
-| `ui/hud/` | Adventure-style HUD: rings, time, red rings, lives, power-ups, a boss's hits left, the results and the pause menu, with icons drawn in code |
+| `ui/hud/` | Adventure-style HUD: rings, time, red rings, lives, power-ups, the boost gauge, a boss's hits left, the results and the pause menu, with icons drawn in code |
 | `ui/translations/` | Every player-facing string, by key, in `strings.csv` (English for now) |
 | `ui/menu_theme.tres` | The menus' shared look |

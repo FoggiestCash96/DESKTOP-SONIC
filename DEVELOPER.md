@@ -36,12 +36,14 @@ You play a stand-in Sonic built from simple shapes, with toon shading and animat
 | In the air: homing attack (with a target in reach) or air dash | Space again | A again |
 | Roll (hold while moving) | Ctrl | B |
 | Spin dash: hold while still, tap jump to charge, let go to launch | Ctrl, then Space | B, then A |
+| Boost (hold; in the air, an air boost) | Shift | X or RT |
+| Quickstep left / right (running fast) | Q / E | LB / RB |
 | Orbit the camera | Mouse or arrow keys | Right stick |
 | Swing the camera behind the player | Middle mouse button | Right stick click |
 | Debug overlay (player and camera state) | F3 | |
 | Pause menu | Esc | Start |
 
-Menus work with a controller (D-pad or stick, A to choose, B to go back), the keyboard (arrows, Enter, Esc) or the mouse. Every control can be remapped in Options. The mouse is captured while you play; if you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, the act's red rings (filled once found), lives, and the power-ups running. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+Menus work with a controller (D-pad or stick, A to choose, B to go back), the keyboard (arrows, Enter, Esc) or the mouse. Every control can be remapped in Options. The mouse is captured while you play; if you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, the act's red rings (filled once found), lives, the power-ups running, and the boost gauge. Rings, enemies and boost monitors fill the gauge; boosting smashes through enemies. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
 
 Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, the second press is an air dash.
 
@@ -71,7 +73,7 @@ Far to the left of the start, past the long hill, is the enemy gallery: a crab, 
 
 ### Tuning
 
-- **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the homing attack and air dash, damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
+- **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the homing attack and air dash, the boost and quickstep, damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
 - **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow, wall handling, and the speed lines and motion blur. Players' own choices (sensitivity, inverted axes, effects on or off) are in the Options menu and act on top of these.
 - **Player settings and saves:** the Options menu writes `user://settings.cfg`, and each save slot is `user://saves/slot_NN.json` (`user://` is `%APPDATA%\Godot\app_userdata\Sonic Velocity Run` on Windows when running from the editor). Delete them to start fresh.
 - **Lives and restarts:** `engine/systems/game_rules.tres`: starting lives, the delay before a restart, and how long GAME OVER shows.
@@ -93,7 +95,7 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 | `engine/gimmicks/spikes.tscn` | Set `size` for the bed's footprint. |
 | `engine/gimmicks/checkpoint.tscn` | The player restarts 1 m in front of it, facing its −Z axis. |
 | `engine/collectibles/ring.tscn` | One ring. For rows and arches, add a `Node3D` with `engine/collectibles/ring_line.gd` instead: set `count`, `spacing` and `arc_height`, and turn it to aim along its −Z axis. |
-| `engine/collectibles/item_monitor.tscn` | Pick the `item`. Ring monitors have a `ring_amount`. |
+| `engine/collectibles/item_monitor.tscn` | Pick the `item`: rings, shield, speed shoes, invincibility, magnet or boost. Ring monitors have a `ring_amount`. |
 | `engine/collectibles/hidden_collectible.tscn` | A red ring. Acts have five. |
 | `engine/collectibles/extra_life.tscn` | The act's hidden 1-up. |
 | `engine/gimmicks/tidal_wave.tscn` | Washes along its −Z axis on a timer: set `size`, `reach` and the surge, backwash and rest times. Keep its path clear of overhangs, since the water follows the ground. |

@@ -148,7 +148,7 @@ MODERN
 | Homing Attack | Y | Lock-on range 12 m, cone 90° (decided 2026-10-29). Built in Milestone 8, with the air dash: DESIGN.md §9.2. |
 | Air Dash / Jump Dash | Y | |
 | Light Speed Dash (ring trails) | Y | Decided 2026-10-29. Built once rings exist. |
-| Boost | Y | Gauge filled by rings and enemies. Built after Milestone 2, once the camera and rings exist (decided 2026-10-29). |
+| Boost | Y | Gauge filled by rings and enemies (decided 2026-10-29). Built 2026-10-31 with an air boost and the quickstep: 30 m/s, about 5 s per full gauge, a 2.5 m quickstep (DESIGN.md §5.8). |
 | Stomp / Bounce | Y | |
 | Grind rails | Y | `Path3D`-driven; balance optional |
 | Wall-run / wall-jump | Y | |
@@ -225,7 +225,7 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §10 Collectibles and progression
 
-- Rings, 1-ups, item monitors (10 rings, shield, speed shoes, invincibility, ring magnet, plus a boost refill once the boost exists; decided 2026-10-30), checkpoints (star posts).
+- Rings, 1-ups, item monitors (10 rings, shield, speed shoes, invincibility, ring magnet, plus a boost refill, built with the boost; decided 2026-10-30), checkpoints (star posts).
 - Hidden collectibles per act: **Red rings**, count **5** (decided 2026-10-30).
 - Special stages / Chaos Emeralds: `[[CHOOSE: None | Classic-style 3D half-pipe | Sphere grid | Own design]]`. Super form unlocked at 7: `[[Y/N]]`.
 - Ranking: `[[CHOOSE: None | S–D rank by time+rings+score]]`.

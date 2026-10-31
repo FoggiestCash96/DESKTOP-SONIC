@@ -4,6 +4,7 @@
 [ext_resource type="Script" path="res://content/sonic/ui/hud/ring_icon.gd" id="2_seeov"]
 [ext_resource type="Script" path="res://content/sonic/ui/hud/life_icon.gd" id="3_0pxfu"]
 [ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="4_8nl2l"]
+[ext_resource type="Script" path="res://content/sonic/ui/hud/boost_gauge.gd" id="4_seeov"]
 [ext_resource type="PackedScene" path="res://content/sonic/ui/menus/pause_menu.tscn" id="5_kqy70"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_h5k8y"]
@@ -113,6 +114,7 @@ offset_left = 48.0
 offset_top = -176.0
 offset_right = 668.0
 offset_bottom = -36.0
+grow_vertical = 0
 pivot_offset = Vector2(0, 140)
 mouse_filter = 2
 
@@ -163,6 +165,7 @@ offset_left = -508.0
 offset_top = 36.0
 offset_right = -48.0
 offset_bottom = 276.0
+grow_horizontal = 0
 pivot_offset = Vector2(460, 0)
 mouse_filter = 2
 
@@ -192,7 +195,33 @@ offset_left = -508.0
 offset_top = -176.0
 offset_right = -48.0
 offset_bottom = -36.0
+grow_horizontal = 0
+grow_vertical = 0
+pivot_offset = Vector2(460, 140)
 mouse_filter = 2
+
+[node name="BoostLabel" type="Label" parent="BoostSlot" unique_id=755687815]
+layout_mode = 0
+offset_top = 40.0
+offset_right = 460.0
+offset_bottom = 80.0
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_color = Color(0.3, 0.85, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_y = 5
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 6
+text = "HUD_BOOST"
+horizontal_alignment = 2
+
+[node name="BoostGauge" type="Control" parent="BoostSlot" unique_id=1212523273]
+unique_name_in_owner = true
+anchors_preset = 0
+offset_top = 86.0
+offset_right = 460.0
+offset_bottom = 124.0
+mouse_filter = 2
+script = ExtResource("4_seeov")
 
 [node name="BossBar" type="VBoxContainer" parent="." unique_id=1461472193]
 unique_name_in_owner = true
