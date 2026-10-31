@@ -16,6 +16,7 @@ extends Resource
 @export var fov_rest: float = 70.0  ## Field of view standing still (degrees).
 @export var fov_fast: float = 85.0  ## Field of view at the player's top running speed and above (degrees).
 @export var fov_smoothing: float = 0.3  ## Seconds for the field of view to catch up.
+@export var fov_boost: float = 95.0  ## Field of view while boosting (degrees).
 
 @export_group("Control")
 @export var look_speed: float = 150.0  ## Stick and arrow-key orbit speed (degrees per second).

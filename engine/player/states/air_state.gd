@@ -2,7 +2,8 @@ class_name AirState
 extends PlayerState
 ## Airborne: gravity, classic air drag near the top of a jump, air control up to top speed (unless
 ## a spring has locked the stick), and a shorter jump when jump is let go early. A second press of
-## jump does a homing attack or an air dash (Player.try_air_action()). Lands on any surface gentle
+## jump does a homing attack or an air dash (Player.try_air_action()), and the boost button an air
+## boost (Player.try_air_boost()), a straight dash with no gravity. Lands on any surface gentle
 ## enough to stand on.
 
 var jumped := false  ## Left the ground by jumping, which also curls the player into a ball.
@@ -31,6 +32,11 @@ func tick(delta: float) -> void:
 		player.jump()
 		return
 	if player.jump_pressed and player.try_air_action():
+		return
+	if player.boost_pressed and player.try_air_boost():
+		return
+	if player.air_boost_time_left() > 0.0:
+		player.turn_upright(delta)  # Straight ahead at an even speed: no gravity or drag.
 		return
 	var horizontal := Vector3(player.velocity.x, 0.0, player.velocity.z)
 	var vertical := player.velocity.y

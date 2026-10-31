@@ -5,11 +5,12 @@ extends StaticBody3D
 ## rolling, spin dashing or homing in) they break it open and get what's inside. Breaking it from
 ## above, or with a homing attack, bounces them back up.
 
-enum Item { RINGS, SHIELD, SPEED_SHOES, INVINCIBILITY, MAGNET }
+enum Item { RINGS, SHIELD, SPEED_SHOES, INVINCIBILITY, MAGNET, BOOST }
 
-const ITEM_TEXT: Array[String] = ["RINGS", "SHIELD", "SHOES", "INVINCIBLE", "MAGNET"]
+const ITEM_TEXT: Array[String] = ["RINGS", "SHIELD", "SHOES", "INVINCIBLE", "MAGNET", "BOOST"]
 const ITEM_COLORS: Array[Color] = [
 	Color(1.0, 0.8, 0.2), Color(0.35, 0.6, 1.0), Color(1.0, 0.35, 0.3), Color(1.0, 1.0, 0.85), Color(0.45, 1.0, 0.5),
+	Color(0.3, 0.9, 1.0),
 ]
 const BOUNCE_HEIGHT := 0.6  ## A player whose feet are above this height on the box (m) bounces off it.
 
@@ -63,6 +64,8 @@ func _break_open(player: Player) -> void:
 			player.give_invincibility()
 		Item.MAGNET:
 			player.give_magnet()
+		Item.BOOST:
+			player.fill_boost()
 	var rise := create_tween()
 	rise.tween_property(_label, "position:y", _label.position.y + 1.0, 0.5)
 	rise.tween_property(_label, "modulate:a", 0.0, 0.4)

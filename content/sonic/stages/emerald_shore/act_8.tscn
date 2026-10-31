@@ -333,6 +333,10 @@ spacing = 2.5
 [node name="RedRing5" parent="Gimmicks" unique_id=1314771501 instance=ExtResource("10_hnhjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -27, 0.9, -223)
 
+[node name="MonitorPlatformBoost" parent="Gimmicks" unique_id=1379877146 instance=ExtResource("13_hojor")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -142)
+item = 5
+
 [node name="Enemies" type="Node3D" parent="." unique_id=60743343]
 
 [node name="ScuttlerCauseway1" parent="Enemies" unique_id=1354843088 instance=ExtResource("16_kmd4n")]

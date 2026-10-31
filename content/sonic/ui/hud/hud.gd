@@ -1,8 +1,8 @@
 extends CanvasLayer
 ## Heads-up display in the style of the 3D Adventure games (decided 2026-10-31): a big ring count
 ## with a ring icon at the top left, the time below it and the act's red rings below that, lives with
-## Sonic's icon at the bottom left, power-ups at the top right, and the bottom right kept for the boost
-## gauge. It also shows the stage's title card, a boss's name and hits left, the results at the goal,
+## Sonic's icon at the bottom left, power-ups at the top right, and the boost gauge at the bottom
+## right. It also shows the stage's title card, a boss's name and hits left, the results at the goal,
 ## the game-over message, and holds the pause menu. Nothing relies on colour alone: the ring count
 ## blinks at zero and found red rings change shape. Its size follows the HUD size setting.
 
@@ -20,6 +20,8 @@ var _red_ring_icons: Array[Control] = []
 @onready var _top_left: Control = %TopLeft
 @onready var _bottom_left: Control = %BottomLeft
 @onready var _top_right: Control = %TopRight
+@onready var _boost_slot: Control = %BoostSlot
+@onready var _boost_gauge: Control = %BoostGauge
 @onready var _rings: Label = %Rings
 @onready var _time: Label = %Time
 @onready var _red_rings: HBoxContainer = %RedRings
@@ -64,6 +66,8 @@ func _process(_delta: float) -> void:
 	if target == null:
 		return
 	_rings.text = str(target.rings)
+	_boost_gauge.set("value", target.boost_gauge)
+	_boost_gauge.set("active", target.is_boosting())
 	# No rings means the next hit is fatal, so the count flashes, as in the classic games.
 	var flash := target.rings == 0 and fmod(Time.get_ticks_msec() / 1000.0, WARNING_PERIOD) < WARNING_PERIOD * 0.5
 	_rings.modulate = WARNING if flash else Color.WHITE
@@ -120,7 +124,7 @@ func _show_boss() -> void:
 
 func _apply_scale() -> void:
 	var factor := Vector2.ONE * GameSettings.hud_scale
-	for corner: Control in [_top_left, _bottom_left, _top_right]:
+	for corner: Control in [_top_left, _bottom_left, _top_right, _boost_slot]:
 		corner.scale = factor
 
 

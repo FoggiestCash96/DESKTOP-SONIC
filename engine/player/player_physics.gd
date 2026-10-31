@@ -63,6 +63,20 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export var homing_bounce: float = 10.0  ## Upward speed after a homing attack hits (m/s).
 @export var air_dash_speed: float = 15.0  ## With nothing in reach, jump in the air dashes ahead at least this fast (m/s).
 
+@export_group("Boost")
+@export var boost_speed: float = 30.0  ## Speed the boost holds on the ground, and an air boost's speed (m/s).
+@export var boost_drain: float = 20.0  ## Gauge used per second of boosting on the ground (percent): a full gauge lasts 5 s.
+@export var air_boost_cost: float = 10.0  ## Gauge an air boost uses (percent).
+@export var air_boost_time: float = 0.4  ## Seconds an air boost carries the player straight ahead.
+@export var boost_start: float = 33.0  ## Gauge at the start of a stage (percent).
+@export var boost_per_ring: float = 2.0  ## Gauge each ring adds (percent): 50 rings fill it.
+@export var boost_per_enemy: float = 10.0  ## Gauge each enemy destroyed adds (percent).
+
+@export_group("Quickstep")
+@export var quickstep_distance: float = 2.5  ## How far a quickstep moves the player sideways (m).
+@export var quickstep_time: float = 0.12  ## Seconds a quickstep takes.
+@export var quickstep_min_speed: float = 8.0  ## Quickstep only works running at least this fast (m/s).
+
 @export_group("Enemies")
 @export var rebound_slowdown: float = 1.0 * SPEED  ## Destroying an enemy in the air while rising, or from below its middle, only slows the player by this much (m/s). From above they bounce back up.
 

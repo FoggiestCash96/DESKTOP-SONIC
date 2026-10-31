@@ -218,6 +218,20 @@ static func enemy_rebound(vertical: float, player_height: float, enemy_height: f
 	return -vertical
 
 
+## The boost gauge (0 to 100) after adding `amount` (negative to use some).
+static func boost_fill(gauge: float, amount: float) -> float:
+	return clampf(gauge + amount, 0.0, 100.0)
+
+
+## Velocity of a quickstep: sideways across `heading` on the surface with normal `up`, to the right
+## for `side` 1 and the left for -1, fast enough to cover quickstep_distance in quickstep_time.
+static func quickstep_velocity(heading: Vector3, up: Vector3, side: float, physics: PlayerPhysics) -> Vector3:
+	var right := heading.cross(up)
+	if right.length_squared() < 1e-6:
+		return Vector3.ZERO
+	return right.normalized() * side * physics.quickstep_distance / maxf(physics.quickstep_time, 0.001)
+
+
 ## Movement values with speed shoes on: a copy of `physics` with acc, frc, top, air_acc and
 ## roll_frc multiplied by speed_shoes_factor, as the classic shoes double them.
 static func with_speed_shoes(physics: PlayerPhysics) -> PlayerPhysics:
