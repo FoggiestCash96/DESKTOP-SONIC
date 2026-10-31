@@ -41,6 +41,7 @@ size = Vector2(4000, 4000)
 [node name="EmeraldShoreAct1" type="Node3D" unique_id=1381585461]
 script = ExtResource("1_4hkn0")
 title = "Emerald Shore Act 1: Sunny Beachfront"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
 next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=285431394]

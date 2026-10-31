@@ -57,6 +57,7 @@ size = Vector3(12, 8, 0.4)
 [node name="EmeraldShoreAct8" type="Node3D" unique_id=639086480]
 script = ExtResource("1_aj05m")
 title = "Emerald Shore Act 8: Stormy Coastal Fortress"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1216114723]
 environment = ExtResource("2_5p8sn")

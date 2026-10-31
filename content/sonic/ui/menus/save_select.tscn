@@ -1,0 +1,107 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="1_o51nm"]
+[ext_resource type="Script" path="res://content/sonic/ui/menus/save_select.gd" id="2_c23p2"]
+
+[sub_resource type="Gradient" id="Gradient_mrotl"]
+colors = PackedColorArray(0.039, 0.102, 0.29, 1, 0.102, 0.435, 0.82, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_6nbix"]
+gradient = SubResource("Gradient_mrotl")
+fill_to = Vector2(0, 1)
+
+[node name="SaveSelect" type="Control" unique_id=184543860]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_o51nm")
+script = ExtResource("2_c23p2")
+
+[node name="Background" type="TextureRect" parent="." unique_id=86896977]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_6nbix")
+expand_mode = 1
+
+[node name="Box" type="VBoxContainer" parent="." unique_id=1188249593]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_left = 260.0
+offset_top = 60.0
+offset_right = -260.0
+offset_bottom = -50.0
+theme_override_constants/separation = 20
+
+[node name="Title" type="Label" parent="Box" unique_id=142338253]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 10
+text = "SAVE_TITLE"
+horizontal_alignment = 1
+
+[node name="Scroll" type="ScrollContainer" parent="Box" unique_id=1379331543]
+layout_mode = 2
+size_flags_vertical = 3
+follow_focus = true
+horizontal_scroll_mode = 0
+
+[node name="Slots" type="VBoxContainer" parent="Box/Scroll" unique_id=1032696104]
+unique_name_in_owner = true
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/separation = 10
+
+[node name="Hint" type="Label" parent="Box" unique_id=1758236695]
+layout_mode = 2
+theme_override_font_sizes/font_size = 26
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 4
+text = "SAVE_HINT"
+horizontal_alignment = 1
+
+[node name="Confirm" type="Control" parent="." unique_id=414646623]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Dim" type="ColorRect" parent="Confirm" unique_id=1183534888]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0.02, 0.08, 0.6)
+
+[node name="Center" type="CenterContainer" parent="Confirm" unique_id=557394196]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Confirm/Center" unique_id=333455004]
+layout_mode = 2
+
+[node name="Box" type="VBoxContainer" parent="Confirm/Center/Panel" unique_id=1859443886]
+layout_mode = 2
+theme_override_constants/separation = 24
+
+[node name="ConfirmLabel" type="Label" parent="Confirm/Center/Panel/Box" unique_id=737221377]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 38
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 6
+horizontal_alignment = 1
+
+[node name="ConfirmButtons" type="HBoxContainer" parent="Confirm/Center/Panel/Box" unique_id=1845124127]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 24
+alignment = 1

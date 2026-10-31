@@ -1,0 +1,93 @@
+[gd_scene format=3]
+
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="1_jshic"]
+[ext_resource type="Script" path="res://content/sonic/ui/map/world_map.gd" id="2_h3t54"]
+
+[sub_resource type="Gradient" id="Gradient_mcye2"]
+colors = PackedColorArray(0.02, 0.36, 0.6, 1, 0.02, 0.12, 0.32, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_o6ttf"]
+gradient = SubResource("Gradient_mcye2")
+fill_to = Vector2(0, 1)
+
+[node name="WorldMap" type="Control" unique_id=557977095]
+layout_mode = 3
+anchors_preset = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("1_jshic")
+script = ExtResource("2_h3t54")
+map_points = PackedVector2Array(0.12, 0.8, 0.3, 0.55, 0.52, 0.72, 0.64, 0.4, 0.4, 0.22, 0.7, 0.12)
+
+[node name="Background" type="TextureRect" parent="." unique_id=1461405958]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+texture = SubResource("GradientTexture2D_o6ttf")
+expand_mode = 1
+
+[node name="Title" type="Label" parent="." unique_id=2127078642]
+layout_mode = 0
+offset_left = 60.0
+offset_top = 34.0
+offset_right = 60.0
+offset_bottom = 34.0
+theme_override_font_sizes/font_size = 56
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 9
+text = "MAP_TITLE"
+
+[node name="Map" type="Control" parent="." unique_id=2057961438]
+unique_name_in_owner = true
+anchors_preset = 0
+anchor_left = 0.02
+anchor_top = 0.12
+anchor_right = 0.52
+anchor_bottom = 0.96
+mouse_filter = 2
+
+[node name="Side" type="PanelContainer" parent="." unique_id=1324057513]
+layout_mode = 0
+anchor_left = 0.54
+anchor_top = 0.06
+anchor_right = 0.98
+anchor_bottom = 0.94
+
+[node name="Box" type="VBoxContainer" parent="Side" unique_id=104899918]
+layout_mode = 2
+theme_override_constants/separation = 12
+
+[node name="WorldTitle" type="Label" parent="Side/Box" unique_id=1190944905]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+theme_override_font_sizes/font_size = 48
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 8
+
+[node name="Acts" type="VBoxContainer" parent="Side/Box" unique_id=2074980107]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_constants/separation = 6
+
+[node name="Details" type="Label" parent="Side/Box" unique_id=1405494210]
+unique_name_in_owner = true
+auto_translate_mode = 2
+layout_mode = 2
+size_flags_vertical = 3
+theme_override_font_sizes/font_size = 28
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 4
+autowrap_mode = 3
+
+[node name="Hint" type="Label" parent="Side/Box" unique_id=2006077392]
+layout_mode = 2
+theme_override_font_sizes/font_size = 22
+theme_override_colors/font_color = Color(1, 1, 1, 0.8)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 4
+text = "MAP_HINT"

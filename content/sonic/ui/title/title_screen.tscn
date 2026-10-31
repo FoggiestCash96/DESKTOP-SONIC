@@ -1,5 +1,6 @@
 [gd_scene format=3]
 
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="1_0w7vu"]
 [ext_resource type="Script" path="res://content/sonic/ui/title/title_screen.gd" id="1_jrg8v"]
 
 [sub_resource type="Gradient" id="Gradient_0w7vu"]
@@ -31,13 +32,6 @@ outline_color = Color(0.023529412, 0.0627451, 0.22745098, 1)
 shadow_color = Color(0, 0, 0, 0.35)
 shadow_offset = Vector2(0, 6)
 
-[sub_resource type="LabelSettings" id="LabelSettings_jrg8v"]
-font_size = 26
-outline_size = 10
-outline_color = Color(0.023529412, 0.0627451, 0.22745098, 1)
-shadow_color = Color(0, 0, 0, 0.35)
-shadow_offset = Vector2(0, 6)
-
 [sub_resource type="LabelSettings" id="LabelSettings_hh72y"]
 font_size = 24
 font_color = Color(1, 1, 1, 0.8)
@@ -61,6 +55,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+theme = ExtResource("1_0w7vu")
 script = ExtResource("1_jrg8v")
 
 [node name="Background" type="TextureRect" parent="." unique_id=1968111248]
@@ -85,7 +80,7 @@ horizontal_alignment = 1
 
 [node name="Subtitle" type="Label" parent="Center" unique_id=1227607954]
 layout_mode = 2
-text = "An open-source fan game"
+text = "TITLE_SUBTITLE"
 label_settings = SubResource("LabelSettings_1q0ee")
 horizontal_alignment = 1
 
@@ -96,16 +91,16 @@ layout_mode = 2
 [node name="PromptLabel" type="Label" parent="Center" unique_id=2097708436]
 unique_name_in_owner = true
 layout_mode = 2
-text = "Press Enter or Start"
+text = "TITLE_PRESS_START"
 label_settings = SubResource("LabelSettings_e7jdg")
 horizontal_alignment = 1
 
-[node name="TestRoomHint" type="Label" parent="Center" unique_id=825318858]
-modulate = Color(1, 1, 1, 0.65)
+[node name="Menu" type="VBoxContainer" parent="Center" unique_id=1118828489]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(560, 0)
 layout_mode = 2
-text = "F or Y: greybox test room    Shift or X: Act 8 boss"
-label_settings = SubResource("LabelSettings_jrg8v")
-horizontal_alignment = 1
+size_flags_horizontal = 4
+theme_override_constants/separation = 12
 
 [node name="VersionLabel" type="Label" parent="." unique_id=2005433263]
 unique_name_in_owner = true
@@ -129,7 +124,7 @@ offset_left = 160.0
 offset_top = -120.0
 offset_right = -160.0
 offset_bottom = -32.0
-text = "Sonic Velocity Run is a free, non-commercial fan game. It is not affiliated with, endorsed or sponsored by SEGA. Sonic the Hedgehog and all related characters and trademarks belong to SEGA."
+text = "TITLE_DISCLAIMER"
 label_settings = SubResource("LabelSettings_ilmd5")
 horizontal_alignment = 1
 autowrap_mode = 3

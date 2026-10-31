@@ -24,8 +24,8 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 
 ## Run the game
 
-- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to play Emerald Shore Act 1, F (Y) for the greybox test room, or Shift (X) to go straight to Act 8 and its boss.
-- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn`, `act_8.tscn` or `stages/greybox/test_room.tscn` to go straight there.
+- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) for the main menu: **Play** goes to the save slots and then the world map, where you pick an act; **Options** has the settings; **Test room** opens the greybox test room. Two developer shortcuts skip the menus without a save slot: F (Y) for the test room, Shift (X) for Act 8 and its boss.
+- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn`, `act_8.tscn` or `stages/greybox/test_room.tscn` to go straight there. Without a save slot nothing is saved, and the goal leads to the stage's `next_scene` (Act 1 to Act 8) or the title screen.
 
 You play a stand-in Sonic built from simple shapes, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
 
@@ -39,9 +39,9 @@ You play a stand-in Sonic built from simple shapes, with toon shading and animat
 | Orbit the camera | Mouse or arrow keys | Right stick |
 | Swing the camera behind the player | Middle mouse button | Right stick click |
 | Debug overlay (player and camera state) | F3 | |
-| Back to the title screen | Esc | Start |
+| Pause menu | Esc | Start |
 
-The mouse is captured while you play. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+Menus work with a controller (D-pad or stick, A to choose, B to go back), the keyboard (arrows, Enter, Esc) or the mouse. Every control can be remapped in Options. The mouse is captured while you play; if you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, the act's red rings (filled once found), lives, and the power-ups running. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
 
 Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, the second press is an air dash.
 
@@ -72,7 +72,8 @@ Far to the left of the start, past the long hill, is the enemy gallery: a crab, 
 ### Tuning
 
 - **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the homing attack and air dash, damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
-- **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow, wall handling, and the speed lines and motion blur (each can be switched off).
+- **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow, wall handling, and the speed lines and motion blur. Players' own choices (sensitivity, inverted axes, effects on or off) are in the Options menu and act on top of these.
+- **Player settings and saves:** the Options menu writes `user://settings.cfg`, and each save slot is `user://saves/slot_NN.json` (`user://` is `%APPDATA%\Godot\app_userdata\Sonic Velocity Run` on Windows when running from the editor). Delete them to start fresh.
 - **Lives and restarts:** `engine/systems/game_rules.tres`: starting lives, the delay before a restart, and how long GAME OVER shows.
 - **Gimmicks:** each spring, dash panel, monitor and ring row has its own settings in the Inspector.
 - **Enemies and bosses:** each badnik scene (`content/sonic/enemies/`) and each placed badnik has its own settings: notice range, speeds, patrol distance and so on. The boss's are on the `CrabMech` node in `content/sonic/bosses/emerald_shore/crab_mech.tscn`, per phase where they change.
@@ -105,12 +106,12 @@ A checkpoint counts anywhere through its gate: set `gate_width` to the width of 
 
 Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and remodelled in Blender later. An act needs:
 
-- A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results) and `next_scene`.
+- A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results), its `hub_scene` (`content/sonic/ui/map/world_map.tscn`, where the goal leads while a save slot is played), and its `next_scene` (where the goal leads without one).
 - An instance of `engine/player/player.tscn`. Set its `character` (`content/sonic/characters/sonic/sonic.tres` for Sonic) and a `kill_height` a little below the lowest ground.
 - `engine/camera/player_camera.tscn` (its `target` is the player) and `content/sonic/ui/hud/hud.tscn` (its `target` too).
 - The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.
 
-Then add gimmicks, badniks, checkpoints, five red rings, one extra life and a goal (or, in Act 8, the boss). Play it, and keep at least one route open to players who aren't fast.
+Then add gimmicks, badniks, checkpoints, five red rings, one extra life and a goal (or, in Act 8, the boss). Play it, and keep at least one route open to players who aren't fast. Finally put its scene on its act in `content/sonic/stages/worlds.tres`, the world map's list of worlds and acts, so the map can open it.
 
 ### Enemies and bosses
 
@@ -126,6 +127,10 @@ Drag a badnik from `content/sonic/enemies/` into a stage (under an `Enemies` nod
 A new kind of enemy is a scene whose root has one of the scripts in `engine/enemies/` (or a script extending `Enemy`), with a `Hitbox` Area3D on the enemies layer watching the player layer, a `HomingTarget` marker (`engine/enemies/base/homing_target.gd`) where the homing attack should aim, and a `Model` with the visuals, all with **Access as Unique Name** ticked. Give the model an AnimationPlayer with `patrol`, `notice`, `attack` and `stunned` animations and they play by themselves.
 
 A boss is a script extending `Boss` (`engine/enemies/base/boss.gd`) with a `WeakPoint` area, a `HomingTarget` and a `Model`, and its `body_areas` and `danger_areas` set. It fills in `_fight()` and decides when it's `vulnerable`; overriding `begin()` gives it an intro. In the stage, a `BossArena` area (`engine/enemies/base/boss_arena.gd`, with a `Barriers` static body under it) starts the boss when the player walks in, and a camera volume with the boss as its `focus` keeps it on screen. `content/sonic/bosses/emerald_shore/` is the worked example.
+
+### Menus and text
+
+The menus live in `content/sonic/ui/`: the title screen, `menus/` (save slots, options, pause), `map/` (the world map) and `hud/`. They share `menu_theme.tres` for their look and `menus/menu_kit.gd` for building buttons and labels. Every piece of text shown to players is a key such as `MENU_PLAY`, translated through `ui/translations/strings.csv`: add a key there for new text, and a column (say `fr`) for a new language. Godot turns the CSV into `.translation` files when it imports, and `project.godot` lists them.
 
 ### Characters: from Blender to Godot
 
@@ -185,10 +190,10 @@ engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a tes
   gimmicks/       Loop, springs, dash panels, spikes, checkpoints, tidal waves, goal; rails... later
   collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
   enemies/        Enemy behaviours (walker, flyer, turret, leaper); base/ has the enemy and boss bases, homing targets, the boss arena, shots, explosions and freed animals
-  systems/        Stage root script and GameState (autoload); save, settings, audio later
+  systems/        Stage root script, GameState, SaveGame and GameSettings (autoloads), remappable controls, world map data
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8) and UI (title screen, placeholder HUD)
+content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8, the list of worlds) and UI (title, menus, world map, HUD, translations)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 tools/blender/    Blender scripts, such as the project's glTF export

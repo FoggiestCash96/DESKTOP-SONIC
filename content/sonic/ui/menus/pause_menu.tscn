@@ -1,0 +1,49 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://content/sonic/ui/menus/pause_menu.gd" id="1_6kpj6"]
+[ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="2_pigcr"]
+
+[node name="PauseMenu" type="CanvasLayer" unique_id=722191697]
+process_mode = 3
+layer = 20
+script = ExtResource("1_6kpj6")
+
+[node name="Screen" type="Control" parent="." unique_id=1232115221]
+layout_mode = 3
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+theme = ExtResource("2_pigcr")
+
+[node name="Dim" type="ColorRect" parent="Screen" unique_id=1422048528]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+color = Color(0, 0.02, 0.08, 0.6)
+
+[node name="Center" type="CenterContainer" parent="Screen" unique_id=1996306093]
+layout_mode = 0
+anchor_right = 1.0
+anchor_bottom = 1.0
+
+[node name="Panel" type="PanelContainer" parent="Screen/Center" unique_id=1633258251]
+layout_mode = 2
+
+[node name="Box" type="VBoxContainer" parent="Screen/Center/Panel" unique_id=475460788]
+layout_mode = 2
+theme_override_constants/separation = 22
+
+[node name="Title" type="Label" parent="Screen/Center/Panel/Box" unique_id=2015427270]
+layout_mode = 2
+theme_override_font_sizes/font_size = 64
+theme_override_colors/font_color = Color(1, 0.82, 0.25, 1)
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 10
+text = "PAUSE_TITLE"
+horizontal_alignment = 1
+
+[node name="Buttons" type="VBoxContainer" parent="Screen/Center/Panel/Box" unique_id=908414790]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(620, 0)
+layout_mode = 2
+theme_override_constants/separation = 12

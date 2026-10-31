@@ -1,0 +1,245 @@
+[gd_resource type="Resource" script_class="WorldList" format=3]
+
+[ext_resource type="Script" path="res://engine/systems/world_list.gd" id="1_adwrb"]
+[ext_resource type="Script" path="res://engine/systems/world_info.gd" id="2_6ffjo"]
+[ext_resource type="Script" path="res://engine/systems/act_info.gd" id="3_lod5s"]
+
+[sub_resource type="Resource" id="Resource_pnnv0"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Sunny Beachfront"
+scene = "res://content/sonic/stages/emerald_shore/act_1.tscn"
+
+[sub_resource type="Resource" id="Resource_wc8pr"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Lush Palm Grove"
+
+[sub_resource type="Resource" id="Resource_nc1n1"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Cascading Waterfall Basin"
+
+[sub_resource type="Resource" id="Resource_h3ci7"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Shallow Reef Lagoon"
+
+[sub_resource type="Resource" id="Resource_pulec"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Underground Grotto"
+
+[sub_resource type="Resource" id="Resource_bty0q"]
+script = ExtResource("3_lod5s")
+title = "Act 6: Tidal Cavern"
+
+[sub_resource type="Resource" id="Resource_cb8xl"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Sunset Ridge Cliffs"
+
+[sub_resource type="Resource" id="Resource_87gyl"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Stormy Coastal Fortress"
+scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
+boss = true
+
+[sub_resource type="Resource" id="Resource_48ijc"]
+script = ExtResource("2_6ffjo")
+title = "Emerald Shore"
+color = Color(0.15, 0.75, 0.55, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_pnnv0"), SubResource("Resource_wc8pr"), SubResource("Resource_nc1n1"), SubResource("Resource_h3ci7"), SubResource("Resource_pulec"), SubResource("Resource_bty0q"), SubResource("Resource_cb8xl"), SubResource("Resource_87gyl")])
+
+[sub_resource type="Resource" id="Resource_rckk8"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Refinery Perimeter"
+
+[sub_resource type="Resource" id="Resource_l660p"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Pipeline Aqueducts"
+
+[sub_resource type="Resource" id="Resource_v5im0"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Waste Processing Facility"
+
+[sub_resource type="Resource" id="Resource_imvug"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Chemical Smelting Plant"
+
+[sub_resource type="Resource" id="Resource_e2oju"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Deep Sludge Sub-Level"
+
+[sub_resource type="Resource" id="Resource_bo8jl"]
+script = ExtResource("3_lod5s")
+title = "Act 6: Toxic Pressure Core"
+
+[sub_resource type="Resource" id="Resource_y4xn4"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Exhaust Vent Towers"
+
+[sub_resource type="Resource" id="Resource_mpypm"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Citadel Command Spire"
+boss = true
+
+[sub_resource type="Resource" id="Resource_skmxa"]
+script = ExtResource("2_6ffjo")
+title = "Toxic Citadel"
+color = Color(0.6, 0.35, 0.8, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_rckk8"), SubResource("Resource_l660p"), SubResource("Resource_v5im0"), SubResource("Resource_imvug"), SubResource("Resource_e2oju"), SubResource("Resource_bo8jl"), SubResource("Resource_y4xn4"), SubResource("Resource_mpypm")])
+
+[sub_resource type="Resource" id="Resource_gta0v"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Neon Boulevard"
+
+[sub_resource type="Resource" id="Resource_xldmk"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Midnight Casino"
+
+[sub_resource type="Resource" id="Resource_f4sq8"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Jackpot Plaza"
+
+[sub_resource type="Resource" id="Resource_skml4"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Roulette Mezzanine"
+
+[sub_resource type="Resource" id="Resource_6lrk5"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Behind the Scenes"
+
+[sub_resource type="Resource" id="Resource_r626c"]
+script = ExtResource("3_lod5s")
+title = "Act 6: High-Roller Penthouse"
+
+[sub_resource type="Resource" id="Resource_6i5ep"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Rooftop Rollercoaster Tracks"
+
+[sub_resource type="Resource" id="Resource_cb45j"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Skyscraper Apex"
+boss = true
+
+[sub_resource type="Resource" id="Resource_u112q"]
+script = ExtResource("2_6ffjo")
+title = "Starlight Strip"
+color = Color(0.95, 0.38, 0.72, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_gta0v"), SubResource("Resource_xldmk"), SubResource("Resource_f4sq8"), SubResource("Resource_skml4"), SubResource("Resource_6lrk5"), SubResource("Resource_r626c"), SubResource("Resource_6i5ep"), SubResource("Resource_cb45j")])
+
+[sub_resource type="Resource" id="Resource_mbwvl"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Snowy Foothills"
+
+[sub_resource type="Resource" id="Resource_1kn6o"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Frozen Forest"
+
+[sub_resource type="Resource" id="Resource_tferr"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Ice Crystal Cavern"
+
+[sub_resource type="Resource" id="Resource_6bleh"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Deep Glacier Tunnels"
+
+[sub_resource type="Resource" id="Resource_rj8e0"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Sub-Zero Abyss"
+
+[sub_resource type="Resource" id="Resource_fshfi"]
+script = ExtResource("3_lod5s")
+title = "Act 6: Avalanche Gorge"
+
+[sub_resource type="Resource" id="Resource_3j8f8"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Blizzard Ridge"
+
+[sub_resource type="Resource" id="Resource_ktgo3"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Summit Observatory"
+boss = true
+
+[sub_resource type="Resource" id="Resource_leapm"]
+script = ExtResource("2_6ffjo")
+title = "Glacier Peak"
+color = Color(0.55, 0.85, 1, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_mbwvl"), SubResource("Resource_1kn6o"), SubResource("Resource_tferr"), SubResource("Resource_6bleh"), SubResource("Resource_rj8e0"), SubResource("Resource_fshfi"), SubResource("Resource_3j8f8"), SubResource("Resource_ktgo3")])
+
+[sub_resource type="Resource" id="Resource_en7rm"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Mine Shaft Entrance"
+
+[sub_resource type="Resource" id="Resource_s2c4j"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Excavation Tunnel A"
+
+[sub_resource type="Resource" id="Resource_rxn6l"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Brimstone Quarry"
+
+[sub_resource type="Resource" id="Resource_7ddmq"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Molten Crucible"
+
+[sub_resource type="Resource" id="Resource_3tix1"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Deep Mantle Core"
+
+[sub_resource type="Resource" id="Resource_kgiia"]
+script = ExtResource("3_lod5s")
+title = "Act 6: Lava Falls Cavern"
+
+[sub_resource type="Resource" id="Resource_2e7y2"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Pressure Valve Shafts"
+
+[sub_resource type="Resource" id="Resource_56e6g"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Volcano Summit Rim"
+boss = true
+
+[sub_resource type="Resource" id="Resource_n2bge"]
+script = ExtResource("2_6ffjo")
+title = "Magma Mine"
+color = Color(1, 0.45, 0.15, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_en7rm"), SubResource("Resource_s2c4j"), SubResource("Resource_rxn6l"), SubResource("Resource_7ddmq"), SubResource("Resource_3tix1"), SubResource("Resource_kgiia"), SubResource("Resource_2e7y2"), SubResource("Resource_56e6g")])
+
+[sub_resource type="Resource" id="Resource_3ym1l"]
+script = ExtResource("3_lod5s")
+title = "Act 1: Skyway Gatehouse"
+
+[sub_resource type="Resource" id="Resource_wpbkn"]
+script = ExtResource("3_lod5s")
+title = "Act 2: Outer Cloud Terraces"
+
+[sub_resource type="Resource" id="Resource_fosvl"]
+script = ExtResource("3_lod5s")
+title = "Act 3: Floating Sun Shrine"
+
+[sub_resource type="Resource" id="Resource_n27hg"]
+script = ExtResource("3_lod5s")
+title = "Act 4: Wind Temple Courtyard"
+
+[sub_resource type="Resource" id="Resource_kekp6"]
+script = ExtResource("3_lod5s")
+title = "Act 5: Airship Deck Docklands"
+
+[sub_resource type="Resource" id="Resource_uy64d"]
+script = ExtResource("3_lod5s")
+title = "Act 6: Stormcloud Spire"
+
+[sub_resource type="Resource" id="Resource_agiif"]
+script = ExtResource("3_lod5s")
+title = "Act 7: Overcast Promenade"
+
+[sub_resource type="Resource" id="Resource_5iy6e"]
+script = ExtResource("3_lod5s")
+title = "Act 8: Stratosphere Palace"
+boss = true
+
+[sub_resource type="Resource" id="Resource_gly61"]
+script = ExtResource("2_6ffjo")
+title = "Cloudtop Citadel"
+color = Color(0.92, 0.94, 1, 1)
+acts = Array[ExtResource("3_lod5s")]([SubResource("Resource_3ym1l"), SubResource("Resource_wpbkn"), SubResource("Resource_fosvl"), SubResource("Resource_n27hg"), SubResource("Resource_kekp6"), SubResource("Resource_uy64d"), SubResource("Resource_agiif"), SubResource("Resource_5iy6e")])
+
+[resource]
+script = ExtResource("1_adwrb")
+worlds = Array[ExtResource("2_6ffjo")]([SubResource("Resource_48ijc"), SubResource("Resource_skmxa"), SubResource("Resource_u112q"), SubResource("Resource_leapm"), SubResource("Resource_n2bge"), SubResource("Resource_gly61")])

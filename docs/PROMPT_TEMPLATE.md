@@ -78,9 +78,9 @@ You are the lead gameplay engineer and technical designer on an **open-source, n
 
 - **Dimension:** Hybrid 3D with 2.5D path sections
 - **Stage style:** Mix per zone
-- **Hub / world map:** World map
+- **Hub / world map:** World map (a menu map of the six worlds for now, decided 2026-10-31)
 - **Act structure:** Acts should have unique structure with some having speed, platforming, defeating enemys with the final act of each world being that worlds boss (decided 2026-10-30: Act 8 is a short run that ends in the boss arena)
-- **Save system:** DEFAULT: per-slot JSON in `user://`, saving zone progress, emblems/medals, best times, and settings.
+- **Save system:** 10 save slots of JSON in `user://saves/`, each saving its act progress, best times and red rings after every act; settings are kept apart, for the whole game (decided 2026-10-31, built in Milestone 9: DESIGN.md §10.2).
 
 ---
 
@@ -249,16 +249,16 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 - Music: `[[CHOOSE: Original compositions (DEFAULT, for licensing) | Remixes of SEGA tracks (higher legal risk)]]`
 - Format: `.ogg` music with loop points, `.wav` SFX.
 - Dynamic layers: speed-shoes and invincibility music overrides, an underwater "drowning" countdown.
-- Audio buses: Master, Music, SFX, Voice, each with a settings slider.
+- Audio buses: Master, Music, SFX, Voice, each with a settings slider (built in Milestone 9).
 
 ---
 
 ## §13 UI, controls and accessibility
 
-- Input: full remappable controls via Godot `InputMap`, controller first, keyboard and mouse supported.
-- HUD: `[[CHOOSE: Classic (Score/Time/Rings) | Adventure-style | Minimal]]`
-- Accessibility: options for camera sensitivity, screen-shake off, motion blur off, colour-blind safe UI, `[[game speed slider (e.g. 75%)]]`, invincibility assist mode `[[Y/N]]`.
-- Languages: English first, with strings through Godot translation CSVs so the community can localise.
+- Input: full remappable controls via Godot `InputMap`, controller first, keyboard and mouse supported (built in Milestone 9).
+- HUD: **Adventure-style** (decided 2026-10-31): DESIGN.md §10.4.
+- Accessibility: options for camera sensitivity, screen-shake off, motion blur off, colour-blind safe UI, a game speed setting (100, 90, 80 or 70%), and an invincibility assist mode **Y** (both decided 2026-10-31, built in Milestone 9).
+- Languages: English first, with strings through Godot translation CSVs so the community can localise (`content/sonic/ui/translations/strings.csv`, since Milestone 9).
 
 ---
 
@@ -324,7 +324,7 @@ res://
 6. ~~Greybox Zone 1 Act 1 plus a playtest build.~~ **Done 2026-10-30.** Act 1 is a speed act with Tidal Surge waves that push (swimming later) and a short 2.5D pier.
 7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
-9. Menus, save system, settings, accessibility.
+9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
 10. Art and audio pass, then a public demo release.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`

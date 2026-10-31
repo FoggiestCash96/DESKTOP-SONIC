@@ -19,6 +19,8 @@ const PUSH_SPEED := 1.0  ## ...with the player moving slower than this (m/s).
 const FINISH_SPEED := 1.0  ## After the goal, the victory pose starts below this speed (m/s).
 const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
 const WORLD_MASK := 1  ## Physics layer of level geometry, which blocks the homing attack's line of sight.
+const SAFE_SPOT_INTERVAL := 0.5  ## With the assist on, where the player stands is remembered this often (s)...
+const SAFE_GROUND := 0.8  ## ...on ground at least this level (the up component of its normal).
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -69,6 +71,8 @@ var _braking := false  # Braking against the direction of travel this tick.
 var _pushing := false  # Pushing against a wall this tick.
 var _sprung := false  # Launched by a spring and not landed since.
 var _air_action_ready := true  # The homing attack or air dash hasn't been used since the player left the ground.
+var _safe_spots: Array[Transform3D] = []  # Where the player last stood on solid ground, older first, for the assist.
+var _safe_timer := 0.0
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -104,6 +108,7 @@ func _ready() -> void:
 	# After a death the stage reloads, and the player starts from the last checkpoint touched.
 	_spawn = GameState.spawn_point(owner.scene_file_path if owner else "", global_transform)
 	global_transform = _spawn
+	_safe_spots = [_spawn, _spawn]
 	heading = _flat(-global_basis.z, Vector3.FORWARD)
 	_flat_heading = heading
 	var magnet_shape := SphereShape3D.new()
@@ -141,8 +146,12 @@ func _physics_process(delta: float) -> void:
 	_count_down(delta)
 	if _magnet_timer > 0.0:
 		_pull_rings()
+	_remember_safe_spot(delta)
 	if global_position.y < kill_height and state != death_state:
-		die(false)
+		if GameSettings.assist:
+			_return_to_safe_ground()
+		else:
+			die(false)
 	homing_candidate = find_homing_target() if state == air_state and _air_action_ready and _input_enabled else null
 
 
@@ -521,6 +530,31 @@ func _bounce_up(speed: float) -> void:
 		change_state(air_state)
 
 
+## With the assist on: every SAFE_SPOT_INTERVAL on solid, fairly level ground, remembers where the
+## player stands, keeping the last two.
+func _remember_safe_spot(delta: float) -> void:
+	_safe_timer += delta
+	if _safe_timer < SAFE_SPOT_INTERVAL or not is_grounded() or ground_normal.y < SAFE_GROUND:
+		return
+	_safe_timer = 0.0
+	_safe_spots = [_safe_spots[1], global_transform]
+
+
+## With the assist on, falling into a pit puts the player back on the older remembered spot (the newer
+## one may be the edge they just ran off), flashing, instead of costing a life.
+func _return_to_safe_ground() -> void:
+	var spot := _safe_spots[0]
+	_safe_spots = [spot, spot]
+	global_transform = spot
+	velocity = Vector3.ZERO
+	ground_speed = 0.0
+	heading = _flat(-spot.basis.z, heading)
+	_flat_heading = heading
+	change_state(air_state)
+	_invulnerable_timer = physics.invulnerable_time
+	reset_physics_interpolation()
+
+
 func _in_sight(from: Vector3, to: Vector3) -> bool:
 	var exclude: Array[RID] = [get_rid()]
 	var query := PhysicsRayQueryParameters3D.create(from, to, WORLD_MASK, exclude)
@@ -557,9 +591,9 @@ func collect_rings(amount: int) -> void:
 
 ## Takes a hit from something at `from`. A shield or the rings soak it up (the rings scatter), with
 ## a short knockback and a couple of seconds of flashing invulnerability. With neither, the player
-## dies. Invincibility and that flashing ignore hits. Returns whether the hit landed.
+## dies. Invincibility, that flashing, and the assist setting ignore hits. Returns whether the hit landed.
 func hurt(from: Vector3) -> bool:
-	if state == death_state or _invulnerable_timer > 0.0 or _invincible_timer > 0.0:
+	if state == death_state or _invulnerable_timer > 0.0 or _invincible_timer > 0.0 or GameSettings.assist:
 		return false
 	if shield:
 		shield = false
