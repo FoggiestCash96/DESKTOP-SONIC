@@ -1,0 +1,112 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/enemies/base/animal.gd" id="1_uovkv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fmj52"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.25, 0.55, 1, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_ra12m"]
+radius = 0.18
+height = 0.36
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_nhlx6"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.96, 0.96, 0.92, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_8guxp"]
+radius = 0.13
+height = 0.26
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereMesh" id="SphereMesh_b7dmx"]
+radius = 0.12
+height = 0.24
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_aoug1"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.8, 0.2, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ywvo0"]
+top_radius = 0.0
+bottom_radius = 0.045
+height = 0.12
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rbhhu"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.05, 0.05, 0.08, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_guiwd"]
+radius = 0.025
+height = 0.05
+radial_segments = 24
+rings = 12
+
+[sub_resource type="BoxMesh" id="BoxMesh_hs6el"]
+size = Vector3(0.04, 0.14, 0.2)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8a0qq"]
+radius = 0.025
+height = 0.05
+radial_segments = 24
+rings = 12
+
+[sub_resource type="BoxMesh" id="BoxMesh_1gh5g"]
+size = Vector3(0.04, 0.14, 0.2)
+
+[node name="Animal" type="Node3D" unique_id=1292223448]
+script = ExtResource("1_uovkv")
+
+[node name="Body" type="MeshInstance3D" parent="." unique_id=606221008]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.2, 0)
+material_override = SubResource("StandardMaterial3D_fmj52")
+mesh = SubResource("SphereMesh_ra12m")
+
+[node name="Belly" type="MeshInstance3D" parent="." unique_id=1145235165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.17, -0.07)
+material_override = SubResource("StandardMaterial3D_nhlx6")
+mesh = SubResource("SphereMesh_8guxp")
+
+[node name="Head" type="MeshInstance3D" parent="." unique_id=1860204911]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.42, -0.06)
+material_override = SubResource("StandardMaterial3D_fmj52")
+mesh = SubResource("SphereMesh_b7dmx")
+
+[node name="Beak" type="MeshInstance3D" parent="." unique_id=1751830144]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.41, -0.2)
+material_override = SubResource("StandardMaterial3D_aoug1")
+mesh = SubResource("CylinderMesh_ywvo0")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="." unique_id=1011290746]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.06, 0.46, -0.15)
+material_override = SubResource("StandardMaterial3D_rbhhu")
+mesh = SubResource("SphereMesh_guiwd")
+
+[node name="WingLeft" type="MeshInstance3D" parent="." unique_id=1682398176]
+transform = Transform3D(0.9396926, 0.34202012, 0, -0.34202012, 0.9396926, 0, 0, 0, 1, -0.18, 0.22, 0.02)
+material_override = SubResource("StandardMaterial3D_fmj52")
+mesh = SubResource("BoxMesh_hs6el")
+
+[node name="EyeRight" type="MeshInstance3D" parent="." unique_id=256028196]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.06, 0.46, -0.15)
+material_override = SubResource("StandardMaterial3D_rbhhu")
+mesh = SubResource("SphereMesh_8a0qq")
+
+[node name="WingRight" type="MeshInstance3D" parent="." unique_id=1894542680]
+transform = Transform3D(0.9396926, -0.34202012, 0, 0.34202012, 0.9396926, 0, 0, 0, 1, 0.18, 0.22, 0.02)
+material_override = SubResource("StandardMaterial3D_fmj52")
+mesh = SubResource("BoxMesh_1gh5g")

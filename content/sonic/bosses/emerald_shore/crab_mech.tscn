@@ -1,0 +1,830 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://content/sonic/bosses/emerald_shore/crab_mech.gd" id="1_x85g2"]
+[ext_resource type="Script" path="res://engine/enemies/base/homing_target.gd" id="2_73cwu"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/rolling_wave.tscn" id="3_e1yyv"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l7n4d"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.95, 0.45, 0.2, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_2drwp"]
+radius = 1.0
+height = 2.0
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_it5ko"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.5, 0.53, 0.6, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_t7ftu"]
+top_radius = 2.62
+bottom_radius = 2.62
+height = 0.28
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qj8bu"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.98, 0.86, 0.66, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_31yi3"]
+radius = 1.0
+height = 2.0
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sx4s6"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.3, 0.95, 1, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.3, 0.95, 1, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="SphereMesh" id="SphereMesh_kgcah"]
+radius = 0.55
+height = 1.1
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l83da"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.22, 0.24, 0.28, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vl8kl"]
+top_radius = 0.85
+bottom_radius = 0.85
+height = 0.2
+radial_segments = 16
+
+[sub_resource type="BoxMesh" id="BoxMesh_nw3t3"]
+size = Vector3(0.8, 0.2, 1.5)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_nbwdw"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.8
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_feoex"]
+diffuse_mode = 3
+specular_mode = 1
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_c3xmb"]
+radius = 0.24
+height = 0.48
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0cwpo"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.1, 0.1, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.1, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ad4sp"]
+radius = 0.12
+height = 0.24
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_38w4w"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 3.2787194
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3ml0s"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.85, 0.32, 0.15, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_grt78"]
+radius = 0.8
+height = 1.6
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereMesh" id="SphereMesh_lojio"]
+radius = 0.42
+height = 0.84
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_dfygp"]
+radius = 1.05
+
+[sub_resource type="BoxMesh" id="BoxMesh_0luc6"]
+size = Vector3(0.8, 0.2, 1.5)
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rp53t"]
+top_radius = 0.09
+bottom_radius = 0.09
+height = 0.8
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_b1cal"]
+diffuse_mode = 3
+specular_mode = 1
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_wpwn4"]
+radius = 0.24
+height = 0.48
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s24ls"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.1, 0.1, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.1, 0.1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_qg1e8"]
+radius = 0.12
+height = 0.24
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vyxs7"]
+top_radius = 0.3
+bottom_radius = 0.3
+height = 3.2787194
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_s7u8w"]
+radius = 0.8
+height = 1.6
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereMesh" id="SphereMesh_j4fvo"]
+radius = 0.42
+height = 0.84
+radial_segments = 24
+rings = 12
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_csccv"]
+radius = 1.05
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_x58le"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_luhru"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vh33p"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_ucj1l"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_rjsav"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_xfdif"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_mypl2"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_ja3ru"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_owunr"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_csrdy"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_yrrp4"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_hnppt"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_ygyys"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_syn5m"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_1avlj"]
+top_radius = 0.16
+bottom_radius = 0.16
+height = 2.7313
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_7ebu2"]
+radius = 0.22
+height = 0.44
+radial_segments = 24
+rings = 12
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_nyahp"]
+size = Vector3(5, 1.5, 3.8)
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_afkf6"]
+radius = 1.25
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_q5wyr"]
+size = Vector3(6.4, 1.4, 2.6)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_rd13o"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.86, 0.87, 0.9, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_1pn43"]
+radius = 1.0
+height = 2.0
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tfdap"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.4, 0.42, 0.48, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_5puf4"]
+top_radius = 1.55
+bottom_radius = 1.55
+height = 0.22
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_lmxhh"]
+transparency = 1
+albedo_color = Color(0.6, 0.85, 1, 0.35)
+roughness = 0.1
+
+[sub_resource type="SphereMesh" id="SphereMesh_wv603"]
+radius = 1.0
+radial_segments = 24
+rings = 12
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vlj1i"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.85, 0.14, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_1kr83"]
+radius = 0.48
+height = 0.96
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vgqxd"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.76, 0.6, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_vb3ur"]
+radius = 0.3
+height = 0.6
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ubb1x"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.7, 0.55, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_xunkm"]
+radius = 0.09
+height = 0.18
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_eklr4"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.45, 0.25, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_cqwj3"]
+radius = 0.06
+height = 0.42
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2d6gr"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.3, 0.6, 1, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.3, 0.6, 1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_sj0v3"]
+radius = 0.08
+height = 0.16
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_glue3"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.45, 0.25, 0.1, 1)
+roughness = 0.6
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_dbggs"]
+radius = 0.06
+height = 0.42
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8dxh7"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.3, 0.6, 1, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.3, 0.6, 1, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_82ji7"]
+radius = 0.08
+height = 0.16
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_e7nrb"]
+height = 0.4
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_u3okk"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.6, 0.15, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.6, 0.15, 1)
+emission_energy_multiplier = 2.0
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_7kwew"]
+top_radius = 0.0
+bottom_radius = 0.4
+height = 0.6
+radial_segments = 16
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_tha26"]
+top_radius = 0.2
+bottom_radius = 0.2
+height = 2.6
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_s57hp"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.8, 0.2, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_bsul3"]
+top_radius = 0.45
+bottom_radius = 0.45
+height = 0.45
+radial_segments = 16
+
+[node name="EmeraldShoreBoss" type="Node3D" unique_id=90425281]
+
+[node name="CrabMech" type="Node3D" parent="." unique_id=1764053166 node_paths=PackedStringArray("ship", "ship_pump", "intro_camera", "intro_wave", "body_areas", "danger_areas")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -12)
+script = ExtResource("1_x85g2")
+ship = NodePath("../EggShip")
+ship_pump = NodePath("../EggShip/Pump")
+intro_camera = NodePath("../IntroCamera")
+intro_wave = NodePath("../IntroWave")
+display_name = "Egg Tidecrab"
+body_areas = [NodePath("LegHurt"), NodePath("Model/Body/ShellHurt")]
+danger_areas = [NodePath("Model/Body/ClawLeft/ClawHurtLeft"), NodePath("Model/Body/ClawRight/ClawHurtRight")]
+
+[node name="Model" type="Node3D" parent="CrabMech" unique_id=988385878]
+unique_name_in_owner = true
+
+[node name="Body" type="Node3D" parent="CrabMech/Model" unique_id=380831374]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2.6, 0)
+
+[node name="Shell" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1209209166]
+unique_name_in_owner = true
+transform = Transform3D(2.6, 0, 0, 0, 0.9, 0, 0, 0, 2, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_l7n4d")
+mesh = SubResource("SphereMesh_2drwp")
+
+[node name="Band" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=978041363]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 0.78, 0, -0.05, 0)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("CylinderMesh_t7ftu")
+
+[node name="Belly" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1313334763]
+transform = Transform3D(2.2, 0, 0, 0, 0.55, 0, 0, 0, 1.7, 0, -0.35, 0)
+material_override = SubResource("StandardMaterial3D_qj8bu")
+mesh = SubResource("SphereMesh_31yi3")
+
+[node name="Core" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1134202310]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
+material_override = SubResource("StandardMaterial3D_sx4s6")
+mesh = SubResource("SphereMesh_kgcah")
+
+[node name="CoreRim" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1477996838]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.72, 0)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_vl8kl")
+
+[node name="LidLeft" type="Node3D" parent="CrabMech/Model/Body" unique_id=1157065237]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.78, 0.92, 0)
+
+[node name="Plate" type="MeshInstance3D" parent="CrabMech/Model/Body/LidLeft" unique_id=122286460]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 0, 0)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("BoxMesh_nw3t3")
+
+[node name="StalkLeft" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1633677579]
+transform = Transform3D(0.9781476, -0.2079117, 0, 0.19537309, 0.9191581, 0.34202012, -0.07110999, -0.33454618, 0.9396926, -0.55, 0.95, -1.35)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("CylinderMesh_nbwdw")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1061582465]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 1.38, -1.5)
+material_override = SubResource("StandardMaterial3D_feoex")
+mesh = SubResource("SphereMesh_c3xmb")
+
+[node name="PupilLeft" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1928872514]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.62, 1.4, -1.72)
+material_override = SubResource("StandardMaterial3D_0cwpo")
+mesh = SubResource("SphereMesh_ad4sp")
+
+[node name="ClawLeft" type="Node3D" parent="CrabMech/Model/Body" unique_id=1677705504]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, -0.3, -1.4)
+
+[node name="Arm" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawLeft" unique_id=1871581305]
+transform = Transform3D(0.9805807, -0.09149914, 0.1734631, -0.19611615, -0.4574957, 0.8673155, 0, -0.8844917, -0.4665559, -0.15, -0.75, -1.45)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("CylinderMesh_38w4w")
+
+[node name="Pincer" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawLeft" unique_id=1495894676]
+transform = Transform3D(1.15, 0, 0, 0, 0.75, 0, 0, 0, 1.5, -0.3, -1.5, -2.9)
+material_override = SubResource("StandardMaterial3D_3ml0s")
+mesh = SubResource("SphereMesh_grt78")
+
+[node name="Thumb" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawLeft" unique_id=1236398533]
+transform = Transform3D(0.9, 0, 0, 0, 0.8, 0, 0, 0, 1.4, 0.049999982, -1.05, -2.7)
+material_override = SubResource("StandardMaterial3D_3ml0s")
+mesh = SubResource("SphereMesh_lojio")
+
+[node name="ClawHurtLeft" type="Area3D" parent="CrabMech/Model/Body/ClawLeft" unique_id=1313491589]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="CrabMech/Model/Body/ClawLeft/ClawHurtLeft" unique_id=631471965]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.3, -1.5, -2.9)
+shape = SubResource("SphereShape3D_dfygp")
+
+[node name="LidRight" type="Node3D" parent="CrabMech/Model/Body" unique_id=2092853319]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.78, 0.92, 0)
+
+[node name="Plate" type="MeshInstance3D" parent="CrabMech/Model/Body/LidRight" unique_id=1510944209]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 0)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("BoxMesh_0luc6")
+
+[node name="StalkRight" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1163177754]
+transform = Transform3D(0.9781476, 0.2079117, 0, -0.19537309, 0.9191581, 0.34202012, 0.07110999, -0.33454618, 0.9396926, 0.55, 0.95, -1.35)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("CylinderMesh_rp53t")
+
+[node name="EyeRight" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1881812954]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.38, -1.5)
+material_override = SubResource("StandardMaterial3D_b1cal")
+mesh = SubResource("SphereMesh_wpwn4")
+
+[node name="PupilRight" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=299655092]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.62, 1.4, -1.72)
+material_override = SubResource("StandardMaterial3D_s24ls")
+mesh = SubResource("SphereMesh_qg1e8")
+
+[node name="ClawRight" type="Node3D" parent="CrabMech/Model/Body" unique_id=1293324606]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, -0.3, -1.4)
+
+[node name="Arm" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawRight" unique_id=1287978857]
+transform = Transform3D(0.9805807, 0.09149914, -0.1734631, 0.19611615, -0.4574957, 0.8673155, 0, -0.8844917, -0.4665559, 0.15, -0.75, -1.45)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("CylinderMesh_vyxs7")
+
+[node name="Pincer" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawRight" unique_id=1119067542]
+transform = Transform3D(1.15, 0, 0, 0, 0.75, 0, 0, 0, 1.5, 0.3, -1.5, -2.9)
+material_override = SubResource("StandardMaterial3D_3ml0s")
+mesh = SubResource("SphereMesh_s7u8w")
+
+[node name="Thumb" type="MeshInstance3D" parent="CrabMech/Model/Body/ClawRight" unique_id=904061599]
+transform = Transform3D(0.9, 0, 0, 0, 0.8, 0, 0, 0, 1.4, -0.049999982, -1.05, -2.7)
+material_override = SubResource("StandardMaterial3D_3ml0s")
+mesh = SubResource("SphereMesh_j4fvo")
+
+[node name="ClawHurtRight" type="Area3D" parent="CrabMech/Model/Body/ClawRight" unique_id=1895275561]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="CrabMech/Model/Body/ClawRight/ClawHurtRight" unique_id=907308509]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.3, -1.5, -2.9)
+shape = SubResource("SphereShape3D_csccv")
+
+[node name="Legs" type="Node3D" parent="CrabMech/Model/Body" unique_id=1547638700]
+unique_name_in_owner = true
+
+[node name="Leg0" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=1131892547]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, -0.2, -0.75)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg0" unique_id=294296779]
+transform = Transform3D(0.87929195, -0.4759638, -0.017437963, -0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, -0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_x58le")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg0" unique_id=1965576993]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_luhru")
+
+[node name="Leg1" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=249457250]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, -0.2, -0.75)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg1" unique_id=1361480661]
+transform = Transform3D(0.87929195, 0.4759638, 0.017437963, 0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, 0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_vh33p")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg1" unique_id=324449938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_ucj1l")
+
+[node name="Leg2" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=1649849631]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, -0.2, -0.2)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg2" unique_id=575629981]
+transform = Transform3D(0.87929195, -0.4759638, -0.017437963, -0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, -0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_rjsav")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg2" unique_id=67799290]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_xfdif")
+
+[node name="Leg3" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=888286402]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, -0.2, -0.2)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg3" unique_id=515106330]
+transform = Transform3D(0.87929195, 0.4759638, 0.017437963, 0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, 0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_mypl2")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg3" unique_id=42544594]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_ja3ru")
+
+[node name="Leg4" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=1277924647]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, -0.2, 0.35)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg4" unique_id=1532533384]
+transform = Transform3D(0.87929195, -0.4759638, -0.017437963, -0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, -0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_owunr")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg4" unique_id=1128915586]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_csrdy")
+
+[node name="Leg5" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=216443991]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, -0.2, 0.35)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg5" unique_id=2006057325]
+transform = Transform3D(0.87929195, 0.4759638, 0.017437963, 0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, 0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_yrrp4")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg5" unique_id=1108106772]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_hnppt")
+
+[node name="Leg6" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=288507452]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.1, -0.2, 0.9)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg6" unique_id=2587021]
+transform = Transform3D(0.87929195, -0.4759638, -0.017437963, -0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, -0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_ygyys")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg6" unique_id=1950983705]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_syn5m")
+
+[node name="Leg7" type="Node3D" parent="CrabMech/Model/Body/Legs" unique_id=842887444]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.1, -0.2, 0.9)
+
+[node name="Bone" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg7" unique_id=1917734009]
+transform = Transform3D(0.87929195, 0.4759638, 0.017437963, 0.4762831, -0.87870246, -0.032193165, 0, 0.0366126, -0.9993295, 0.65, -1.2, 0.05)
+material_override = SubResource("StandardMaterial3D_l83da")
+mesh = SubResource("CylinderMesh_1avlj")
+
+[node name="Foot" type="MeshInstance3D" parent="CrabMech/Model/Body/Legs/Leg7" unique_id=730653737]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.3, -2.4, 0.1)
+material_override = SubResource("StandardMaterial3D_it5ko")
+mesh = SubResource("SphereMesh_7ebu2")
+
+[node name="ShellHurt" type="Area3D" parent="CrabMech/Model/Body" unique_id=948184004]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="CrabMech/Model/Body/ShellHurt" unique_id=2004023293]
+shape = SubResource("BoxShape3D_nyahp")
+
+[node name="WeakPoint" type="Area3D" parent="CrabMech/Model/Body" unique_id=313066831]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="CrabMech/Model/Body/WeakPoint" unique_id=1216281471]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+shape = SubResource("SphereShape3D_afkf6")
+
+[node name="HomingTarget" type="Marker3D" parent="CrabMech/Model/Body" unique_id=1623141816]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.9, 0)
+script = ExtResource("2_73cwu")
+
+[node name="LegHurt" type="Area3D" parent="CrabMech" unique_id=163699037]
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="CrabMech/LegHurt" unique_id=1553205942]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.7, 0)
+shape = SubResource("BoxShape3D_q5wyr")
+
+[node name="EggShip" type="Node3D" parent="." unique_id=2047771879]
+transform = Transform3D(1.4, 0, 0, 0, 1.4, 0, 0, 0, 1.4, 0, 30, -70)
+
+[node name="Pod" type="MeshInstance3D" parent="EggShip" unique_id=918958881]
+transform = Transform3D(1.5, 0, 0, 0, 0.9, 0, 0, 0, 1.5, 0, 0, 0)
+material_override = SubResource("StandardMaterial3D_rd13o")
+mesh = SubResource("SphereMesh_1pn43")
+
+[node name="Rim" type="MeshInstance3D" parent="EggShip" unique_id=2030582882]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.12, 0)
+material_override = SubResource("StandardMaterial3D_tfdap")
+mesh = SubResource("CylinderMesh_5puf4")
+
+[node name="Dome" type="MeshInstance3D" parent="EggShip" unique_id=1923087321]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.3, 0)
+material_override = SubResource("StandardMaterial3D_lmxhh")
+mesh = SubResource("SphereMesh_wv603")
+
+[node name="Coat" type="MeshInstance3D" parent="EggShip" unique_id=599652844]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0.05)
+material_override = SubResource("StandardMaterial3D_vlj1i")
+mesh = SubResource("SphereMesh_1kr83")
+
+[node name="Head" type="MeshInstance3D" parent="EggShip" unique_id=375042506]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.98, 0)
+material_override = SubResource("StandardMaterial3D_vgqxd")
+mesh = SubResource("SphereMesh_vb3ur")
+
+[node name="Nose" type="MeshInstance3D" parent="EggShip" unique_id=1567705747]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.96, -0.3)
+material_override = SubResource("StandardMaterial3D_ubb1x")
+mesh = SubResource("SphereMesh_xunkm")
+
+[node name="MoustacheLeft" type="MeshInstance3D" parent="EggShip" unique_id=675786745]
+transform = Transform3D(0.34202015, 0.9396926, 0, -0.9396926, 0.34202015, 0, 0, 0, 1, -0.17, 0.88, -0.27)
+material_override = SubResource("StandardMaterial3D_eklr4")
+mesh = SubResource("CapsuleMesh_cqwj3")
+
+[node name="GoggleLeft" type="MeshInstance3D" parent="EggShip" unique_id=205599946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.12, 1.2, -0.16)
+material_override = SubResource("StandardMaterial3D_2d6gr")
+mesh = SubResource("SphereMesh_sj0v3")
+
+[node name="MoustacheRight" type="MeshInstance3D" parent="EggShip" unique_id=566375495]
+transform = Transform3D(0.34202015, -0.9396926, 0, 0.9396926, 0.34202015, 0, 0, 0, 1, 0.17, 0.88, -0.27)
+material_override = SubResource("StandardMaterial3D_glue3")
+mesh = SubResource("CapsuleMesh_dbggs")
+
+[node name="GoggleRight" type="MeshInstance3D" parent="EggShip" unique_id=2046962859]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.12, 1.2, -0.16)
+material_override = SubResource("StandardMaterial3D_8dxh7")
+mesh = SubResource("SphereMesh_82ji7")
+
+[node name="Thruster" type="MeshInstance3D" parent="EggShip" unique_id=1452464207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.85, 0)
+material_override = SubResource("StandardMaterial3D_tfdap")
+mesh = SubResource("CylinderMesh_e7nrb")
+
+[node name="Flame" type="MeshInstance3D" parent="EggShip" unique_id=2099802350]
+transform = Transform3D(1, 0, 0, 0, -1, 8.742278e-08, 0, -8.742278e-08, -1, 0, -1.3, 0)
+material_override = SubResource("StandardMaterial3D_u3okk")
+mesh = SubResource("CylinderMesh_7kwew")
+
+[node name="Pump" type="Node3D" parent="EggShip" unique_id=556197912]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.6, 0.9)
+
+[node name="Pipe" type="MeshInstance3D" parent="EggShip/Pump" unique_id=154697281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, 0)
+material_override = SubResource("StandardMaterial3D_tfdap")
+mesh = SubResource("CylinderMesh_tha26")
+
+[node name="Nozzle" type="MeshInstance3D" parent="EggShip/Pump" unique_id=987054350]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -2.7, 0)
+material_override = SubResource("StandardMaterial3D_s57hp")
+mesh = SubResource("CylinderMesh_bsul3")
+
+[node name="IntroCamera" type="Camera3D" parent="." unique_id=2010194830]
+transform = Transform3D(0.9931506, 0.013113436, 0.11610304, 0, 0.9936819, -0.11223294, -0.11684124, 0.11146421, 0.98687583, 6, 3.2, 17)
+fov = 50.0
+
+[node name="IntroWave" parent="." unique_id=244976416 instance=ExtResource("3_e1yyv")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, -1, -40)
+width = 54.0
+height = 5.0
+thickness = 6.0
+speed = 9.0
+reach = 28.0
+rise_time = 0.6
+pushes_players = false
+rolling = false

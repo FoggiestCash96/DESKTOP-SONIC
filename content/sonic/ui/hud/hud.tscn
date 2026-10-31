@@ -2,6 +2,17 @@
 
 [ext_resource type="Script" path="res://content/sonic/ui/hud/hud.gd" id="1_taxje"]
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_taxje"]
+bg_color = Color(0.1, 0.1, 0.12, 0.8)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(1, 1, 1, 0.9)
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_7wbo5"]
+bg_color = Color(1, 0.35, 0.2, 1)
+
 [node name="HUD" type="CanvasLayer" unique_id=95572930]
 script = ExtResource("1_taxje")
 
@@ -133,3 +144,33 @@ theme_override_constants/outline_size = 24
 text = "GAME OVER"
 horizontal_alignment = 1
 vertical_alignment = 1
+
+[node name="BossBar" type="VBoxContainer" parent="." unique_id=1520761606]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -270.0
+offset_top = 28.0
+offset_right = 270.0
+offset_bottom = 100.0
+mouse_filter = 2
+
+[node name="BossName" type="Label" parent="BossBar" unique_id=1579293458]
+unique_name_in_owner = true
+layout_mode = 2
+theme_override_font_sizes/font_size = 30
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 8
+horizontal_alignment = 1
+
+[node name="BossHits" type="ProgressBar" parent="BossBar" unique_id=997998059]
+unique_name_in_owner = true
+custom_minimum_size = Vector2(540, 22)
+layout_mode = 2
+theme_override_styles/background = SubResource("StyleBoxFlat_taxje")
+theme_override_styles/fill = SubResource("StyleBoxFlat_7wbo5")
+max_value = 8.0
+value = 8.0
+show_percentage = false

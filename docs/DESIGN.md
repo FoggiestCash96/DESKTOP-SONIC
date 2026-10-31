@@ -75,7 +75,8 @@ Controller first. Every gameplay action has both a keyboard and a controller bin
 - **Dimension:** hybrid 3D with 2.5D path sections.
 - **Stage style:** mixed per zone.
 - **Hub:** world map.
-- **Acts:** each act has its own focus (speed, platforming or combat). Each world ends with its boss. Emerald Shore Act 1 is a speed act (decided 2026-10-30).
+- **Acts:** each act has its own focus (speed, platforming or combat). Emerald Shore Act 1 is a speed act (decided 2026-10-30).
+- **Bosses** (decided 2026-10-30): each world's boss waits at the end of its **Act 8**, a short run that ends in the boss arena (§9.3).
 - **Routes:** 1 to 3 per act. High routes reward skill, low routes are safer.
 - **Save system:** per-slot JSON in `user://` with zone progress, collectibles, best times and settings.
 
@@ -151,7 +152,7 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 | Move | Status |
 |---|---|
 | Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes |
-| Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built once there are targets. |
+| Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built in Milestone 8 (§9.2). |
 | Boost | Yes, built after Milestone 2, once the camera's speed effects and rings exist |
 | Stomp/bounce | Yes |
 | Grind rails (`Path3D`), wall-run and wall-jump | Yes |
@@ -211,6 +212,7 @@ All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and ev
 - **Checkpoints** count as passed anywhere through a gate around the post (`gate_width`), so a checkpoint can span the whole course and no route misses it.
 - **Goal** (Milestone 6): running through it stops the clock and takes the controls away while the player coasts to a stop. The results (time, rings, red rings) show for 6 s, then the stage moves on: to its `next_scene`, or the title screen until the world map exists.
 - **Tidal waves** (Milestone 6, Emerald Shore's Tidal Surge, decided 2026-10-30 as waves that push, with swimming later): a `TidalWave` washes along its −Z axis on a timer. The surge carries the player toward 17 m/s at 25 m/s², faster than running, so riding one gets up slopes too steep to run up. Then the water drains back as a deeper sheet, dragging toward the shore at up to 6 m/s at 8 m/s²: more than friction, so it moves a player standing still, while a runner only slows down. Then it rests. The water hugs the ground under it.
+- **Rolling waves** (Milestone 8): a single crest that rolls along its −Z axis for `reach` metres, hugging the ground, then sinks away. A player it catches is carried along at its speed; jump it to stay clear. Bosses send them out (§9.3).
 - **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
 - **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
 
@@ -268,6 +270,18 @@ All three modes are needed because stages are hybrid:
 
 Falling into the sea (below y = −30) costs a life. The five red rings: the two loop tops, the gap to the deck, the plank, and one over a yellow spring by the rollers that needs you to stand still on it.
 
+**Badniks** (Milestone 8): a crab on the beach start, a gull where the beach drops to the tidal flats (clear of where players wait for a wave), a hovering gull below the jump to the high deck (a stepping stone for anyone who comes up short), a crab on the deck, a clam and a crab on the low road, a gull over the merge, fish leaping across the pier, and a crab on the rollers. The goal leads on to Act 8 until Acts 2 to 7 exist. Milestone 8 also closed the pier's last gap, below the end of the high plank: players coming down long from the plank or the red spring fell into it with no warning.
+
+### 7.2 Emerald Shore Act 8: Stormy Coastal Fortress (greybox, Milestone 8)
+
+`content/sonic/stages/emerald_shore/act_8.tscn`, under a stormy sky (`stormy_environment.tres`): a short run along a walled causeway to the boss.
+
+1. **Causeway:** two crabs, a clam on a block (a red ring above it), and checkpoint 1.
+2. **The gap:** 12 m of sea, crossed with a homing chain on two hovering gulls (a red ring just above the second) or with the dash panel's speed and a jump.
+3. **The bridge:** 4 m wide over the water, with three fish leaping across it in turn. A red ring floats over its middle.
+4. **The platform:** a crab, a ring monitor, a red ring in the far corner, and checkpoint 2.
+5. **The arena:** a beach 60 m wide below the fortress towers, walled in by cliffs, with the sea to the north and the fifth red ring in its far corner. A barrier closes the way in once the fight starts, a camera volume keeps the crab in view, and two ring monitors stand by the entrance. Beating the boss clears the act.
+
 ## 8. Art and characters
 
 ### 8.1 Art direction (decided 2026-10-30)
@@ -297,21 +311,69 @@ The model shows, in order of priority: death, hurt, the ball (jumping, rolling o
 
 **The stand-in Sonic** (`content/sonic/characters/sonic/`) is built entirely by `build_sonic.py`: simple shapes, each bound rigidly to one bone, in 3,526 triangles with 16 bones and all 13 animations. It proves the pipeline before real art exists. A hand-made model replaces it by keeping the bone names, animation names and conventions above.
 
+## 9. Enemies and bosses
+
+### 9.1 Enemies (Milestone 8)
+
+Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that patrols, notices a player who comes close, attacks, and is stunned for a moment afterwards. Four behaviours live in `engine/enemies/`, and each world dresses them up as its own badniks in `content/sonic/enemies/`.
+
+| Behaviour | What it does |
+|---|---|
+| `WalkerEnemy` | Patrols back and forth along the ground, rears up on noticing a player, then charges at where they were. It follows the ground and stops at edges and walls. |
+| `FlyerEnemy` | Hovers, bobbing, and dives at a player who comes close, then flies home. With `swoops` off it only hovers, as a stepping stone for homing chains. |
+| `TurretEnemy` | Stays put, opens up for a player in range, and fires shots at where they were. |
+| `LeaperEnemy` | Waits out of sight below its spot and leaps out in an arc on its own timetable, across a path or straight up. |
+
+- **Touching an enemy** hurts the player, unless they're curled up (jumping, rolling, spin dashing or homing in) or invincible. Then it bursts and frees an animal. Shots hurt even a curled-up player, unless a shield or invincibility protects them. Destroyed enemies come back when the stage reloads.
+- **Rebound**, the classic rule: destroying one in the air while falling onto it from above bounces the player back up at the speed they fell. Rising, or level with its middle or lower, they're only slowed by 1 px/frame (1.875 m/s, `rebound_slowdown`). After a homing attack they bounce straight up instead (§9.2). Rolling or spin dashing on the ground, they carry straight on.
+- **Homing targets:** every enemy, item monitor and boss weak point carries a `HomingTarget` marker where the attack aims, switched off while the thing can't be hit.
+- **Animations:** if an enemy's model has an AnimationPlayer with animations named after the modes (`patrol`, `notice`, `attack`, `stunned`), each plays as its mode starts, so real models from Blender drop in the same way.
+
+**Emerald Shore's badniks** (decided 2026-10-30): four original fan designs, built from simple shapes until the art pass.
+
+| Badnik | Behaviour | Details |
+|---|---|---|
+| Scuttler | Walker | A crab. Patrols sideways 4 m either way, notices within 7 m, raises its claws and charges 7 m at 9 m/s. |
+| Galegull | Flyer | A robot gull. Notices within 9 m and dives at 11 m/s. Hovering ones bridge gaps for homing chains. |
+| Pearlshot | Turret | A clam. Within 14 m it opens and fires two pearls 0.8 s apart at 8 m/s. |
+| Leapfin | Leaper | A fish. Leaps across piers and bridges, or straight up out of a pool. |
+
+### 9.2 Homing attack and air dash (Milestone 8)
+
+- **Homing attack:** pressing jump again in the air, once each time the player leaves the ground, locks on to the nearest target within **12 m** and **45° either side** of the way they face (where the stick points, or with it let go, their direction of travel), with no level geometry in the way. The player curls up and flies straight at it at 28 m/s, following it as it moves. A hit bounces them straight up at 10 m/s with the move ready again, so attacks chain from target to target. The attack gives up after 0.6 s, or if the target goes away.
+- **Air dash:** with nothing in reach, the same press dashes ahead at 15 m/s (or the player's own speed, if faster), dropping any sideways drift and stopping a fall for a moment.
+- It works after a jump, after running off a ledge, and after a spring. A yellow reticle shows on whatever a homing attack would lock on to.
+- The values are in `player_physics.tres` (the "Homing attack" and "Enemies" groups).
+
+### 9.3 Bosses (Milestone 8)
+
+- **`engine/enemies/base/boss.gd`:** a boss takes `hits` hits, by default **8**, and moves on a phase at each of `phase_changes` hits left, by default **4 and 2**. After each hit it flashes for 1 s and can't be hit again, and the player is thrown back off it. Its weak point takes hits only while the boss is open to attack (`vulnerable`). Its body hurts a player standing up and bounces off a curled-up one, and attack parts (claws and the like) hurt anyone while they're active. Defeating it clears the stage 3 s later, with the results as at a goal.
+- **`BossArena`:** an area that raises its barriers when a player first enters and starts the boss, intro first.
+- A camera volume with a `focus` keeps that node in view beyond the player, which an arena uses to keep its boss on screen.
+- The HUD shows a boss's name and hits left during its fight.
+- **Where:** at the end of each world's Act 8 (decided 2026-10-30).
+
+**Emerald Shore's boss: the Egg Tidecrab** (decided 2026-10-30: the user's combination of a wave-making ship and a crab mech).
+
+- **Intro:** Eggman's ship flies in over the sea and lowers a pump that raises a great wave, then flies off. He isn't seen again in the stage. The crab mech rises out of the wave as it breaks on the beach.
+- **Fight:** the crab scuttles sideways to line up with Sonic. Within about 6.5 m it sweeps a claw across in front of it (jump it). Otherwise it raises both claws and slams them down, sending waves rolling across the beach (jump them, or be carried away), and sinks low with the lid over its glowing core open: that's the moment to hit it, from a jump or with a homing attack.
+- **Phases:** 1 wave per slam and the core open for 3.5 s at first. From 4 hits left it moves faster, sends 2 waves and opens for 3 s. From 2 left: 3 waves, 2.5 s, and a charge across the beach before each slam. It turns redder with each phase.
+- **Defeat:** it bursts into explosions and collapses, and the act is clear.
+
 ---
 
-## 9. Open decisions
+## 10. Open decisions
 
 Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
 | **Boost (after M4–M5)** | Boost speed and gauge rates; quickstep distance |
-| **Structure** | Is Act 8 the boss act, or does a boss stage follow Act 8? (Act 8 names read like boss arenas.) |
-| **M8 (enemies)** | Badnik roster and boss concepts per world |
+| **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
 | **M9 (menus)** | HUD style; accessibility extras (game speed slider, assist mode) |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; music tool; 2D art tool; community channel; GameJolt |
 
-## 10. Roadmap
+## 11. Roadmap
 
 | # | Milestone | Status |
 |---|---|---|
@@ -322,8 +384,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 5 | Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints | **Done** |
 | 6 | Greybox Emerald Shore Act 1 plus a playtest build | **Done** |
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
-| 8 | Enemies and the first boss | Next |
-| 9 | Menus, save system, settings, accessibility | |
+| 8 | Enemies and the first boss | **Done** |
+| 9 | Menus, save system, settings, accessibility | Next |
 | 10 | Art and audio pass, then a public demo release | |
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

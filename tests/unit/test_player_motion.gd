@@ -277,6 +277,31 @@ func test_speed_shoes_double_the_classic_values() -> void:
 	assert_almost_eq(physics.top, 11.25, 1e-6, "the original values are untouched")
 
 
+
+func test_homing_reaches_targets_ahead_within_range() -> void:
+	var ahead := Vector3.FORWARD
+	assert_true(PlayerMotion.in_homing_reach(Vector3(0.0, -2.0, -8.0), ahead, 12.0, 90.0), "ahead and below")
+	assert_true(PlayerMotion.in_homing_reach(Vector3(-7.0, 1.0, -7.2), ahead, 12.0, 90.0), "just inside 45° to the side")
+	assert_false(PlayerMotion.in_homing_reach(Vector3(-7.2, 0.0, -7.0), ahead, 12.0, 90.0), "just outside 45° to the side")
+	assert_false(PlayerMotion.in_homing_reach(Vector3(0.0, 0.0, -12.5), ahead, 12.0, 90.0), "too far")
+	assert_false(PlayerMotion.in_homing_reach(Vector3(0.0, 0.0, 4.0), ahead, 12.0, 90.0), "behind")
+	assert_true(PlayerMotion.in_homing_reach(Vector3(0.3, -5.0, 0.4), ahead, 12.0, 90.0), "straight below counts as in front")
+
+
+func test_air_dash_sets_a_minimum_speed_ahead() -> void:
+	var slow := PlayerMotion.air_dash(Vector3(1.0, 0.0, -3.0), Vector3.FORWARD, physics.air_dash_speed)
+	assert_true(slow.is_equal_approx(Vector3(0.0, 0.0, -physics.air_dash_speed)), "speeds up to the dash speed and drops the drift: %s" % slow)
+	var fast := PlayerMotion.air_dash(Vector3(0.0, 0.0, -25.0), Vector3.FORWARD, physics.air_dash_speed)
+	assert_true(fast.is_equal_approx(Vector3(0.0, 0.0, -25.0)), "a faster player keeps their speed: %s" % fast)
+
+
+func test_destroying_an_enemy_rebounds_as_in_the_classic_games() -> void:
+	var slowdown := physics.rebound_slowdown
+	assert_almost_eq(slowdown, 1.875, 1e-6, "1 px/frame")
+	assert_almost_eq(PlayerMotion.enemy_rebound(-6.0, 2.0, 1.0, slowdown), 6.0, 1e-6, "falling onto it from above bounces back up")
+	assert_almost_eq(PlayerMotion.enemy_rebound(-6.0, 0.5, 1.0, slowdown), -4.125, 1e-6, "falling past it from below only slows the fall")
+	assert_almost_eq(PlayerMotion.enemy_rebound(8.0, 0.5, 1.0, slowdown), 6.125, 1e-6, "rising through it only slows the rise")
+
 ## Normal of a slope that rises toward -Z at `degrees` from flat.
 func _slope_normal(degrees: float) -> Vector3:
 	return Vector3.UP.rotated(Vector3.RIGHT, deg_to_rad(degrees))

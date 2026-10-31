@@ -10,6 +10,7 @@ const SPIN_CHARGE_KEEP_PER_FRAME := 1.0 - 1.0 / 32.0  ## Share of spin dash char
 const LOST_RINGS_PER_CIRCLE := 16  ## Scattered rings fly out in circles of this many, as in the classic games.
 const LOST_RING_STEEP := 60.0  ## Alternate scattered rings fly out this many degrees above the horizontal...
 const LOST_RING_SHALLOW := 30.0  ## ...and the others this many.
+const HOMING_OVERHEAD := 1.0  ## A homing target closer than this horizontally (m) is straight above or below, and counts as in front.
 
 
 ## Ground speed after one tick of running. `input_strength` (0 to 1) is how far the stick is
@@ -184,6 +185,37 @@ static func pushed(velocity: Vector3, direction: Vector3, max_speed: float, amou
 	if along >= max_speed:
 		return velocity
 	return velocity + direction * minf(amount, max_speed - along)
+
+
+## Whether a homing attack target at `offset` from the player is in reach: no farther than
+## `reach`, and within `cone_degrees` (both sides together) of `aim` on the horizontal plane.
+static func in_homing_reach(offset: Vector3, aim: Vector3, reach: float, cone_degrees: float) -> bool:
+	if offset.length() > reach:
+		return false
+	var flat := Vector3(offset.x, 0.0, offset.z)
+	if flat.length() < HOMING_OVERHEAD:
+		return true
+	var flat_aim := Vector3(aim.x, 0.0, aim.z)
+	if flat_aim.length_squared() < 1e-6:
+		return false
+	return flat.normalized().dot(flat_aim.normalized()) >= cos(deg_to_rad(cone_degrees * 0.5)) - 1e-6
+
+
+## Horizontal velocity after an air dash along `direction` (a horizontal unit vector): `speed`
+## that way, or the player's own speed along it if that's faster. Any sideways drift is dropped.
+static func air_dash(horizontal: Vector3, direction: Vector3, speed: float) -> Vector3:
+	return direction * maxf(speed, horizontal.dot(direction))
+
+
+## Vertical speed after destroying an enemy in the air, as in the classic games. Falling onto it
+## from above bounces the player back up at the speed they fell. Rising, or level with its middle
+## or lower, they are only slowed by `slowdown`.
+static func enemy_rebound(vertical: float, player_height: float, enemy_height: float, slowdown: float) -> float:
+	if vertical > 0.0:
+		return vertical - slowdown
+	if player_height <= enemy_height:
+		return vertical + slowdown
+	return -vertical
 
 
 ## Movement values with speed shoes on: a copy of `physics` with acc, frc, top, air_acc and

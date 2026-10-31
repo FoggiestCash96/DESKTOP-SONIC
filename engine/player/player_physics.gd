@@ -55,6 +55,17 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export var air_drag: bool = true  ## Classic drag on horizontal speed near the top of a jump.
 @export var upright_speed: float = 540.0  ## How fast the player turns back upright in the air (degrees per second).
 
+@export_group("Homing attack")
+@export var homing_range: float = 12.0  ## Jump in the air locks on to targets this close (m)...
+@export_range(10.0, 180.0) var homing_cone: float = 90.0  ## ...within this angle of the way the player faces (degrees, both sides together).
+@export var homing_speed: float = 28.0  ## Speed of the homing attack (m/s).
+@export var homing_max_time: float = 0.6  ## Seconds before a homing attack that hasn't reached its target gives up.
+@export var homing_bounce: float = 10.0  ## Upward speed after a homing attack hits (m/s).
+@export var air_dash_speed: float = 15.0  ## With nothing in reach, jump in the air dashes ahead at least this fast (m/s).
+
+@export_group("Enemies")
+@export var rebound_slowdown: float = 1.0 * SPEED  ## Destroying an enemy in the air while rising, or from below its middle, only slows the player by this much (m/s). From above they bounce back up.
+
 @export_group("Assists")
 @export var coyote_time: float = 0.1  ## Seconds after running off a ledge during which a jump still works.
 @export var jump_buffer_time: float = 0.1  ## Seconds a jump press is remembered before landing.

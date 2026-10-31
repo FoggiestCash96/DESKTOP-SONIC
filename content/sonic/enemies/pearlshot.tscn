@@ -1,0 +1,243 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/enemies/turret_enemy.gd" id="1_34drg"]
+[ext_resource type="Script" path="res://engine/enemies/base/homing_target.gd" id="2_1185g"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kuc47"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.5, 0.52, 0.58, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_jxnot"]
+top_radius = 0.55
+bottom_radius = 0.55
+height = 0.2
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2tw3n"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(0.78, 0.45, 0.72, 1)
+roughness = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_1j7wn"]
+radius = 0.62
+height = 0.62
+radial_segments = 24
+rings = 12
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o0nnh"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.72, 0.78, 1)
+roughness = 0.6
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_3rmu4"]
+height = 0.05
+radial_segments = 16
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fkfip"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.95, 0.97, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.95, 0.97, 1)
+emission_energy_multiplier = 0.6
+
+[sub_resource type="SphereMesh" id="SphereMesh_7a4sj"]
+radius = 0.17
+height = 0.34
+radial_segments = 24
+rings = 12
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_x40gl"]
+top_radius = 0.1
+bottom_radius = 0.1
+height = 0.4
+radial_segments = 16
+
+[sub_resource type="SphereMesh" id="SphereMesh_7xoca"]
+radius = 0.62
+height = 0.62
+radial_segments = 24
+rings = 12
+is_hemisphere = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0bl4v"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.9, 0.2, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.9, 0.2, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_hdhwh"]
+radius = 0.08
+height = 0.16
+radial_segments = 24
+rings = 12
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_7yx85"]
+diffuse_mode = 3
+specular_mode = 1
+albedo_color = Color(1, 0.9, 0.2, 1)
+roughness = 0.6
+emission_enabled = true
+emission = Color(1, 0.9, 0.2, 1)
+emission_energy_multiplier = 0.5
+
+[sub_resource type="SphereMesh" id="SphereMesh_oyom1"]
+radius = 0.08
+height = 0.16
+radial_segments = 24
+rings = 12
+
+[sub_resource type="Animation" id="Animation_ws4sm"]
+length = 0.8
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.1, 0.3),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(-0.95, 0, 0), Vector3(-1.05, 0, 0), Vector3(-0.95, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_t8doy"]
+length = 0.4
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.4),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.95, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_8tm6m"]
+loop_mode = 1
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.5, 1),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Vector3(0, 0, 0), Vector3(-0.08, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="Animation" id="Animation_3wtx3"]
+length = 0.3
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("Lid:rotation")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 0.3),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Vector3(-0.95, 0, 0), Vector3(0, 0, 0)]
+}
+
+[sub_resource type="AnimationLibrary" id="AnimationLibrary_wr8ci"]
+_data = {
+&"attack": SubResource("Animation_ws4sm"),
+&"notice": SubResource("Animation_t8doy"),
+&"patrol": SubResource("Animation_8tm6m"),
+&"stunned": SubResource("Animation_3wtx3")
+}
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_e0p1i"]
+size = Vector3(1.3, 1, 1.3)
+
+[node name="Pearlshot" type="Node3D" unique_id=445153036]
+script = ExtResource("1_34drg")
+notice_range = 14.0
+notice_time = 0.6
+stun_time = 1.6
+
+[node name="Model" type="Node3D" parent="." unique_id=755796274]
+unique_name_in_owner = true
+
+[node name="Base" type="MeshInstance3D" parent="Model" unique_id=1848168248]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.1, 0)
+material_override = SubResource("StandardMaterial3D_kuc47")
+mesh = SubResource("CylinderMesh_jxnot")
+
+[node name="BottomShell" type="MeshInstance3D" parent="Model" unique_id=541962122]
+transform = Transform3D(1, 0, 0, 0, -0.5, 8.742278e-08, 0, -4.371139e-08, -1, 0, 0.42, 0)
+material_override = SubResource("StandardMaterial3D_2tw3n")
+mesh = SubResource("SphereMesh_1j7wn")
+
+[node name="Tongue" type="MeshInstance3D" parent="Model" unique_id=1333540906]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.43, 0)
+material_override = SubResource("StandardMaterial3D_o0nnh")
+mesh = SubResource("CylinderMesh_3rmu4")
+
+[node name="Pearl" type="MeshInstance3D" parent="Model" unique_id=229344644]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.55, -0.05)
+material_override = SubResource("StandardMaterial3D_fkfip")
+mesh = SubResource("SphereMesh_7a4sj")
+
+[node name="Barrel" type="MeshInstance3D" parent="Model" unique_id=323472763]
+transform = Transform3D(1, 0, 0, 0, -4.371139e-08, 1, 0, -1, -4.371139e-08, 0, 0.52, -0.35)
+material_override = SubResource("StandardMaterial3D_kuc47")
+mesh = SubResource("CylinderMesh_x40gl")
+
+[node name="Lid" type="Node3D" parent="Model" unique_id=275980311]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.44, 0.55)
+
+[node name="TopShell" type="MeshInstance3D" parent="Model/Lid" unique_id=331962200]
+transform = Transform3D(1, 0, 0, 0, 0.5, 0, 0, 0, 1, 0, 0, -0.55)
+material_override = SubResource("StandardMaterial3D_2tw3n")
+mesh = SubResource("SphereMesh_7xoca")
+
+[node name="EyeLeft" type="MeshInstance3D" parent="Model/Lid" unique_id=2080916602]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.22, 0.22, -0.98)
+material_override = SubResource("StandardMaterial3D_0bl4v")
+mesh = SubResource("SphereMesh_hdhwh")
+
+[node name="EyeRight" type="MeshInstance3D" parent="Model/Lid" unique_id=1605338713]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.22, 0.22, -0.98)
+material_override = SubResource("StandardMaterial3D_7yx85")
+mesh = SubResource("SphereMesh_oyom1")
+
+[node name="AnimationPlayer" type="AnimationPlayer" parent="Model" unique_id=2138854858]
+libraries/ = SubResource("AnimationLibrary_wr8ci")
+
+[node name="Muzzle" type="Marker3D" parent="." unique_id=977678361]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.52, -0.6)
+
+[node name="Hitbox" type="Area3D" parent="." unique_id=1331361675]
+unique_name_in_owner = true
+collision_layer = 4
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Hitbox" unique_id=1433983094]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+shape = SubResource("BoxShape3D_e0p1i")
+
+[node name="HomingTarget" type="Marker3D" parent="." unique_id=324167023]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.5, 0)
+script = ExtResource("2_1185g")

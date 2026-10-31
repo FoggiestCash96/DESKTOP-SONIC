@@ -1,7 +1,7 @@
 extends CanvasLayer
 ## Placeholder heads-up display for the greybox stages: rings, time, lives, red rings and the
-## power-ups running, the stage's title card, its results at the goal, and the game-over message.
-## Milestone 9 decides its real style.
+## power-ups running, the stage's title card, a boss's name and hits left during its fight, the
+## results at the goal, and the game-over message. Milestone 9 decides its real style.
 
 const WARNING := Color(1.0, 0.3, 0.25)
 const WARNING_PERIOD := 1.0  ## Seconds per flash of the ring count while it is zero.
@@ -22,6 +22,9 @@ const TITLE_FADE := 0.6  ## ...before fading out over this long.
 @onready var _result_rings: Label = %ResultRings
 @onready var _result_red_rings: Label = %ResultRedRings
 @onready var _game_over: Label = %GameOver
+@onready var _boss_bar: Control = %BossBar
+@onready var _boss_name: Label = %BossName
+@onready var _boss_hits: ProgressBar = %BossHits
 
 
 func _ready() -> void:
@@ -41,6 +44,7 @@ func _process(_delta: float) -> void:
 	_lives.text = "LIVES   %d" % GameState.lives
 	_red_rings.visible = GameState.hidden_total > 0
 	_red_rings.text = "RED RINGS   %d / %d" % [GameState.hidden_found, GameState.hidden_total]
+	_show_boss()
 	if target == null:
 		return
 	_rings.text = "RINGS   %d" % target.rings
@@ -56,7 +60,18 @@ func _show_results() -> void:
 	_result_time.text = "TIME   %s" % GameState.format_time(GameState.time)
 	_result_rings.text = "RINGS   %d" % GameState.cleared_rings
 	_result_red_rings.text = "RED RINGS   %d / %d" % [GameState.hidden_found, GameState.hidden_total]
+	_result_red_rings.visible = GameState.hidden_total > 0
 	_results.visible = true
+
+
+func _show_boss() -> void:
+	var boss := get_tree().get_first_node_in_group(Boss.GROUP) as Boss
+	_boss_bar.visible = boss != null and boss.fighting
+	if not _boss_bar.visible:
+		return
+	_boss_name.text = boss.display_name.to_upper()
+	_boss_hits.max_value = boss.hits
+	_boss_hits.value = boss.hits_left
 
 
 func _describe_power_ups() -> String:

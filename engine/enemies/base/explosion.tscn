@@ -1,0 +1,21 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/enemies/base/explosion.gd" id="1_oiako"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_qoiql"]
+transparency = 1
+shading_mode = 0
+albedo_color = Color(1, 0.62, 0.18, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_n7tyq"]
+radial_segments = 24
+rings = 12
+
+[node name="Explosion" type="Node3D" unique_id=288946705]
+script = ExtResource("1_oiako")
+
+[node name="Ball" type="MeshInstance3D" parent="." unique_id=438826486]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_qoiql")
+cast_shadow = 0
+mesh = SubResource("SphereMesh_n7tyq")

@@ -13,11 +13,12 @@ A reusable, franchise-free 3D platformer engine: player physics, camera, gimmick
 | Folder | Contents | Milestone |
 |---|---|---|
 | `player/` | Player controller, movement math and tuning resource; character definitions, the model driver and the character import script | 2, 7 |
-| `player/states/` | One script per movement state: ground, roll, spin dash, air, hurt, death (grind and more later) | 3, 5 |
+| `player/states/` | One script per movement state: ground, roll, spin dash, air, homing attack, hurt, death (grind and more later) | 3, 5, 8 |
 | `camera/` | Player camera, camera volumes, camera tuning, and the speed lines and motion blur | 4, 7 |
-| `gimmicks/` | Reusable stage objects: loop track, springs, dash panels, spikes, checkpoints, tidal waves, goal; rails and more later | 3, 5, 6 |
+| `gimmicks/` | Reusable stage objects: loop track, springs, dash panels, spikes, checkpoints, tidal and rolling waves, goal; rails and more later | 3, 5, 6, 8 |
 | `collectibles/` | Rings, ring rows, scattered rings, item monitors, hidden collectibles, extra lives | 5 |
-| `enemies/base/` | Enemy base classes and state machines | 8 |
+| `enemies/` | Enemy behaviours: walker, flyer, turret, leaper | 8 |
+| `enemies/base/` | The enemy state machine, the boss base and boss arena, homing targets, shots, explosions and freed animals | 8 |
 | `systems/` | Stage root script and GameState (lives, checkpoints, stage clock); save, settings, audio, scene loading and replays later | 5, 9 |
 | `debug/` | Developer overlay (F3) and fly camera | 1 |
 | `greybox/` | Grid shader, materials and environment for blockout scenes | 1 |
