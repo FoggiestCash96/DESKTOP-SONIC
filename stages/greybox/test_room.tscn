@@ -20,12 +20,30 @@
 [ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="17_302h5"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="18_qajct"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="19_ysvsk"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="21_y7hr1"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="22_302h5"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="23_qajct"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="24_ysvsk"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
 
 [sub_resource type="BoxMesh" id="BoxMesh_rnj5a"]
 size = Vector3(0.3, 3, 0.3)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_y7hr1"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.2, 0.55, 0.9, 0.8)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.2, 0.55, 0.9, 1)
+emission_energy_multiplier = 0.2
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_302h5"]
+top_radius = 2.5
+bottom_radius = 2.5
+height = 0.04
 
 [node name="TestRoom" type="Node3D" unique_id=1758518970]
 script = ExtResource("1_3v71b")
@@ -904,3 +922,73 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -65, 16, -46)
 
 [node name="RedRing5" parent="Gimmicks" unique_id=2091775321 instance=ExtResource("18_qajct")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 72.5, 7.3, -30)
+
+[node name="EnemyGallery" type="Node3D" parent="." unique_id=1983784362]
+
+[node name="SignEnemies" type="Label3D" parent="EnemyGallery" unique_id=1479054291]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 3.8, 34)
+pixel_size = 0.012
+billboard = 1
+text = "ENEMIES
+jump, roll or homing attack them"
+font_size = 96
+outline_size = 18
+
+[node name="Scuttler" parent="EnemyGallery" unique_id=1354843088 instance=ExtResource("21_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -110, 0, 18)
+
+[node name="Pearlshot" parent="EnemyGallery" unique_id=445153036 instance=ExtResource("22_302h5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 0, 4)
+
+[node name="Galegull" parent="EnemyGallery" unique_id=1972243346 instance=ExtResource("23_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -142, 3.2, 16)
+
+[node name="Pool" type="MeshInstance3D" parent="EnemyGallery" unique_id=78363773]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 0.02, -14)
+material_override = SubResource("StandardMaterial3D_y7hr1")
+mesh = SubResource("CylinderMesh_302h5")
+
+[node name="Leapfin" parent="EnemyGallery" unique_id=1874287843 instance=ExtResource("24_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -126, 0, -14)
+
+[node name="SignChain" type="Label3D" parent="EnemyGallery" unique_id=1032627105]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 7, -30)
+pixel_size = 0.012
+billboard = 1
+text = "HOMING CHAIN
+jump, then jump again near a target"
+font_size = 96
+outline_size = 18
+
+[node name="ChainRamp" type="CSGPolygon3D" parent="EnemyGallery" unique_id=288338269]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -126, 0, -20)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 12, 0, 12, 3, 0, 0)
+depth = 8.0
+material = ExtResource("5_k0xv2")
+
+[node name="ChainPlatformA" type="CSGPolygon3D" parent="EnemyGallery" unique_id=1485325882]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -126, 0, -32)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 3, 0, 3)
+depth = 8.0
+material = ExtResource("4_tyqwl")
+
+[node name="ChainPlatformB" type="CSGPolygon3D" parent="EnemyGallery" unique_id=1770679268]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -126, 0, -70)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 3, 0, 3)
+depth = 8.0
+material = ExtResource("4_tyqwl")
+
+[node name="ChainGull1" parent="EnemyGallery" unique_id=292824341 instance=ExtResource("23_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 5, -52)
+swoops = false
+
+[node name="ChainGull2" parent="EnemyGallery" unique_id=933546109 instance=ExtResource("23_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 5.6, -58)
+swoops = false
+
+[node name="ChainGull3" parent="EnemyGallery" unique_id=1371841489 instance=ExtResource("23_qajct")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 6.2, -64)
+swoops = false

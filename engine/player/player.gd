@@ -2,7 +2,7 @@ class_name Player
 extends CharacterBody3D
 ## Kinematic player controller with classic momentum physics: speed along the surface, slopes
 ## that add and take away speed, walls and loops through surface alignment, rolling and the spin
-## dash, and free 3D velocity in the air. Each movement state is a script in engine/player/states/;
+## dash, free 3D velocity in the air, and the homing attack and air dash. Each movement state is a script in engine/player/states/;
 ## the shared surface handling lives here, along with rings, hits, power-ups and staying on 2.5D
 ## paths. Input is relative to the active camera, and all tuning lives in `physics`.
 
@@ -18,6 +18,7 @@ const PUSH_INPUT := 0.5  ## The stick must point at least this squarely into a w
 const PUSH_SPEED := 1.0  ## ...with the player moving slower than this (m/s).
 const FINISH_SPEED := 1.0  ## After the goal, the victory pose starts below this speed (m/s).
 const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
+const WORLD_MASK := 1  ## Physics layer of level geometry, which blocks the homing attack's line of sight.
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -44,6 +45,8 @@ var spin_dash_state: SpinDashState
 var air_state: AirState
 var hurt_state: HurtState
 var death_state: DeathState
+var homing_state: HomingState
+var homing_candidate: HomingTarget  ## What a homing attack would lock on to right now, shown with a reticle. Null on the ground or with the attack used.
 
 var _spawn: Transform3D
 var _base_physics: PlayerPhysics
@@ -65,6 +68,7 @@ var _model: CharacterModel  # The character's model, if `character` has one.
 var _braking := false  # Braking against the direction of travel this tick.
 var _pushing := false  # Pushing against a wall this tick.
 var _sprung := false  # Launched by a spring and not landed since.
+var _air_action_ready := true  # The homing attack or air dash hasn't been used since the player left the ground.
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -74,6 +78,7 @@ var _sprung := false  # Launched by a spring and not landed since.
 @onready var _shield_mesh: Node3D = %Shield
 @onready var _sparkle_mesh: Node3D = %Sparkle
 @onready var _magnet_mesh: Node3D = %Magnet
+@onready var _reticle: Node3D = %HomingReticle
 
 
 func _ready() -> void:
@@ -84,6 +89,7 @@ func _ready() -> void:
 	air_state = AirState.new(self)
 	hurt_state = HurtState.new(self)
 	death_state = DeathState.new(self)
+	homing_state = HomingState.new(self)
 	if character:
 		if character.physics:
 			physics = character.physics
@@ -137,10 +143,14 @@ func _physics_process(delta: float) -> void:
 		_pull_rings()
 	if global_position.y < kill_height and state != death_state:
 		die(false)
+	homing_candidate = find_homing_target() if state == air_state and _air_action_ready and _input_enabled else null
 
 
 func _process(_delta: float) -> void:
 	_update_visual()
+	_reticle.visible = is_instance_valid(homing_candidate)
+	if _reticle.visible:
+		_reticle.global_position = homing_candidate.get_global_transform_interpolated().origin
 	if _model:
 		_model.animate(pose(), ground_speed if is_grounded() else velocity.length())
 
@@ -169,6 +179,7 @@ func respawn() -> void:
 	_flat_heading = heading
 	_control_lock = 0.0
 	_invulnerable_timer = 0.0
+	_air_action_ready = true
 	_end_power_ups()
 	change_state(air_state)
 	reset_physics_interpolation()
@@ -189,10 +200,19 @@ func is_grounded() -> bool:
 	return state == ground_state or state == roll_state or state == spin_dash_state
 
 
-## Whether the player is curled into a ball (jumping, rolling or spin dashing), which breaks item
-## monitors and, later, enemies.
+## Whether the player is curled into a ball (jumping, rolling, spin dashing or homing in), which
+## breaks item monitors and destroys enemies.
 func is_attacking() -> bool:
 	return _curled and not _intangible
+
+
+func is_homing() -> bool:
+	return state == homing_state
+
+
+## The middle of the curled-up ball, where homing attacks aim from.
+func ball_center() -> Vector3:
+	return global_position + global_basis.y.normalized() * _ball_shape.position.y
 
 
 # --- Input --------------------------------------------------------------------------------
@@ -366,6 +386,7 @@ func land() -> void:
 	heading = _on_plane(along, ground_normal, _any_perpendicular(ground_normal))
 	_flat_heading = _flat(heading, _flat_heading)
 	_sprung = false
+	_air_action_ready = true
 	change_state(ground_state)
 
 
@@ -383,6 +404,7 @@ func launch(new_velocity: Vector3, lock_time: float) -> void:
 	air_state.rising = false
 	set_ball(false)
 	_sprung = true
+	_air_action_ready = true
 	_coyote_timer = 0.0
 	lock_controls(lock_time)
 
@@ -402,11 +424,107 @@ func push_along_ground(direction: Vector3, speed: float, keep_faster: bool, lock
 
 
 ## Bounces back up off something broken from above, such as an item monitor: falling speed turns
-## into rising speed. Letting go of jump still cuts the rise short, as it would a jump.
+## into rising speed. Letting go of jump still cuts the rise short, as it would a jump. After a
+## homing attack it's the homing bounce instead.
 func bounce() -> void:
-	if state == air_state and velocity.y < 0.0:
+	if state == homing_state:
+		_bounce_up(physics.homing_bounce)
+	elif state == air_state and velocity.y < 0.0:
 		velocity.y = -velocity.y
 		air_state.rising = air_state.jumped
+
+
+# --- Homing attack and enemies ------------------------------------------------------------
+
+## A second press of jump in the air: a homing attack on the nearest target in reach, or with none,
+## an air dash ahead. Once each time the player leaves the ground; landing a homing attack gives it
+## back. Returns whether it did either.
+func try_air_action() -> bool:
+	if not _air_action_ready:
+		return false
+	_air_action_ready = false
+	consume_jump()
+	var target := find_homing_target()
+	if target:
+		homing_state.target = target
+		change_state(homing_state)
+		return true
+	var horizontal := PlayerMotion.air_dash(Vector3(velocity.x, 0.0, velocity.z), air_aim(), physics.air_dash_speed)
+	velocity = horizontal + Vector3.UP * maxf(velocity.y, 0.0)
+	air_state.jumped = true
+	air_state.rising = false
+	set_ball(true)
+	return true
+
+
+## The way the player faces in the air, for the homing attack and air dash: where the stick points,
+## or with the stick let go, their direction of travel.
+func air_aim() -> Vector3:
+	if wish.length_squared() > 0.01:
+		return _flat(wish, horizontal_heading())
+	return _flat(velocity, horizontal_heading())
+
+
+## The nearest enabled HomingTarget within reach (PlayerMotion.in_homing_reach()) that no level
+## geometry hides, or null.
+func find_homing_target() -> HomingTarget:
+	var origin := ball_center()
+	var facing := air_aim()
+	var best: HomingTarget = null
+	var best_distance := INF
+	for node in get_tree().get_nodes_in_group(HomingTarget.GROUP):
+		var target := node as HomingTarget
+		if target == null or not target.enabled or not target.is_visible_in_tree():
+			continue
+		var offset := target.global_position - origin
+		var distance := offset.length()
+		if distance >= best_distance or not PlayerMotion.in_homing_reach(offset, facing, physics.homing_range, physics.homing_cone):
+			continue
+		if not _in_sight(origin, target.global_position):
+			continue
+		best = target
+		best_distance = distance
+	return best
+
+
+## Rebounds off an enemy just destroyed, whose middle is at `center`. After a homing attack the
+## player bounces straight up, ready to chain into the next. Otherwise in the air it's the classic
+## rebound (PlayerMotion.enemy_rebound()); on the ground, rolling or spin dashing, they carry on.
+func rebound_from(center: Vector3) -> void:
+	if state == homing_state:
+		_bounce_up(physics.homing_bounce)
+	elif state == air_state:
+		var falling := velocity.y <= 0.0
+		velocity.y = PlayerMotion.enemy_rebound(velocity.y, ball_center().y, center.y, physics.rebound_slowdown)
+		if falling and velocity.y > 0.0:
+			air_state.rising = air_state.jumped
+
+
+## Thrown back off something hit hard, such as a boss's weak point: away from `from` at `speed` and
+## up at `rise`, still curled, with the homing attack and air dash ready again.
+func bounce_back(from: Vector3, speed: float, rise: float) -> void:
+	if state == death_state:
+		return
+	_bounce_up(rise)
+	velocity += _flat(global_position - from, -horizontal_heading()) * speed
+
+
+## Straight up at `speed`, curled, with the homing attack and air dash ready again.
+func _bounce_up(speed: float) -> void:
+	velocity = Vector3.UP * speed
+	air_state.jumped = true
+	air_state.rising = false
+	_air_action_ready = true
+	if state == air_state:
+		set_ball(true)
+	else:
+		change_state(air_state)
+
+
+func _in_sight(from: Vector3, to: Vector3) -> bool:
+	var exclude: Array[RID] = [get_rid()]
+	var query := PhysicsRayQueryParameters3D.create(from, to, WORLD_MASK, exclude)
+	return get_world_3d().direct_space_state.intersect_ray(query).is_empty()
 
 
 ## Moving water pushing the player along `direction` (a horizontal unit vector): it speeds them up

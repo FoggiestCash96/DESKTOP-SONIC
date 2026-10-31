@@ -24,8 +24,8 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 
 ## Run the game
 
-- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to play Emerald Shore Act 1, or F (Y on a controller) for the greybox test room.
-- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn` or `stages/greybox/test_room.tscn` to go straight there.
+- **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) to play Emerald Shore Act 1, F (Y) for the greybox test room, or Shift (X) to go straight to Act 8 and its boss.
+- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn`, `act_8.tscn` or `stages/greybox/test_room.tscn` to go straight there.
 
 You play a stand-in Sonic built from simple shapes, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
 
@@ -33,6 +33,7 @@ You play a stand-in Sonic built from simple shapes, with toon shading and animat
 |---|---|---|
 | Move (relative to the camera) | W A S D | Left stick |
 | Jump (hold for a higher jump) | Space | A |
+| In the air: homing attack (with a target in reach) or air dash | Space again | A again |
 | Roll (hold while moving) | Ctrl | B |
 | Spin dash: hold while still, tap jump to charge, let go to launch | Ctrl, then Space | B, then A |
 | Orbit the camera | Mouse or arrow keys | Right stick |
@@ -40,14 +41,19 @@ You play a stand-in Sonic built from simple shapes, with toon shading and animat
 | Debug overlay (player and camera state) | F3 | |
 | Back to the title screen | Esc | Start |
 
-The mouse is captured while you play. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge or touching spikes with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+The mouse is captured while you play. If you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, lives and red rings found. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
+
+Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, the second press is an air dash.
 
 **Emerald Shore Act 1** is the first greybox act, a speed act about 1.2 km long:
 - Waves wash up the tidal flats every 15 seconds. Ride one up the steep slope.
 - From the top, jump the gap on the left to the high deck, or run down the right to the low road.
 - After the right turn there's a side-view pier, then a second loop.
 - Five red rings are hidden along the way.
-- The goal shows your time and rings, then returns to the title screen.
+- Badniks along the way: crabs, gulls, a clam that fires pearls, and fish leaping across the pier.
+- The goal shows your time and rings, then moves on to Act 8.
+
+**Emerald Shore Act 8** is a short run along a fortress causeway (a homing chain across a gap, fish leaping over a bridge) to the beach where the boss waits. Eggman raises a wave and leaves; the crab mech that rises out of it takes 8 hits on its core, which opens after it slams its claws down. Jump the waves it sends, then hit the core. Beating it shows the results, then returns to the title screen.
 
 [docs/DESIGN.md](docs/DESIGN.md#71-emerald-shore-act-1-sunny-beachfront-greybox-milestone-6) maps it section by section.
 
@@ -61,16 +67,19 @@ Follow the ring trail to the right of the start for the gimmick area, three lane
 
 Five red rings are hidden around the room, and an extra life floats over the yellow spring.
 
+Far to the left of the start, past the long hill, is the enemy gallery: a crab, a clam, a gull and a leaping fish to try jumping, rolling and homing attacks on, and a homing chain of three gulls across a gap between two platforms.
+
 ### Tuning
 
-- **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
+- **Player:** `engine/player/player_physics.tres`. Select it in the FileSystem dock, change values in the Inspector, save, and run again to try them. Every value is in SI units, and its tooltip says what it does. Besides movement it holds the homing attack and air dash, damage, ring-loss and power-up values. [docs/DESIGN.md](docs/DESIGN.md#53-constants) lists the classic value behind each default.
 - **Camera:** `engine/camera/camera_settings.tres`: distance, pitch, look-ahead, field of view, auto-follow, wall handling, and the speed lines and motion blur (each can be switched off).
 - **Lives and restarts:** `engine/systems/game_rules.tres`: starting lives, the delay before a restart, and how long GAME OVER shows.
 - **Gimmicks:** each spring, dash panel, monitor and ring row has its own settings in the Inspector.
+- **Enemies and bosses:** each badnik scene (`content/sonic/enemies/`) and each placed badnik has its own settings: notice range, speeds, patrol distance and so on. The boss's are on the `CrabMech` node in `content/sonic/bosses/emerald_shore/crab_mech.tscn`, per phase where they change.
 
 ### Camera volumes
 
-To give part of a level a set camera angle or a 2.5D side view, add a `Node3D` with `engine/camera/camera_volume.gd` and set its `size`. Its box shows in the editor. Turn the node so its -Z axis points the way the camera should look; the box turns with it. For a side view, tick `side_view` and lay the box's X axis along the path. Turn off `avoid_walls` where the camera should look through geometry, as at the loop.
+To give part of a level a set camera angle or a 2.5D side view, add a `Node3D` with `engine/camera/camera_volume.gd` and set its `size`. Its box shows in the editor. Turn the node so its -Z axis points the way the camera should look; the box turns with it. For a side view, tick `side_view` and lay the box's X axis along the path. Turn off `avoid_walls` where the camera should look through geometry, as at the loop. Set `focus` to keep a node in view beyond the player instead, as a boss arena does.
 
 ### Gimmicks and collectibles
 
@@ -88,6 +97,7 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 | `engine/collectibles/extra_life.tscn` | The act's hidden 1-up. |
 | `engine/gimmicks/tidal_wave.tscn` | Washes along its −Z axis on a timer: set `size`, `reach` and the surge, backwash and rest times. Keep its path clear of overhangs, since the water follows the ground. |
 | `engine/gimmicks/goal.tscn` | The end of an act. Turn it so its −Z axis points the way the player runs through. |
+| `engine/gimmicks/rolling_wave.tscn` | One wave crest rolling along its −Z axis for `reach` metres. Bosses send these out; with `rolling` on it starts by itself. |
 
 A checkpoint counts anywhere through its gate: set `gate_width` to the width of the course. For a 2.5D section, tick `lock_depth` on a side-view camera volume as well as `side_view`; the player then stays on the box's middle plane.
 
@@ -100,7 +110,22 @@ Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot a
 - `engine/camera/player_camera.tscn` (its `target` is the player) and `content/sonic/ui/hud/hud.tscn` (its `target` too).
 - The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.
 
-Then add gimmicks, checkpoints, five red rings, one extra life and a goal. Play it, and keep at least one route open to players who aren't fast.
+Then add gimmicks, badniks, checkpoints, five red rings, one extra life and a goal (or, in Act 8, the boss). Play it, and keep at least one route open to players who aren't fast.
+
+### Enemies and bosses
+
+Drag a badnik from `content/sonic/enemies/` into a stage (under an `Enemies` node keeps things tidy), then adjust it in the Inspector:
+
+| Scene | Behaviour | Placing it |
+|---|---|---|
+| `scuttler.tscn` | Walker | Patrols along its own X axis, `patrol_distance` either side. Keep its patrol on solid ground. |
+| `galegull.tscn` | Flyer | Untick `swoops` for a hovering stepping stone in a homing chain; chained targets want to be within 12 m of each other. |
+| `pearlshot.tscn` | Turret | Fires at the player from `notice_range` away. Give players something to hide behind, or a way round. |
+| `leapfin.tscn` | Leaper | Put it at the water's surface. With `leap_distance` it leaps along its −Z axis and back; stagger neighbours with `start_delay`. |
+
+A new kind of enemy is a scene whose root has one of the scripts in `engine/enemies/` (or a script extending `Enemy`), with a `Hitbox` Area3D on the enemies layer watching the player layer, a `HomingTarget` marker (`engine/enemies/base/homing_target.gd`) where the homing attack should aim, and a `Model` with the visuals, all with **Access as Unique Name** ticked. Give the model an AnimationPlayer with `patrol`, `notice`, `attack` and `stunned` animations and they play by themselves.
+
+A boss is a script extending `Boss` (`engine/enemies/base/boss.gd`) with a `WeakPoint` area, a `HomingTarget` and a `Model`, and its `body_areas` and `danger_areas` set. It fills in `_fight()` and decides when it's `vulnerable`; overriding `begin()` gives it an intro. In the stage, a `BossArena` area (`engine/enemies/base/boss_arena.gd`, with a `Barriers` static body under it) starts the boss when the player walks in, and a camera volume with the boss as its `focus` keeps it on screen. `content/sonic/bosses/emerald_shore/` is the worked example.
 
 ### Characters: from Blender to Godot
 
@@ -159,11 +184,11 @@ engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a tes
   camera/         Player camera, camera volumes and camera tuning
   gimmicks/       Loop, springs, dash panels, spikes, checkpoints, tidal waves, goal; rails... later
   collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
-  enemies/base/   Enemy base classes (Milestone 8)
+  enemies/        Enemy behaviours (walker, flyer, turret, leaper); base/ has the enemy and boss bases, homing targets, the boss arena, shots, explosions and freed animals
   systems/        Stage root script and GameState (autoload); save, settings, audio later
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, stages (Emerald Shore Act 1) and UI (title screen, placeholder HUD)
+content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8) and UI (title screen, placeholder HUD)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 tools/blender/    Blender scripts, such as the project's glTF export

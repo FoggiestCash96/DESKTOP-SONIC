@@ -135,9 +135,23 @@ func _goal_view(delta: float) -> Vector4:
 	var speed_fov := CameraMath.speed_fov(target.velocity.length(), target.physics.top, settings.fov_rest, settings.fov_fast)
 	if _volume:
 		var volume_fov := _volume.fov if _volume.fov > 0.0 else speed_fov
-		return Vector4(_volume.view_yaw(), deg_to_rad(_volume.pitch_degrees), _volume.distance, volume_fov)
+		return Vector4(_volume_yaw(delta), deg_to_rad(_volume.pitch_degrees), _volume.distance, volume_fov)
 	_follow(delta)
 	return Vector4(_yaw, _pitch, settings.distance, speed_fov)
+
+
+## The yaw the current volume asks for. With a focus, it turns (at up to focus_turn_speed) to look
+## past the player at it, and holds still while the player is right next to it.
+func _volume_yaw(delta: float) -> float:
+	var focus := _volume.focus
+	if focus == null or not is_instance_valid(focus):
+		return _volume.view_yaw()
+	var toward := focus.global_position - target.get_global_transform_interpolated().origin
+	toward.y = 0.0
+	if toward.length() < settings.focus_min_distance:
+		return _view.x
+	var goal := CameraMath.yaw_facing(toward)
+	return CameraMath.approach_angle(_view.x, goal, deg_to_rad(settings.focus_turn_speed) * delta)
 
 
 ## Free mode: camera_recenter swings behind the player at once. Otherwise, a while after the

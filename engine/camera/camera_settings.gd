@@ -25,6 +25,8 @@ extends Resource
 @export var auto_follow_min_speed: float = 1.0  ## The camera only follows while the player moves at least this fast (m/s).
 @export var auto_follow_max_angle: float = 135.0  ## The camera doesn't swing round while the player runs at it more steeply than this (degrees).
 @export var recenter_time: float = 0.25  ## Seconds for camera_recenter to swing the camera behind the player.
+@export var focus_turn_speed: float = 180.0  ## How fast a camera volume with a focus turns to keep it in view (degrees per second).
+@export var focus_min_distance: float = 3.0  ## Closer than this to a volume's focus (m), the camera stops turning toward it, so passing right by doesn't spin the view.
 
 @export_group("Collision")
 @export var collision_radius: float = 0.25  ## Size of the probe that keeps the camera out of walls (m).

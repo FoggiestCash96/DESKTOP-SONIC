@@ -79,7 +79,7 @@ You are the lead gameplay engineer and technical designer on an **open-source, n
 - **Dimension:** Hybrid 3D with 2.5D path sections
 - **Stage style:** Mix per zone
 - **Hub / world map:** World map
-- **Act structure:** Acts should have unique structure with some having speed, platforming, defeating enemys with the final act of each world being that worlds boss
+- **Act structure:** Acts should have unique structure with some having speed, platforming, defeating enemys with the final act of each world being that worlds boss (decided 2026-10-30: Act 8 is a short run that ends in the boss arena)
 - **Save system:** DEFAULT: per-slot JSON in `user://`, saving zone progress, emblems/medals, best times, and settings.
 
 ---
@@ -145,7 +145,7 @@ MODERN
 | Spin Dash | Y | Classic: release speed `8 + floor(charge)/2`, charge capped at 8 |
 | Drop Dash | Y | Mania-style. Hold jump in the air for `[[20]]` frames |
 | Super Peel Out | Y | |
-| Homing Attack | Y | Lock-on range 12 m, cone 90° (decided 2026-10-29) |
+| Homing Attack | Y | Lock-on range 12 m, cone 90° (decided 2026-10-29). Built in Milestone 8, with the air dash: DESIGN.md §9.2. |
 | Air Dash / Jump Dash | Y | |
 | Light Speed Dash (ring trails) | Y | Decided 2026-10-29. Built once rings exist. |
 | Boost | Y | Gauge filled by rings and enemies. Built after Milestone 2, once the camera and rings exist (decided 2026-10-29). |
@@ -216,10 +216,10 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §9 Enemies and bosses
 
-- **Badniks:** `[[FILL: list, e.g. Motobug-style roller, Buzz-style flyer, turret]]`. All enemies must be original designs or clearly fan-made. No ripped models.
-- **Behaviour:** small state machines (patrol, notice, attack, stunned, destroyed) that release an animal.
-- **Bosses:** `[[FILL: one per zone, Eggman machine concepts]]`. Default: 8 hits, with phase changes at 4 and 2.
-- **Homing-attack targets:** every enemy exposes a `homing_target` marker if §5.4 enables homing.
+- **Badniks:** chosen world by world. **Emerald Shore** (decided 2026-10-30): Scuttler (a crab walker that charges), Galegull (a gull that dives, or hovers as a homing stepping stone), Pearlshot (a clam turret that fires pearls) and Leapfin (a fish that leaps from the water). All enemies must be original designs or clearly fan-made. No ripped models.
+- **Behaviour:** small state machines (patrol, notice, attack, stunned, destroyed) that release an animal. Built in Milestone 8 (DESIGN.md §9.1).
+- **Bosses:** one per world, at the end of its Act 8 (decided 2026-10-30). Default: 8 hits, with phase changes at 4 and 2. **Emerald Shore:** the Egg Tidecrab. Eggman's ship raises a great wave and leaves for good; the crab mech rises out of the wave, sweeps its claws, and slams them to send waves across the beach before sinking low with its core open (DESIGN.md §9.3). Other worlds: `[[FILL: as each world is built]]`.
+- **Homing-attack targets:** every enemy, item monitor and boss weak point carries a `HomingTarget` marker.
 
 ---
 
@@ -323,7 +323,7 @@ res://
 5. ~~Gimmicks v1: springs, dash panels, rings, ring loss, monitors, checkpoints.~~ **Done 2026-10-30.**
 6. ~~Greybox Zone 1 Act 1 plus a playtest build.~~ **Done 2026-10-30.** Act 1 is a speed act with Tidal Surge waves that push (swimming later) and a short 2.5D pier.
 7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
-8. Enemies and the first boss.
+8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. Menus, save system, settings, accessibility.
 10. Art and audio pass, then a public demo release.
 

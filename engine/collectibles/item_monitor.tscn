@@ -1,6 +1,7 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://engine/collectibles/item_monitor.gd" id="1_fcbcs"]
+[ext_resource type="Script" path="res://engine/enemies/base/homing_target.gd" id="2_vo8md"]
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_vo8md"]
 size = Vector3(0.9, 0.9, 0.9)
@@ -70,3 +71,8 @@ pixel_size = 0.008
 billboard = 1
 text = "RINGS"
 font_size = 48
+
+[node name="HomingTarget" type="Marker3D" parent="." unique_id=1312847375]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.45, 0)
+script = ExtResource("2_vo8md")

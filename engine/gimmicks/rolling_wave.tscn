@@ -1,0 +1,52 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/rolling_wave.gd" id="1_l2ig0"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_uojjt"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gvlh6"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.3, 0.68, 1, 0.85)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.3, 0.68, 1, 1)
+emission_energy_multiplier = 0.35
+
+[sub_resource type="BoxMesh" id="BoxMesh_p1vk1"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8jho5"]
+transparency = 1
+cull_mode = 2
+albedo_color = Color(0.95, 0.98, 1, 0.95)
+roughness = 0.6
+emission_enabled = true
+emission = Color(0.95, 0.98, 1, 1)
+emission_energy_multiplier = 0.4
+
+[sub_resource type="BoxMesh" id="BoxMesh_n47qo"]
+
+[node name="RollingWave" type="Node3D" unique_id=244976416]
+script = ExtResource("1_l2ig0")
+
+[node name="Crest" type="Area3D" parent="." unique_id=1711032186]
+unique_name_in_owner = true
+collision_layer = 64
+collision_mask = 2
+monitorable = false
+
+[node name="Shape" type="CollisionShape3D" parent="Crest" unique_id=816293634]
+unique_name_in_owner = true
+shape = SubResource("BoxShape3D_uojjt")
+
+[node name="Water" type="MeshInstance3D" parent="Crest" unique_id=1246889008]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_gvlh6")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_p1vk1")
+
+[node name="Foam" type="MeshInstance3D" parent="Crest" unique_id=157919325]
+unique_name_in_owner = true
+material_override = SubResource("StandardMaterial3D_8jho5")
+cast_shadow = 0
+mesh = SubResource("BoxMesh_n47qo")

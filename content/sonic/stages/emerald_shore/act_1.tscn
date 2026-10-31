@@ -21,6 +21,10 @@
 [ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="18_liumi"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="19_bd0p8"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="20_5fu3n"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="22_lm72i"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="23_ch032"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="24_epgkl"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="25_dqho4"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kc7de"]
 transparency = 1
@@ -37,6 +41,7 @@ size = Vector2(4000, 4000)
 [node name="EmeraldShoreAct1" type="Node3D" unique_id=1381585461]
 script = ExtResource("1_4hkn0")
 title = "Emerald Shore Act 1: Sunny Beachfront"
+next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=285431394]
 environment = ExtResource("2_b5b7m")
@@ -211,9 +216,9 @@ depth = 4.0
 material = ExtResource("6_lm72i")
 
 [node name="Pier5" type="CSGPolygon3D" parent="Geometry" unique_id=275935932]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 220, 0, -513)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0, -513)
 use_collision = true
-polygon = PackedVector2Array(0, -1, 25, -1, 25, 0, 0, 0)
+polygon = PackedVector2Array(0, -1, 30, -1, 30, 0, 0, 0)
 depth = 4.0
 material = ExtResource("6_lm72i")
 
@@ -545,3 +550,46 @@ spacing = 3.0
 
 [node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("20_5fu3n")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 632, 0, -510)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1269175034]
+
+[node name="ScuttlerStart" parent="Enemies" unique_id=1354843088 instance=ExtResource("22_lm72i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -34)
+patrol_distance = 3.5
+
+[node name="GullBeachDown" parent="Enemies" unique_id=1972243346 instance=ExtResource("23_ch032")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 3.5, -206)
+
+[node name="GullGap" parent="Enemies" unique_id=1233863911 instance=ExtResource("23_ch032")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 8.4, -328.5)
+swoops = false
+
+[node name="ScuttlerDeck" parent="Enemies" unique_id=1036912618 instance=ExtResource("22_lm72i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 6, -362)
+
+[node name="PearlshotLowRoad" parent="Enemies" unique_id=445153036 instance=ExtResource("24_epgkl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 0, -378)
+
+[node name="ScuttlerLowRoad" parent="Enemies" unique_id=353982662 instance=ExtResource("22_lm72i")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12, 0, -398)
+
+[node name="GullMerge" parent="Enemies" unique_id=1271735409 instance=ExtResource("23_ch032")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16, 9.5, -482)
+
+[node name="FishPier1" parent="Enemies" unique_id=1874287843 instance=ExtResource("25_dqho4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118, -2.5, -511)
+leap_height = 3.5
+leap_distance = 8.0
+leap_time = 1.2
+hide_depth = 1.0
+
+[node name="FishPier2" parent="Enemies" unique_id=1509529686 instance=ExtResource("25_dqho4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 205, -2.5, -511)
+leap_height = 3.5
+leap_distance = 8.0
+leap_time = 1.2
+start_delay = 0.7
+hide_depth = 1.0
+
+[node name="ScuttlerRollers" parent="Enemies" unique_id=1008302499 instance=ExtResource("22_lm72i")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 530, 0, -510)

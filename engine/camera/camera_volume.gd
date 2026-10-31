@@ -5,8 +5,9 @@ extends Node3D
 ## 2.5D sections. The camera faces this node's -Z axis (turn the node to aim it), tilted by
 ## pitch_degrees, from `distance` away, and blends in and out over blend_time. A side-view volume
 ## is for a 2.5D path that runs along the box's X axis: the camera only aims ahead along that axis,
-## and with lock_depth the player is held to the path too. Where volumes overlap, the highest
-## priority wins. The box shows in the editor only.
+## and with lock_depth the player is held to the path too. A volume with a `focus` turns the camera
+## to keep that node in view beyond the player instead, as for a boss. Where volumes overlap, the
+## highest priority wins. The box shows in the editor only.
 
 const GROUP := "camera_volumes"
 
@@ -22,6 +23,7 @@ const GROUP := "camera_volumes"
 @export var lock_depth: bool = false  ## Hold the player to the box's middle plane (its X axis and up) while inside, so a side view plays in 2.5D: no stepping off the path into depth.
 @export var avoid_walls: bool = true  ## Pull the camera in front of walls. Turn off where the view looks through geometry on purpose, such as the side of a loop.
 @export var priority: int = 0
+@export var focus: Node3D  ## Keeps this in view: the camera looks past the player at it, ignoring the volume's own facing.
 
 var _preview: MeshInstance3D
 
