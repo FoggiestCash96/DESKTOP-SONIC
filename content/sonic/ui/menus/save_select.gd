@@ -5,6 +5,7 @@ extends Control
 
 @export_file("*.tscn") var world_map: String = "res://content/sonic/ui/map/world_map.tscn"
 @export_file("*.tscn") var title_screen: String = "res://content/sonic/ui/title/title_screen.tscn"
+@export var music: AudioStream = preload("res://content/sonic/audio/music/title.ogg")  ## Carries on from one menu to the next.
 
 var _slot_buttons: Array[Button] = []
 var _deleting := -1
@@ -18,6 +19,7 @@ var _deleting := -1
 func _ready() -> void:
 	if SaveGame.has_slot():
 		SaveGame.close()
+	Music.play(music)
 	for i in SaveGame.SLOTS:
 		var button := MenuKit.button("", _start.bind(i))
 		button.auto_translate_mode = Node.AUTO_TRANSLATE_MODE_DISABLED

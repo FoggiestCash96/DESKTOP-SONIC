@@ -147,6 +147,7 @@ func _take_hit(player: Player) -> void:
 	_grace = CONTACT_GRACE
 	homing_target.enabled = false
 	player.bounce_back(weak_point.global_position, rebound_speed, rebound_rise)
+	Sfx.play_at(&"boss_hit", weak_point.global_position)
 	hit_taken.emit(hits_left)
 	if hits_left <= 0:
 		_defeat()

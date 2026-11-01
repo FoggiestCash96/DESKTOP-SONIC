@@ -89,6 +89,7 @@ func destroy(by: Player) -> void:
 	if by:
 		by.rebound_from(center)
 		by.add_boost(by.physics.boost_per_enemy)
+	Sfx.play_at(&"enemy_pop", center)
 	var stage := get_parent()
 	var explosion := (load(EXPLOSION_SCENE) as PackedScene).instantiate() as Node3D
 	stage.add_child(explosion)

@@ -33,6 +33,9 @@ godot --headless --path . --script res://tests/check_scripts.gd
 # Run the unit tests (exit code 1 on failure; CI also fails on any "SCRIPT ERROR" line)
 godot --headless --path . --script res://tests/run_tests.gd
 
+# Re-render the music and sound effects (Python with numpy and SciPy, FFmpeg), then re-import
+python tools/audio/render.py
+
 # Rebuild the stand-in Sonic model (Blender 5.0+), then re-import
 blender --background --factory-startup --python content/sonic/characters/sonic/build_sonic.py
 ```
@@ -41,10 +44,13 @@ blender --background --factory-startup --python content/sonic/characters/sonic/b
 
 - Godot's own `.blend` import is off (`filesystem/import/blender/enabled=false`): headless imports can't run Blender, and the game uses the exported `.glb`. A character `.glb` needs `import_script/path` set to `engine/player/character_import.gd` in its `.import` file for toon materials and looping animations.
 
-- A `--script` tool that names a class in a type (for example `var p: Player`) compiles that class before autoloads exist, so the class's uses of `DebugOverlay` and `GameState` fail to compile. In tool scripts, find such nodes at runtime and access them without the class type (a built-in type such as `CharacterBody3D` is fine).
+- A `--script` tool that names a class in a type (for example `var p: Player`) compiles that class before autoloads exist, so the class's uses of `DebugOverlay`, `GameState`, `Sfx` and `Music` fail to compile. In tool scripts, find such nodes at runtime and access them without the class type (a built-in type such as `CharacterBody3D` is fine).
 - After adding a script with a new `class_name`, run the headless `--import` before any `--script` tool that loads scripts using it: tools read the global class cache, which only an import (or the editor) refreshes.
 - After editing `content/sonic/ui/translations/strings.csv`, run `--import` and commit the regenerated `.translation` with it. Those files are committed on purpose (a `.gitignore` exception): `project.godot` loads them at start-up, so without them a fresh checkout's first import logs errors.
 - `set()` won't put an untyped `Array` into a typed-array property (it's silently refused, and nothing is saved). In builder scripts, append to the array `get()` returns instead.
+- Music loop points live in each `.ogg.import` file's `[params]` (`loop`, `loop_offset`), which `tools/audio/render.py` writes; a looping WAV carries them in its `smpl` chunk, read on import. Re-import after rendering.
+- A `class_name` script whose static function names its own class is never freed, and the engine reports it at exit ("resources still in use"). `SoundBank.find()` returns a plain `Resource` for that reason.
+- Quitting while music plays reports the stream as leaked: the audio thread lets go of it only on its next mix. Playtests stop every player and wait a moment before `quit()`.
 - `JSON.parse_string()` prints an engine error on bad input; to read files that may be damaged, use `JSON.new().parse()`, which only returns an error code.
 - A player put a little above the ground (as playtests do) is in the air for a few ticks: wait for it to land before pressing jump or boost, or it's an air dash or air boost instead.
 - Playtests drive menus with `Input.parse_input_event()` and an `InputEventAction` (press, then release a couple of frames later): `Input.action_press()` sets the action's state but sends no event, so `_unhandled_input` and focused buttons never see it. Point `SaveGame.directory` and `GameSettings.path` at test files first, so real saves and settings stay untouched.
@@ -57,3 +63,4 @@ blender --background --factory-startup --python content/sonic/characters/sonic/b
 - `content/sonic/`: Sonic-specific characters, stages and UI.
 - `stages/greybox/`: blockout and test scenes.
 - `tests/`: headless test runner (`run_tests.gd`), base class (`test_suite.gd`) and `unit/test_*.gd`.
+- `tools/audio/`: the music (notes in `music/`) and sound effects (`sounds.py`), and the synth that renders them into `content/sonic/audio/`.

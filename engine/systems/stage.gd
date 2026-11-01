@@ -4,6 +4,7 @@ extends Node3D
 ## the stage from the last checkpoint after a player dies, and ends the game when the lives run out.
 ## At the goal it records the clear on the save slot (SaveGame), shows the results, and moves on:
 ## to the world map while a save slot is being played, otherwise to `next_scene` or the title screen.
+## It plays its `music` (Music), fades it at a death, and plays the jingles at the goal and game over.
 
 signal cleared(improved: Dictionary)  ## The goal was reached and the clear recorded. `improved` is SaveGame.record_clear()'s result.
 
@@ -12,6 +13,8 @@ const RESULTS_MIN_TIME := 1.5  ## Seconds the results show before a button press
 @export var title: String = ""  ## Name shown as the stage starts and on its results, such as "Act 1: Sunny Beachfront".
 @export_file("*.tscn") var hub_scene: String = ""  ## The world map, where the goal and a game over lead while a save slot is being played.
 @export_file("*.tscn") var next_scene: String = ""  ## Where the goal leads with no save slot, as when testing. Empty goes to the title screen.
+@export var music: AudioStream  ## The stage's music. Empty plays none.
+@export var fast_music: AudioStream  ## The same music faster, for speed shoes. Empty speeds `music` up instead.
 
 var improved: Dictionary = {}  ## What the last clear improved on the save slot (SaveGame.record_clear()).
 
@@ -30,6 +33,7 @@ func _ready() -> void:
 	for node in get_tree().get_nodes_in_group(Player.GROUP):
 		(node as Player).died.connect(_on_player_died)
 	GameState.stage_cleared.connect(_on_stage_cleared)
+	Music.play(music, fast_music)
 
 
 func _exit_tree() -> void:
@@ -79,6 +83,7 @@ func _on_player_died() -> void:
 		return
 	_ending = true
 	GameState.stop_clock()
+	Music.stop(1.0)
 	# Timers call back through signals, which are dropped if the stage is freed first (on pause).
 	var next := _restart if GameState.lose_life() else _game_over
 	get_tree().create_timer(GameState.rules.restart_delay).timeout.connect(next)
@@ -89,6 +94,7 @@ func _on_stage_cleared() -> void:
 	var assisted := GameSettings.assist or GameSettings.game_speed < 1.0
 	improved = SaveGame.record_clear(scene_file_path, GameState.time, GameState.cleared_rings, GameState.hidden_found_ids(), assisted)
 	_results_shown = 0.0
+	Music.jingle(&"clear", false)
 	cleared.emit(improved)
 	get_tree().create_timer(GameState.rules.results_time).timeout.connect(_move_on)
 
@@ -99,6 +105,7 @@ func _restart() -> void:
 
 func _game_over() -> void:
 	GameState.end_game()
+	Music.jingle(&"game_over", false)
 	get_tree().create_timer(GameState.rules.game_over_time).timeout.connect(_end_game)
 
 

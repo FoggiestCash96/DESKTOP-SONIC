@@ -1,0 +1,143 @@
+[gd_resource type="Resource" script_class="SoundBank" format=3]
+
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/invincible.ogg" id="1_a8442"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/extra_life.ogg" id="2_b4adm"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/act_clear.ogg" id="3_nug18"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/game_over.ogg" id="4_o5oed"]
+[ext_resource type="Script" path="res://engine/audio/sound_bank.gd" id="5_r2fip"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/jump.wav" id="6_kxll2"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/roll.wav" id="7_igm4q"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/spin_charge.wav" id="8_erhdm"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/spin_release.wav" id="9_3qcte"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/skid.wav" id="10_volrt"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/homing.wav" id="11_vs68e"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/air_dash.wav" id="12_onhr8"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boost.wav" id="13_u01as"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boost_loop.wav" id="14_kt8rm"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/air_boost.wav" id="15_t3yfu"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/quickstep.wav" id="16_5d1wy"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ring_left.wav" id="17_c8j1a"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ring_right.wav" id="18_2jk11"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ring_loss.wav" id="19_l7jeg"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/shield_loss.wav" id="20_at3wu"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/death.wav" id="21_mk64t"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/shield.wav" id="22_mrv30"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/magnet.wav" id="23_xjjqm"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boost_fill.wav" id="24_ch7py"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/monitor.wav" id="25_ho4in"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/spring.wav" id="26_dth2h"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/dash_panel.wav" id="27_76tyf"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/checkpoint.wav" id="28_0080k"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/goal.wav" id="29_y5ul0"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/red_ring.wav" id="30_bgjr3"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/wave.wav" id="31_y3sd7"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/splash.wav" id="32_5ao27"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/enemy_pop.wav" id="33_vp7o4"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/enemy_shot.wav" id="34_5c2jr"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/explosion.wav" id="35_7uv6w"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boss_hit.wav" id="36_npjy4"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boss_slam.wav" id="37_mmpfk"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boss_sweep.wav" id="38_0sei2"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boss_charge.wav" id="39_yfg7s"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/boss_roar.wav" id="40_ls8ik"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ship.wav" id="41_32inn"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_move.wav" id="42_ufnty"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_confirm.wav" id="43_b3ngr"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_back.wav" id="44_dwf0w"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_locked.wav" id="45_a4x7o"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_pause.wav" id="46_kp54c"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_start.wav" id="47_8u0qp"]
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tdlpc"]
+playback_mode = 1
+random_pitch = 1.05
+streams_count = 1
+stream_0/stream = ExtResource("10_volrt")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_mq2r8"]
+playback_mode = 2
+streams_count = 2
+stream_0/stream = ExtResource("17_c8j1a")
+stream_1/stream = ExtResource("18_2jk11")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_x2vpa"]
+playback_mode = 1
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("32_5ao27")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_l5cwm"]
+playback_mode = 1
+random_pitch = 1.08
+streams_count = 1
+stream_0/stream = ExtResource("33_vp7o4")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_u4lby"]
+playback_mode = 1
+random_pitch = 1.06
+streams_count = 1
+stream_0/stream = ExtResource("34_5c2jr")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_7nub7"]
+playback_mode = 1
+random_pitch = 1.1
+streams_count = 1
+stream_0/stream = ExtResource("35_7uv6w")
+
+[sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_b4ier"]
+playback_mode = 1
+random_pitch = 1.05
+streams_count = 1
+stream_0/stream = ExtResource("36_npjy4")
+
+[resource]
+script = ExtResource("5_r2fip")
+sounds = Dictionary[StringName, AudioStream]({
+&"air_boost": ExtResource("15_t3yfu"),
+&"air_dash": ExtResource("12_onhr8"),
+&"boost": ExtResource("13_u01as"),
+&"boost_fill": ExtResource("24_ch7py"),
+&"boost_loop": ExtResource("14_kt8rm"),
+&"boss_charge": ExtResource("39_yfg7s"),
+&"boss_hit": SubResource("AudioStreamRandomizer_b4ier"),
+&"boss_roar": ExtResource("40_ls8ik"),
+&"boss_slam": ExtResource("37_mmpfk"),
+&"boss_sweep": ExtResource("38_0sei2"),
+&"checkpoint": ExtResource("28_0080k"),
+&"dash_panel": ExtResource("27_76tyf"),
+&"death": ExtResource("21_mk64t"),
+&"enemy_pop": SubResource("AudioStreamRandomizer_l5cwm"),
+&"enemy_shot": SubResource("AudioStreamRandomizer_u4lby"),
+&"explosion": SubResource("AudioStreamRandomizer_7nub7"),
+&"goal": ExtResource("29_y5ul0"),
+&"homing": ExtResource("11_vs68e"),
+&"jump": ExtResource("6_kxll2"),
+&"magnet": ExtResource("23_xjjqm"),
+&"monitor": ExtResource("25_ho4in"),
+&"quickstep": ExtResource("16_5d1wy"),
+&"red_ring": ExtResource("30_bgjr3"),
+&"ring": SubResource("AudioStreamRandomizer_mq2r8"),
+&"ring_loss": ExtResource("19_l7jeg"),
+&"roll": ExtResource("7_igm4q"),
+&"shield": ExtResource("22_mrv30"),
+&"shield_loss": ExtResource("20_at3wu"),
+&"ship": ExtResource("41_32inn"),
+&"skid": SubResource("AudioStreamRandomizer_tdlpc"),
+&"spin_charge": ExtResource("8_erhdm"),
+&"spin_release": ExtResource("9_3qcte"),
+&"splash": SubResource("AudioStreamRandomizer_x2vpa"),
+&"spring": ExtResource("26_dth2h"),
+&"ui_back": ExtResource("44_dwf0w"),
+&"ui_confirm": ExtResource("43_b3ngr"),
+&"ui_locked": ExtResource("45_a4x7o"),
+&"ui_move": ExtResource("42_ufnty"),
+&"ui_pause": ExtResource("46_kp54c"),
+&"ui_start": ExtResource("47_8u0qp"),
+&"wave": ExtResource("31_y3sd7")
+})
+music = Dictionary[StringName, AudioStream]({
+&"clear": ExtResource("3_nug18"),
+&"extra_life": ExtResource("2_b4adm"),
+&"game_over": ExtResource("4_o5oed"),
+&"invincible": ExtResource("1_a8442")
+})

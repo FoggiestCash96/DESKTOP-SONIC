@@ -8,8 +8,9 @@ func label() -> String:
 	return "ROLL"
 
 
-func enter(_previous: PlayerState) -> void:
+func enter(previous: PlayerState) -> void:
 	player.set_ball(true)
+	Sfx.play(&"spin_release" if previous == player.spin_dash_state else &"roll")
 
 
 func tick(delta: float) -> void:

@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_4hkn0"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_b5b7m"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1.ogg" id="2_epgkl"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1_fast.ogg" id="3_dqho4"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_n0or1"]
 [ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_b5b7m"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_l8lpn"]
@@ -43,6 +45,8 @@ script = ExtResource("1_4hkn0")
 title = "Emerald Shore Act 1: Sunny Beachfront"
 hub_scene = "res://content/sonic/ui/map/world_map.tscn"
 next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
+music = ExtResource("2_epgkl")
+fast_music = ExtResource("3_dqho4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=285431394]
 environment = ExtResource("2_b5b7m")

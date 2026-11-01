@@ -24,6 +24,8 @@ DebugOverlay="*res://engine/debug/debug_overlay.tscn"
 GameState="*res://engine/systems/game_state.gd"
 GameSettings="*res://engine/systems/game_settings.gd"
 SaveGame="*res://engine/systems/save_game.gd"
+Sfx="*res://engine/audio/sfx.gd"
+Music="*res://engine/audio/music.gd"
 
 [debug]
 
@@ -43,6 +45,10 @@ window/stretch/aspect="expand"
 [filesystem]
 
 import/blender/enabled=false
+
+[game]
+
+audio/sound_bank="res://content/sonic/audio/sound_bank.tres"
 
 [input]
 

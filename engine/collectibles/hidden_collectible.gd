@@ -21,4 +21,5 @@ func _ready() -> void:
 
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player and GameState.find(GameState.id_of(self), true):
+		Sfx.play(&"red_ring")
 		queue_free()

@@ -43,6 +43,7 @@ func open() -> void:
 	_quit_button.text = "PAUSE_QUIT_MAP" if SaveGame.has_slot() and stage.hub_scene != "" else "PAUSE_QUIT_TITLE"
 	visible = true
 	get_tree().paused = true
+	Sfx.play_ui(&"ui_pause")
 	Input.mouse_mode = Input.MOUSE_MODE_VISIBLE
 	MenuKit.focus_first(_buttons)
 

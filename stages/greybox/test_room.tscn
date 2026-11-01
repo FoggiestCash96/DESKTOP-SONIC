@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" path="res://stages/greybox/test_room.gd" id="1_3v71b"]
 [ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_e7fp2"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1.ogg" id="2_qajct"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_e7fp2"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1_fast.ogg" id="3_ysvsk"]
 [ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_aqf77"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_k0xv2"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="4_tyqwl"]
@@ -48,6 +50,8 @@ height = 0.04
 [node name="TestRoom" type="Node3D" unique_id=1758518970]
 script = ExtResource("1_3v71b")
 title = "Greybox test room"
+music = ExtResource("2_qajct")
+fast_music = ExtResource("3_ysvsk")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2066380012]
 environment = ExtResource("2_e7fp2")

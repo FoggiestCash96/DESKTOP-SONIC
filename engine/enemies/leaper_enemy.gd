@@ -35,6 +35,9 @@ func _enter_mode(new_mode: Mode) -> void:
 		global_position = _from + Vector3.DOWN * hide_depth if _leaps > 0 else home + Vector3.DOWN * hide_depth
 	elif out:
 		_from = global_position + Vector3.UP * hide_depth
+		Sfx.play_at(&"splash", _from)
+	elif new_mode == Mode.STUNNED:  # Just dived back in.
+		Sfx.play_at(&"splash", global_position)
 
 
 func _patrol(_delta: float) -> void:

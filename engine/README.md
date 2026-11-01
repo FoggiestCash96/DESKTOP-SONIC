@@ -19,6 +19,7 @@ A reusable, franchise-free 3D platformer engine: player physics, camera, gimmick
 | `collectibles/` | Rings, ring rows, scattered rings, item monitors, hidden collectibles, extra lives | 5 |
 | `enemies/` | Enemy behaviours: walker, flyer, turret, leaper | 8 |
 | `enemies/base/` | The enemy state machine, the boss base and boss arena, homing targets, shots, explosions and freed animals | 8 |
-| `systems/` | Stage root script; GameState (lives, checkpoints, stage clock), SaveGame (save slots) and GameSettings (settings, assists) autoloads; remappable controls; world map data. Audio, scene loading and replays later | 5, 9 |
+| `systems/` | Stage root script; GameState (lives, checkpoints, stage clock), SaveGame (save slots) and GameSettings (settings, assists) autoloads; remappable controls; world map data. Scene loading and replays later | 5, 9 |
+| `audio/` | The Sfx autoload (sound effects by name, menu sounds), the Music autoload (tracks, power-up music, jingles, speed shoes) and the SoundBank resource a game fills in | 10 |
 | `debug/` | Developer overlay (F3) and fly camera | 1 |
 | `greybox/` | Grid shader, materials and environment for blockout scenes | 1 |

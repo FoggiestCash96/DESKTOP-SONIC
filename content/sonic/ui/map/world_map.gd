@@ -13,6 +13,7 @@ const PATH_COLOR := Color(1.0, 1.0, 1.0, 0.35)
 @export var worlds: WorldList = preload("res://content/sonic/stages/worlds.tres")
 @export var map_points: PackedVector2Array = [Vector2(0.12, 0.8), Vector2(0.3, 0.55), Vector2(0.52, 0.72), Vector2(0.64, 0.4), Vector2(0.4, 0.22), Vector2(0.7, 0.12)]  ## Where each world sits, as a share of the map area.
 @export_file("*.tscn") var save_select: String = "res://content/sonic/ui/menus/save_select.tscn"
+@export var music: AudioStream = preload("res://content/sonic/audio/music/title.ogg")  ## Carries on from one menu to the next.
 
 var world := 0  ## The world shown.
 var _act_buttons: Array[Button] = []
@@ -29,6 +30,7 @@ func _ready() -> void:
 	var unfinished := last.x >= 0 and not SaveData.is_cleared(SaveGame.data, GameState.stage)
 	# Whatever is chosen here starts fresh: no checkpoint or clock carried over from the last visit.
 	GameState.leave_stage()
+	Music.play(music)
 	world = maxi(last.x, 0)
 	_map.draw.connect(_draw_map)
 	_show_world(last.y if unfinished else -1)
@@ -120,6 +122,8 @@ func _play(index: int) -> void:
 	var act := worlds.worlds[world].acts[index]
 	if act.scene != "" and is_act_unlocked(world, index):
 		get_tree().change_scene_to_file(act.scene)
+	else:
+		Sfx.play_ui(&"ui_locked")
 
 
 ## The worlds along a winding path, the one shown ringed; locked worlds greyed out.

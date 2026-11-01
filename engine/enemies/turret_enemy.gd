@@ -38,6 +38,7 @@ func _fire() -> void:
 	shot.speed = shot_speed
 	get_parent().add_child(shot)
 	shot.global_position = _muzzle.global_position
+	Sfx.play_at(&"enemy_shot", _muzzle.global_position)
 	if target and turns:
 		shot.aim_at(target.ball_center())
 	else:

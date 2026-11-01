@@ -16,3 +16,4 @@ Sonic and all related characters and trademarks belong to SEGA. Our original fil
 | `ui/hud/` | Adventure-style HUD: rings, time, red rings, lives, power-ups, the boost gauge, a boss's hits left, the results and the pause menu, with icons drawn in code |
 | `ui/translations/` | Every player-facing string, by key, in `strings.csv` (English for now) |
 | `ui/menu_theme.tres` | The menus' shared look |
+| `audio/` | The music (`music/`, Ogg Vorbis with loop points, plus faster versions for speed shoes) and sound effects (`sounds/`), all original and made by `tools/audio/`, and `sound_bank.tres`, which names the file for each of the engine's sounds and music cues (Milestone 10) |

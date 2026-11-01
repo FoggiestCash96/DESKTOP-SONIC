@@ -415,18 +415,51 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 
 All menu and HUD text goes through Godot's translation system, from `content/sonic/ui/translations/strings.csv` (English for now), so the community can add languages by adding a column.
 
+## 11. Audio (Milestone 10)
+
+Decided 2026-10-31: **original music, composed in code** and changeable at any time, and **sound effects synthesised in code**, all CC BY-SA 4.0. Nothing is sampled or downloaded.
+
+### 11.1 How it's made
+
+- `tools/audio/` renders everything: `python tools/audio/render.py` (Python 3 with numpy and SciPy, and FFmpeg for Ogg Vorbis). Each track is written as notes in `tools/audio/music/<track>.py`, in a small text notation (`tools/audio/README.md`), and played on instruments modelled on the Genesis's FM chip (`instruments.py`): FM brass, slap bass, steel drums, clavinet, electric piano and bells, plus synth leads, pads and strings, and a synthesised drum kit with congas, shaker, timbales and timpani. The sound effects are short recipes in `sounds.py`.
+- **Levels:** music is mixed to −17 LUFS with peaks under −1 dB, and an automatic EQ nudges each track toward a typical mix's tonal balance. Each sound effect has its own loudness, from −15 LUFS (the boost) to −28 (a menu tick); frequent sounds sit lower. Renders are exact, so re-rendering unchanged music leaves the files alone.
+- **Loops:** the music loops from the end of its intro, seamlessly (the loop is rendered twice and the second pass kept, so echoes and reverb carry over the seam). The loop point is written into the `.ogg.import` file. A looping sound effect (the boost's rush of air) carries its loop points in its WAV.
+- **Changing it** (asked for: the user may want to change the music later): edit a track's notes and re-render it; or replace its `.ogg` with a recording from any tool, setting the loop in Godot's Import dock; or point a stage, a menu or the sound bank at another file. None of these needs code.
+
+### 11.2 The music
+
+| Track | Plays | Feel |
+|---|---|---|
+| Title (`title.ogg`) | Title screen, save slots and world map, carrying on between them | Act 1's hook, relaxed: electric piano and bells over a light groove, after a brass fanfare. F major, 120 BPM. |
+| Emerald Shore Act 1 (`emerald_shore_1.ogg`) | Act 1 and the test room | Tropical funk: brass on the hook, slap bass, steel drums, a clavinet on the off-beats, congas and shaker. A lyrical bridge and a slap bass and steel drum breakdown. F major, 150 BPM, a 4-bar intro and a 51 s loop. |
+| Emerald Shore Act 8 (`emerald_shore_8.ogg`) | Act 8, until the boss | The same tune stormy: D minor, a driving synth bass, strings, timpani and thunder, and a pounding steel drum riff. 156 BPM. |
+| Boss (`boss.ogg`) | Boss fights, from the boss's entrance | A churning bass ostinato, brass and racing arpeggios, then strings over 3-3-2 brass stabs. C minor, 168 BPM. |
+| Invincibility (`invincible.ogg`) | Instead of the music while invincible | Heroic brass and a four-on-the-floor beat. A major, 168 BPM. |
+| Extra life (`extra_life.ogg`) | A jingle; the music stops for it and carries on afterwards | About 4 s. B-flat major. |
+| Act clear (`act_clear.ogg`) | A jingle at the goal or when a boss is beaten, over the results | A 5 s fanfare, then its last chord rings out. F major. |
+| Game over (`game_over.ogg`) | A jingle when the last life is lost | A slow falling phrase of 5 s, ringing out. D minor. |
+
+**Speed shoes** switch a stage's music to its `_fast` version (rendered 25% faster at the same pitch) from the same point in the tune, and back when they run out. Music without a fast version plays 20% faster and higher instead. The **drowning countdown** waits for swimming.
+
+### 11.3 In the game
+
+- **Engine:** two autoloads in `engine/audio/`. `Sfx` plays sound effects by name (`Sfx.play(&"jump")`); `Music` plays the music. Both take their sounds from a `SoundBank` resource, named by the project setting `game/audio/sound_bank` (`content/sonic/audio/sound_bank.tres`), which maps each of the engine's sound names and music cues to a file. A name the bank doesn't have stays silent, so the engine runs without content.
+- **Music:** a stage plays its `music` as it loads, carrying on if it's already playing (restarting from the pause menu); after a death it starts from the top, since dying fades it out. A menu's music carries on from one menu to the next. Invincibility's music replaces the track while it lasts, and the track picks up where it stopped. A jingle cuts in: the extra life's hands back, the act clear's and game over's don't. A boss arena starts its `music` as the fight begins and fades it when the boss is beaten. Dying fades the music over a second. The music pauses with the game.
+- **Sounds:** the player's own sounds are heard the same everywhere. Things in the world (a badnik popping, a shot, a fish's splash, a tidal wave washing up the beach, the boss) are heard from where they are, fading out by 80 m. Rings alternate between the speakers. Up to four plays of one sound overlap. Menus get their sounds without any code of their own: a tick when the focus moves, a blip when a button is pressed, another on back.
+- **Buses:** music on Music, sound effects on SFX, each with its slider (§10.2). Sound effects pause with the game, except the menus'.
+
 ---
 
-## 11. Open decisions
+## 12. Open decisions
 
 Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
-| **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; music tool; 2D art tool; community channel; GameJolt |
+| **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; GameJolt |
 
-## 12. Roadmap
+## 13. Roadmap
 
 | # | Milestone | Status |
 |---|---|---|
@@ -439,6 +472,6 @@ Each one is grouped by the milestone where it starts to block work.
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
-| 10 | Art and audio pass, then a public demo release | Next |
+| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11); the art pass and the demo release next |
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

@@ -32,6 +32,7 @@ const WORLD_MASK := 1
 @export var backwash_depth: float = 30.0  ## Depth of the draining sheet (m), deeper than the wave so the pull lasts.
 
 var _time := 0.0
+var _was_surging := false
 var _push_box: BoxShape3D
 var _preview: MeshInstance3D
 
@@ -53,6 +54,9 @@ func _physics_process(delta: float) -> void:
 	_time += delta
 	var cycle := cycle_now()
 	var surging := cycle.y > 0.0
+	if surging and not _was_surging:
+		Sfx.play_on(&"wave", _water)  # Rolls up the beach with the water.
+	_was_surging = surging
 	_place_water(cycle.x * reach, size.y if cycle.y >= 0.0 else backwash_depth)
 	if cycle.y == 0.0:
 		return
