@@ -2,13 +2,7 @@
 
 [ext_resource type="Theme" path="res://content/sonic/ui/menu_theme.tres" id="1_0w7vu"]
 [ext_resource type="Script" path="res://content/sonic/ui/title/title_screen.gd" id="1_jrg8v"]
-
-[sub_resource type="Gradient" id="Gradient_0w7vu"]
-colors = PackedColorArray(0.039215688, 0.101960786, 0.2901961, 1, 0.101960786, 0.43529412, 0.81960785, 1)
-
-[sub_resource type="GradientTexture2D" id="GradientTexture2D_4e30m"]
-gradient = SubResource("Gradient_0w7vu")
-fill_to = Vector2(0, 1)
+[ext_resource type="PackedScene" path="res://content/sonic/ui/title/title_backdrop.tscn" id="3_4e30m"]
 
 [sub_resource type="LabelSettings" id="LabelSettings_u0m4v"]
 font_size = 112
@@ -58,12 +52,7 @@ grow_vertical = 2
 theme = ExtResource("1_0w7vu")
 script = ExtResource("1_jrg8v")
 
-[node name="Background" type="TextureRect" parent="." unique_id=1968111248]
-layout_mode = 0
-anchor_right = 1.0
-anchor_bottom = 1.0
-texture = SubResource("GradientTexture2D_4e30m")
-expand_mode = 1
+[node name="Backdrop" parent="." unique_id=1194961323 instance=ExtResource("3_4e30m")]
 
 [node name="Center" type="VBoxContainer" parent="." unique_id=995615529]
 layout_mode = 0

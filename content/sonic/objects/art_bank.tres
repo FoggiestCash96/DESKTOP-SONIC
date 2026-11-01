@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="ArtBank" format=3]
+
+[ext_resource type="Material" path="res://content/sonic/materials/spikes_plate.tres" id="1_da1pj"]
+[ext_resource type="Material" path="res://content/sonic/materials/wave_water.tres" id="2_f2uxf"]
+[ext_resource type="Material" path="res://content/sonic/materials/wave_foam.tres" id="3_adfmr"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/spring.glb" id="4_lth88"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/dash_panel.glb" id="5_x02gq"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/item_monitor.glb" id="6_1v4gj"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/checkpoint.glb" id="7_w6gy2"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/goal.glb" id="8_3xmjy"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/extra_life.glb" id="9_arfs8"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/spikes.glb" id="10_ws44r"]
+[ext_resource type="PackedScene" path="res://content/sonic/objects/animal.glb" id="11_idclh"]
+[ext_resource type="Script" path="res://engine/art/art_bank.gd" id="12_u6kul"]
+
+[resource]
+script = ExtResource("12_u6kul")
+models = Dictionary[StringName, PackedScene]({
+&"animal": ExtResource("11_idclh"),
+&"checkpoint": ExtResource("7_w6gy2"),
+&"dash_panel": ExtResource("5_x02gq"),
+&"extra_life": ExtResource("9_arfs8"),
+&"goal": ExtResource("8_3xmjy"),
+&"item_monitor": ExtResource("6_1v4gj"),
+&"spikes": ExtResource("10_ws44r"),
+&"spring": ExtResource("4_lth88")
+})
+materials = Dictionary[StringName, Material]({
+&"spikes_plate": ExtResource("1_da1pj"),
+&"wave_foam": ExtResource("3_adfmr"),
+&"wave_water": ExtResource("2_f2uxf")
+})

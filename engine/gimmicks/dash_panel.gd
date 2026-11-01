@@ -10,6 +10,7 @@ var _sounded := false  # The panel's sound has played for the touch going on now
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"dash_panel"))
 	# Push before the player moves this tick.
 	process_physics_priority = -1
 	body_entered.connect(func(_body: Node3D) -> void: set_physics_process(true))

@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" path="res://engine/enemies/flyer_enemy.gd" id="1_2wwaw"]
 [ext_resource type="Script" path="res://engine/enemies/base/homing_target.gd" id="2_4fr7g"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/models/galegull.glb" id="2_smlq0"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_smlq0"]
 diffuse_mode = 3
@@ -257,6 +258,7 @@ script = ExtResource("1_2wwaw")
 notice_range = 9.0
 notice_time = 0.6
 stun_time = 2.5
+skin = ExtResource("2_smlq0")
 
 [node name="Model" type="Node3D" parent="." unique_id=1398488629]
 unique_name_in_owner = true

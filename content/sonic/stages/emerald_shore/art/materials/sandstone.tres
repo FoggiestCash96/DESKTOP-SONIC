@@ -1,0 +1,16 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://engine/art/height_bands.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/colour_1 = Color(0.97, 0.78, 0.5, 1)
+shader_parameter/colour_2 = Color(0.92, 0.62, 0.36, 1)
+shader_parameter/colour_3 = Color(0.82, 0.46, 0.27, 1)
+shader_parameter/colour_4 = Color(0.92, 0.62, 0.36, 1)
+shader_parameter/line_colour = Color(0.66, 0.34, 0.21, 1)
+shader_parameter/band_height = 1.4
+shader_parameter/line_width = 0.1
+shader_parameter/wobble = 0.35
+shader_parameter/wobble_length = 7.0
+shader_parameter/roughness = 0.85

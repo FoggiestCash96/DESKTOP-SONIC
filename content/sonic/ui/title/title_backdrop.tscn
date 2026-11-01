@@ -1,0 +1,42 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://content/sonic/ui/title/title_backdrop.gd" id="1_44hf8"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/sunny_environment.tres" id="2_xy5ai"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sea.tres" id="3_mx5gi"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/title/art/title_beach.glb" id="4_4nub3"]
+[ext_resource type="PackedScene" path="res://content/sonic/characters/sonic/sonic.tscn" id="5_bsrvy"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_niif5"]
+size = Vector2(4000, 4000)
+
+[node name="TitleBackdrop" type="Node3D" unique_id=1194961323]
+script = ExtResource("1_44hf8")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2053922813]
+environment = ExtResource("2_xy5ai")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=284056285]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.95
+shadow_enabled = true
+directional_shadow_max_distance = 60.0
+
+[node name="Sea" type="MeshInstance3D" parent="." unique_id=1509119851]
+material_override = ExtResource("3_mx5gi")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_niif5")
+
+[node name="Beach" parent="." unique_id=301242977 instance=ExtResource("4_4nub3")]
+
+[node name="Sonic" parent="." unique_id=453513762 instance=ExtResource("5_bsrvy")]
+unique_name_in_owner = true
+transform = Transform3D(-0.96858317, 0, 0.2486899, 0, 1, 0, -0.2486899, 0, -0.96858317, 0, 1.68, 0)
+
+[node name="CameraPivot" type="Node3D" parent="." unique_id=304501511]
+unique_name_in_owner = true
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.68, 0)
+
+[node name="Camera" type="Camera3D" parent="CameraPivot" unique_id=718327847]
+transform = Transform3D(0.955779, 0.025845552, 0.29294795, 0, 0.9961307, -0.087884374, -0.29408586, 0.08399804, 0.95208085, -0.55, 0.62, 2.7)
+fov = 60.0

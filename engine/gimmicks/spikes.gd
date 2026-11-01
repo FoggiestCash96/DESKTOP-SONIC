@@ -20,9 +20,11 @@ const BASE_HEIGHT := 0.1  ## Thickness of the plate the points stand on (m).
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"spikes"))
 	_build()
 	if Engine.is_editor_hint():
 		return
+	_base.material_override = ArtBank.material(&"spikes_plate", _base.material_override)
 	body_entered.connect(func(_body: Node3D) -> void: set_physics_process(true))
 	set_physics_process(false)
 

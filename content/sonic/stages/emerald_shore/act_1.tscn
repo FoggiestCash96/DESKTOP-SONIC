@@ -1,22 +1,25 @@
 [gd_scene format=3]
 
 [ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_4hkn0"]
-[ext_resource type="Environment" path="res://engine/greybox/greybox_environment.tres" id="2_b5b7m"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1.ogg" id="2_epgkl"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_1_fast.ogg" id="3_dqho4"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_n0or1"]
 [ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_b5b7m"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="4_l8lpn"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/sunny_environment.tres" id="4_mh766"]
 [ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="5_eupqa"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="6_lm72i"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="7_ch032"]
 [ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="8_epgkl"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="9_dqho4"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sea.tres" id="9_vwlmn"]
 [ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="10_mh766"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="11_vwlmn"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="12_y4ooh"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="13_g4bam"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/loop.tres" id="13_vwlmn"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/tidal_wave.tscn" id="14_fdqvd"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_1_art.glb" id="14_y4ooh"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/spikes.tscn" id="15_1vheb"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="16_50f6d"]
 [ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="17_g5eva"]
@@ -27,15 +30,6 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="23_ch032"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="24_epgkl"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="25_dqho4"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_kc7de"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.15, 0.45, 0.85, 0.7)
-roughness = 0.6
-emission_enabled = true
-emission = Color(0.15, 0.45, 0.85, 1)
-emission_energy_multiplier = 0.15
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_3sfmo"]
 size = Vector2(4000, 4000)
@@ -49,11 +43,14 @@ music = ExtResource("2_epgkl")
 fast_music = ExtResource("3_dqho4")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=285431394]
-environment = ExtResource("2_b5b7m")
+environment = ExtResource("4_mh766")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=341233872]
 transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.95
 shadow_enabled = true
+directional_shadow_max_distance = 150.0
 
 [node name="Player" parent="." unique_id=719696558 instance=ExtResource("3_n0or1")]
 character = ExtResource("4_b5b7m")
@@ -67,7 +64,7 @@ target = NodePath("../Player")
 
 [node name="Sea" type="MeshInstance3D" parent="." unique_id=1413437429]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -14, -300)
-material_override = SubResource("StandardMaterial3D_kc7de")
+material_override = ExtResource("9_vwlmn")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_3sfmo")
 
@@ -75,6 +72,7 @@ mesh = SubResource("PlaneMesh_3sfmo")
 
 [node name="Start" type="CSGPolygon3D" parent="Geometry" unique_id=2117542687]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, 12)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 72, -2, 72, 0, 0, 0)
 depth = 24.0
@@ -82,6 +80,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Downhill" type="CSGPolygon3D" parent="Geometry" unique_id=1102889807]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, -60)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -10, 50, -10, 50, -8, 0, 0)
 depth = 20.0
@@ -89,6 +88,7 @@ material = ExtResource("7_ch032")
 
 [node name="LoopFloor" type="CSGPolygon3D" parent="Geometry" unique_id=316352184]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 16, 0, -110)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -10, 40, -10, 40, -8, 0, -8)
 depth = 26.0
@@ -99,10 +99,11 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -7.995, -125)
 script = ExtResource("8_epgkl")
 radius = 5.0
 exit_offset = 6.0
-material = ExtResource("7_ch032")
+material = ExtResource("13_vwlmn")
 
 [node name="LoopExitUphill" type="CSGPolygon3D" parent="Geometry" unique_id=1378053634]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 15, 0, -150)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -10, 30, -10, 30, 0, 0, -8)
 depth = 20.0
@@ -110,6 +111,7 @@ material = ExtResource("7_ch032")
 
 [node name="BeachTop" type="CSGPolygon3D" parent="Geometry" unique_id=2065472629]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -180)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 20, -2, 20, 0, 0, 0)
 depth = 40.0
@@ -117,6 +119,7 @@ material = ExtResource("6_lm72i")
 
 [node name="BeachDown" type="CSGPolygon3D" parent="Geometry" unique_id=1527122666]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -200)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -6, 15, -6, 15, -4, 0, 0)
 depth = 40.0
@@ -124,6 +127,7 @@ material = ExtResource("7_ch032")
 
 [node name="Flats" type="CSGPolygon3D" parent="Geometry" unique_id=1619710637]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -215)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -6, 75, -6, 75, -4, 0, -4)
 depth = 40.0
@@ -131,6 +135,7 @@ material = ExtResource("6_lm72i")
 
 [node name="SurgeSlope" type="CSGPolygon3D" parent="Geometry" unique_id=1401081155]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -290)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -6, 26, -6, 26, 8, 0, -4)
 depth = 40.0
@@ -138,6 +143,7 @@ material = ExtResource("7_ch032")
 
 [node name="Crest" type="CSGPolygon3D" parent="Geometry" unique_id=399156929]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -316)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -6, 8, -6, 8, 8, 0, 8)
 depth = 40.0
@@ -145,6 +151,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Deck" type="CSGPolygon3D" parent="Geometry" unique_id=169310996]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 3, 0, -333)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, 4.5, 92, 4.5, 92, 6, 0, 6)
 depth = 18.0
@@ -152,6 +159,7 @@ material = ExtResource("6_lm72i")
 
 [node name="LowSlope" type="CSGPolygon3D" parent="Geometry" unique_id=1815649783]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -324)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 36, -2, 36, 0, 0, 8)
 depth = 22.0
@@ -159,6 +167,7 @@ material = ExtResource("7_ch032")
 
 [node name="LowGround" type="CSGPolygon3D" parent="Geometry" unique_id=1101893283]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -324)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 106, -2, 106, 0, 0, 0)
 depth = 40.0
@@ -166,6 +175,7 @@ material = ExtResource("6_lm72i")
 
 [node name="LowRamp" type="CSGPolygon3D" parent="Geometry" unique_id=2041613400]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -430)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 25, -2, 25, 6, 0, 0)
 depth = 40.0
@@ -173,6 +183,7 @@ material = ExtResource("7_ch032")
 
 [node name="Merge" type="CSGPolygon3D" parent="Geometry" unique_id=301992500]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 25, 0, -455)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 75, -2, 75, 6, 0, 6)
 depth = 40.0
@@ -180,6 +191,7 @@ material = ExtResource("6_lm72i")
 
 [node name="PierRamp" type="CSGPolygon3D" parent="Geometry" unique_id=1367321781]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -509)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 40, -2, 40, 0, 0, 6)
 depth = 12.0
@@ -187,6 +199,7 @@ material = ExtResource("7_ch032")
 
 [node name="Pier1" type="CSGPolygon3D" parent="Geometry" unique_id=2097984930]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 65, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 40, -1, 40, 0, 0, 0)
 depth = 4.0
@@ -194,6 +207,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Pier2" type="CSGPolygon3D" parent="Geometry" unique_id=914477920]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 111, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 34, -1, 34, 0, 0, 0)
 depth = 4.0
@@ -201,6 +215,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Pier3" type="CSGPolygon3D" parent="Geometry" unique_id=756856262]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 153, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 22, -1, 22, 0, 0, 0)
 depth = 4.0
@@ -208,6 +223,7 @@ material = ExtResource("6_lm72i")
 
 [node name="HighPlank" type="CSGPolygon3D" parent="Geometry" unique_id=1360934242]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 170, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, 5.5, 34, 5.5, 34, 6, 0, 6)
 depth = 4.0
@@ -215,6 +231,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Pier4" type="CSGPolygon3D" parent="Geometry" unique_id=1630281709]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 181, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 34, -1, 34, 0, 0, 0)
 depth = 4.0
@@ -222,6 +239,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Pier5" type="CSGPolygon3D" parent="Geometry" unique_id=275935932]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0, -513)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 30, -1, 30, 0, 0, 0)
 depth = 4.0
@@ -229,6 +247,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Shore" type="CSGPolygon3D" parent="Geometry" unique_id=1705257893]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 245, 0, -505)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 40, -2, 40, 0, 0, 0)
 depth = 20.0
@@ -236,6 +255,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Downhill2" type="CSGPolygon3D" parent="Geometry" unique_id=1886890581]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 285, 0, -505)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -12, 60, -12, 60, -10, 0, 0)
 depth = 20.0
@@ -243,6 +263,7 @@ material = ExtResource("7_ch032")
 
 [node name="Loop2Floor" type="CSGPolygon3D" parent="Geometry" unique_id=1673385937]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 345, 0, -499)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -12, 45, -12, 45, -10, 0, -10)
 depth = 26.0
@@ -253,10 +274,11 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 360,
 script = ExtResource("8_epgkl")
 radius = 5.0
 exit_offset = 6.0
-material = ExtResource("7_ch032")
+material = ExtResource("13_vwlmn")
 
 [node name="Uphill2" type="CSGPolygon3D" parent="Geometry" unique_id=1697297595]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 390, 0, -500)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -12, 60, -12, 60, 0, 0, -10)
 depth = 20.0
@@ -264,6 +286,7 @@ material = ExtResource("7_ch032")
 
 [node name="Rollers" type="CSGPolygon3D" parent="Geometry" unique_id=699705327]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 450, 0, -500)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 110, -2, 110, 0, 0, 0)
 depth = 20.0
@@ -271,6 +294,7 @@ material = ExtResource("6_lm72i")
 
 [node name="Hump1" type="CSGPolygon3D" parent="Geometry" unique_id=358904749]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 470, 0, -500)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 20, -1, 20, 0, 10, 2.5, 0, 0)
 depth = 20.0
@@ -278,6 +302,7 @@ material = ExtResource("7_ch032")
 
 [node name="Hump2" type="CSGPolygon3D" parent="Geometry" unique_id=2144097425]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 505, 0, -500)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 20, -1, 20, 0, 10, 2.5, 0, 0)
 depth = 20.0
@@ -285,6 +310,7 @@ material = ExtResource("7_ch032")
 
 [node name="FinalStraight" type="CSGPolygon3D" parent="Geometry" unique_id=579396939]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 560, 0, -500)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 140, -2, 140, 0, 0, 0)
 depth = 20.0
@@ -292,20 +318,14 @@ material = ExtResource("6_lm72i")
 
 [node name="EndWall" type="CSGBox3D" parent="Geometry" unique_id=1499931022]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 700.5, 4, -510)
+visible = false
 use_collision = true
 size = Vector3(1, 8, 24)
 material = ExtResource("9_dqho4")
 
-[node name="Gimmicks" type="Node3D" parent="." unique_id=1746426554]
+[node name="Art" parent="." unique_id=478697821 instance=ExtResource("14_y4ooh")]
 
-[node name="SignStart" type="Label3D" parent="Gimmicks" unique_id=970483729]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 6)
-pixel_size = 0.012
-billboard = 1
-text = "EMERALD SHORE
-Act 1 · Sunny Beachfront"
-font_size = 96
-outline_size = 18
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1746426554]
 
 [node name="RingsStart" type="Node3D" parent="Gimmicks" unique_id=1808651573]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -6)
@@ -335,12 +355,15 @@ spacing = 5.0635955604688645
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.9, 1.3, -125)
 
 [node name="SignSurge" type="Label3D" parent="Gimmicks" unique_id=370823251]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 1.5, -222)
-pixel_size = 0.012
-billboard = 1
-text = "Wait for a wave, then ride it up!"
-font_size = 96
-outline_size = 18
+transform = Transform3D(0.90630776, 0, 0.42261827, 0, 1, 0, -0.42261827, 0, 0.90630776, -16.4, -1.3, -224)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Wait for a wave,
+then ride it up!"
+font_size = 64
+outline_size = 14
 
 [node name="RingsFlats" type="Node3D" parent="Gimmicks" unique_id=1239256991]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -3.2, -226)
@@ -357,12 +380,14 @@ backwash_time = 6.5
 rest_time = 2.5
 
 [node name="SignSplit" type="Label3D" parent="Gimmicks" unique_id=1679243209]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 12, -320)
-pixel_size = 0.012
-billboard = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 13, -320)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
 text = "← jump the gap        low road →"
-font_size = 96
-outline_size = 18
+font_size = 72
+outline_size = 14
 
 [node name="RedRing2" parent="Gimmicks" unique_id=122618111 instance=ExtResource("13_g4bam")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 11, -328)
@@ -412,12 +437,14 @@ count = 6
 spacing = 2.5
 
 [node name="SignTurn" type="Label3D" parent="Gimmicks" unique_id=262144121]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18, 9, -515)
-pixel_size = 0.012
-billboard = 1
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9, -531.2)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
 text = "→"
-font_size = 96
-outline_size = 18
+font_size = 220
+outline_size = 14
 
 [node name="DashCorner" parent="Gimmicks" unique_id=1706706896 instance=ExtResource("12_y4ooh")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 12, 6, -515)
@@ -427,14 +454,6 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 16, 
 script = ExtResource("10_mh766")
 count = 4
 spacing = 3.0
-
-[node name="SignPier" type="Label3D" parent="Gimmicks" unique_id=868857512]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 66, 4, -511)
-pixel_size = 0.012
-billboard = 1
-text = "2.5D pier"
-font_size = 96
-outline_size = 18
 
 [node name="PierSideView" type="Node3D" parent="Gimmicks" unique_id=153509929]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 155, 6, -515)

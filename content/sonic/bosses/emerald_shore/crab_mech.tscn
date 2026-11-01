@@ -2,7 +2,9 @@
 
 [ext_resource type="Script" path="res://content/sonic/bosses/emerald_shore/crab_mech.gd" id="1_x85g2"]
 [ext_resource type="Script" path="res://engine/enemies/base/homing_target.gd" id="2_73cwu"]
+[ext_resource type="PackedScene" path="res://content/sonic/bosses/emerald_shore/egg_ship.glb" id="2_e1yyv"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/rolling_wave.tscn" id="3_e1yyv"]
+[ext_resource type="PackedScene" path="res://content/sonic/bosses/emerald_shore/crab_mech.glb" id="3_l7n4d"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_l7n4d"]
 diffuse_mode = 3
@@ -452,10 +454,12 @@ radial_segments = 16
 transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 0, 0, -12)
 script = ExtResource("1_x85g2")
 ship = NodePath("../EggShip")
+ship_skin = ExtResource("2_e1yyv")
 ship_pump = NodePath("../EggShip/Pump")
 intro_camera = NodePath("../IntroCamera")
 intro_wave = NodePath("../IntroWave")
 display_name = "Egg Tidecrab"
+skin = ExtResource("3_l7n4d")
 body_areas = [NodePath("LegHurt"), NodePath("Model/Body/ShellHurt")]
 danger_areas = [NodePath("Model/Body/ClawLeft/ClawHurtLeft"), NodePath("Model/Body/ClawRight/ClawHurtRight")]
 

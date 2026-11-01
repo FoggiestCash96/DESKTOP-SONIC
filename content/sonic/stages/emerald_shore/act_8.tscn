@@ -7,13 +7,16 @@
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_tsvun"]
 [ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_x67ys"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="5_1fy4l"]
+[ext_resource type="Script" path="res://engine/art/storm.gd" id="5_j4sq8"]
 [ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="6_fds33"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="7_j4sq8"]
 [ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="8_lpuc5"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/storm_sea.tres" id="9_fds33"]
 [ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="9_yi6bi"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="10_hnhjs"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="11_nmtfp"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="12_8hlsc"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_8_art.glb" id="12_j4sq8"]
 [ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="13_hojor"]
 [ext_resource type="Script" path="res://engine/enemies/base/boss_arena.gd" id="14_nr5og"]
 [ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="15_gmq5s"]
@@ -23,15 +26,6 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="18_h505v"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="19_gijyk"]
 [ext_resource type="PackedScene" path="res://content/sonic/bosses/emerald_shore/crab_mech.tscn" id="20_pmv7g"]
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gvwnf"]
-transparency = 1
-cull_mode = 2
-albedo_color = Color(0.12, 0.3, 0.42, 0.85)
-roughness = 0.6
-emission_enabled = true
-emission = Color(0.12, 0.3, 0.42, 1)
-emission_energy_multiplier = 0.1
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_o3m28"]
 size = Vector2(1200, 1200)
@@ -69,9 +63,14 @@ environment = ExtResource("2_5p8sn")
 
 [node name="Sun" type="DirectionalLight3D" parent="." unique_id=229460309]
 transform = Transform3D(0.8660254, -0.38302222, 0.32139382, 0, 0.64278764, 0.76604444, -0.5, -0.66341394, 0.5566704, 0, 0, 0)
-light_color = Color(0.86, 0.89, 0.96, 1)
-light_energy = 0.65
+light_color = Color(0.75, 0.8, 0.9, 1)
+light_energy = 0.6
 shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="Storm" type="Node3D" parent="." unique_id=483418303 node_paths=PackedStringArray("light")]
+script = ExtResource("5_j4sq8")
+light = NodePath("../Sun")
 
 [node name="Player" parent="." unique_id=719696558 instance=ExtResource("3_tsvun")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 8)
@@ -86,7 +85,7 @@ target = NodePath("../Player")
 
 [node name="Sea" type="MeshInstance3D" parent="." unique_id=1000966082]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.5, -200)
-material_override = SubResource("StandardMaterial3D_gvwnf")
+material_override = ExtResource("9_fds33")
 cast_shadow = 0
 mesh = SubResource("PlaneMesh_o3m28")
 
@@ -94,6 +93,7 @@ mesh = SubResource("PlaneMesh_o3m28")
 
 [node name="Causeway1" type="CSGPolygon3D" parent="Geometry" unique_id=1621459774]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 7, 0, 14)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 82, -2, 82, 0, 0, 0)
 depth = 14.0
@@ -101,24 +101,28 @@ material = ExtResource("7_j4sq8")
 
 [node name="WallsCauseway1Left" type="CSGBox3D" parent="Geometry" unique_id=1739741046]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.5, 2, -27)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 82)
 material = ExtResource("8_lpuc5")
 
 [node name="WallsCauseway1Right" type="CSGBox3D" parent="Geometry" unique_id=1486644017]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.5, 2, -27)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 82)
 material = ExtResource("8_lpuc5")
 
 [node name="ClamBlock" type="CSGBox3D" parent="Geometry" unique_id=528102709]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4.5, 0.75, -54)
+visible = false
 use_collision = true
 size = Vector3(3, 1.5, 3)
 material = ExtResource("8_lpuc5")
 
 [node name="Causeway2" type="CSGPolygon3D" parent="Geometry" unique_id=1993583840]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 7, 0, -80)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 14, -2, 14, 0, 0, 0)
 depth = 14.0
@@ -126,6 +130,7 @@ material = ExtResource("7_j4sq8")
 
 [node name="Bridge" type="CSGPolygon3D" parent="Geometry" unique_id=1946090319]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 2, 0, -94)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -1, 28, -1, 28, 0, 0, 0)
 depth = 4.0
@@ -133,6 +138,7 @@ material = ExtResource("7_j4sq8")
 
 [node name="Platform" type="CSGPolygon3D" parent="Geometry" unique_id=529005922]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, -122)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 30, -2, 30, 0, 0, 0)
 depth = 20.0
@@ -140,18 +146,21 @@ material = ExtResource("7_j4sq8")
 
 [node name="WallsPlatformLeft" type="CSGBox3D" parent="Geometry" unique_id=608442006]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 2, -137)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 30)
 material = ExtResource("8_lpuc5")
 
 [node name="WallsPlatformRight" type="CSGBox3D" parent="Geometry" unique_id=2021293133]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10.5, 2, -137)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 30)
 material = ExtResource("8_lpuc5")
 
 [node name="Entrance" type="CSGPolygon3D" parent="Geometry" unique_id=566448369]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 6, 0, -152)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -2, 23, -2, 23, 0, 0, 0)
 depth = 12.0
@@ -159,18 +168,21 @@ material = ExtResource("7_j4sq8")
 
 [node name="WallsEntranceLeft" type="CSGBox3D" parent="Geometry" unique_id=1799365055]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 2, -163.5)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 23)
 material = ExtResource("8_lpuc5")
 
 [node name="WallsEntranceRight" type="CSGBox3D" parent="Geometry" unique_id=563743402]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6.5, 2, -163.5)
+visible = false
 use_collision = true
 size = Vector3(1, 4, 23)
 material = ExtResource("8_lpuc5")
 
 [node name="ArenaFloor" type="CSGPolygon3D" parent="Geometry" unique_id=1353912615]
 transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 30, 0, -175)
+visible = false
 use_collision = true
 polygon = PackedVector2Array(0, -4, 52, -4, 52, 0, 0, 0)
 depth = 60.0
@@ -178,40 +190,47 @@ material = ExtResource("7_j4sq8")
 
 [node name="CliffWest" type="CSGBox3D" parent="Geometry" unique_id=793413550]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31, 5, -201)
+visible = false
 use_collision = true
 size = Vector3(2, 10, 54)
 material = ExtResource("8_lpuc5")
 
 [node name="CliffEast" type="CSGBox3D" parent="Geometry" unique_id=1769285888]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 31, 5, -201)
+visible = false
 use_collision = true
 size = Vector3(2, 10, 54)
 material = ExtResource("8_lpuc5")
 
 [node name="CliffSouthWest" type="CSGBox3D" parent="Geometry" unique_id=1990587942]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -18.5, 5, -174)
+visible = false
 use_collision = true
 size = Vector3(25, 10, 2)
 material = ExtResource("8_lpuc5")
 
 [node name="CliffSouthEast" type="CSGBox3D" parent="Geometry" unique_id=228794818]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 5, -174)
+visible = false
 use_collision = true
 size = Vector3(25, 10, 2)
 material = ExtResource("8_lpuc5")
 
 [node name="Tower1" type="CSGBox3D" parent="Geometry" unique_id=1732170505]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -48, 15, -262)
+visible = false
 size = Vector3(12, 34, 12)
 material = ExtResource("8_lpuc5")
 
 [node name="Tower2" type="CSGBox3D" parent="Geometry" unique_id=706119366]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 15, -292)
+visible = false
 size = Vector3(12, 34, 12)
 material = ExtResource("8_lpuc5")
 
 [node name="Tower3" type="CSGBox3D" parent="Geometry" unique_id=998111070]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, 15, -262)
+visible = false
 size = Vector3(12, 34, 12)
 material = ExtResource("8_lpuc5")
 
@@ -222,16 +241,9 @@ collision_mask = 0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 7, -227.5)
 shape = SubResource("BoxShape3D_nd4l3")
 
-[node name="Gimmicks" type="Node3D" parent="." unique_id=1115583083]
+[node name="Art" parent="." unique_id=871364654 instance=ExtResource("12_j4sq8")]
 
-[node name="SignStart" type="Label3D" parent="Gimmicks" unique_id=411305183]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, 6)
-pixel_size = 0.012
-billboard = 1
-text = "EMERALD SHORE
-Act 8 · Stormy Coastal Fortress"
-font_size = 96
-outline_size = 18
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1115583083]
 
 [node name="RingsStart" type="Node3D" parent="Gimmicks" unique_id=127556316]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -4)
@@ -250,12 +262,15 @@ gate_width = 14.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 0, -64)
 
 [node name="SignGap" type="Label3D" parent="Gimmicks" unique_id=1923779311]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5, -66)
-pixel_size = 0.012
-billboard = 1
-text = "Homing attack across!"
-font_size = 96
-outline_size = 18
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 6.4, -63)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Homing attack
+across!"
+font_size = 72
+outline_size = 14
 
 [node name="RedRing2" parent="Gimmicks" unique_id=36976376 instance=ExtResource("10_hnhjs")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.6, -77.5)

@@ -28,7 +28,7 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 - **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) for the main menu: **Play** goes to the save slots and then the world map, where you pick an act; **Options** has the settings; **Test room** opens the greybox test room. Two developer shortcuts skip the menus without a save slot: F (Y) for the test room, Shift (X) for Act 8 and its boss.
 - **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn`, `act_8.tscn` or `stages/greybox/test_room.tscn` to go straight there. Without a save slot nothing is saved, and the goal leads to the stage's `next_scene` (Act 1 to Act 8) or the title screen.
 
-You play a stand-in Sonic built from simple shapes, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
+You play Sonic, built by a script in Blender, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
 
 | Action | Keyboard and mouse | Controller |
 |---|---|---|
@@ -107,7 +107,7 @@ A checkpoint counts anywhere through its gate: set `gate_width` to the width of 
 
 ### Building an act
 
-Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and remodelled in Blender later. An act needs:
+Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and dressed in Blender afterwards. An act needs:
 
 - A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results), its `hub_scene` (`content/sonic/ui/map/world_map.tscn`, where the goal leads while a save slot is played), and its `next_scene` (where the goal leads without one).
 - An instance of `engine/player/player.tscn`. Set its `character` (`content/sonic/characters/sonic/sonic.tres` for Sonic) and a `kill_height` a little below the lowest ground.
@@ -115,6 +115,32 @@ Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot a
 - The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.
 
 Then add gimmicks, badniks, checkpoints, five red rings, one extra life and a goal (or, in Act 8, the boss). Play it, and keep at least one route open to players who aren't fast. Finally put its scene on its act in `content/sonic/stages/worlds.tres`, the world map's list of worlds and acts, so the map can open it.
+
+### Dressing an act (the art pass)
+
+An act's art is built from its greybox by a script, and the greybox stays in the act, hidden, as the collision ([docs/DESIGN.md](docs/DESIGN.md#83-the-art-pass-milestone-10) has the rules). After changing an act's greybox, export it and build its art again (from the repository root):
+
+```bash
+godot --headless --path . --script res://tools/godot/export_greybox.gd -- res://content/sonic/stages/emerald_shore/act_1.tscn content/sonic/stages/emerald_shore/art/act_1.greybox.json
+blender --background --factory-startup --python content/sonic/stages/emerald_shore/art/build_act_1.py
+godot --headless --path . --import
+```
+
+The build script dresses every greybox piece by name (grass, sand, piers...) and stops if a piece has no style, so a new piece can't slip in without art. For a new act, copy a build script, list its pieces, and add the result to the act as an instance named `Art`; then hide the greybox's CSG shapes (leave `use_collision` on), give the `Sea` the world's water material and the `WorldEnvironment` its sky. Hints are `Label3D`s with billboard off: the art puts a board behind each one. A unit test fails when an act's greybox has changed since its art was built.
+
+### Models for objects, badniks and bosses
+
+The engine's objects keep simple placeholder shapes, and a model dresses them when the game runs (`engine/art/model_skin.gd`): each part of the model is named after the node it dresses, with `__` for `/`. To change a model, edit its build script and run it, then import:
+
+```bash
+blender --background --factory-startup --python content/sonic/objects/build_objects.py
+blender --background --factory-startup --python content/sonic/enemies/models/build_badniks.py
+blender --background --factory-startup --python content/sonic/bosses/emerald_shore/build_crab_mech.py
+```
+
+The scripts build each part where the object's scene puts that node, from a layout `tools/godot/export_parts.gd` writes (`<name>.parts.json`); export it again after moving or renaming a placeholder's nodes. The engine's objects find their models in `content/sonic/objects/art_bank.tres` (the project setting `game/art/art_bank`); a badnik or boss names its own in `skin`.
+
+To force Godot to import a `.glb` again (after changing a material in a `materials/` library, say), delete its files in `.godot/imported/` (`<name>.glb-*`) and run the import.
 
 ### Enemies and bosses
 
@@ -152,7 +178,7 @@ To add a sound, render it (add a recipe to `sounds.py`), then add its name to th
 
 ### Characters: from Blender to Godot
 
-The stand-in Sonic is built entirely by a script, so rebuilding it is one command (from the repository root):
+Sonic is built entirely by a script, so rebuilding him is one command (from the repository root):
 
 ```bash
 blender --background --factory-startup --python content/sonic/characters/sonic/build_sonic.py
@@ -210,12 +236,14 @@ engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a tes
   enemies/        Enemy behaviours (walker, flyer, turret, leaper); base/ has the enemy and boss bases, homing targets, the boss arena, shots, explosions and freed animals
   systems/        Stage root script, GameState, SaveGame and GameSettings (autoloads), remappable controls, world map data
   audio/          Sfx and Music (autoloads) and the SoundBank resource
+  art/            Toon shaders (stripes, height bands, water, sky), the art import script, model skins, the ArtBank, and storms
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8, the list of worlds), UI (title, menus, world map, HUD, translations) and audio (music, sounds, the sound bank)
+content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8 with their art, the list of worlds), objects (models for the engine's objects, the art bank), materials, UI (title with its beach, menus, world map, HUD, translations) and audio (music, sounds, the sound bank)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
-tools/blender/    Blender scripts, such as the project's glTF export
+tools/blender/    Blender scripts: the glTF export, and the kits art is built with (art_kit, stage_kit)
+tools/godot/      Godot scripts that write a stage's greybox or a scene's layout as JSON for the Blender scripts
 tools/audio/      The music and sound effects, written as notes and recipes, and the synth that renders them
 docs/             Design decisions and the AI session prompt
 ```

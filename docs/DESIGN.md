@@ -261,13 +261,13 @@ All three modes are needed because stages are hybrid:
 
 **Engine implications:** surface friction has to be a per-surface property (Glacier Peak). Moving water and liquid volumes need to push the player and rise and fall over time (Emerald Shore, Toxic Citadel). Bumpers and launchers are shared gimmicks (Starlight Strip, Cloudtop Citadel). Minecarts are rideable path followers (Magma Mine).
 
-**Greybox first:** every act starts as blockout geometry plus gimmicks, gets playtested, then gets an art pass in Blender. Collision uses simplified meshes (`-col` suffix on import), never the render mesh.
+**Greybox first:** every act starts as blockout geometry plus gimmicks, gets playtested, then gets an art pass in Blender. The greybox stays in the act, hidden, as its collision, and the art never collides (§8.3).
 
-**Level building** (decided 2026-10-30): **Godot greybox, then Blender.** Acts are blocked out in the Godot editor with CSG shapes (`use_collision` on) and the generated pieces (loops, ring rows), playtested there, and remodelled in Blender for the art pass.
+**Level building** (decided 2026-10-30): **Godot greybox, then Blender.** Acts are blocked out in the Godot editor with CSG shapes (`use_collision` on) and the generated pieces (loops, ring rows), playtested there, and dressed in Blender for the art pass by a script that reads the greybox (§8.3).
 
 **Loops:** `engine/gimmicks/loop_track.gd` generates a loop from its radius, width and exit offset, in the editor as well as in the game. The exit comes back down beside the entry, and low curbs along both edges keep the player on the track as it shifts sideways. Players ride the inside curb as it shifts, so a red ring at the top goes on that line, not the middle. The curbs rise from nothing over the first and last 30° of the loop, so their ends can't snag a player running in. The test room's loop has a 4 m radius, which a runner at top speed clears with about 5 m/s to spare at the top; anything slower doesn't make it.
 
-### 7.1 Emerald Shore Act 1: Sunny Beachfront (greybox, Milestone 6)
+### 7.1 Emerald Shore Act 1: Sunny Beachfront (Milestone 6, art in Milestone 10)
 
 `content/sonic/stages/emerald_shore/act_1.tscn`, about 1.2 km long: a speedy run takes about 80 s. Two legs with a right turn between them:
 
@@ -284,7 +284,7 @@ Falling into the sea (below y = −30) costs a life. The five red rings: the two
 
 **Badniks** (Milestone 8): a crab on the beach start, a gull where the beach drops to the tidal flats (clear of where players wait for a wave), a hovering gull below the jump to the high deck (a stepping stone for anyone who comes up short), a crab on the deck, a clam and a crab on the low road, a gull over the merge, fish leaping across the pier, and a crab on the rollers. The goal leads on to Act 8 until Acts 2 to 7 exist. Milestone 8 also closed the pier's last gap, below the end of the high plank: players coming down long from the plank or the red spring fell into it with no warning.
 
-### 7.2 Emerald Shore Act 8: Stormy Coastal Fortress (greybox, Milestone 8)
+### 7.2 Emerald Shore Act 8: Stormy Coastal Fortress (Milestone 8, art in Milestone 10)
 
 `content/sonic/stages/emerald_shore/act_8.tscn`, under a stormy sky (`stormy_environment.tres`): a short run along a walled causeway to the boss.
 
@@ -321,7 +321,38 @@ From Blender to the game:
 
 The model shows, in order of priority: death, hurt, the ball (jumping, rolling or spin dashing), spring (rising after a spring), fall (in the air otherwise), victory (stopped after the goal), skid (braking), push (pressing into a wall), and otherwise the run cycle (`PlayerMotion.pose()`).
 
-**The stand-in Sonic** (`content/sonic/characters/sonic/`) is built entirely by `build_sonic.py`: simple shapes, each bound rigidly to one bone, in 3,526 triangles with 16 bones and all 13 animations. It proves the pipeline before real art exists. A hand-made model replaces it by keeping the bone names, animation names and conventions above.
+**Sonic** (`content/sonic/characters/sonic/`) is built entirely by `build_sonic.py`. Since the art pass (§8.3) his fur is one smooth surface: simple shapes (head, muzzle, ears, quills, body, arms and legs, each with a colour and a bone) are fused by a voxel remesh and trimmed to the budget, each face takes the colour of the shape it lies on, and each vertex is skinned to the bones of the shapes near it, so the joints bend smoothly. The eyes, nose, gloves and shoes (red, with a white strap, a gold buckle and a white sole) are separate pieces, each moving with one bone. He has 22,024 triangles, 16 bones and all 13 animations. A hand-made model can replace him by keeping the bone names, animation names and conventions above.
+
+### 8.3 The art pass (Milestone 10)
+
+Decided 2026-11-01: the art pass covers the stages and scenery, the objects, the badniks and the boss, and a rebuilt Sonic, all **built by scripts in Blender**, so anyone can change and rebuild them. Emerald Shore's land is **banded sandstone**: green grass tops over warm sandstone cliffs in horizontal bands, white sand, palms and a turquoise sea, a look of its own rather than Green Hill's checkerboard. The collision stays exactly the greybox's, so the art changed nothing about how the acts play. The test room stays a greybox. The demo will have **all eight of Emerald Shore's acts** (decided 2026-11-01), so Acts 2 to 7 come next, dressed the same way.
+
+**Stages.** An act's greybox stays in the act, hidden, as its collision (a hidden CSG shape still collides). `tools/godot/export_greybox.gd` writes it as JSON next to the act's art (`act_<n>.greybox.json`): every piece's profile and placement, the loops, the camera volumes, invisible walls, signs, gimmicks and enemies. The act's build script (`build_act_<n>.py`) dresses each piece by name with the world's kit (`shore_kit.py`, `fortress_kit.py`, using `tools/blender/stage_kit.py`) and exports `act_<n>_art.glb`, which the act shows as its `Art`. The rules that keep the art honest:
+
+- Only the tops of greybox pieces look walkable. Each top is copied exactly; cliffs drop from its edges into the sea, under a lip of grass, and where pieces meet, their cliffs give way to each other.
+- Anything on a walkable top is something to run through: flowers, grass, shells, starfish. Palms stand in the shallows at the foot of the cliffs, sea stacks and islands keep well clear, and nothing stands between a side view's camera and its path.
+- Bridges, decks and piers keep the greybox's shape, on posts only where nothing walkable is below them.
+- Hints are signs: the art puts a board behind each fixed `Label3D`, on a post planted in the nearest edge, or as a banner across the track. An invisible wall gets a fence.
+- A piece the build script doesn't name stops the build, and a unit test fails when an act's greybox has changed since its art was built.
+
+Act 1 is a sandstone coast: striped grass, sand, rippled wet sand on the tidal flats, a wooden pier and a high deck, palms, sea stacks, islands and a lighthouse past the goal. Act 8 is Eggman's fortress: tiled stone causeways and walls in block courses with lamps, a steel bridge on pylons with hazard stripes, the shore's sand and cliffs around the arena, a fence along its sea wall, three steel towers out at sea with lit windows and red beacons, rain and lightning. The greybox's floating labels became signs: "Wait for a wave, then ride it up!", the fork's banner, the turn arrow and "Homing attack across!". The act-name labels (the title card shows the name) and "2.5D pier" (a note for developers) are gone.
+
+**Looks.** The big surfaces use shaders in `engine/art/`, tuned in materials next to the art:
+
+| Shader | For |
+|---|---|
+| `stripes.gdshader` | Stripes along the way the player runs: mown grass, planks, ripples in wet sand, a loop's tiles (loops now have UVs in metres) |
+| `height_bands.gdshader` | Colour by height, so sandstone bands and block courses line up across every cliff |
+| `toon_water.gdshader` | Light over the shallows and dark in the deep (from the depth below), foam wherever the water meets something, drifting ripples |
+| `toon_sky.gdshader` | A gradient, the sun and flat-shaded clouds, with a flash for lightning |
+
+Everything else is painted: its colour is in its vertex colours, on one shared material (`painted`, or `painted_two_sided` for leaves), so a chunk of the stage draws in a handful of calls. `engine/art/art_import.gd`, a `.glb`'s import script, swaps its materials for the library's by name (`materials/` next to it, then `content/sonic/materials/`, set by `game/art/material_library`) and gives the rest the toon look. `engine/art/storm.gd` adds rain around the camera and lightning. The sun is warm and the tonemapping linear, so the colours stay bright.
+
+**Objects, badniks and the boss.** The engine's objects keep their placeholder shapes, and a model dresses them at start-up (`engine/art/model_skin.gd`): each part of the model is named after the node it dresses (`Head__Lamp` dresses `Head/Lamp`), so the object's scripts, animations and collision are untouched. A part with no node of its name is added, an empty hides a placeholder, and scripts that colour a part (a spring's pad, a monitor's screen, a checkpoint's lamp, the boss's shell) colour the model's. `tools/godot/export_parts.gd` writes a scene's layout for the Blender scripts. The engine finds its objects' models, and the materials for meshes it builds (waves, spike plates), in an `ArtBank` named by the project setting `game/art/art_bank` (`content/sonic/objects/art_bank.tres`); a badnik or boss names its own `skin`. The models: springs with real coils, dash panels with chevrons, item monitors with an icon for each item (the monitor shows the one for what's inside), a striped checkpoint post, the goal's chequered banner and star sign, the extra life, spike points, the freed bird, the four badniks (about 1,000 to 3,000 triangles each, from tens of thousands as placeholders) and the Egg Tidecrab with Eggman's ship (8,404 and 3,334 triangles).
+
+**Title screen.** A live beach behind the menu: Sonic on a rock in the shallows, palms, sea stacks and the lighthouse, with the camera drifting slowly (`content/sonic/ui/title/title_backdrop.tscn`).
+
+**Measured** (1280×720, triangles drawn in the frame, shadows not counted): Act 1's art is 118,606 triangles in 55 chunks and Act 8's 42,678. From Act 1's start, which sees the whole first straight, the frame draws about 106,000 triangles; every other spot checked in either act draws 17,000 to 80,000, within the budget of 100,000 per visible region (§8.1). Rings stop being drawn beyond 120 m, where they're a few pixels across.
 
 ## 9. Enemies and bosses
 
@@ -456,6 +487,7 @@ Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
+| **Acts 2 to 7** (next) | Each act's route and gimmicks, and its music: Lush Palm Grove, Cascading Waterfall Basin, Shallow Reef Lagoon, Underground Grotto, Tidal Cavern and Sunset Ridge Cliffs. Whether the water acts get swimming. |
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; GameJolt |
 
@@ -472,6 +504,6 @@ Each one is grouped by the milestone where it starts to block work.
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
-| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11); the art pass and the demo release next |
+| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11) and the art pass done (2026-11-01, §8.3). The demo will have all eight of Emerald Shore's acts, so Acts 2 to 7 come next, then the demo release |
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

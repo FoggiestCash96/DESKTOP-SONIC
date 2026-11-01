@@ -1,0 +1,14 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://engine/art/stripes.gdshader" id="1_shader"]
+
+[resource]
+shader = ExtResource("1_shader")
+shader_parameter/colour_1 = Color(0.96, 0.8, 0.53, 1)
+shader_parameter/colour_2 = Color(0.9, 0.69, 0.44, 1)
+shader_parameter/line_colour = Color(0.62, 0.38, 0.22, 1)
+shader_parameter/stripe_length = 1.0
+shader_parameter/line_width = 0.07
+shader_parameter/speckle = 0.0
+shader_parameter/speckle_size = 1.5
+shader_parameter/roughness = 0.85

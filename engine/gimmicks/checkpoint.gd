@@ -18,6 +18,7 @@ const LIT := Color(1.0, 0.25, 0.2)
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"checkpoint"))
 	var gate := BoxShape3D.new()
 	gate.size = Vector3(gate_width, GATE_HEIGHT, GATE_DEPTH)
 	_gate.shape = gate

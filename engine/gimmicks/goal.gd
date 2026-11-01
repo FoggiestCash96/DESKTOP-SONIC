@@ -7,6 +7,7 @@ extends Area3D
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"goal"))
 	body_entered.connect(_on_body_entered)
 
 

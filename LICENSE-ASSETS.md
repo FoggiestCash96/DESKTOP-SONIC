@@ -8,7 +8,7 @@ Everything that is code or engine configuration is under the [MIT License](LICEN
 
 - GDScript (`*.gd`) and shaders (`*.gdshader`)
 - Everything in `engine/`, `tests/` and `.github/`
-- The tools in `tools/`, except the compositions in `tools/audio/music/`
+- The tools in `tools/`, except the compositions in `tools/audio/music/`: among them the kits art is built with (`tools/blender/`) and the exporters in `tools/godot/`
 - Project and export configuration (`project.godot`, `export_presets.cfg`)
 - Scene and resource files (`*.tscn`, `*.tres`) that only wire up code, such as the player, camera, gimmicks, debug tools and greybox materials
 
@@ -18,7 +18,7 @@ Original creative work made for this project is under
 [Creative Commons Attribution-ShareAlike 4.0 International](https://creativecommons.org/licenses/by-sa/4.0/)
 ([legal code](https://creativecommons.org/licenses/by-sa/4.0/legalcode)):
 
-- 3D models, rigs and animations (`*.blend`, `*.glb`)
+- 3D models, rigs and animations (`*.blend`, `*.glb`), and the scripts in `content/` that build them (`build_*.py`, the worlds' kits such as `shore_kit.py`): they are the art's source
 - Textures, sprites, UI art and icons
 - Music and sound effects, and the compositions in `tools/audio/music/` they're rendered from
 - Stage and level layouts in `content/` and `stages/`

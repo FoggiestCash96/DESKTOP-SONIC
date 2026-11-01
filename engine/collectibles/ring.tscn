@@ -19,4 +19,6 @@ shape = SubResource("SphereShape3D_7uk3r")
 material_override = ExtResource("2_nlga6")
 cast_shadow = 0
 custom_aabb = AABB(-0.3, -0.3, -0.3, 0.6, 0.6, 0.6)
+visibility_range_end = 120.0
+visibility_range_end_margin = 10.0
 mesh = ExtResource("3_c78nd")

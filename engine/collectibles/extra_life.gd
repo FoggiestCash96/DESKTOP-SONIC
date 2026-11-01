@@ -8,6 +8,7 @@ func _ready() -> void:
 	if GameState.is_found(GameState.id_of(self)):
 		queue_free()
 		return
+	ModelSkin.apply(self, ArtBank.model(&"extra_life"))
 	body_entered.connect(_on_body_entered)
 
 
