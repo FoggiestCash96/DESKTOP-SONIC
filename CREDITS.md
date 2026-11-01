@@ -11,6 +11,8 @@
 | [Godot Engine](https://godotengine.org/) 4.7 | Godot Engine contributors (Juan Linietsky, Ariel Manzur and contributors) | MIT |
 | [Jolt Physics](https://github.com/jrouwe/JoltPhysics), bundled with Godot | Jorrit Rouwe and contributors | MIT |
 | [Blender](https://www.blender.org/) (asset creation only, not shipped) | Blender Foundation | GPL (assets made with it are ours) |
+| [Python](https://www.python.org/), [NumPy](https://numpy.org/) and [SciPy](https://scipy.org/) (making the music and sound only, not shipped) | The Python Software Foundation, and the NumPy and SciPy developers | PSF, BSD |
+| [FFmpeg](https://ffmpeg.org/) with [libvorbis](https://xiph.org/vorbis/) (encoding the music only, not shipped) | The FFmpeg developers, Xiph.Org | LGPL/GPL, BSD |
 
 ## Research and references
 

@@ -23,6 +23,7 @@ const BOOST_BURST_COLOR := Color(0.6, 0.85, 1.0, 0.8)
 const WORLD_MASK := 1  ## Physics layer of level geometry, which blocks the homing attack's line of sight.
 const SAFE_SPOT_INTERVAL := 0.5  ## With the assist on, where the player stands is remembered this often (s)...
 const SAFE_GROUND := 0.8  ## ...on ground at least this level (the up component of its normal).
+const SKID_SOUND_SPEED := 4.0  ## Braking from at least this fast (m/s) screeches.
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -84,6 +85,7 @@ var _air_boost_ready := true  # The air boost hasn't been used since the player 
 var _quickstep_timer := 0.0  # Seconds of quickstep left.
 var _quickstep_side := 0.0  # Which way the quickstep goes: -1 left, 1 right.
 var _safe_timer := 0.0
+var _was_braking := false
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -145,6 +147,9 @@ func _ready() -> void:
 func _exit_tree() -> void:
 	for label in OVERLAY_LABELS:
 		DebugOverlay.unwatch(label)
+	# The stage is going (reloading or changing): power-up music and the boost's sound go with it.
+	Sfx.set_looping(&"boost_loop", false)
+	_end_power_ups()
 
 
 func _physics_process(delta: float) -> void:
@@ -161,6 +166,10 @@ func _physics_process(delta: float) -> void:
 	if boosting and state == ground_state and ground_speed < physics.boost_speed * 0.5:
 		boosting = false
 	_hold_to_lane(delta)
+	if _braking and not _was_braking and ground_speed >= SKID_SOUND_SPEED:
+		Sfx.play(&"skid")
+	_was_braking = _braking
+	Sfx.set_looping(&"boost_loop", is_boosting() and state != death_state)
 	_count_down(delta)
 	if _magnet_timer > 0.0:
 		_pull_rings()
@@ -409,6 +418,7 @@ func jump() -> void:
 	air_state.rising = true
 	_coyote_timer = 0.0
 	_jump_buffer_timer = 0.0
+	Sfx.play(&"jump")
 	if grounded:
 		change_state(air_state)
 
@@ -493,6 +503,7 @@ func try_air_boost() -> bool:
 	velocity = air_aim() * physics.boost_speed
 	boosting = boost_held
 	set_ball(false)
+	Sfx.play(&"air_boost")
 	return true
 
 
@@ -508,12 +519,14 @@ func try_air_action() -> bool:
 	if target:
 		homing_state.target = target
 		change_state(homing_state)
+		Sfx.play(&"homing")
 		return true
 	var horizontal := PlayerMotion.air_dash(Vector3(velocity.x, 0.0, velocity.z), air_aim(), physics.air_dash_speed)
 	velocity = horizontal + Vector3.UP * maxf(velocity.y, 0.0)
 	air_state.jumped = true
 	air_state.rising = false
 	set_ball(true)
+	Sfx.play(&"air_dash")
 	return true
 
 
@@ -599,6 +612,7 @@ func _update_boost(delta: float) -> void:
 
 ## A flash of air as the boost starts.
 func _boost_burst() -> void:
+	Sfx.play(&"boost")
 	var burst := (load(BOOST_BURST_SCENE) as PackedScene).instantiate() as Node3D
 	burst.set("size", 3.0)
 	get_parent().add_child(burst)
@@ -618,6 +632,7 @@ func _start_quickstep() -> void:
 		return
 	_quickstep_side = float(quickstep_pressed)
 	_quickstep_timer = physics.quickstep_time
+	Sfx.play(&"quickstep")
 
 
 ## With the assist on: every SAFE_SPOT_INTERVAL on solid, fairly level ground, remembers where the
@@ -677,6 +692,7 @@ func set_input_enabled(on: bool) -> void:
 
 func collect_rings(amount: int) -> void:
 	rings += amount
+	Sfx.play(&"ring")
 	add_boost(amount * physics.boost_per_ring)
 
 
@@ -688,6 +704,7 @@ func add_boost(amount: float) -> void:
 ## Fills the boost gauge, as a boost monitor does.
 func fill_boost() -> void:
 	boost_gauge = 100.0
+	Sfx.play(&"boost_fill")
 
 
 ## Takes a hit from something at `from`. A shield or the rings soak it up (the rings scatter), with
@@ -698,8 +715,10 @@ func hurt(from: Vector3) -> bool:
 		return false
 	if shield:
 		shield = false
+		Sfx.play(&"shield_loss")
 	elif rings > 0:
 		_scatter_rings()
+		Sfx.play(&"ring_loss")
 	else:
 		die()
 		return true
@@ -716,6 +735,7 @@ func die(hop := true) -> void:
 		return
 	death_state.hop = hop
 	change_state(death_state)
+	Sfx.play(&"death")
 	_invulnerable_timer = 0.0
 	_end_power_ups()
 	if died.get_connections().is_empty():
@@ -725,20 +745,25 @@ func die(hop := true) -> void:
 
 func give_shield() -> void:
 	shield = true
+	Sfx.play(&"shield")
 
 
-## Speed shoes double acceleration, friction and top speed for a while.
+## Speed shoes double acceleration, friction and top speed for a while, and speed up the music.
 func give_speed_shoes() -> void:
 	_shoes_timer = _base_physics.speed_shoes_time
 	physics = PlayerMotion.with_speed_shoes(_base_physics)
+	Music.set_fast(true)
 
 
+## Invincibility, with its own music while it lasts.
 func give_invincibility() -> void:
 	_invincible_timer = _base_physics.invincibility_time
+	Music.start_override(&"invincible")
 
 
 func give_magnet() -> void:
 	_magnet_timer = _base_physics.magnet_time
+	Sfx.play(&"magnet")
 
 
 func is_invincible() -> bool:
@@ -910,15 +935,23 @@ func _count_down(delta: float) -> void:
 	_coyote_timer = maxf(_coyote_timer - delta, 0.0)
 	_jump_buffer_timer = maxf(_jump_buffer_timer - delta, 0.0)
 	_invulnerable_timer = maxf(_invulnerable_timer - delta, 0.0)
-	_invincible_timer = maxf(_invincible_timer - delta, 0.0)
 	_magnet_timer = maxf(_magnet_timer - delta, 0.0)
+	if _invincible_timer > 0.0:
+		_invincible_timer = maxf(_invincible_timer - delta, 0.0)
+		if _invincible_timer == 0.0:
+			Music.end_override(&"invincible")
 	if _shoes_timer > 0.0:
 		_shoes_timer = maxf(_shoes_timer - delta, 0.0)
 		if _shoes_timer == 0.0:
 			physics = _base_physics
+			Music.set_fast(false)
 
 
 func _end_power_ups() -> void:
+	if _shoes_timer > 0.0:
+		Music.set_fast(false)
+	if _invincible_timer > 0.0:
+		Music.end_override(&"invincible")
 	shield = false
 	_shoes_timer = 0.0
 	_invincible_timer = 0.0

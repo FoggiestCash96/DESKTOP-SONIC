@@ -14,6 +14,7 @@ func enter(_previous: PlayerState) -> void:
 	charge = 0.0
 	player.ground_speed = 0.0
 	player.set_ball(true)
+	Sfx.play(&"spin_charge")
 
 
 func tick(delta: float) -> void:
@@ -22,6 +23,8 @@ func tick(delta: float) -> void:
 	if player.jump_pressed:
 		player.consume_jump()
 		charge = minf(charge + physics.spin_dash_charge_per_press, physics.spin_dash_max_charge)
+		# Each rev sounds higher, the more charge there is.
+		Sfx.play(&"spin_charge", 1.0 + 0.5 * charge / physics.spin_dash_max_charge)
 	player.aim()
 	if player.crouch_held:
 		player.ground_speed = 0.0

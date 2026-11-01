@@ -122,6 +122,7 @@ func _play_intro() -> void:
 	if ship:
 		ship.position = ship_start
 		ship.visible = true
+		Sfx.play_on(&"ship", ship)
 		_watch_ship = true
 		_camera_focus = ship.global_position
 		var arrive := create_tween()
@@ -167,6 +168,7 @@ func _fight(delta: float) -> void:
 			_sweep_claw.rotation = Vector3(0.3 * drawn, SWEEP_OUT * _sweep_sign * drawn, 0.0)
 			if act_time >= sweep_windups[phase]:
 				_sweep_hurt.monitoring = true
+				Sfx.play_at(&"boss_sweep", _sweep_claw.global_position)
 				_set_act(Act.SWEEP)
 		Act.SWEEP:
 			var swept := clampf(act_time / SWEEP_TIME, 0.0, 1.0)
@@ -192,6 +194,7 @@ func _fight(delta: float) -> void:
 			if down >= 1.0:
 				_claw_hurt_left.monitoring = false
 				_claw_hurt_right.monitoring = false
+				Sfx.play_at(&"boss_slam", global_position)
 				_waves_left = waves_per_slam[phase]
 				_wave_timer = 0.0
 				_open_up()
@@ -209,6 +212,7 @@ func _fight(delta: float) -> void:
 			var start := _home.x - move_range if _charge_to > _home.x else _home.x + move_range
 			_scuttle(start, move_speeds[phase] * 1.5, delta)
 			if absf(position.x - start) < 0.1 and act_time >= 0.8:
+				Sfx.play_at(&"boss_charge", global_position)
 				_set_act(Act.CHARGE)
 		Act.CHARGE:
 			_scuttle(_charge_to, charge_speed, delta)
@@ -307,6 +311,7 @@ func _on_hit() -> void:
 func _on_phase_changed(new_phase: int) -> void:
 	_shell_material.albedo_color = PHASE_TINTS[mini(new_phase, PHASE_TINTS.size() - 1)]
 	_waves_left = 0
+	Sfx.play_at(&"boss_roar", global_position)
 	_close_up(Act.ROAR)
 
 
@@ -329,6 +334,7 @@ func _explode() -> void:
 	explosion.size = randf_range(1.8, 3.2)
 	get_parent().add_child(explosion)
 	explosion.global_position = _body.global_position + Vector3(randf_range(-2.6, 2.6), randf_range(-0.8, 1.4), randf_range(-2.0, 2.0))
+	Sfx.play_at(&"explosion", explosion.global_position)
 
 
 # --- Helpers ------------------------------------------------------------------------------

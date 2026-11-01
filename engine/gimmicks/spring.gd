@@ -51,6 +51,7 @@ func _launch(player: Player) -> void:
 		player.push_along_ground(direction, speed, false, control_lock)
 	else:
 		player.launch(GimmickMath.spring_velocity(player.velocity, direction, speed, keep_momentum), control_lock)
+	Sfx.play(&"spring")
 	var squash := create_tween()
 	squash.tween_property(_pad, "scale:y", 0.4, 0.05)
 	squash.tween_property(_pad, "scale:y", 1.0, 0.3).set_trans(Tween.TRANS_ELASTIC).set_ease(Tween.EASE_OUT)

@@ -10,6 +10,7 @@ extends Control
 ## Scene loaded with the boost button: the act with the first boss.
 @export_file("*.tscn") var boss_scene: String = "res://content/sonic/stages/emerald_shore/act_8.tscn"
 @export var options_scene: PackedScene = preload("res://content/sonic/ui/menus/options_menu.tscn")
+@export var music: AudioStream = preload("res://content/sonic/audio/music/title.ogg")  ## Carries on from one menu to the next.
 
 var _options: Control
 
@@ -21,6 +22,7 @@ var _options: Control
 func _ready() -> void:
 	if SaveGame.has_slot():
 		SaveGame.close()
+	Music.play(music)
 	var version: String = ProjectSettings.get_setting("application/config/version", "0.0.0")
 	_version_label.text = "v%s  ·  pre-alpha" % version
 	var blink := create_tween().set_loops()
@@ -44,6 +46,7 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if event.is_action_pressed("ui_accept") or event.is_action_pressed("jump") or event.is_action_pressed("pause"):
 		get_viewport().set_input_as_handled()
+		Sfx.play_ui(&"ui_start")
 		_show_menu(true)
 	elif event.is_action_pressed("special"):
 		get_viewport().set_input_as_handled()

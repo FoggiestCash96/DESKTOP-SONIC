@@ -48,6 +48,7 @@ func _physics_process(_delta: float) -> void:
 
 func _break_open(player: Player) -> void:
 	set_physics_process(false)
+	Sfx.play(&"monitor")
 	_shape.disabled = true
 	_box.visible = false
 	_homing_target.enabled = false

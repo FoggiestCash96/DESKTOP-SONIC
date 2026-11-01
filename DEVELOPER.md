@@ -9,6 +9,7 @@ How to set up, run, test and release Sonic Velocity Run. Design decisions are in
 | [Godot](https://github.com/godotengine/godot/releases/tag/4.7.2-stable) | **4.7.2 stable, standard build** (not .NET) | The CI uses the same version (`GODOT_VERSION` in `.github/workflows/ci.yml`). |
 | Git and [Git LFS](https://git-lfs.com/) | Any recent version | Run `git lfs install` once, before cloning. |
 | [Blender](https://www.blender.org/) | 5.0 or newer | Only needed for 3D assets, such as rebuilding or replacing the character model. |
+| Python with numpy and SciPy, and [FFmpeg](https://ffmpeg.org/) | Python 3.10 or newer | Only needed to re-render the music and sound effects ([tools/audio/README.md](tools/audio/README.md)). |
 
 ## Get the code
 
@@ -134,6 +135,21 @@ A boss is a script extending `Boss` (`engine/enemies/base/boss.gd`) with a `Weak
 
 The menus live in `content/sonic/ui/`: the title screen, `menus/` (save slots, options, pause), `map/` (the world map) and `hud/`. They share `menu_theme.tres` for their look and `menus/menu_kit.gd` for building buttons and labels. Every piece of text shown to players is a key such as `MENU_PLAY`, translated through `ui/translations/strings.csv`: add a key there for new text, and a column (say `fr`) for a new language. Godot turns the CSV into `.translation` files when it imports, and `project.godot` lists them. Commit those too (`.gitignore` lets them through): the game loads them as it starts, before an import could make them, so a checkout without them logs errors.
 
+### Music and sound
+
+The music and sound effects are made from text by `tools/audio/`: the tracks are notes in `tools/audio/music/`, the sounds recipes in `tools/audio/sounds.py`. [tools/audio/README.md](tools/audio/README.md) explains the notation and how to swap in your own recordings. After re-rendering, re-import (open the editor, or `godot --headless --path . --import`).
+
+In code, play a sound by name and the sound bank (`content/sonic/audio/sound_bank.tres`) finds its file:
+
+```gdscript
+Sfx.play(&"spring")                     # heard the same everywhere, as the player's own sounds are
+Sfx.play_at(&"enemy_pop", position)     # from a point in the world
+Sfx.play_on(&"wave", water)             # following a node as it moves
+Music.jingle(&"extra_life")             # cuts in, then the music carries on
+```
+
+To add a sound, render it (add a recipe to `sounds.py`), then add its name to the bank in the Inspector. A stage's music is the `Music` and `Fast Music` of its root node (`Fast Music` plays during speed shoes); a boss fight's is the `Music` of its `BossArena`.
+
 ### Characters: from Blender to Godot
 
 The stand-in Sonic is built entirely by a script, so rebuilding it is one command (from the repository root):
@@ -193,12 +209,14 @@ engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a tes
   collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
   enemies/        Enemy behaviours (walker, flyer, turret, leaper); base/ has the enemy and boss bases, homing targets, the boss arena, shots, explosions and freed animals
   systems/        Stage root script, GameState, SaveGame and GameSettings (autoloads), remappable controls, world map data
+  audio/          Sfx and Music (autoloads) and the SoundBank resource
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8, the list of worlds) and UI (title, menus, world map, HUD, translations)
+content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8, the list of worlds), UI (title, menus, world map, HUD, translations) and audio (music, sounds, the sound bank)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 tools/blender/    Blender scripts, such as the project's glTF export
+tools/audio/      The music and sound effects, written as notes and recipes, and the synth that renders them
 docs/             Design decisions and the AI session prompt
 ```
 

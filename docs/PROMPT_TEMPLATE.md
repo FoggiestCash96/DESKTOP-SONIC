@@ -65,8 +65,8 @@ You are the lead gameplay engineer and technical designer on an **open-source, n
 | Level building | **Godot CSG/greybox → Blender** (decided 2026-10-30) | Block out in the Godot editor, remodel in Blender for the art pass |
 | Splines (loops, rails, 2D paths) | Godot `Path3D` / `Curve3D` | |
 | 2D art and textures | Krita / GIMP / Aseprite (`[[FILL]]`) | |
-| Music | `[[CHOOSE: Furnace Tracker (Genesis FM style) | LMMS | Reaper/DAW | Commissioned]]` | |
-| SFX | Audacity, sfxr/jsfxr, Foley | |
+| Music | Furnace Tracker (Genesis FM style), LMMS, a DAW, or commissioned | **Composed in code** (decided 2026-10-31): notes in `tools/audio/music/`, rendered with a Genesis-style FM synth. Changeable: edit and re-render, or drop in an `.ogg` from any tool |
+| SFX | Audacity, sfxr/jsfxr, Foley | **Synthesised in code** (decided 2026-10-31): `tools/audio/sounds.py` |
 | Version control | **Git + GitHub**, **Git LFS** for `.blend .glb .png .wav .ogg` | |
 | CI and releases | **GitHub Actions** using the official Godot export templates; releases on **GitHub Releases + itch.io** (`[[+ GameJolt?]]`) | |
 
@@ -246,9 +246,9 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 
 ## §12 Audio
 
-- Music: `[[CHOOSE: Original compositions (DEFAULT, for licensing) | Remixes of SEGA tracks (higher legal risk)]]`
+- Music: **Original compositions** (decided 2026-10-31), composed in code with `tools/audio/` and changeable later; the full set for the demo: title and menus, Emerald Shore Acts 1 and 8, the boss, invincibility, and jingles for an extra life, the act clear and game over (DESIGN.md §11).
 - Format: `.ogg` music with loop points, `.wav` SFX.
-- Dynamic layers: speed-shoes and invincibility music overrides, an underwater "drowning" countdown.
+- Dynamic layers: speed-shoes and invincibility music overrides (built 2026-10-31: speed shoes switch to a faster version of the track), an underwater "drowning" countdown (with swimming).
 - Audio buses: Master, Music, SFX, Voice, each with a settings slider (built in Milestone 9).
 
 ---
@@ -325,7 +325,7 @@ res://
 7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
-10. Art and audio pass, then a public demo release.
+10. Art and audio pass, then a public demo release. **Audio done 2026-10-31:** original music for the menus, both acts, the boss and invincibility, three jingles, and about 40 sound effects, all made in code (`tools/audio/`). Next: the art pass (script-built in Blender, decided 2026-10-31), then the demo release.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 

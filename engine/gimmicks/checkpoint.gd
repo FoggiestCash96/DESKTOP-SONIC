@@ -30,6 +30,7 @@ func _on_body_entered(body: Node3D) -> void:
 	var spawn := global_transform.orthonormalized().translated_local(Vector3.FORWARD * SPAWN_AHEAD)
 	if body is Player and GameState.touch_checkpoint(GameState.id_of(self), spawn):
 		_light(true)
+		Sfx.play(&"checkpoint")
 		var spin := create_tween()
 		spin.tween_property(_head, "rotation:y", _head.rotation.y + TAU * 3.0, 0.9).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
 

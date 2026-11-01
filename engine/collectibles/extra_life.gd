@@ -14,4 +14,5 @@ func _ready() -> void:
 func _on_body_entered(body: Node3D) -> void:
 	if body is Player and GameState.find(GameState.id_of(self), false):
 		GameState.add_life()
+		Music.jingle(&"extra_life")
 		queue_free()

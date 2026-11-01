@@ -6,6 +6,8 @@ extends Area3D
 @export var speed: float = 16.0 * PlayerPhysics.SPEED  ## Speed it sends the player off at (m/s). 30 is the classic speed booster (16 px/frame).
 @export var control_lock: float = 0.25  ## Seconds the stick is ignored afterwards, so the player leaves in a straight line.
 
+var _sounded := false  # The panel's sound has played for the touch going on now.
+
 
 func _ready() -> void:
 	# Push before the player moves this tick.
@@ -21,6 +23,9 @@ func _physics_process(_delta: float) -> void:
 		var player := body as Player
 		if player:
 			touching = true
-			player.push_along_ground(-global_basis.z, speed, true, control_lock)
+			if player.push_along_ground(-global_basis.z, speed, true, control_lock) and not _sounded:
+				_sounded = true
+				Sfx.play(&"dash_panel")
 	if not touching:
+		_sounded = false
 		set_physics_process(false)

@@ -51,6 +51,7 @@ func _ready() -> void:
 
 ## Sends the wave on its way from this node.
 func roll() -> void:
+	Sfx.play_on(&"wave", self)
 	_travelled = 0.0
 	rolling = true
 	visible = true

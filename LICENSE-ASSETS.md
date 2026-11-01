@@ -8,6 +8,7 @@ Everything that is code or engine configuration is under the [MIT License](LICEN
 
 - GDScript (`*.gd`) and shaders (`*.gdshader`)
 - Everything in `engine/`, `tests/` and `.github/`
+- The tools in `tools/`, except the compositions in `tools/audio/music/`
 - Project and export configuration (`project.godot`, `export_presets.cfg`)
 - Scene and resource files (`*.tscn`, `*.tres`) that only wire up code, such as the player, camera, gimmicks, debug tools and greybox materials
 
@@ -19,7 +20,7 @@ Original creative work made for this project is under
 
 - 3D models, rigs and animations (`*.blend`, `*.glb`)
 - Textures, sprites, UI art and icons
-- Music and sound effects
+- Music and sound effects, and the compositions in `tools/audio/music/` they're rendered from
 - Stage and level layouts in `content/` and `stages/`
 
 **Attribution:** credit "The Sonic Velocity Run contributors" and link to this repository. Where `CREDITS.md` names an individual author for an asset, credit that person too.

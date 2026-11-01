@@ -2,6 +2,8 @@
 
 [ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_aj05m"]
 [ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/stormy_environment.tres" id="2_5p8sn"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_8.ogg" id="2_x67ys"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_8_fast.ogg" id="3_1fy4l"]
 [ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="3_tsvun"]
 [ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="4_x67ys"]
 [ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="5_1fy4l"]
@@ -17,6 +19,7 @@
 [ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="15_gmq5s"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="16_kmd4n"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="17_aacpm"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/boss.ogg" id="17_fds33"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="18_h505v"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="19_gijyk"]
 [ext_resource type="PackedScene" path="res://content/sonic/bosses/emerald_shore/crab_mech.tscn" id="20_pmv7g"]
@@ -58,6 +61,8 @@ size = Vector3(12, 8, 0.4)
 script = ExtResource("1_aj05m")
 title = "Emerald Shore Act 8: Stormy Coastal Fortress"
 hub_scene = "res://content/sonic/ui/map/world_map.tscn"
+music = ExtResource("2_x67ys")
+fast_music = ExtResource("3_1fy4l")
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1216114723]
 environment = ExtResource("2_5p8sn")
@@ -292,6 +297,7 @@ collision_mask = 2
 monitorable = false
 script = ExtResource("14_nr5og")
 boss = NodePath("../../Boss/CrabMech")
+music = ExtResource("17_fds33")
 
 [node name="Shape" type="CollisionShape3D" parent="Gimmicks/BossArena" unique_id=291054436]
 shape = SubResource("BoxShape3D_uhysw")
