@@ -62,7 +62,7 @@ You are the lead gameplay engineer and technical designer on an **open-source, n
 | 3D physics backend | **Jolt** (built into Godot 4.4+; set it in Project Settings → Physics → 3D) | |
 | Player collision | **Custom kinematic controller** (shape/ray casts on a `CharacterBody3D`). **Never a `RigidBody`.** | |
 | 3D modelling and animation | **Blender**; export **glTF 2.0 (`.glb`)**, commit both the `.blend` source and the `.glb` | |
-| Level building | **Godot CSG/greybox → Blender** (decided 2026-10-30) | Block out in the Godot editor, remodel in Blender for the art pass |
+| Level building | **Godot CSG/greybox → Blender** (decided 2026-10-30) | Block out in the Godot editor; the art is built by a Blender script from the greybox, which stays as the collision (DESIGN.md §8.3) |
 | Splines (loops, rails, 2D paths) | Godot `Path3D` / `Curve3D` | |
 | 2D art and textures | Krita / GIMP / Aseprite (`[[FILL]]`) | |
 | Music | Furnace Tracker (Genesis FM style), LMMS, a DAW, or commissioned | **Composed in code** (decided 2026-10-31): notes in `tools/audio/music/`, rendered with a Genesis-style FM synth. Changeable: edit and re-render, or drop in an `.ogg` from any tool |
@@ -177,7 +177,7 @@ Character: [[FILL: Sonic]]
   Animation blend driven by: ground_speed (BlendSpace1D), on_ground, state
 ```
 
-Built in Milestone 7: `CharacterDef` is `engine/player/character_def.gd`, and Sonic's is `content/sonic/characters/sonic/sonic.tres`. A scripted stand-in model has the animations `idle`, `walk`, `jog`, `run`, `max_run`, `skid`, `ball` (jumping, rolling and the spin dash share it), `spring`, `fall`, `push`, `hurt`, `death` and `victory`. The pipeline is in DESIGN.md §8.2.
+Built in Milestone 7: `CharacterDef` is `engine/player/character_def.gd`, and Sonic's is `content/sonic/characters/sonic/sonic.tres`. Sonic's model is built by a script (rebuilt in the Milestone 10 art pass) and has the animations `idle`, `walk`, `jog`, `run`, `max_run`, `skid`, `ball` (jumping, rolling and the spin dash share it), `spring`, `fall`, `push`, `hurt`, `death` and `victory`. The pipeline is in DESIGN.md §8.2.
 
 Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuckles (`[[glide + climb, lower jmp 6.0]]`), Amy (`[[hammer]]`), original characters (`[[FILL]]`).
 
@@ -210,7 +210,7 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 - **Gimmick library (build as reusable scenes):** springs (fixed and diagonal), dash panels, loops, corkscrews, rails, ziplines, pulleys, bumpers, rotating platforms, crumbling floors, breakable walls (roll or spin to break), water and air bubbles, conveyor belts, cannons, `[[+ your own]]`.
 - **Route design:** every act has at least 1 route and at most 3 routes. High routes reward skill, low routes are safer.
 - **Greybox first:** each act is first built with blockout geometry plus gimmicks, playtested, then art-passed in Blender.
-- **Collision meshes:** use separate simplified collision (`-col` suffix on Blender import), never the render mesh.
+- **Collision:** the greybox stays in the act, hidden, as its collision; stage art never collides (DESIGN.md §8.3).
 
 ---
 
@@ -241,6 +241,7 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 - **Shaders:** toon outline **N**, speed lines **Y** (Sonic Colors-style streaks along the screen edges at high speed and when boosting), motion blur **Y** (full-screen radial blur at high speed and when boosting, with an off switch). Decided 2026-10-30.
 - **Blender export conventions:** +Y-up handled by the glTF exporter; scale 1 unit = 1 m; apply transforms; name actions to match animation names in §6.
 - **Low-end target:** **60 fps at 1080p on a GTX 1060-class GPU**, Forward+ (decided 2026-10-30).
+- **Art pass** (decided 2026-11-01, built in Milestone 10): everything is **script-built in Blender**: stages from their greybox, objects, badniks, the boss and Sonic. Emerald Shore is **banded sandstone** (green grass tops, sandstone cliffs in horizontal bands, white sand, palms, a turquoise sea). Big surfaces use the shaders in `engine/art/`; everything else is painted in vertex colours. See DESIGN.md §8.3.
 
 ---
 
@@ -325,7 +326,7 @@ res://
 7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
-10. Art and audio pass, then a public demo release. **Audio done 2026-10-31:** original music for the menus, both acts, the boss and invincibility, three jingles, and about 40 sound effects, all made in code (`tools/audio/`). Next: the art pass (script-built in Blender, decided 2026-10-31), then the demo release.
+10. Art and audio pass, then a public demo release. **Audio done 2026-10-31:** original music for the menus, both acts, the boss and invincibility, three jingles, and about 40 sound effects, all made in code (`tools/audio/`). **Art pass done 2026-11-01:** both acts, the objects, the badniks, the boss, Sonic and the title screen, all script-built in Blender. Next: Acts 2 to 7 (the demo will have all eight of Emerald Shore's acts), then the demo release.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 

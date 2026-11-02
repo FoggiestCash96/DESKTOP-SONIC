@@ -18,6 +18,7 @@ var _age := 0.0
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"animal"))
 	velocity = Vector3.UP * pop_speed
 	var angle := randf() * TAU
 	_direction = Vector3(sin(angle), 0.0, cos(angle))

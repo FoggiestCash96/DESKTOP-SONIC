@@ -1,0 +1,118 @@
+{
+	"scene": "res://engine/gimmicks/spikes.tscn",
+	"nodes": [
+		{
+			"path": "Shape",
+			"type": "CollisionShape3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.25,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Base",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.05,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "BoxMesh",
+				"size": [
+					2.0,
+					0.1,
+					2.0
+				],
+				"aabb": [
+					-1.0,
+					-0.05,
+					-1.0,
+					2.0,
+					0.1,
+					2.0
+				]
+			},
+			"colour": [
+				0.22,
+				0.22,
+				0.25
+			]
+		},
+		{
+			"path": "Points",
+			"type": "MultiMeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.5,
+				"top_radius": 0.0,
+				"bottom_radius": 0.2,
+				"aabb": [
+					-0.2,
+					-0.25,
+					-0.2,
+					0.4,
+					0.5,
+					0.4
+				]
+			}
+		}
+	]
+}

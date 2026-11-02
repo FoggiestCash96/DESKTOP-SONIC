@@ -26,6 +26,7 @@ const EXPLOSION_SCENE := "res://engine/enemies/base/explosion.tscn"
 @export var notice_time: float = 0.5  ## Seconds between noticing a player and attacking.
 @export var stun_time: float = 1.0  ## Seconds of pause after an attack.
 @export var animal_scene: PackedScene = preload("res://engine/enemies/base/animal.tscn")  ## Freed when the enemy is destroyed. Empty frees nothing.
+@export var skin: PackedScene  ## A model to dress the placeholder shapes in (see ModelSkin). Empty keeps them.
 
 var mode := Mode.PATROL
 var target: Player  ## The player being noticed or attacked.
@@ -40,6 +41,7 @@ var _animations: AnimationPlayer
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, skin)
 	add_to_group(GROUP)
 	home = global_position
 	var found := model.find_children("*", "AnimationPlayer", true, false)

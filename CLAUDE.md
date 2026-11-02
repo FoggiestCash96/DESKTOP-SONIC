@@ -36,8 +36,15 @@ godot --headless --path . --script res://tests/run_tests.gd
 # Re-render the music and sound effects (Python with numpy and SciPy, FFmpeg), then re-import
 python tools/audio/render.py
 
-# Rebuild the stand-in Sonic model (Blender 5.0+), then re-import
+# Rebuild the Sonic model (Blender 5.0+), then re-import
 blender --background --factory-startup --python content/sonic/characters/sonic/build_sonic.py
+
+# After changing an act's greybox: export it, rebuild its art, re-import (see DEVELOPER.md)
+godot --headless --path . --script res://tools/godot/export_greybox.gd -- res://content/sonic/stages/emerald_shore/act_1.tscn content/sonic/stages/emerald_shore/art/act_1.greybox.json
+blender --background --factory-startup --python content/sonic/stages/emerald_shore/art/build_act_1.py
+
+# Rebuild the models for objects, badniks and the boss (each from <name>.parts.json; tools/godot/export_parts.gd writes those)
+blender --background --factory-startup --python content/sonic/objects/build_objects.py
 ```
 
 ## Gotchas
@@ -54,6 +61,10 @@ blender --background --factory-startup --python content/sonic/characters/sonic/b
 - `JSON.parse_string()` prints an engine error on bad input; to read files that may be damaged, use `JSON.new().parse()`, which only returns an error code.
 - A player put a little above the ground (as playtests do) is in the air for a few ticks: wait for it to land before pressing jump or boost, or it's an air dash or air boost instead.
 - Playtests drive menus with `Input.parse_input_event()` and an `InputEventAction` (press, then release a couple of frames later): `Input.action_press()` sets the action's state but sends no event, so `_unhandled_input` and focused buttons never see it. Point `SaveGame.directory` and `GameSettings.path` at test files first, so real saves and settings stay untouched.
+- The stage art is built from the greybox, which stays in the act as the collision: a hidden CSG shape still collides. Hide the CSG shapes themselves, not the `Geometry` group: loops live in it and must stay visible. `tests/unit/test_art.gd` fails when an act's greybox changed without its art being rebuilt.
+- A `.glb`'s import script only runs when Godot imports it. To import again (after changing its import script or a library material), delete `.godot/imported/<name>.glb-*` and run `--import`; deleting only the `.md5` doesn't do it.
+- `ModelSkin` ignores a model part's own transform: parts are modelled in the space of the node they dress (`art_kit.Parts` does this from the scene's layout). It does nothing in the editor, where the swap would be saved into the scene.
+- Item monitors, springs and other objects use the `Sfx` autoload, so a `--script` tool can't name their classes (see above); unit tests read their scenes through `PackedScene.get_state()` instead of running them.
 - `Area3D.get_overlapping_bodies()` errors while the area's `monitoring` is off, so code that switches an area off (enemy hitboxes, boss parts) must skip it.
 - Gimmicks that act on the player (springs, dash panels, spikes, item monitors, enemies, bosses) check `get_overlapping_bodies()` in `_physics_process` instead of acting in `body_entered`. That lets them keep acting while the player stays in contact (spikes once the flashing ends, a dash panel the player lands on), and the ones with `process_physics_priority = -1` act before the player moves that tick. The flip side: overlaps are from the last physics step, so a player teleported off a gimmick still counts as touching it for one more tick.
 
@@ -64,3 +75,4 @@ blender --background --factory-startup --python content/sonic/characters/sonic/b
 - `stages/greybox/`: blockout and test scenes.
 - `tests/`: headless test runner (`run_tests.gd`), base class (`test_suite.gd`) and `unit/test_*.gd`.
 - `tools/audio/`: the music (notes in `music/`) and sound effects (`sounds.py`), and the synth that renders them into `content/sonic/audio/`.
+- `tools/blender/` and `tools/godot/`: the kits the art is built with, and the exporters that hand a greybox or a scene's layout to them. The art's build scripts live with the art in `content/`.

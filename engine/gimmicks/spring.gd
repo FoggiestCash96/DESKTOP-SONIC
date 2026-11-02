@@ -22,6 +22,7 @@ var _launched: Array[Player] = []  # Players still touching since their launch, 
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"spring"))
 	_update_look()
 	if Engine.is_editor_hint():
 		return

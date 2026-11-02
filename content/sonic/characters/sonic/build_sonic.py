@@ -1,13 +1,14 @@
-"""Builds the stand-in Sonic model: mesh, rig and animations, saved as sonic.blend and sonic.glb.
+"""Builds the Sonic model: mesh, rig and animations, saved as sonic.blend and sonic.glb.
 
 Run it from the repository root (Blender 5.0 or newer):
 
     blender --background --factory-startup --python content/sonic/characters/sonic/build_sonic.py
 
-The model is made of simple shapes, each bound rigidly to one bone, so the whole character
-pipeline (Blender, glTF, Godot's AnimationTree) works before real art exists. A hand-made model
-can replace it: keep the bone names, the animation names and the conventions below, and export
-it with tools/blender/export_glb.py.
+The fur (head, quills, ears, body, arms and legs) is one smooth surface, skinned so the joints
+bend; the eyes, nose, gloves and shoes are separate pieces, each moving with one bone. Everything
+is made from simple shapes in code (see build_fur), so it can be tweaked and rebuilt. A hand-made
+model can replace it: keep the bone names, the animation names and the conventions below, and
+export it with tools/blender/export_glb.py.
 
 Conventions: 1 unit = 1 m, feet at the origin, facing +Y in Blender (which becomes Godot's -Z),
 about 1 m tall to match the player's collision capsule.
@@ -34,6 +35,7 @@ COLOURS = {
     "Red": (0.86, 0.10, 0.10),
     "Black": (0.04, 0.04, 0.05),
     "Green": (0.10, 0.65, 0.25),
+    "Gold": (1.0, 0.75, 0.15),
 }
 
 
@@ -93,62 +95,190 @@ def ellipsoid(bone: str, colour: str, centre, size, segments: int = 16, rings: i
     return finish_part(obj, bone, colour)
 
 
-def rod(bone: str, colour: str, start, end, radius: float) -> bpy.types.Object:
-    """A cylinder from `start` to `end`."""
-    start, end = Vector(start), Vector(end)
-    axis = end - start
-    bpy.ops.mesh.primitive_cylinder_add(vertices=10, radius=radius, depth=axis.length, location=(start + end) / 2)
-    obj = bpy.context.active_object
-    obj.rotation_mode = 'QUATERNION'
-    obj.rotation_quaternion = axis.to_track_quat('Z', 'Y')
-    return finish_part(obj, bone, colour)
+def tube_mesh(points, radii, segments: int = 12) -> bpy.types.Object:
+    """A closed tube through `points`, as thick as `radii` at each, as a new object."""
+    points = [Vector(p) for p in points]
+    vertices, faces = [], []
+    normal = None
+    for i, point in enumerate(points):
+        tangent = (points[min(i + 1, len(points) - 1)] - points[max(i - 1, 0)]).normalized()
+        if normal is None:
+            helper = Vector((0, 0, 1)) if abs(tangent.z) < 0.9 else Vector((1, 0, 0))
+            normal = tangent.cross(helper).normalized()
+        else:
+            normal = (normal - tangent * normal.dot(tangent)).normalized()
+        binormal = tangent.cross(normal)
+        for j in range(segments):
+            angle = math.tau * j / segments
+            vertices.append(point + (normal * math.cos(angle) + binormal * math.sin(angle)) * max(radii[i], 0.001))
+    for i in range(len(points) - 1):
+        for j in range(segments):
+            k = (j + 1) % segments
+            faces.append((i * segments + j, i * segments + k, (i + 1) * segments + k, (i + 1) * segments + j))
+    faces.append(tuple(reversed(range(segments))))
+    last = (len(points) - 1) * segments
+    faces.append(tuple(range(last, last + segments)))
+    mesh = bpy.data.meshes.new("tube")
+    mesh.from_pydata([tuple(v) for v in vertices], [], faces)
+    mesh.update()
+    obj = bpy.data.objects.new("tube", mesh)
+    bpy.context.collection.objects.link(obj)
+    # Make the faces point outward, whichever way the frames turned.
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.mode_set(mode='EDIT')
+    bpy.ops.mesh.select_all(action='SELECT')
+    bpy.ops.mesh.normals_make_consistent(inside=False)
+    bpy.ops.object.mode_set(mode='OBJECT')
+    return obj
 
 
-def spike(bone: str, colour: str, base, direction, radius: float, length: float) -> bpy.types.Object:
-    """A cone whose base is centred at `base`, pointing along `direction`."""
-    direction = Vector(direction).normalized()
-    bpy.ops.mesh.primitive_cone_add(vertices=10, radius1=radius, radius2=0.0, depth=length, location=Vector(base) + direction * length / 2)
-    obj = bpy.context.active_object
-    obj.rotation_mode = 'QUATERNION'
-    obj.rotation_quaternion = direction.to_track_quat('Z', 'Y')
-    return finish_part(obj, bone, colour)
+def tube(bone: str, colour: str, points, radii, segments: int = 12) -> bpy.types.Object:
+    return finish_part(tube_mesh(points, radii, segments), bone, colour)
+
+
+# --- The fur ---------------------------------------------------------------------------------------
+# The blue and tan fur is one surface. Simple shapes, each with a colour and a bone, are fused by a
+# voxel remesh and trimmed to the triangle budget; then every face takes the colour of the shape it
+# lies on, and every vertex is skinned to the bones of the shapes near it, so the body bends
+# smoothly at the joints instead of coming apart.
+
+FUR_VOXEL = 0.0075  # m: fine enough for the thin arms.
+FUR_FACES = 9000  # The fur's budget after trimming.
+SKIN_BLEND = 0.035  # m: how far past its own shape a bone still pulls on the fur.
+
+
+class Shape:
+    """A shape of the fur: its colour, its bone, and its signed distance (negative inside)."""
+
+    def __init__(self, colour: str, bone: str, kind: str, *params):
+        self.colour, self.bone, self.kind, self.params = colour, bone, kind, params
+
+    def make(self) -> bpy.types.Object:
+        if self.kind == "ellipsoid":
+            centre, size = self.params
+            bpy.ops.mesh.primitive_uv_sphere_add(segments=24, ring_count=12, radius=1.0, location=centre)
+            obj = bpy.context.active_object
+            obj.scale = size
+            return obj
+        points, radii = self.params
+        return tube_mesh(points, radii, 14)
+
+    def distance(self, point: Vector) -> float:
+        if self.kind == "ellipsoid":
+            centre, size = self.params
+            q = Vector(((point.x - centre[0]) / size[0], (point.y - centre[1]) / size[1], (point.z - centre[2]) / size[2]))
+            return (q.length - 1.0) * min(size)
+        points, radii = self.params
+        best = math.inf
+        for i in range(len(points) - 1):
+            a, b = Vector(points[i]), Vector(points[i + 1])
+            ab = b - a
+            t = max(0.0, min(1.0, (point - a).dot(ab) / max(ab.length_squared, 1e-9)))
+            best = min(best, (point - (a + ab * t)).length - (radii[i] + (radii[i + 1] - radii[i]) * t))
+        return best
+
+
+def fur_shapes() -> list:
+    shapes = [
+        Shape("Blue", "head", "ellipsoid", (0, 0, 0.78), (0.205, 0.2, 0.2)),
+        Shape("Skin", "head", "ellipsoid", (0, 0.145, 0.705), (0.105, 0.082, 0.072)),
+        # Quills sweeping back from the head, curving as they go.
+        Shape("Blue", "head", "tube", [(0, -0.09, 0.93), (0, -0.21, 0.98), (0, -0.34, 0.96)], [0.085, 0.058, 0.004]),
+        Shape("Blue", "head", "tube", [(0, -0.15, 0.80), (0, -0.29, 0.79), (0, -0.44, 0.74)], [0.09, 0.06, 0.004]),
+        Shape("Blue", "head", "tube", [(0, -0.12, 0.66), (0, -0.22, 0.60), (0, -0.32, 0.53)], [0.07, 0.045, 0.004]),
+        Shape("Blue", "chest", "ellipsoid", (0, 0, 0.47), (0.125, 0.11, 0.14)),
+        Shape("Blue", "chest", "ellipsoid", (0, -0.005, 0.585), (0.078, 0.072, 0.06)),
+        Shape("Skin", "chest", "ellipsoid", (0, 0.05, 0.455), (0.088, 0.075, 0.1)),
+        Shape("Blue", "hips", "ellipsoid", (0, 0, 0.405), (0.112, 0.095, 0.075)),
+        Shape("Blue", "hips", "tube", [(0, -0.09, 0.39), (0, -0.16, 0.37)], [0.03, 0.005]),
+    ]
+    for side, sign in (("L", -1), ("R", 1)):
+        shapes += [
+            Shape("Blue", "head", "tube", [(0.09 * sign, -0.01, 0.94), (0.165 * sign, -0.05, 1.065)], [0.052, 0.004]),
+            Shape("Blue", "head", "tube", [(0.1 * sign, -0.11, 0.86), (0.18 * sign, -0.23, 0.87), (0.25 * sign, -0.34, 0.83)], [0.08, 0.054, 0.004]),
+            Shape("Blue", "head", "tube", [(0.08 * sign, -0.13, 0.71), (0.145 * sign, -0.24, 0.67), (0.2 * sign, -0.33, 0.61)], [0.072, 0.048, 0.004]),
+            Shape("Blue", "chest", "tube", [(0.045 * sign, -0.09, 0.52), (0.065 * sign, -0.17, 0.48), (0.085 * sign, -0.22, 0.43)], [0.04, 0.025, 0.004]),
+            Shape("Skin", f"upper_arm.{side}", "tube", [(0.10 * sign, 0, 0.575), (0.20 * sign, 0, 0.46)], [0.034, 0.03]),
+            Shape("Skin", f"forearm.{side}", "tube", [(0.20 * sign, 0, 0.46), (0.255 * sign, 0, 0.37)], [0.03, 0.028]),
+            Shape("Blue", f"thigh.{side}", "tube", [(0.07 * sign, 0, 0.40), (0.08 * sign, 0, 0.24)], [0.042, 0.035]),
+            Shape("Blue", f"shin.{side}", "tube", [(0.08 * sign, 0, 0.24), (0.09 * sign, 0, 0.11)], [0.035, 0.031]),
+        ]
+    return shapes
+
+
+def apply_modifier(obj: bpy.types.Object, kind: str, **settings) -> None:
+    modifier = obj.modifiers.new(kind, kind)
+    for key, value in settings.items():
+        setattr(modifier, key, value)
+    bpy.ops.object.select_all(action='DESELECT')
+    obj.select_set(True)
+    bpy.context.view_layer.objects.active = obj
+    bpy.ops.object.modifier_apply(modifier=modifier.name)
+
+
+def build_fur() -> bpy.types.Object:
+    shapes = fur_shapes()
+    objects = [shape.make() for shape in shapes]
+    bpy.ops.object.select_all(action='DESELECT')
+    for obj in objects:
+        obj.select_set(True)
+    bpy.context.view_layer.objects.active = objects[0]
+    bpy.ops.object.join()
+    fur = bpy.context.active_object
+    bpy.ops.object.transform_apply(location=True, rotation=True, scale=True)
+    apply_modifier(fur, 'REMESH', mode='VOXEL', voxel_size=FUR_VOXEL, adaptivity=0.0)
+    apply_modifier(fur, 'SMOOTH', factor=0.5, iterations=3)
+    apply_modifier(fur, 'DECIMATE', ratio=min(1.0, FUR_FACES / max(len(fur.data.polygons), 1)))
+    # Each face takes the colour of the shape it lies on.
+    fur.data.materials.clear()
+    colours = sorted({shape.colour for shape in shapes})
+    for colour in colours:
+        fur.data.materials.append(material(colour))
+    for polygon in fur.data.polygons:
+        centre = Vector(polygon.center)
+        nearest = min(shapes, key=lambda shape: shape.distance(centre))
+        polygon.material_index = colours.index(nearest.colour)
+    # Each vertex follows the bones of the shapes within SKIN_BLEND of the nearest one.
+    groups = {bone: fur.vertex_groups.new(name=bone) for bone in sorted({shape.bone for shape in shapes})}
+    for vertex in fur.data.vertices:
+        distances = [shape.distance(vertex.co) for shape in shapes]
+        closest = min(distances)
+        weights = {}
+        for shape, distance in zip(shapes, distances):
+            pull = SKIN_BLEND - (distance - closest)
+            if pull > 0:
+                weights[shape.bone] = weights.get(shape.bone, 0.0) + pull
+        total = sum(weights.values())
+        for bone, weight in weights.items():
+            groups[bone].add([vertex.index], weight / total, 'REPLACE')
+    return fur
 
 
 def build_mesh() -> bpy.types.Object:
-    parts = []
-    # Head: a big sphere with a muzzle, eyes, ears and quills sweeping back.
-    parts.append(ellipsoid("head", "Blue", (0, 0, 0.78), (0.21, 0.21, 0.21), 24, 12))
-    parts.append(ellipsoid("head", "Skin", (0, 0.15, 0.71), (0.11, 0.075, 0.07)))
-    parts.append(ellipsoid("head", "Black", (0, 0.225, 0.745), (0.026, 0.024, 0.022), 10, 6))
-    parts.append(ellipsoid("head", "White", (0, 0.155, 0.83), (0.12, 0.065, 0.085)))
+    parts = [build_fur()]
+    # Eyes: one white mask with two green irises looking slightly inward, pupils and glints.
     for sign in (-1, 1):
-        parts.append(ellipsoid("head", "Green", (0.04 * sign, 0.212, 0.83), (0.024, 0.012, 0.032), 10, 6))
-        parts.append(spike("head", "Blue", (0.10 * sign, -0.02, 0.93), (0.45 * sign, -0.15, 1.0), 0.05, 0.11))
-    for base, direction, radius, length in (
-        ((0, -0.10, 0.92), (0, -1.0, 0.45), 0.08, 0.30),
-        ((-0.09, -0.12, 0.81), (-0.35, -1.0, 0.05), 0.085, 0.32),
-        ((0.09, -0.12, 0.81), (0.35, -1.0, 0.05), 0.085, 0.32),
-        ((0, -0.13, 0.80), (0, -1.0, 0.0), 0.09, 0.36),
-        ((0, -0.12, 0.68), (0, -1.0, -0.40), 0.08, 0.30),
-    ):
-        parts.append(spike("head", "Blue", base, direction, radius, length))
-    # Body, with a light belly, two small back quills and a stubby tail.
-    parts.append(ellipsoid("chest", "Blue", (0, 0, 0.48), (0.125, 0.11, 0.135)))
-    parts.append(ellipsoid("chest", "Skin", (0, 0.055, 0.465), (0.085, 0.07, 0.095)))
-    parts.append(spike("chest", "Blue", (0, -0.09, 0.53), (0, -1.0, -0.5), 0.05, 0.14))
-    parts.append(spike("hips", "Blue", (0, -0.09, 0.40), (0, -1.0, -0.2), 0.035, 0.10))
+        parts.append(ellipsoid("head", "White", (0.047 * sign, 0.158, 0.835), (0.066, 0.044, 0.088), 20, 10))
+        parts.append(ellipsoid("head", "Green", (0.041 * sign, 0.197, 0.832), (0.028, 0.012, 0.04), 12, 6))
+        parts.append(ellipsoid("head", "Black", (0.039 * sign, 0.205, 0.834), (0.014, 0.008, 0.022), 10, 5))
+        parts.append(ellipsoid("head", "White", (0.032 * sign, 0.21, 0.85), (0.006, 0.004, 0.008), 8, 4))
+        # Inner ears, tan, in front of each ear.
+        parts.append(tube("head", "Skin", [(0.09 * sign, 0.012, 0.95), (0.155 * sign, -0.022, 1.045)], [0.03, 0.003], 10))
+    parts.append(ellipsoid("head", "Black", (0, 0.222, 0.745), (0.028, 0.024, 0.022), 12, 6))
     for side, sign in (("L", -1), ("R", 1)):
-        # Arms and gloves.
-        parts.append(rod(f"upper_arm.{side}", "Skin", (0.11 * sign, 0, 0.58), (0.20 * sign, 0, 0.46), 0.03))
-        parts.append(rod(f"forearm.{side}", "Skin", (0.20 * sign, 0, 0.46), (0.26 * sign, 0, 0.36), 0.03))
-        parts.append(ellipsoid(f"hand.{side}", "White", (0.275 * sign, 0, 0.33), (0.055, 0.055, 0.055)))
-        parts.append(rod(f"forearm.{side}", "White", (0.248 * sign, 0, 0.38), (0.262 * sign, 0, 0.358), 0.045))
-        # Legs and shoes.
-        parts.append(rod(f"thigh.{side}", "Blue", (0.07 * sign, 0, 0.40), (0.08 * sign, 0, 0.24), 0.035))
-        parts.append(rod(f"shin.{side}", "Blue", (0.08 * sign, 0, 0.24), (0.09 * sign, 0, 0.10), 0.035))
-        parts.append(ellipsoid(f"foot.{side}", "Red", (0.09 * sign, 0.04, 0.06), (0.07, 0.15, 0.065)))
-        parts.append(ellipsoid(f"foot.{side}", "White", (0.09 * sign, 0.03, 0.10), (0.072, 0.03, 0.03), 12, 6))
-        parts.append(ellipsoid(f"foot.{side}", "White", (0.09 * sign, -0.02, 0.012), (0.075, 0.13, 0.014), 12, 4))
+        # Gloves: a white fist with a thumb, and a wide cuff around the wrist.
+        parts.append(ellipsoid(f"hand.{side}", "White", (0.272 * sign, 0.0, 0.33), (0.058, 0.055, 0.062)))
+        parts.append(ellipsoid(f"hand.{side}", "White", (0.25 * sign, 0.045, 0.348), (0.022, 0.026, 0.02), 10, 6))
+        parts.append(tube(f"forearm.{side}", "White", [(0.247 * sign, 0, 0.388), (0.262 * sign, 0, 0.356)], [0.047, 0.05]))
+        # Shoes: red with an upturned toe, a white strap with a gold buckle, a white sole and a sock cuff.
+        parts.append(ellipsoid(f"foot.{side}", "Red", (0.09 * sign, 0.05, 0.065), (0.072, 0.155, 0.068)))
+        parts.append(ellipsoid(f"foot.{side}", "Red", (0.09 * sign, 0.15, 0.072), (0.06, 0.07, 0.056)))
+        parts.append(ellipsoid(f"foot.{side}", "White", (0.09 * sign, 0.03, 0.112), (0.076, 0.036, 0.03), 16, 8))
+        parts.append(ellipsoid(f"foot.{side}", "Gold", (0.158 * sign, 0.03, 0.098), (0.012, 0.028, 0.022), 8, 5))
+        parts.append(ellipsoid(f"foot.{side}", "White", (0.09 * sign, 0.04, 0.015), (0.078, 0.166, 0.017), 16, 6))
+        parts.append(tube(f"foot.{side}", "White", [(0.09 * sign, 0, 0.13), (0.09 * sign, 0, 0.095)], [0.04, 0.045]))
 
     bpy.ops.object.select_all(action='DESELECT')
     for part in parts:

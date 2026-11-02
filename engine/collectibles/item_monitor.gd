@@ -32,6 +32,7 @@ const BOUNCE_HEIGHT := 0.6  ## A player whose feet are above this height on the 
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, ArtBank.model(&"item_monitor"))
 	_update_look()
 	# Break open before the player moves this tick, so a rolling player carries straight on.
 	process_physics_priority = -1
@@ -78,6 +79,11 @@ func _update_look() -> void:
 	var color := ITEM_COLORS[item]
 	_label.text = "%d RINGS" % ring_amount if item == Item.RINGS else ITEM_TEXT[item]
 	_label.modulate = color
+	# A model can give the box an icon for each item, named after it (IconRings, IconSpeedShoes...).
+	var icon := "Icon" + String(Item.keys()[item]).to_pascal_case()
+	for child in _box.get_children():
+		if String(child.name).begins_with("Icon"):
+			(child as Node3D).visible = child.name == icon
 	var current := _screen.material_override as StandardMaterial3D
 	if current and current.albedo_color == color:
 		return  # Unchanged, so opening a scene in the editor doesn't mark it as modified.

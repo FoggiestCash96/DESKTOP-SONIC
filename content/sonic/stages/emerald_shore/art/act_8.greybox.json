@@ -1,0 +1,1120 @@
+{
+	"stage": "res://content/sonic/stages/emerald_shore/act_8.tscn",
+	"sea_height": -1.5,
+	"player_start": {
+		"x": [
+			1.0,
+			0.0,
+			0.0
+		],
+		"y": [
+			0.0,
+			1.0,
+			0.0
+		],
+		"z": [
+			0.0,
+			0.0,
+			1.0
+		],
+		"origin": [
+			0.0,
+			0.0,
+			8.0
+		]
+	},
+	"pieces": [
+		{
+			"name": "Causeway1",
+			"path": "Geometry/Causeway1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					7.0,
+					0.0,
+					14.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					82.0,
+					-2.0
+				],
+				[
+					82.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 14.0
+		},
+		{
+			"name": "WallsCauseway1Left",
+			"path": "Geometry/WallsCauseway1Left",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-7.5,
+					2.0,
+					-27.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				82.0
+			]
+		},
+		{
+			"name": "WallsCauseway1Right",
+			"path": "Geometry/WallsCauseway1Right",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.5,
+					2.0,
+					-27.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				82.0
+			]
+		},
+		{
+			"name": "ClamBlock",
+			"path": "Geometry/ClamBlock",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					4.5,
+					0.75,
+					-54.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				3.0,
+				1.5,
+				3.0
+			]
+		},
+		{
+			"name": "Causeway2",
+			"path": "Geometry/Causeway2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					7.0,
+					0.0,
+					-80.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					14.0,
+					-2.0
+				],
+				[
+					14.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 14.0
+		},
+		{
+			"name": "Bridge",
+			"path": "Geometry/Bridge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					2.0,
+					0.0,
+					-94.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					28.0,
+					-1.0
+				],
+				[
+					28.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Platform",
+			"path": "Geometry/Platform",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					10.0,
+					0.0,
+					-122.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					30.0,
+					-2.0
+				],
+				[
+					30.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "WallsPlatformLeft",
+			"path": "Geometry/WallsPlatformLeft",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.5,
+					2.0,
+					-137.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				30.0
+			]
+		},
+		{
+			"name": "WallsPlatformRight",
+			"path": "Geometry/WallsPlatformRight",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					10.5,
+					2.0,
+					-137.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				30.0
+			]
+		},
+		{
+			"name": "Entrance",
+			"path": "Geometry/Entrance",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					6.0,
+					0.0,
+					-152.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					23.0,
+					-2.0
+				],
+				[
+					23.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 12.0
+		},
+		{
+			"name": "WallsEntranceLeft",
+			"path": "Geometry/WallsEntranceLeft",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-6.5,
+					2.0,
+					-163.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				23.0
+			]
+		},
+		{
+			"name": "WallsEntranceRight",
+			"path": "Geometry/WallsEntranceRight",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					6.5,
+					2.0,
+					-163.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				4.0,
+				23.0
+			]
+		},
+		{
+			"name": "ArenaFloor",
+			"path": "Geometry/ArenaFloor",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					30.0,
+					0.0,
+					-175.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-4.0
+				],
+				[
+					52.0,
+					-4.0
+				],
+				[
+					52.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 60.0
+		},
+		{
+			"name": "CliffWest",
+			"path": "Geometry/CliffWest",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-31.0,
+					5.0,
+					-201.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				2.0,
+				10.0,
+				54.0
+			]
+		},
+		{
+			"name": "CliffEast",
+			"path": "Geometry/CliffEast",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					31.0,
+					5.0,
+					-201.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				2.0,
+				10.0,
+				54.0
+			]
+		},
+		{
+			"name": "CliffSouthWest",
+			"path": "Geometry/CliffSouthWest",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-18.5,
+					5.0,
+					-174.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				25.0,
+				10.0,
+				2.0
+			]
+		},
+		{
+			"name": "CliffSouthEast",
+			"path": "Geometry/CliffSouthEast",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					18.5,
+					5.0,
+					-174.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				25.0,
+				10.0,
+				2.0
+			]
+		},
+		{
+			"name": "Tower1",
+			"path": "Geometry/Tower1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-48.0,
+					15.0,
+					-262.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				12.0,
+				34.0,
+				12.0
+			]
+		},
+		{
+			"name": "Tower2",
+			"path": "Geometry/Tower2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					15.0,
+					-292.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				12.0,
+				34.0,
+				12.0
+			]
+		},
+		{
+			"name": "Tower3",
+			"path": "Geometry/Tower3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					48.0,
+					15.0,
+					-262.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				12.0,
+				34.0,
+				12.0
+			]
+		}
+	],
+	"loops": [],
+	"camera_volumes": [
+		{
+			"name": "ArenaCamera",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					8.0,
+					-201.0
+				]
+			},
+			"size": [
+				62.0,
+				20.0,
+				54.0
+			],
+			"side_view": false,
+			"distance": 9.5
+		}
+	],
+	"walls": [
+		{
+			"name": "SeaWall",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					7.0,
+					-227.5
+				]
+			},
+			"size": [
+				60.0,
+				14.0,
+				1.0
+			]
+		}
+	],
+	"markers": [
+		{
+			"name": "RingsStart",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-4.0
+			]
+		},
+		{
+			"name": "RedRing1",
+			"kind": "hidden_collectible",
+			"position": [
+				4.5,
+				4.4,
+				-54.0
+			]
+		},
+		{
+			"name": "Checkpoint1",
+			"kind": "checkpoint",
+			"position": [
+				0.0,
+				0.0,
+				-58.0
+			]
+		},
+		{
+			"name": "DashGap",
+			"kind": "dash_panel",
+			"position": [
+				-3.0,
+				0.0,
+				-64.0
+			]
+		},
+		{
+			"name": "SignGap",
+			"kind": "Label3D",
+			"position": [
+				0.0,
+				6.4,
+				-63.0
+			],
+			"text_size": [
+				5.08,
+				1.98
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					6.4,
+					-63.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RedRing2",
+			"kind": "hidden_collectible",
+			"position": [
+				0.0,
+				5.6,
+				-77.5
+			]
+		},
+		{
+			"name": "RingsBridge",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-96.0
+			]
+		},
+		{
+			"name": "RedRing3",
+			"kind": "hidden_collectible",
+			"position": [
+				0.0,
+				3.4,
+				-112.0
+			]
+		},
+		{
+			"name": "MonitorPlatformRings",
+			"kind": "item_monitor",
+			"position": [
+				6.0,
+				0.0,
+				-132.0
+			]
+		},
+		{
+			"name": "RedRing4",
+			"kind": "hidden_collectible",
+			"position": [
+				8.6,
+				0.9,
+				-146.0
+			]
+		},
+		{
+			"name": "RingsPlatform",
+			"kind": "Node3D",
+			"position": [
+				-6.0,
+				0.8,
+				-126.0
+			]
+		},
+		{
+			"name": "Checkpoint2",
+			"kind": "checkpoint",
+			"position": [
+				0.0,
+				0.0,
+				-148.0
+			]
+		},
+		{
+			"name": "RingsEntrance",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-156.0
+			]
+		},
+		{
+			"name": "BossArena",
+			"kind": "Area3D",
+			"position": [
+				0.0,
+				7.0,
+				-202.0
+			]
+		},
+		{
+			"name": "MonitorArenaWest",
+			"kind": "item_monitor",
+			"position": [
+				-22.0,
+				0.0,
+				-186.0
+			]
+		},
+		{
+			"name": "MonitorArenaEast",
+			"kind": "item_monitor",
+			"position": [
+				22.0,
+				0.0,
+				-186.0
+			]
+		},
+		{
+			"name": "RingsArena",
+			"kind": "Node3D",
+			"position": [
+				-10.0,
+				0.8,
+				-181.0
+			]
+		},
+		{
+			"name": "RedRing5",
+			"kind": "hidden_collectible",
+			"position": [
+				-27.0,
+				0.9,
+				-223.0
+			]
+		},
+		{
+			"name": "MonitorPlatformBoost",
+			"kind": "item_monitor",
+			"position": [
+				4.0,
+				0.0,
+				-142.0
+			]
+		},
+		{
+			"name": "ScuttlerCauseway1",
+			"kind": "scuttler",
+			"position": [
+				-3.0,
+				0.0,
+				-28.0
+			]
+		},
+		{
+			"name": "ScuttlerCauseway2",
+			"kind": "scuttler",
+			"position": [
+				3.0,
+				0.0,
+				-44.0
+			]
+		},
+		{
+			"name": "PearlshotCauseway",
+			"kind": "pearlshot",
+			"position": [
+				4.5,
+				1.5,
+				-54.0
+			]
+		},
+		{
+			"name": "GullGap1",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				3.0,
+				-72.0
+			]
+		},
+		{
+			"name": "GullGap2",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				3.8,
+				-77.5
+			]
+		},
+		{
+			"name": "FishBridge1",
+			"kind": "leapfin",
+			"position": [
+				-4.0,
+				-1.5,
+				-100.0
+			]
+		},
+		{
+			"name": "FishBridge2",
+			"kind": "leapfin",
+			"position": [
+				-4.0,
+				-1.5,
+				-108.0
+			]
+		},
+		{
+			"name": "FishBridge3",
+			"kind": "leapfin",
+			"position": [
+				-4.0,
+				-1.5,
+				-116.0
+			]
+		},
+		{
+			"name": "ScuttlerPlatform",
+			"kind": "scuttler",
+			"position": [
+				-4.0,
+				0.0,
+				-134.0
+			]
+		}
+	]
+}

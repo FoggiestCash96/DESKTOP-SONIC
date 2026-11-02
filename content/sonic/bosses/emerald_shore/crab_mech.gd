@@ -33,6 +33,7 @@ const PHASE_TINTS: Array[Color] = [Color(0.95, 0.45, 0.2), Color(1.0, 0.3, 0.1),
 
 @export_group("Intro")
 @export var ship: Node3D  ## Eggman's ship, which pumps up the wave and leaves.
+@export var ship_skin: PackedScene  ## A model to dress the ship's placeholder shapes in (see ModelSkin).
 @export var ship_pump: Node3D  ## The pump below the ship, lowered into the sea.
 @export var intro_camera: Camera3D  ## Watches the intro.
 @export var intro_wave: RollingWave  ## The great wave the crab rises out of.
@@ -92,10 +93,13 @@ var _camera_focus := Vector3.ZERO
 
 func _ready() -> void:
 	super()
+	ModelSkin.apply(ship, ship_skin)
 	_home = position
 	_last_x = position.x
-	# Its own copy, so the phase colour doesn't change every crab sharing the scene's material.
-	_shell_material = (_shell.material_override as StandardMaterial3D).duplicate() as StandardMaterial3D
+	# Its own copy, so the phase colour doesn't change every crab sharing the scene's material
+	# (the placeholder's, or the model's when a skin has dressed the shell).
+	var shell_look := _shell.material_override if _shell.material_override else _shell.mesh.surface_get_material(0)
+	_shell_material = (shell_look as StandardMaterial3D).duplicate() as StandardMaterial3D
 	_shell.material_override = _shell_material
 	_claw_hurt_left.monitoring = false
 	_claw_hurt_right.monitoring = false

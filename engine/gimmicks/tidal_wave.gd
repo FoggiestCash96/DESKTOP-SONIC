@@ -43,6 +43,9 @@ var _preview: MeshInstance3D
 
 
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		_surface.material_override = ArtBank.material(&"wave_water", _surface.material_override)
+		_foam.material_override = ArtBank.material(&"wave_foam", _foam.material_override)
 	_update_shape()
 	_time = start_time
 	# Push before the player moves this tick.

@@ -21,5 +21,6 @@ A reusable, franchise-free 3D platformer engine: player physics, camera, gimmick
 | `enemies/base/` | The enemy state machine, the boss base and boss arena, homing targets, shots, explosions and freed animals | 8 |
 | `systems/` | Stage root script; GameState (lives, checkpoints, stage clock), SaveGame (save slots) and GameSettings (settings, assists) autoloads; remappable controls; world map data. Scene loading and replays later | 5, 9 |
 | `audio/` | The Sfx autoload (sound effects by name, menu sounds), the Music autoload (tracks, power-up music, jingles, speed shoes) and the SoundBank resource a game fills in | 10 |
+| `art/` | Toon shaders for stages (stripes, height bands, water, sky), the import script for art `.glb`s (materials by name from a library), `ModelSkin` and the `ArtBank` (models that dress the engine's objects), and `Storm` (rain and lightning) | 10 |
 | `debug/` | Developer overlay (F3) and fly camera | 1 |
 | `greybox/` | Grid shader, materials and environment for blockout scenes | 1 |

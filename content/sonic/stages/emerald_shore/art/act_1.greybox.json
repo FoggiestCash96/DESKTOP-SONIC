@@ -1,0 +1,2150 @@
+{
+	"stage": "res://content/sonic/stages/emerald_shore/act_1.tscn",
+	"sea_height": -14.0,
+	"player_start": {
+		"x": [
+			1.0,
+			0.0,
+			0.0
+		],
+		"y": [
+			0.0,
+			1.0,
+			0.0
+		],
+		"z": [
+			0.0,
+			0.0,
+			1.0
+		],
+		"origin": [
+			0.0,
+			0.0,
+			0.0
+		]
+	},
+	"pieces": [
+		{
+			"name": "Start",
+			"path": "Geometry/Start",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					12.0,
+					0.0,
+					12.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					72.0,
+					-2.0
+				],
+				[
+					72.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 24.0
+		},
+		{
+			"name": "Downhill",
+			"path": "Geometry/Downhill",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					10.0,
+					0.0,
+					-60.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-10.0
+				],
+				[
+					50.0,
+					-10.0
+				],
+				[
+					50.0,
+					-8.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "LoopFloor",
+			"path": "Geometry/LoopFloor",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					16.0,
+					0.0,
+					-110.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-10.0
+				],
+				[
+					40.0,
+					-10.0
+				],
+				[
+					40.0,
+					-8.0
+				],
+				[
+					0.0,
+					-8.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "LoopExitUphill",
+			"path": "Geometry/LoopExitUphill",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					15.0,
+					0.0,
+					-150.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-10.0
+				],
+				[
+					30.0,
+					-10.0
+				],
+				[
+					30.0,
+					0.0
+				],
+				[
+					0.0,
+					-8.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "BeachTop",
+			"path": "Geometry/BeachTop",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-180.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					20.0,
+					-2.0
+				],
+				[
+					20.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "BeachDown",
+			"path": "Geometry/BeachDown",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-200.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					15.0,
+					-6.0
+				],
+				[
+					15.0,
+					-4.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "Flats",
+			"path": "Geometry/Flats",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-215.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					75.0,
+					-6.0
+				],
+				[
+					75.0,
+					-4.0
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "SurgeSlope",
+			"path": "Geometry/SurgeSlope",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-290.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					26.0,
+					-6.0
+				],
+				[
+					26.0,
+					8.0
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "Crest",
+			"path": "Geometry/Crest",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-316.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					8.0,
+					-6.0
+				],
+				[
+					8.0,
+					8.0
+				],
+				[
+					0.0,
+					8.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "Deck",
+			"path": "Geometry/Deck",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					3.0,
+					0.0,
+					-333.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.5
+				],
+				[
+					92.0,
+					4.5
+				],
+				[
+					92.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "LowSlope",
+			"path": "Geometry/LowSlope",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-324.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					36.0,
+					-2.0
+				],
+				[
+					36.0,
+					0.0
+				],
+				[
+					0.0,
+					8.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "LowGround",
+			"path": "Geometry/LowGround",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-324.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					106.0,
+					-2.0
+				],
+				[
+					106.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "LowRamp",
+			"path": "Geometry/LowRamp",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-430.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					25.0,
+					-2.0
+				],
+				[
+					25.0,
+					6.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "Merge",
+			"path": "Geometry/Merge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-455.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					75.0,
+					-2.0
+				],
+				[
+					75.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 40.0
+		},
+		{
+			"name": "PierRamp",
+			"path": "Geometry/PierRamp",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					25.0,
+					0.0,
+					-509.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					40.0,
+					-2.0
+				],
+				[
+					40.0,
+					0.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 12.0
+		},
+		{
+			"name": "Pier1",
+			"path": "Geometry/Pier1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					65.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					40.0,
+					-1.0
+				],
+				[
+					40.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Pier2",
+			"path": "Geometry/Pier2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					111.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					34.0,
+					-1.0
+				],
+				[
+					34.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Pier3",
+			"path": "Geometry/Pier3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					153.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					22.0,
+					-1.0
+				],
+				[
+					22.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "HighPlank",
+			"path": "Geometry/HighPlank",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					170.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.5
+				],
+				[
+					34.0,
+					5.5
+				],
+				[
+					34.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Pier4",
+			"path": "Geometry/Pier4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					181.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					34.0,
+					-1.0
+				],
+				[
+					34.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Pier5",
+			"path": "Geometry/Pier5",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					215.0,
+					0.0,
+					-513.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					30.0,
+					-1.0
+				],
+				[
+					30.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Shore",
+			"path": "Geometry/Shore",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					245.0,
+					0.0,
+					-505.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					40.0,
+					-2.0
+				],
+				[
+					40.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Downhill2",
+			"path": "Geometry/Downhill2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					285.0,
+					0.0,
+					-505.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-12.0
+				],
+				[
+					60.0,
+					-12.0
+				],
+				[
+					60.0,
+					-10.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Loop2Floor",
+			"path": "Geometry/Loop2Floor",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					345.0,
+					0.0,
+					-499.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-12.0
+				],
+				[
+					45.0,
+					-12.0
+				],
+				[
+					45.0,
+					-10.0
+				],
+				[
+					0.0,
+					-10.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Uphill2",
+			"path": "Geometry/Uphill2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					390.0,
+					0.0,
+					-500.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-12.0
+				],
+				[
+					60.0,
+					-12.0
+				],
+				[
+					60.0,
+					0.0
+				],
+				[
+					0.0,
+					-10.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Rollers",
+			"path": "Geometry/Rollers",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					450.0,
+					0.0,
+					-500.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					110.0,
+					-2.0
+				],
+				[
+					110.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Hump1",
+			"path": "Geometry/Hump1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					470.0,
+					0.0,
+					-500.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					20.0,
+					-1.0
+				],
+				[
+					20.0,
+					0.0
+				],
+				[
+					10.0,
+					2.5
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Hump2",
+			"path": "Geometry/Hump2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					505.0,
+					0.0,
+					-500.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					20.0,
+					-1.0
+				],
+				[
+					20.0,
+					0.0
+				],
+				[
+					10.0,
+					2.5
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "FinalStraight",
+			"path": "Geometry/FinalStraight",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					560.0,
+					0.0,
+					-500.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					140.0,
+					-2.0
+				],
+				[
+					140.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "EndWall",
+			"path": "Geometry/EndWall",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					700.5,
+					4.0,
+					-510.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				8.0,
+				24.0
+			]
+		}
+	],
+	"loops": [
+		{
+			"name": "Loop1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					-7.995,
+					-125.0
+				]
+			},
+			"radius": 5.0,
+			"width": 4.0,
+			"exit_offset": 6.0,
+			"curb_height": 0.6
+		},
+		{
+			"name": "Loop2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					360.0,
+					-9.995,
+					-515.0
+				]
+			},
+			"radius": 5.0,
+			"width": 4.0,
+			"exit_offset": 6.0,
+			"curb_height": 0.6
+		}
+	],
+	"camera_volumes": [
+		{
+			"name": "PierSideView",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					155.0,
+					6.0,
+					-515.0
+				]
+			},
+			"size": [
+				190.0,
+				30.0,
+				12.0
+			],
+			"side_view": true,
+			"distance": 14.0
+		}
+	],
+	"walls": [],
+	"markers": [
+		{
+			"name": "RingsStart",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-6.0
+			]
+		},
+		{
+			"name": "MonitorStartRings",
+			"kind": "item_monitor",
+			"position": [
+				-7.0,
+				0.0,
+				-22.0
+			]
+		},
+		{
+			"name": "RingsToDash",
+			"kind": "Node3D",
+			"position": [
+				6.0,
+				0.8,
+				-36.0
+			]
+		},
+		{
+			"name": "DashStart",
+			"kind": "dash_panel",
+			"position": [
+				6.0,
+				0.0,
+				-48.0
+			]
+		},
+		{
+			"name": "RingsDownhill",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.16,
+				-64.0
+			]
+		},
+		{
+			"name": "RedRing1",
+			"kind": "hidden_collectible",
+			"position": [
+				1.9,
+				1.3,
+				-125.0
+			]
+		},
+		{
+			"name": "SignSurge",
+			"kind": "Label3D",
+			"position": [
+				-16.4,
+				-1.3,
+				-224.0
+			],
+			"text_size": [
+				4.95,
+				1.76
+			],
+			"transform": {
+				"x": [
+					0.9063,
+					0.0,
+					-0.4226
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.4226,
+					0.0,
+					0.9063
+				],
+				"origin": [
+					-16.4,
+					-1.3,
+					-224.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RingsFlats",
+			"kind": "Node3D",
+			"position": [
+				5.0,
+				-3.2,
+				-226.0
+			]
+		},
+		{
+			"name": "Surge",
+			"kind": "tidal_wave",
+			"position": [
+				5.0,
+				-4.0,
+				-215.0
+			]
+		},
+		{
+			"name": "SignSplit",
+			"kind": "Label3D",
+			"position": [
+				5.0,
+				13.0,
+				-320.0
+			],
+			"text_size": [
+				10.74,
+				1.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					5.0,
+					13.0,
+					-320.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RedRing2",
+			"kind": "hidden_collectible",
+			"position": [
+				-6.0,
+				11.0,
+				-328.0
+			]
+		},
+		{
+			"name": "RingsDeck",
+			"kind": "Node3D",
+			"position": [
+				-6.0,
+				6.8,
+				-345.0
+			]
+		},
+		{
+			"name": "MonitorDeckShoes",
+			"kind": "item_monitor",
+			"position": [
+				-6.0,
+				6.0,
+				-382.0
+			]
+		},
+		{
+			"name": "DashDeck",
+			"kind": "dash_panel",
+			"position": [
+				-6.0,
+				6.0,
+				-416.0
+			]
+		},
+		{
+			"name": "RingsLow",
+			"kind": "Node3D",
+			"position": [
+				16.0,
+				0.8,
+				-364.0
+			]
+		},
+		{
+			"name": "MonitorLowShield",
+			"kind": "item_monitor",
+			"position": [
+				16.0,
+				0.0,
+				-386.0
+			]
+		},
+		{
+			"name": "SpikesLow",
+			"kind": "spikes",
+			"position": [
+				4.0,
+				0.0,
+				-372.0
+			]
+		},
+		{
+			"name": "MonitorLowRings",
+			"kind": "item_monitor",
+			"position": [
+				21.0,
+				0.0,
+				-404.0
+			]
+		},
+		{
+			"name": "Checkpoint1",
+			"kind": "checkpoint",
+			"position": [
+				5.0,
+				6.0,
+				-468.0
+			]
+		},
+		{
+			"name": "MonitorMergeMagnet",
+			"kind": "item_monitor",
+			"position": [
+				-8.0,
+				6.0,
+				-500.0
+			]
+		},
+		{
+			"name": "RingsMergeMagnet",
+			"kind": "Node3D",
+			"position": [
+				-12.0,
+				6.8,
+				-484.0
+			]
+		},
+		{
+			"name": "SignTurn",
+			"kind": "Label3D",
+			"position": [
+				14.0,
+				9.0,
+				-531.2
+			],
+			"text_size": [
+				1.9,
+				2.94
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					14.0,
+					9.0,
+					-531.2
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "DashCorner",
+			"kind": "dash_panel",
+			"position": [
+				12.0,
+				6.0,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsCorner",
+			"kind": "Node3D",
+			"position": [
+				16.0,
+				6.8,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsPier1",
+			"kind": "Node3D",
+			"position": [
+				68.0,
+				0.8,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsGap1",
+			"kind": "Node3D",
+			"position": [
+				101.0,
+				0.8,
+				-515.0
+			]
+		},
+		{
+			"name": "SpikesPier1",
+			"kind": "spikes",
+			"position": [
+				126.5,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsSpikes1",
+			"kind": "Node3D",
+			"position": [
+				122.0,
+				0.8,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsGap2",
+			"kind": "Node3D",
+			"position": [
+				141.0,
+				0.8,
+				-515.0
+			]
+		},
+		{
+			"name": "PierSpring",
+			"kind": "spring",
+			"position": [
+				165.0,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsPlank",
+			"kind": "Node3D",
+			"position": [
+				174.0,
+				6.8,
+				-515.0
+			]
+		},
+		{
+			"name": "RedRing3",
+			"kind": "hidden_collectible",
+			"position": [
+				199.0,
+				6.9,
+				-515.0
+			]
+		},
+		{
+			"name": "MonitorPierInvincible",
+			"kind": "item_monitor",
+			"position": [
+				186.0,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "SpikesPier2",
+			"kind": "spikes",
+			"position": [
+				193.5,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsGap4",
+			"kind": "Node3D",
+			"position": [
+				212.0,
+				0.8,
+				-515.0
+			]
+		},
+		{
+			"name": "DashPierEnd",
+			"kind": "dash_panel",
+			"position": [
+				236.0,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "DashShore",
+			"kind": "dash_panel",
+			"position": [
+				278.0,
+				0.0,
+				-515.0
+			]
+		},
+		{
+			"name": "RingsDownhill2",
+			"kind": "Node3D",
+			"position": [
+				298.0,
+				-1.3667,
+				-515.0
+			]
+		},
+		{
+			"name": "RedRing4",
+			"kind": "hidden_collectible",
+			"position": [
+				360.0,
+				-0.7,
+				-513.1
+			]
+		},
+		{
+			"name": "RingsUphill2",
+			"kind": "Node3D",
+			"position": [
+				396.0,
+				-8.2,
+				-510.0
+			]
+		},
+		{
+			"name": "Checkpoint2",
+			"kind": "checkpoint",
+			"position": [
+				456.0,
+				0.0,
+				-510.0
+			]
+		},
+		{
+			"name": "RingsRollers",
+			"kind": "Node3D",
+			"position": [
+				461.0,
+				0.8,
+				-510.0
+			]
+		},
+		{
+			"name": "RollerSpring",
+			"kind": "spring",
+			"position": [
+				498.0,
+				0.0,
+				-503.0
+			]
+		},
+		{
+			"name": "RedRing5",
+			"kind": "hidden_collectible",
+			"position": [
+				498.0,
+				6.6,
+				-503.0
+			]
+		},
+		{
+			"name": "SecretSpring",
+			"kind": "spring",
+			"position": [
+				546.0,
+				0.0,
+				-518.0
+			]
+		},
+		{
+			"name": "ExtraLife",
+			"kind": "extra_life",
+			"position": [
+				546.0,
+				17.5,
+				-518.0
+			]
+		},
+		{
+			"name": "RingsFinal",
+			"kind": "Node3D",
+			"position": [
+				575.0,
+				0.8,
+				-510.0
+			]
+		},
+		{
+			"name": "Goal",
+			"kind": "goal",
+			"position": [
+				632.0,
+				0.0,
+				-510.0
+			]
+		},
+		{
+			"name": "MonitorStartBoost",
+			"kind": "item_monitor",
+			"position": [
+				-12.0,
+				0.0,
+				-22.0
+			]
+		},
+		{
+			"name": "MonitorMergeBoost",
+			"kind": "item_monitor",
+			"position": [
+				0.0,
+				6.0,
+				-492.0
+			]
+		},
+		{
+			"name": "ScuttlerStart",
+			"kind": "scuttler",
+			"position": [
+				-7.0,
+				0.0,
+				-34.0
+			]
+		},
+		{
+			"name": "GullBeachDown",
+			"kind": "galegull",
+			"position": [
+				8.0,
+				3.5,
+				-206.0
+			]
+		},
+		{
+			"name": "GullGap",
+			"kind": "galegull",
+			"position": [
+				-6.0,
+				8.4,
+				-328.5
+			]
+		},
+		{
+			"name": "ScuttlerDeck",
+			"kind": "scuttler",
+			"position": [
+				-6.0,
+				6.0,
+				-362.0
+			]
+		},
+		{
+			"name": "PearlshotLowRoad",
+			"kind": "pearlshot",
+			"position": [
+				24.0,
+				0.0,
+				-378.0
+			]
+		},
+		{
+			"name": "ScuttlerLowRoad",
+			"kind": "scuttler",
+			"position": [
+				12.0,
+				0.0,
+				-398.0
+			]
+		},
+		{
+			"name": "GullMerge",
+			"kind": "galegull",
+			"position": [
+				16.0,
+				9.5,
+				-482.0
+			]
+		},
+		{
+			"name": "FishPier1",
+			"kind": "leapfin",
+			"position": [
+				118.0,
+				-2.5,
+				-511.0
+			]
+		},
+		{
+			"name": "FishPier2",
+			"kind": "leapfin",
+			"position": [
+				205.0,
+				-2.5,
+				-511.0
+			]
+		},
+		{
+			"name": "ScuttlerRollers",
+			"kind": "scuttler",
+			"position": [
+				530.0,
+				0.0,
+				-510.0
+			]
+		}
+	]
+}

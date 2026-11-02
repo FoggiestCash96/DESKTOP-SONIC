@@ -14,6 +14,10 @@
 | [Python](https://www.python.org/), [NumPy](https://numpy.org/) and [SciPy](https://scipy.org/) (making the music and sound only, not shipped) | The Python Software Foundation, and the NumPy and SciPy developers | PSF, BSD |
 | [FFmpeg](https://ffmpeg.org/) with [libvorbis](https://xiph.org/vorbis/) (encoding the music only, not shipped) | The FFmpeg developers, Xiph.Org | LGPL/GPL, BSD |
 
+## Art
+
+All of the game's 3D art (both acts, the objects, the badniks, the boss, Sonic and the title screen's beach) is made by scripts in Blender by the Sonic Velocity Run contributors, and can be rebuilt from them: see [DEVELOPER.md](DEVELOPER.md). No textures, models or other art come from anywhere else.
+
 ## Research and references
 
 Studied for **behaviour only**. No code or assets were copied.

@@ -48,6 +48,8 @@ import/blender/enabled=false
 
 [game]
 
+art/art_bank="res://content/sonic/objects/art_bank.tres"
+art/material_library="res://content/sonic/materials"
 audio/sound_bank="res://content/sonic/audio/sound_bank.tres"
 
 [input]

@@ -26,6 +26,7 @@ const FLASH_PERIOD := 0.08  ## Seconds per flash after a hit.
 const CONTACT_GRACE := 0.4  ## Seconds after a hit or a bounce during which touching the body does nothing.
 
 @export var display_name: String = ""  ## Shown with its hits left on the HUD.
+@export var skin: PackedScene  ## A model to dress the placeholder shapes in (see ModelSkin). Empty keeps them.
 @export var hits: int = 8
 @export var phase_changes: Array[int] = [4, 2]  ## Hits left at which the next phase starts.
 @export var hit_flash_time: float = 1.0  ## Seconds it can't be hit after a hit.
@@ -53,6 +54,7 @@ var _grace := 0.0
 
 
 func _ready() -> void:
+	ModelSkin.apply(self, skin)
 	add_to_group(GROUP)
 	hits_left = hits
 	homing_target.enabled = false

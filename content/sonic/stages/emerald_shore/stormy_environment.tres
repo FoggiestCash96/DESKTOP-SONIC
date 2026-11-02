@@ -1,20 +1,38 @@
 [gd_resource type="Environment" format=3]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_4xsdg"]
-sky_top_color = Color(0.2, 0.23, 0.3, 1)
-sky_horizon_color = Color(0.45, 0.48, 0.53, 1)
-ground_bottom_color = Color(0.1, 0.11, 0.13, 1)
-ground_horizon_color = Color(0.45, 0.48, 0.53, 1)
+[ext_resource type="Shader" path="res://engine/art/toon_sky.gdshader" id="1_sky"]
 
-[sub_resource type="Sky" id="Sky_u17vc"]
-sky_material = SubResource("ProceduralSkyMaterial_4xsdg")
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_storm"]
+shader = ExtResource("1_sky")
+shader_parameter/top_colour = Color(0.2, 0.23, 0.3, 1)
+shader_parameter/horizon_colour = Color(0.44, 0.47, 0.52, 1)
+shader_parameter/below_colour = Color(0.22, 0.26, 0.3, 1)
+shader_parameter/gradient_curve = 0.7
+shader_parameter/sun_colour = Color(0.8, 0.85, 0.9, 1)
+shader_parameter/sun_size = 0.0
+shader_parameter/sun_halo = 0.06
+shader_parameter/cloud_colour = Color(0.46, 0.48, 0.54, 1)
+shader_parameter/cloud_shade_colour = Color(0.27, 0.29, 0.34, 1)
+shader_parameter/cloud_cover = 0.78
+shader_parameter/cloud_scale = 0.9
+shader_parameter/cloud_offset = Vector2(0, 0)
+shader_parameter/flash = 0.0
+
+[sub_resource type="Sky" id="Sky_storm"]
+sky_material = SubResource("ShaderMaterial_storm")
 
 [resource]
 background_mode = 2
-sky = SubResource("Sky_u17vc")
+sky = SubResource("Sky_storm")
 ambient_light_source = 3
-tonemap_mode = 2
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.75
+reflected_light_source = 2
+tonemap_mode = 0
+glow_enabled = true
+glow_intensity = 0.4
+glow_bloom = 0.08
 fog_enabled = true
 fog_light_color = Color(0.42, 0.45, 0.5, 1)
-fog_density = 0.004
+fog_density = 0.0035
 fog_sky_affect = 0.0

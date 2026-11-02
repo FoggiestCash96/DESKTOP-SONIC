@@ -5,8 +5,11 @@ extends Node3D
 ## The track starts at this node's origin heading along -Z, climbs a full vertical circle and comes
 ## back down beside the entry, shifted along +X by `exit_offset` so its two ends don't meet.
 ## The mesh and collision are generated when the node is ready (in the editor too) and never saved.
+## The mesh's UVs are in metres: U along the track from the entry, V across it from the middle (and
+## up the curbs), so a material can draw stripes or tiles that follow the track.
 
 const CURB_RAMP := PI / 6.0  ## The curbs rise to full height over this much of each end of the loop (radians).
+const UNDERSIDE := Color(0.6, 0.6, 0.6)  ## Vertex colour of the track's outer side and the curbs' backs, for a material that shades them darker.
 
 @export var radius: float = 4.0:
 	set(value):
@@ -69,6 +72,8 @@ func _build() -> void:
 	var surface := SurfaceTool.new()
 	surface.begin(Mesh.PRIMITIVE_TRIANGLES)
 	var faces := PackedVector3Array()
+	var arc := sqrt(pow(exit_offset / TAU, 2.0) + radius * radius)  # Metres of track per radian.
+	var half := width * 0.5
 	for i in segments:
 		var angle_a := TAU * i / segments
 		var angle_b := TAU * (i + 1) / segments
@@ -83,11 +88,18 @@ func _build() -> void:
 		var left_b := center_b - side_b * width * 0.5
 		var right_b := center_b + side_b * width * 0.5
 		var facing := (normal_a + normal_b).normalized()
-		var curb_a := normal_a * curb_rise(angle_a, curb_height)
-		var curb_b := normal_b * curb_rise(angle_b, curb_height)
-		_quad(surface, faces, left_a, right_a, right_b, left_b, facing)
-		_quad(surface, faces, left_a, left_b, left_b + curb_b, left_a + curb_a, side_a)
-		_quad(surface, faces, right_a, right_b, right_b + curb_b, right_a + curb_a, -side_a)
+		var rise_a := curb_rise(angle_a, curb_height)
+		var rise_b := curb_rise(angle_b, curb_height)
+		var curb_a := normal_a * rise_a
+		var curb_b := normal_b * rise_b
+		var along_a := arc * angle_a
+		var along_b := arc * angle_b
+		_quad(surface, faces, [left_a, right_a, right_b, left_b], facing,
+				[Vector2(along_a, -half), Vector2(along_a, half), Vector2(along_b, half), Vector2(along_b, -half)])
+		_quad(surface, faces, [left_a, left_b, left_b + curb_b, left_a + curb_a], side_a,
+				[Vector2(along_a, -half), Vector2(along_b, -half), Vector2(along_b, -half - rise_b), Vector2(along_a, -half - rise_a)])
+		_quad(surface, faces, [right_a, right_b, right_b + curb_b, right_a + curb_a], -side_a,
+				[Vector2(along_a, half), Vector2(along_b, half), Vector2(along_b, half + rise_b), Vector2(along_a, half + rise_a)])
 
 	var mesh_instance := MeshInstance3D.new()
 	mesh_instance.name = "Mesh"
@@ -118,18 +130,23 @@ func _side(angle: float) -> Vector3:
 	return tangent.cross(surface_normal(angle)).normalized()
 
 
-## Adds the quad a-b-c-d to the mesh as two-sided triangles, and once to the collision faces.
-## `normal` is the side the quad should face.
-static func _quad(surface: SurfaceTool, faces: PackedVector3Array, a: Vector3, b: Vector3, c: Vector3, d: Vector3, normal: Vector3) -> void:
-	for corners: PackedVector3Array in [PackedVector3Array([a, b, c]), PackedVector3Array([a, c, d])]:
-		var triangle := corners
+## Adds the quad `corners` to the mesh as two-sided triangles with `uvs` at its corners, and once
+## to the collision faces. `normal` is the side the quad should face; its other side gets the
+## UNDERSIDE vertex colour.
+static func _quad(surface: SurfaceTool, faces: PackedVector3Array, corners: PackedVector3Array, normal: Vector3, uvs: PackedVector2Array) -> void:
+	for corner_order: PackedInt32Array in [PackedInt32Array([0, 1, 2]), PackedInt32Array([0, 2, 3])]:
+		var order := corner_order
 		# Godot treats a triangle as facing (third - first) x (second - first).
-		if (triangle[2] - triangle[0]).cross(triangle[1] - triangle[0]).dot(normal) < 0.0:
-			triangle = PackedVector3Array([triangle[0], triangle[2], triangle[1]])
-		faces.append_array(triangle)
-		for corner in triangle:
+		if (corners[order[2]] - corners[order[0]]).cross(corners[order[1]] - corners[order[0]]).dot(normal) < 0.0:
+			order = PackedInt32Array([order[0], order[2], order[1]])
+		for index in order:
+			faces.append(corners[index])
 			surface.set_normal(normal)
-			surface.add_vertex(corner)
-		for corner in PackedVector3Array([triangle[0], triangle[2], triangle[1]]):
+			surface.set_color(Color.WHITE)
+			surface.set_uv(uvs[index])
+			surface.add_vertex(corners[index])
+		for index in PackedInt32Array([order[0], order[2], order[1]]):
 			surface.set_normal(-normal)
-			surface.add_vertex(corner)
+			surface.set_color(UNDERSIDE)
+			surface.set_uv(uvs[index])
+			surface.add_vertex(corners[index])

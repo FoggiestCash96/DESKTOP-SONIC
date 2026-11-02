@@ -1,0 +1,1174 @@
+{
+	"scene": "res://content/sonic/enemies/scuttler.tscn",
+	"nodes": [
+		{
+			"path": "Model",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Model/Body",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.55,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Model/Body/Shell",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.4,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.55,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.55,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.5,
+				"height": 1.0,
+				"aabb": [
+					-0.4964,
+					-0.5,
+					-0.4964,
+					0.9927,
+					1.0,
+					0.9927
+				]
+			},
+			"colour": [
+				0.92,
+				0.3,
+				0.2
+			]
+		},
+		{
+			"path": "Model/Body/Belly",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.3,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.4,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					0.92
+				],
+				"origin": [
+					0.0,
+					0.49,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.45,
+				"height": 0.9,
+				"aabb": [
+					-0.4467,
+					-0.45,
+					-0.4467,
+					0.8934,
+					0.9,
+					0.8934
+				]
+			},
+			"colour": [
+				0.98,
+				0.85,
+				0.65
+			]
+		},
+		{
+			"path": "Model/Body/Band",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					0.72
+				],
+				"origin": [
+					0.0,
+					0.55,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.08,
+				"top_radius": 0.71,
+				"bottom_radius": 0.71,
+				"aabb": [
+					-0.71,
+					-0.04,
+					-0.71,
+					1.42,
+					0.08,
+					1.42
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/Body/StalkLeft",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.9848,
+					0.1677,
+					-0.0449
+				],
+				"y": [
+					-0.1736,
+					0.9513,
+					-0.2549
+				],
+				"z": [
+					0.0,
+					0.2588,
+					0.9659
+				],
+				"origin": [
+					-0.18,
+					0.85,
+					-0.28
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.32,
+				"top_radius": 0.035,
+				"bottom_radius": 0.035,
+				"aabb": [
+					-0.035,
+					-0.16,
+					-0.035,
+					0.07,
+					0.32,
+					0.07
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/Body/EyeLeft",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.2,
+					1.02,
+					-0.33
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.09,
+				"height": 0.18,
+				"aabb": [
+					-0.0893,
+					-0.09,
+					-0.0893,
+					0.1787,
+					0.18,
+					0.1787
+				]
+			},
+			"colour": [
+				1.0,
+				1.0,
+				1.0
+			]
+		},
+		{
+			"path": "Model/Body/PupilLeft",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.2,
+					1.03,
+					-0.41
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.045,
+				"height": 0.09,
+				"aabb": [
+					-0.0447,
+					-0.045,
+					-0.0447,
+					0.0893,
+					0.09,
+					0.0893
+				]
+			},
+			"colour": [
+				0.05,
+				0.05,
+				0.08
+			]
+		},
+		{
+			"path": "Model/Body/ClawLeft",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.55,
+					0.55,
+					-0.4
+				]
+			}
+		},
+		{
+			"path": "Model/Body/ClawLeft/Arm",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"z": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"origin": [
+					-0.6,
+					0.55,
+					-0.54
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.3,
+				"top_radius": 0.07,
+				"bottom_radius": 0.07,
+				"aabb": [
+					-0.07,
+					-0.15,
+					-0.07,
+					0.14,
+					0.3,
+					0.14
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/Body/ClawLeft/Pincer",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.75,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.4
+				],
+				"origin": [
+					-0.65,
+					0.57,
+					-0.78
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.22,
+				"height": 0.44,
+				"aabb": [
+					-0.2184,
+					-0.22,
+					-0.2184,
+					0.4368,
+					0.44,
+					0.4368
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/Body/ClawLeft/Thumb",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.8,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.8,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.3
+				],
+				"origin": [
+					-0.55,
+					0.69,
+					-0.72
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.11,
+				"height": 0.22,
+				"aabb": [
+					-0.1092,
+					-0.11,
+					-0.1092,
+					0.2184,
+					0.22,
+					0.2184
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/Body/StalkRight",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.9848,
+					-0.1677,
+					0.0449
+				],
+				"y": [
+					0.1736,
+					0.9513,
+					-0.2549
+				],
+				"z": [
+					0.0,
+					0.2588,
+					0.9659
+				],
+				"origin": [
+					0.18,
+					0.85,
+					-0.28
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.32,
+				"top_radius": 0.035,
+				"bottom_radius": 0.035,
+				"aabb": [
+					-0.035,
+					-0.16,
+					-0.035,
+					0.07,
+					0.32,
+					0.07
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/Body/EyeRight",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.2,
+					1.02,
+					-0.33
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.09,
+				"height": 0.18,
+				"aabb": [
+					-0.0893,
+					-0.09,
+					-0.0893,
+					0.1787,
+					0.18,
+					0.1787
+				]
+			},
+			"colour": [
+				1.0,
+				1.0,
+				1.0
+			]
+		},
+		{
+			"path": "Model/Body/PupilRight",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.2,
+					1.03,
+					-0.41
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.045,
+				"height": 0.09,
+				"aabb": [
+					-0.0447,
+					-0.045,
+					-0.0447,
+					0.0893,
+					0.09,
+					0.0893
+				]
+			},
+			"colour": [
+				0.05,
+				0.05,
+				0.08
+			]
+		},
+		{
+			"path": "Model/Body/ClawRight",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.55,
+					0.55,
+					-0.4
+				]
+			}
+		},
+		{
+			"path": "Model/Body/ClawRight/Arm",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"z": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"origin": [
+					0.6,
+					0.55,
+					-0.54
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.3,
+				"top_radius": 0.07,
+				"bottom_radius": 0.07,
+				"aabb": [
+					-0.07,
+					-0.15,
+					-0.07,
+					0.14,
+					0.3,
+					0.14
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/Body/ClawRight/Pincer",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.75,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.4
+				],
+				"origin": [
+					0.65,
+					0.57,
+					-0.78
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.22,
+				"height": 0.44,
+				"aabb": [
+					-0.2184,
+					-0.22,
+					-0.2184,
+					0.4368,
+					0.44,
+					0.4368
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/Body/ClawRight/Thumb",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.8,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					0.8,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.3
+				],
+				"origin": [
+					0.55,
+					0.69,
+					-0.72
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.11,
+				"height": 0.22,
+				"aabb": [
+					-0.1092,
+					-0.11,
+					-0.1092,
+					0.2184,
+					0.22,
+					0.2184
+				]
+			},
+			"colour": [
+				0.8,
+				0.2,
+				0.14
+			]
+		},
+		{
+			"path": "Model/LegsLeft",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Model/LegsLeft/Leg0",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					-0.766,
+					0.0
+				],
+				"y": [
+					0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.78,
+					0.3,
+					0.25
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/LegsLeft/Leg1",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					-0.766,
+					0.0
+				],
+				"y": [
+					0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.78,
+					0.3,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/LegsLeft/Leg2",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					-0.766,
+					0.0
+				],
+				"y": [
+					0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-0.78,
+					0.3,
+					-0.25
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/LegsRight",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Model/LegsRight/Leg0",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					0.766,
+					0.0
+				],
+				"y": [
+					-0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.78,
+					0.3,
+					0.25
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/LegsRight/Leg1",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					0.766,
+					0.0
+				],
+				"y": [
+					-0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.78,
+					0.3,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Model/LegsRight/Leg2",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					0.6428,
+					0.766,
+					0.0
+				],
+				"y": [
+					-0.766,
+					0.6428,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.78,
+					0.3,
+					-0.25
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.62,
+				"top_radius": 0.05,
+				"bottom_radius": 0.05,
+				"aabb": [
+					-0.05,
+					-0.31,
+					-0.05,
+					0.1,
+					0.62,
+					0.1
+				]
+			},
+			"colour": [
+				0.55,
+				0.58,
+				0.64
+			]
+		},
+		{
+			"path": "Hitbox",
+			"type": "Area3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.0,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Hitbox/Shape",
+			"type": "CollisionShape3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.5,
+					-0.1
+				]
+			}
+		},
+		{
+			"path": "HomingTarget",
+			"type": "Marker3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.55,
+					0.0
+				]
+			}
+		}
+	]
+}

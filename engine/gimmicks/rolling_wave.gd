@@ -33,6 +33,9 @@ var _box: BoxShape3D
 
 
 func _ready() -> void:
+	if not Engine.is_editor_hint():
+		_water.material_override = ArtBank.material(&"wave_water", _water.material_override)
+		_foam.material_override = ArtBank.material(&"wave_foam", _foam.material_override)
 	_box = BoxShape3D.new()
 	_shape.shape = _box
 	_set_height(height)

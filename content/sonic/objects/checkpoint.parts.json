@@ -1,0 +1,230 @@
+{
+	"scene": "res://engine/gimmicks/checkpoint.tscn",
+	"nodes": [
+		{
+			"path": "Gate",
+			"type": "CollisionShape3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					1.5,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Foot",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.05,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 0.1,
+				"top_radius": 0.25,
+				"bottom_radius": 0.25,
+				"aabb": [
+					-0.25,
+					-0.05,
+					-0.25,
+					0.5,
+					0.1,
+					0.5
+				]
+			},
+			"colour": [
+				0.55,
+				0.56,
+				0.6
+			]
+		},
+		{
+			"path": "Pole",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					0.85,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "CylinderMesh",
+				"height": 1.7,
+				"top_radius": 0.06,
+				"bottom_radius": 0.06,
+				"aabb": [
+					-0.06,
+					-0.85,
+					-0.06,
+					0.12,
+					1.7,
+					0.12
+				]
+			},
+			"colour": [
+				0.55,
+				0.56,
+				0.6
+			]
+		},
+		{
+			"path": "Head",
+			"type": "Node3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					1.75,
+					0.0
+				]
+			}
+		},
+		{
+			"path": "Head/Cap",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					1.75,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.1,
+				"height": 0.2,
+				"aabb": [
+					-0.0999,
+					-0.1,
+					-0.0999,
+					0.1998,
+					0.2,
+					0.1998
+				]
+			},
+			"colour": [
+				0.55,
+				0.56,
+				0.6
+			]
+		},
+		{
+			"path": "Head/Lamp",
+			"type": "MeshInstance3D",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.2,
+					1.75,
+					0.0
+				]
+			},
+			"mesh": {
+				"class": "SphereMesh",
+				"radius": 0.14,
+				"height": 0.28,
+				"aabb": [
+					-0.1398,
+					-0.14,
+					-0.1398,
+					0.2797,
+					0.28,
+					0.2797
+				]
+			}
+		}
+	]
+}
