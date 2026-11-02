@@ -129,11 +129,13 @@ func test_each_act_has_a_toon_sea_and_sky() -> void:
 func test_each_acts_art_is_built_from_its_greybox_as_it_is_now() -> void:
 	for act: String in ACTS:
 		var stage := (load(act) as PackedScene).instantiate()
-		var now: Variant = JSON.parse_string(JSON.stringify(ExportGreybox.export_stage(stage, act)))
+		var now := JSON.parse_string(JSON.stringify(ExportGreybox.export_stage(stage, act))) as Dictionary
 		stage.free()
 		var greybox: String = ACTS[act]
-		var built: Variant = JSON.parse_string(FileAccess.get_file_as_string(greybox))
-		assert_true(now == built, "%s changed since its art was built: export its greybox and build its art again (%s)" % [act.get_file(), greybox.get_file()])
+		var built := JSON.parse_string(FileAccess.get_file_as_string(greybox)) as Dictionary
+		for key: String in built:
+			assert_true(_comparable(now.get(key)) == _comparable(built[key]),
+					"%s: its %s changed since its art was built: export its greybox and build its art again (%s)" % [act.get_file(), key, greybox.get_file()])
 
 
 func test_the_fortress_act_has_a_storm() -> void:
@@ -154,6 +156,23 @@ func test_a_loop_has_uvs_for_its_material() -> void:
 	assert_true(format & Mesh.ARRAY_FORMAT_TEX_UV != 0, "the loop's mesh has no UVs")
 	assert_true(format & Mesh.ARRAY_FORMAT_COLOR != 0, "the loop's mesh has no colours for its underside")
 	loop.free()
+
+
+## A section of a greybox's JSON without the signs' text sizes. Those come from fonts, and a
+## character a font lacks (like the signs' arrows) is drawn from whatever font the computer has, so
+## they differ from one machine to another while the greybox stays the same.
+func _comparable(section: Variant) -> Variant:
+	if not section is Array:
+		return section
+	var result := []
+	for item: Variant in section:
+		if item is Dictionary and (item as Dictionary).has("text_size"):
+			var copy := (item as Dictionary).duplicate()
+			copy.erase("text_size")
+			result.append(copy)
+		else:
+			result.append(item)
+	return result
 
 
 ## Every part of `model` names a node of `scene` (under `root`), or a node a new part can go under.
