@@ -316,7 +316,7 @@ item = 5
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 60, -34)
 
 [node name="SignCurrent" type="Label3D" parent="Gimmicks" unique_id=1852721613]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -8, 63.5, -30)
+transform = Transform3D(1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, 1, -8, 63.5, -30)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)
@@ -366,7 +366,7 @@ count = 4
 spacing = 3.0
 
 [node name="SignTiers" type="Label3D" parent="Gimmicks" unique_id=20113658]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 0, 39.5, -212)
+transform = Transform3D(1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, 1, 0, 39.5, -212)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)

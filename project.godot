@@ -51,6 +51,7 @@ import/blender/enabled=false
 art/art_bank="res://content/sonic/objects/art_bank.tres"
 art/material_library="res://content/sonic/materials"
 audio/sound_bank="res://content/sonic/audio/sound_bank.tres"
+ui/symbol_font="res://thirdparty/fonts/dejavu/DejaVuSans-Bold.ttf"
 
 [input]
 

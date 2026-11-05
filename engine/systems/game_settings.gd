@@ -52,6 +52,7 @@ var path := "user://settings.cfg"  ## Tests point this somewhere else.
 
 
 func _ready() -> void:
+	SymbolFont.install()  # Before any text is drawn, so symbols never come from the system's fonts.
 	load_settings()
 	apply()
 

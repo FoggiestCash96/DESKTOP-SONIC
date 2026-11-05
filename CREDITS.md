@@ -16,7 +16,7 @@
 
 ## Art
 
-All of the game's 3D art (both acts, the objects, the badniks, the boss, Sonic and the title screen's beach) is made by scripts in Blender by the Sonic Velocity Run contributors, and can be rebuilt from them: see [DEVELOPER.md](DEVELOPER.md). No textures, models or other art come from anywhere else.
+All of the game's 3D art (Emerald Shore's eight acts, the objects, the badniks, the boss, Sonic and the title screen's beach) is made by scripts in Blender by the Sonic Velocity Run contributors, and can be rebuilt from them: see [DEVELOPER.md](DEVELOPER.md). No textures, models or other art come from anywhere else. The music and sound effects are composed and synthesised in code by the contributors too ([tools/audio/](tools/audio/README.md)).
 
 ## Research and references
 
@@ -28,10 +28,11 @@ Studied for **behaviour only**. No code or assets were copied.
 
 ## Third-party assets
 
-None yet. Add every third-party asset here before merging it, using this format:
+Add every third-party asset here before merging it, in this format. Each keeps its own license, which lives in its folder under `thirdparty/` and goes into every download.
 
 | Asset | Path | Author | Source | License |
 |---|---|---|---|---|
+| DejaVu Sans Bold 2.37, a font for the characters the default font lacks, such as the arrows on signs | `thirdparty/fonts/dejavu/` | Bitstream, Inc. (Bitstream Vera), Tavmjong Bah (Arev glyphs) and the DejaVu fonts team | [dejavu-fonts](https://github.com/dejavu-fonts/dejavu-fonts/releases/tag/version_2_37) | Bitstream Vera Fonts license, with the DejaVu changes in the public domain (`thirdparty/fonts/dejavu/LICENSE`) |
 
 ## Trademarks
 

@@ -557,6 +557,8 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 
 All menu and HUD text goes through Godot's translation system, from `content/sonic/ui/translations/strings.csv` (English for now), so the community can add languages by adding a column.
 
+Characters the engine's default font lacks, such as the arrows on signs, come from a bundled font, DejaVu Sans Bold (decided 2026-11-05 for the demo): it's added to the default font's fallbacks at start-up (`SymbolFont`, named by the project setting `game/ui/symbol_font`), so those characters look the same on every system instead of depending on the fonts each one has installed, where a system without such a font would show boxes. Everything else keeps the default font's look. `tests/unit/test_fonts.gd` checks that every character on a sign in a stage, and in the game's text, is in one font or the other. A sign's text faces its +Z axis, toward the players coming at it; on a 2.5D stretch it faces the side-view camera.
+
 ## 11. Audio (Milestone 10)
 
 Decided 2026-10-31: **original music, composed in code** and changeable at any time, and **sound effects synthesised in code**, all CC BY-SA 4.0. Nothing is sampled or downloaded.
@@ -606,7 +608,7 @@ Each one is grouped by the milestone where it starts to block work.
 | Needed by | Decision |
 |---|---|
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
-| **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; GameJolt |
+| **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; itch.io and GameJolt pages |
 
 ## 13. Roadmap
 
@@ -621,6 +623,8 @@ Each one is grouped by the milestone where it starts to block work.
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
-| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11), the art pass done (2026-11-01, §8.3), and Acts 2 to 7 built with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9). Next: the demo release |
+| 10 | Art and audio pass, then a public demo release | **Done** (2026-11-05): audio (2026-10-31, §11), the art pass (2026-11-01, §8.3), Acts 2 to 7 with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9), and the first public demo, **v0.1.0**, on GitHub Releases |
+
+**Releases** (decided 2026-11-05): pushing a `v*` tag publishes a GitHub pre-release (while the game is in 0.x) with Windows, Linux and macOS builds, each carrying the licenses, the credits and the bundled font's license, and with the notes in `docs/releases/<tag>.md`. The demo is on GitHub Releases only; itch.io can follow later. Each release is first checked from a test build (Actions → CI → Run workflow), launched on Windows.
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

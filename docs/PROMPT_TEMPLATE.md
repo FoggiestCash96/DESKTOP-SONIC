@@ -326,7 +326,7 @@ res://
 7. ~~Character art pipeline: Blender → glTF → AnimationTree.~~ **Done 2026-10-30**, with a scripted stand-in Sonic, toon shading, speed lines and motion blur.
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
-10. Art and audio pass, then a public demo release. **Audio done 2026-10-31:** original music for the menus, both acts, the boss and invincibility, three jingles, and about 40 sound effects, all made in code (`tools/audio/`). **Art pass done 2026-11-01:** both acts, the objects, the badniks, the boss, Sonic and the title screen, all script-built in Blender. Next: Acts 2 to 7 (the demo will have all eight of Emerald Shore's acts), then the demo release.
+10. ~~Art and audio pass, then a public demo release.~~ **Done 2026-11-05.** Audio 2026-10-31: original music and about 40 sound effects, all made in code (`tools/audio/`). Art pass 2026-11-01: the acts, objects, badniks, boss, Sonic and title screen, all script-built in Blender. Acts 2 to 7 2026-11-05, with water, grind rails, moving and crumbling platforms, breakable walls, swimming and their own music. The first public demo, v0.1.0, with all eight of Emerald Shore's acts, on GitHub Releases.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 
