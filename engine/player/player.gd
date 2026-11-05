@@ -2,9 +2,11 @@ class_name Player
 extends CharacterBody3D
 ## Kinematic player controller with classic momentum physics: speed along the surface, slopes
 ## that add and take away speed, walls and loops through surface alignment, rolling and the spin
-## dash, free 3D velocity in the air, the homing attack and air dash, the boost and the quickstep. Each movement state is a script in engine/player/states/;
-## the shared surface handling lives here, along with rings, hits, power-ups and staying on 2.5D
-## paths. Input is relative to the active camera, and all tuning lives in `physics`.
+## dash, free 3D velocity in the air, the homing attack and air dash, the boost and the quickstep,
+## grinding on rails and swimming. Each movement state is a script in engine/player/states/; the
+## shared surface handling lives here, along with rings, hits, power-ups, air under water, being
+## crushed and staying on 2.5D paths. Input is relative to the active camera, and all tuning lives
+## in `physics`.
 
 signal died  ## The player died. The stage restarts, or the game ends, a moment later.
 
@@ -20,10 +22,14 @@ const FINISH_SPEED := 1.0  ## After the goal, the victory pose starts below this
 const LOST_RING_SCENE := "res://engine/collectibles/lost_ring.tscn"
 const BOOST_BURST_SCENE := "res://engine/enemies/base/explosion.tscn"
 const BOOST_BURST_COLOR := Color(0.6, 0.85, 1.0, 0.8)
+const SPLASH_COLOR := Color(0.85, 0.97, 1.0, 0.85)
 const WORLD_MASK := 1  ## Physics layer of level geometry, which blocks the homing attack's line of sight.
 const SAFE_SPOT_INTERVAL := 0.5  ## With the assist on, where the player stands is remembered this often (s)...
 const SAFE_GROUND := 0.8  ## ...on ground at least this level (the up component of its normal).
 const SKID_SOUND_SPEED := 4.0  ## Braking from at least this fast (m/s) screeches.
+const WATER_HEIGHT := 0.5  ## The player is under water once this point above their feet is (m).
+const CRUSH_MARGIN := 0.12  ## Squeezed this far into level geometry by something moving, the player is crushed (m).
+const CRUSH_REACH := 30.0  ## Only things that move within this distance can crush (m).
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -56,6 +62,7 @@ var air_state: AirState
 var hurt_state: HurtState
 var death_state: DeathState
 var homing_state: HomingState
+var grind_state: GrindState
 var homing_candidate: HomingTarget  ## What a homing attack would lock on to right now, shown with a reticle. Null on the ground or with the attack used.
 
 var _spawn: Transform3D
@@ -86,6 +93,13 @@ var _quickstep_timer := 0.0  # Seconds of quickstep left.
 var _quickstep_side := 0.0  # Which way the quickstep goes: -1 left, 1 right.
 var _safe_timer := 0.0
 var _was_braking := false
+var _underwater := false  # Below a WaterVolume's surface.
+var _air := 30.0  # Seconds of air left under water.
+var _physics_variants: Dictionary[int, PlayerPhysics] = {}  # `physics` with speed shoes and under water, worked out once each.
+var _rail_cooldown := 0.0  # Seconds before a rail can catch the player again.
+var _crush_query := PhysicsShapeQueryParameters3D.new()
+var _crush_ball := SphereShape3D.new()
+var _crush_capsule := CapsuleShape3D.new()
 
 @onready var _standing_shape: CollisionShape3D = %StandingShape
 @onready var _ball_shape: CollisionShape3D = %BallShape
@@ -108,6 +122,7 @@ func _ready() -> void:
 	hurt_state = HurtState.new(self)
 	death_state = DeathState.new(self)
 	homing_state = HomingState.new(self)
+	grind_state = GrindState.new(self)
 	if character:
 		if character.physics:
 			physics = character.physics
@@ -116,6 +131,13 @@ func _ready() -> void:
 			_visual.add_child(_model)
 	_base_physics = physics
 	boost_gauge = physics.boost_start
+	_air = physics.air_time
+	_crush_ball.radius = (_ball_shape.shape as SphereShape3D).radius - CRUSH_MARGIN
+	var standing := _standing_shape.shape as CapsuleShape3D
+	_crush_capsule.radius = standing.radius - CRUSH_MARGIN
+	_crush_capsule.height = standing.height - CRUSH_MARGIN * 2.0
+	_crush_query.collision_mask = WORLD_MASK
+	_crush_query.exclude = [get_rid()]
 	floor_snap_length = physics.snap_length
 	floor_max_angle = deg_to_rad(physics.surface_step_angle)
 	# The states set velocity themselves; without this a falling body touching an edge would stop dead on it.
@@ -149,6 +171,7 @@ func _exit_tree() -> void:
 		DebugOverlay.unwatch(label)
 	# The stage is going (reloading or changing): power-up music and the boost's sound go with it.
 	Sfx.set_looping(&"boost_loop", false)
+	Sfx.set_looping(&"grind_loop", false)
 	_end_power_ups()
 
 
@@ -157,11 +180,15 @@ func _physics_process(delta: float) -> void:
 	_braking = false
 	_pushing = false
 	_read_input()
+	_update_water(delta)
 	_update_boost(delta)
 	_start_quickstep()
 	state.tick(delta)
 	move_and_slide()
 	state.after_move(delta)
+	_catch_rail()
+	if state != death_state and _crushed():
+		die()
 	# Running head-on into a wall stops the boost rather than grinding into it.
 	if boosting and state == ground_state and ground_speed < physics.boost_speed * 0.5:
 		boosting = false
@@ -170,6 +197,7 @@ func _physics_process(delta: float) -> void:
 		Sfx.play(&"skid")
 	_was_braking = _braking
 	Sfx.set_looping(&"boost_loop", is_boosting() and state != death_state)
+	Sfx.set_looping(&"grind_loop", state == grind_state)
 	_count_down(delta)
 	if _magnet_timer > 0.0:
 		_pull_rings()
@@ -194,6 +222,8 @@ func _process(_delta: float) -> void:
 
 ## Which of CharacterModel.POSES the player's model should show right now.
 func pose() -> StringName:
+	if state == grind_state:
+		return &"skid"  # Leaning back on the rail.
 	var finished := not _input_enabled and is_grounded() and absf(ground_speed) < FINISH_SPEED
 	var sprung := _sprung and state == air_state and velocity.y > 0.0
 	return PlayerMotion.pose(state == death_state, state == hurt_state, is_attacking(), is_grounded(), sprung, finished, _braking, _pushing)
@@ -218,6 +248,7 @@ func respawn() -> void:
 	_invulnerable_timer = 0.0
 	_air_action_ready = true
 	_end_power_ups()
+	_catch_breath()
 	change_state(air_state)
 	reset_physics_interpolation()
 
@@ -254,6 +285,25 @@ func air_boost_time_left() -> float:
 
 func is_homing() -> bool:
 	return state == homing_state
+
+
+func is_grinding() -> bool:
+	return state == grind_state
+
+
+## Whether the player can smash a breakable wall: rolling (after a spin dash too) or boosting.
+func can_smash() -> bool:
+	return (state == roll_state or is_boosting()) and not _intangible
+
+
+## Below the surface of a WaterVolume, swimming.
+func is_underwater() -> bool:
+	return _underwater
+
+
+## Seconds of air left under water.
+func air_left() -> float:
+	return _air
 
 
 ## The middle of the curled-up ball, where homing attacks aim from.
@@ -602,10 +652,10 @@ func _update_boost(delta: float) -> void:
 	var stopped := not boost_held or state == hurt_state or state == death_state or state == roll_state or state == spin_dash_state
 	if boosting and (stopped or (is_grounded() and boost_gauge <= 0.0)):
 		boosting = false
-	elif not boosting and boost_pressed and state == ground_state and boost_gauge > 0.0:
+	elif not boosting and boost_pressed and (state == ground_state or state == grind_state) and boost_gauge > 0.0:
 		boosting = true
 		_boost_burst()
-	if boosting and state == ground_state:
+	if boosting and (state == ground_state or state == grind_state):
 		add_boost(-physics.boost_drain * delta)
 		ground_speed = maxf(ground_speed, physics.boost_speed)
 
@@ -669,7 +719,7 @@ func _in_sight(from: Vector3, to: Vector3) -> bool:
 ## Moving water pushing the player along `direction` (a horizontal unit vector): it speeds them up
 ## along it by `amount` (m/s), but not past `max_speed`, and slows them down against it.
 func push(direction: Vector3, max_speed: float, amount: float) -> void:
-	if state == death_state:
+	if state == death_state or state == grind_state:
 		return
 	if not is_grounded():
 		velocity = PlayerMotion.pushed(velocity, direction, max_speed, amount)
@@ -729,13 +779,14 @@ func hurt(from: Vector3) -> bool:
 
 
 ## Dies: a hop up and a fall through everything, then the stage restarts or the game ends. A fall
-## out of the world (`hop` false) skips the hop. With no stage listening, the player respawns.
-func die(hop := true) -> void:
+## out of the world or drowning (`hop` false) skips the hop. With no stage listening, the player
+## respawns.
+func die(hop := true, sound := &"death") -> void:
 	if state == death_state:
 		return
 	death_state.hop = hop
 	change_state(death_state)
-	Sfx.play(&"death")
+	Sfx.play(sound)
 	_invulnerable_timer = 0.0
 	_end_power_ups()
 	if died.get_connections().is_empty():
@@ -751,7 +802,7 @@ func give_shield() -> void:
 ## Speed shoes double acceleration, friction and top speed for a while, and speed up the music.
 func give_speed_shoes() -> void:
 	_shoes_timer = _base_physics.speed_shoes_time
-	physics = PlayerMotion.with_speed_shoes(_base_physics)
+	_refresh_physics()
 	Music.set_fast(true)
 
 
@@ -800,8 +851,160 @@ func describe_items() -> String:
 		parts.append("magnet %.1f s" % _magnet_timer)
 	if _invulnerable_timer > 0.0:
 		parts.append("flashing %.1f s" % _invulnerable_timer)
+	if _underwater:
+		parts.append("air %.1f s" % _air)
 	parts.append("boost %d%%%s" % [roundi(boost_gauge), " (boosting)" if is_boosting() else ""])
 	return "  ".join(parts)
+
+
+# --- Water ----------------------------------------------------------------------------------
+
+## Takes a breath from an air bubble: the air is full again, and the player stops still for a
+## moment, as in the classic games.
+func breathe() -> void:
+	if state == death_state:
+		return
+	_catch_breath()
+	Sfx.play(&"breathe")
+	velocity = Vector3.ZERO
+	ground_speed = 0.0
+	lock_controls(physics.breathe_pause)
+
+
+## Swimming: below a WaterVolume's surface the player moves with the underwater values
+## (PlayerMotion.underwater()). Falling in takes most of their speed away, and leaving the water
+## while rising carries them up and out. Under water the air runs down, with a chime at 25, 20 and
+## 15 seconds left, the countdown and its music from drown_countdown, and drowning at nothing.
+func _update_water(delta: float) -> void:
+	if state == death_state:
+		return
+	var middle := global_position + global_basis.y.normalized() * WATER_HEIGHT
+	var water := WaterVolume.find(get_tree(), middle)
+	var was_underwater := _underwater
+	_underwater = water != null
+	if _underwater != was_underwater:
+		_refresh_physics()
+		if _underwater:
+			velocity = PlayerMotion.water_entry(velocity, physics)
+			if is_grounded():
+				ground_speed *= physics.water_entry_horizontal
+			_splash(water)
+		else:
+			if not is_grounded():
+				velocity = PlayerMotion.water_exit(velocity, physics)
+			_splash(WaterVolume.find(get_tree(), middle - Vector3.UP * 1.5))
+			_catch_breath()
+	if not _underwater:
+		return
+	var before := _air
+	_air = maxf(_air - delta, 0.0)
+	if PlayerMotion.air_warning(before, _air):
+		Sfx.play(&"air_warning")
+	if before > physics.drown_countdown and _air <= physics.drown_countdown:
+		Music.start_override(&"drowning")
+	if _air <= 0.0:
+		die(false, &"drown")
+
+
+## Full air again, and the drowning countdown's music gives way.
+func _catch_breath() -> void:
+	_air = physics.air_time
+	Music.end_override(&"drowning")
+	if _invincible_timer > 0.0:
+		Music.start_override(&"invincible")
+
+
+## A splash where the player crosses the surface of `water` (if they're still near it).
+func _splash(water: WaterVolume) -> void:
+	if water == null:
+		return
+	var at := Vector3(global_position.x, water.surface_height(global_position), global_position.z)
+	Sfx.play_at(&"splash", at)
+	var burst := (load(BOOST_BURST_SCENE) as PackedScene).instantiate() as Node3D
+	burst.set("size", 1.6)
+	get_parent().add_child(burst)
+	burst.global_position = at
+	var ball := burst.get_node_or_null("%Ball") as MeshInstance3D
+	if ball and ball.material_override is StandardMaterial3D:
+		(ball.material_override as StandardMaterial3D).albedo_color = SPLASH_COLOR
+
+
+## `physics` as it should be now: the character's own values, under water and with speed shoes as
+## they apply.
+func _refresh_physics() -> void:
+	var shoes := _shoes_timer > 0.0
+	var key := int(shoes) + 2 * int(_underwater)
+	if not _physics_variants.has(key):
+		var variant := _base_physics
+		if _underwater:
+			variant = PlayerMotion.underwater(variant)
+		if shoes:
+			variant = PlayerMotion.with_speed_shoes(variant)
+		_physics_variants[key] = variant
+	physics = _physics_variants[key]
+
+
+# --- Rails ----------------------------------------------------------------------------------
+
+## Leaves the rail being ground: on along it into the air, or with `jumped` in a jump.
+func leave_rail(jumped: bool) -> void:
+	if state != grind_state:
+		return
+	velocity = grind_state.motion_direction() * ground_speed
+	_rail_cooldown = physics.grind_cooldown
+	if jumped:
+		velocity += Vector3.UP * physics.jmp
+		air_state.jumped = true
+		air_state.rising = true
+		Sfx.play(&"jump")
+	change_state(air_state)
+
+
+## Lands on a rail close enough to the feet (grind_catch), from the air or by running onto its end,
+## grinding the way the player was going along it.
+func _catch_rail() -> void:
+	if _rail_cooldown > 0.0 or not (state == air_state or state == ground_state or state == roll_state):
+		return
+	if velocity.y > 2.0 and state == air_state:
+		return  # Still rising: rails catch the player on the way down.
+	var feet := global_position
+	for node in get_tree().get_nodes_in_group(GrindRail.GROUP):
+		var rail := node as GrindRail
+		if rail == null or not rail.near(feet, physics.grind_catch):
+			continue
+		var at := rail.closest_offset(feet)
+		var top := rail.top_at(at)
+		if feet.distance_to(top) > physics.grind_catch or feet.y < top.y - 0.25:
+			continue
+		var tangent := rail.tangent_at(at)
+		var along := velocity.dot(tangent)
+		var toward := signf(along) if absf(along) > 0.5 else (1.0 if heading.dot(tangent) >= 0.0 else -1.0)
+		ground_speed = maxf(absf(along), physics.grind_min_speed)
+		grind_state.attach(rail, at, toward)
+		_air_action_ready = true
+		_air_boost_ready = true
+		_sprung = false
+		change_state(grind_state)
+		return
+
+
+# --- Crushing -------------------------------------------------------------------------------
+
+## Whether something moving (a MovingPlatform) has squeezed the player into level geometry: after
+## the move, a body a little smaller than theirs still overlaps something solid.
+func _crushed() -> bool:
+	var near := false
+	for node in get_tree().get_nodes_in_group(MovingPlatform.GROUP):
+		var crusher := node as Node3D
+		if crusher and crusher.global_position.distance_to(global_position) < CRUSH_REACH:
+			near = true
+			break
+	if not near or _intangible:
+		return false
+	var shape := _ball_shape if _curled else _standing_shape
+	_crush_query.shape = (_crush_ball as Shape3D) if _curled else (_crush_capsule as Shape3D)
+	_crush_query.transform = shape.global_transform
+	return not get_world_3d().direct_space_state.intersect_shape(_crush_query, 1).is_empty()
 
 
 # --- Body -----------------------------------------------------------------------------------
@@ -936,6 +1139,7 @@ func _count_down(delta: float) -> void:
 	_jump_buffer_timer = maxf(_jump_buffer_timer - delta, 0.0)
 	_invulnerable_timer = maxf(_invulnerable_timer - delta, 0.0)
 	_magnet_timer = maxf(_magnet_timer - delta, 0.0)
+	_rail_cooldown = maxf(_rail_cooldown - delta, 0.0)
 	if _invincible_timer > 0.0:
 		_invincible_timer = maxf(_invincible_timer - delta, 0.0)
 		if _invincible_timer == 0.0:
@@ -943,7 +1147,7 @@ func _count_down(delta: float) -> void:
 	if _shoes_timer > 0.0:
 		_shoes_timer = maxf(_shoes_timer - delta, 0.0)
 		if _shoes_timer == 0.0:
-			physics = _base_physics
+			_refresh_physics()
 			Music.set_fast(false)
 
 
@@ -956,7 +1160,7 @@ func _end_power_ups() -> void:
 	_shoes_timer = 0.0
 	_invincible_timer = 0.0
 	_magnet_timer = 0.0
-	physics = _base_physics
+	_refresh_physics()
 
 
 ## The 2.5D section (a camera volume with lock_depth) the player is in, if any.

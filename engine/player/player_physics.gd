@@ -103,6 +103,27 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export var lost_ring_pickup_delay: float = 64.0 / CLASSIC_FPS  ## Seconds before scattered rings can be collected.
 @export var lost_ring_lifetime: float = 256.0 / CLASSIC_FPS  ## Seconds before scattered rings vanish.
 
+@export_group("Water")
+@export var water_factor: float = 0.5  ## Underwater, acc, dec, frc, top, air_acc, roll_frc and boost_speed are multiplied by this, as the classic games halve them.
+@export var water_grv: float = 0.0625 * ACCEL  ## Gravity underwater (m/s²).
+@export var water_jmp: float = 3.5 * SPEED  ## Speed of a jump underwater (m/s).
+@export var water_jmp_release_cap: float = 2.0 * SPEED  ## Letting go of jump early underwater caps the upward speed to this (m/s).
+@export var water_hurt_gravity: float = 0.0625 * ACCEL  ## Gravity while knocked back underwater (m/s²).
+@export_range(0.0, 1.0) var water_entry_horizontal: float = 0.5  ## Falling into water keeps this share of the horizontal speed...
+@export_range(0.0, 1.0) var water_entry_vertical: float = 0.25  ## ...and this share of the vertical speed.
+@export var water_exit_boost: float = 2.0  ## Leaving the water while rising multiplies the upward speed by this (up to max_fall), so a jump carries the player out.
+@export var air_time: float = 30.0  ## Seconds of air underwater before drowning.
+@export var drown_countdown: float = 12.0  ## With this many seconds of air left, the countdown and its music start.
+@export var breathe_pause: float = 0.35  ## Seconds the player stops still while taking a breath from an air bubble.
+
+@export_group("Grind rails")
+@export var grind_catch: float = 0.6  ## A rail this close to the player's feet catches them (m).
+@export var grind_min_speed: float = 5.0  ## Landing on a rail with less speed along it than this grinds at this speed (m/s).
+@export var grind_frc: float = 0.5  ## Slowdown while grinding (m/s²), though never below grind_min_speed. Slopes use slp_roll_up and slp_roll_down, as rolling does.
+@export var grind_switch_reach: float = 5.0  ## A quickstep while grinding hops to another rail at most this far to the side (m).
+@export var grind_switch_time: float = 0.18  ## Seconds a hop to another rail takes.
+@export var grind_cooldown: float = 0.3  ## Seconds after leaving a rail before it can catch the player again.
+
 @export_group("Power-ups")
 @export var speed_shoes_time: float = 20.0  ## Seconds speed shoes last.
 @export var speed_shoes_factor: float = 2.0  ## Speed shoes multiply acc, frc, top, air_acc and roll_frc by this.

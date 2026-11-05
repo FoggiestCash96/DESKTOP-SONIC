@@ -2,8 +2,8 @@ extends CanvasLayer
 ## Heads-up display in the style of the 3D Adventure games (decided 2026-10-31): a big ring count
 ## with a ring icon at the top left, the time below it and the act's red rings below that, lives with
 ## Sonic's icon at the bottom left, power-ups at the top right, and the boost gauge at the bottom
-## right. It also shows the stage's title card, a boss's name and hits left, the results at the goal,
-## the game-over message, and holds the pause menu. Nothing relies on colour alone: the ring count
+## right. It also shows the stage's title card, a boss's name and hits left, the drowning countdown
+## under water, the results at the goal, the game-over message, and holds the pause menu. Nothing relies on colour alone: the ring count
 ## blinks at zero and found red rings change shape. Its size follows the HUD size setting.
 
 const WARNING := Color(1.0, 0.3, 0.25)
@@ -29,6 +29,7 @@ var _red_ring_icons: Array[Control] = []
 @onready var _tags: Label = %Tags
 @onready var _power_ups: Label = %PowerUps
 @onready var _stage_title: Label = %StageTitle
+@onready var _air_count: Label = %AirCount
 @onready var _results: Control = %Results
 @onready var _results_title: Label = %ResultsTitle
 @onready var _result_time: Label = %ResultTime
@@ -72,6 +73,11 @@ func _process(_delta: float) -> void:
 	var flash := target.rings == 0 and fmod(Time.get_ticks_msec() / 1000.0, WARNING_PERIOD) < WARNING_PERIOD * 0.5
 	_rings.modulate = WARNING if flash else Color.WHITE
 	_power_ups.text = _describe_power_ups()
+	# Running out of air under water: 5 down to 0, as in the classic games.
+	var count := PlayerMotion.drown_count(target.air_left(), target.physics.drown_countdown) if target.is_underwater() else -1
+	_air_count.visible = count >= 0 and not target.is_dead()
+	if _air_count.visible:
+		_air_count.text = str(count)
 
 
 ## How many of the act's red rings have been found: on this visit, or on an earlier clear.

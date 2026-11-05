@@ -276,6 +276,28 @@ theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
 theme_override_constants/outline_size = 12
 horizontal_alignment = 1
 
+[node name="AirCount" type="Label" parent="." unique_id=1544810371]
+unique_name_in_owner = true
+visible = false
+auto_translate_mode = 2
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -150.0
+offset_top = 230.0
+offset_right = 150.0
+offset_bottom = 400.0
+theme_override_font_sizes/font_size = 150
+theme_override_colors/font_color = Color(0.82, 0.96, 1, 1)
+theme_override_colors/font_shadow_color = Color(0, 0, 0, 0.45)
+theme_override_constants/shadow_offset_x = 0
+theme_override_constants/shadow_offset_y = 6
+theme_override_colors/font_outline_color = Color(0.024, 0.063, 0.227, 1)
+theme_override_constants/outline_size = 24
+text = "5"
+horizontal_alignment = 1
+vertical_alignment = 1
+
 [node name="ResultsCenter" type="CenterContainer" parent="." unique_id=2112177157]
 anchors_preset = 15
 anchor_right = 1.0

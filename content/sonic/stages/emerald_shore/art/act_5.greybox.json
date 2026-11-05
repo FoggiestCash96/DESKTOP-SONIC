@@ -1,0 +1,3015 @@
+{
+	"stage": "res://content/sonic/stages/emerald_shore/act_5.tscn",
+	"sea_height": -14.0,
+	"player_start": {
+		"x": [
+			1.0,
+			0.0,
+			0.0
+		],
+		"y": [
+			0.0,
+			1.0,
+			0.0
+		],
+		"z": [
+			0.0,
+			0.0,
+			1.0
+		],
+		"origin": [
+			0.0,
+			0.0,
+			4.0
+		]
+	},
+	"pieces": [
+		{
+			"name": "Beach",
+			"path": "Geometry/Beach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					15.0,
+					0.0,
+					12.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					42.0,
+					-2.0
+				],
+				[
+					42.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 30.0
+		},
+		{
+			"name": "Tunnel1",
+			"path": "Geometry/Tunnel1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-30.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					80.0,
+					-2.0
+				],
+				[
+					80.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "Tunnel1WallL",
+			"path": "Geometry/Tunnel1WallL",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-9.5,
+					6.0,
+					-70.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				80.0
+			]
+		},
+		{
+			"name": "Tunnel1WallR1",
+			"path": "Geometry/Tunnel1WallR1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.5,
+					6.0,
+					-45.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				30.0
+			]
+		},
+		{
+			"name": "Tunnel1WallR2",
+			"path": "Geometry/Tunnel1WallR2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.5,
+					6.0,
+					-90.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				40.0
+			]
+		},
+		{
+			"name": "Tunnel1Roof",
+			"path": "Geometry/Tunnel1Roof",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					12.5,
+					-70.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				20.0,
+				1.0,
+				80.0
+			]
+		},
+		{
+			"name": "Room1",
+			"path": "Geometry/Room1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-60.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					9.0,
+					-2.0
+				],
+				[
+					9.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 10.0
+		},
+		{
+			"name": "Room1Back",
+			"path": "Geometry/Room1Back",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					18.5,
+					6.0,
+					-65.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				12.0
+			]
+		},
+		{
+			"name": "Room1SideN",
+			"path": "Geometry/Room1SideN",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					13.5,
+					6.0,
+					-70.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				10.0,
+				12.0,
+				1.0
+			]
+		},
+		{
+			"name": "Room1SideS",
+			"path": "Geometry/Room1SideS",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					13.5,
+					6.0,
+					-59.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				10.0,
+				12.0,
+				1.0
+			]
+		},
+		{
+			"name": "Room1Roof",
+			"path": "Geometry/Room1Roof",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					13.5,
+					12.5,
+					-65.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				10.0,
+				1.0,
+				12.0
+			]
+		},
+		{
+			"name": "Room1Lintel",
+			"path": "Geometry/Room1Lintel",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.5,
+					8.0,
+					-65.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				8.0,
+				10.0
+			]
+		},
+		{
+			"name": "ChasmLedge",
+			"path": "Geometry/ChasmLedge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-5.0,
+					0.0,
+					-110.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					30.0,
+					-2.0
+				],
+				[
+					30.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "ChasmWallL",
+			"path": "Geometry/ChasmWallL",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-9.5,
+					6.0,
+					-125.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				30.0
+			]
+		},
+		{
+			"name": "ChasmWallR",
+			"path": "Geometry/ChasmWallR",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.5,
+					6.0,
+					-125.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				30.0
+			]
+		},
+		{
+			"name": "ChasmRoof",
+			"path": "Geometry/ChasmRoof",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					12.5,
+					-125.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				20.0,
+				1.0,
+				30.0
+			]
+		},
+		{
+			"name": "Tunnel2",
+			"path": "Geometry/Tunnel2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-140.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					60.0,
+					-2.0
+				],
+				[
+					60.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "Tunnel2WallL",
+			"path": "Geometry/Tunnel2WallL",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-9.5,
+					6.0,
+					-170.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				60.0
+			]
+		},
+		{
+			"name": "Tunnel2WallR",
+			"path": "Geometry/Tunnel2WallR",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.5,
+					6.0,
+					-170.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				60.0
+			]
+		},
+		{
+			"name": "Tunnel2Roof",
+			"path": "Geometry/Tunnel2Roof",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					12.5,
+					-170.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				20.0,
+				1.0,
+				60.0
+			]
+		},
+		{
+			"name": "HallCorner",
+			"path": "Geometry/HallCorner",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-200.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					32.0,
+					-2.0
+				],
+				[
+					32.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "HallWallW",
+			"path": "Geometry/HallWallW",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.0,
+					15.0,
+					-220.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				30.0,
+				42.0
+			]
+		},
+		{
+			"name": "HallWallN",
+			"path": "Geometry/HallWallN",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					95.0,
+					15.0,
+					-241.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				211.0,
+				30.0,
+				1.0
+			]
+		},
+		{
+			"name": "HallWallS",
+			"path": "Geometry/HallWallS",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					105.0,
+					15.0,
+					-203.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				191.0,
+				30.0,
+				1.0
+			]
+		},
+		{
+			"name": "HallRoof",
+			"path": "Geometry/HallRoof",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					95.0,
+					30.5,
+					-222.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				211.0,
+				1.0,
+				40.0
+			]
+		},
+		{
+			"name": "HallFloor1",
+			"path": "Geometry/HallFloor1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					23.0,
+					-2.0
+				],
+				[
+					23.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallStep",
+			"path": "Geometry/HallStep",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					46.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					0.5
+				],
+				[
+					14.0,
+					0.5
+				],
+				[
+					14.0,
+					2.5
+				],
+				[
+					0.0,
+					2.5
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallLanding",
+			"path": "Geometry/HallLanding",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					72.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					0.5
+				],
+				[
+					10.0,
+					0.5
+				],
+				[
+					10.0,
+					2.5
+				],
+				[
+					0.0,
+					2.5
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallHigh",
+			"path": "Geometry/HallHigh",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					86.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					10.0
+				],
+				[
+					33.0,
+					10.0
+				],
+				[
+					33.0,
+					12.0
+				],
+				[
+					0.0,
+					12.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallDescent",
+			"path": "Geometry/HallDescent",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					119.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					28.0,
+					-2.0
+				],
+				[
+					28.0,
+					0.0
+				],
+				[
+					0.0,
+					12.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallFloor2",
+			"path": "Geometry/HallFloor2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					147.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					53.0,
+					-2.0
+				],
+				[
+					53.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "HallWallE1",
+			"path": "Geometry/HallWallE1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					200.5,
+					15.0,
+					-211.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				30.0,
+				15.0
+			]
+		},
+		{
+			"name": "HallWallE2",
+			"path": "Geometry/HallWallE2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					200.5,
+					21.0,
+					-230.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				18.0,
+				22.0
+			]
+		},
+		{
+			"name": "Tunnel3",
+			"path": "Geometry/Tunnel3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					200.0,
+					0.0,
+					-219.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					140.0,
+					-2.0
+				],
+				[
+					140.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "Tunnel3WallL",
+			"path": "Geometry/Tunnel3WallL",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					270.0,
+					6.0,
+					-237.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				140.0
+			]
+		},
+		{
+			"name": "Tunnel3WallR",
+			"path": "Geometry/Tunnel3WallR",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					270.0,
+					6.0,
+					-218.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				12.0,
+				140.0
+			]
+		},
+		{
+			"name": "Tunnel3Roof",
+			"path": "Geometry/Tunnel3Roof",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					270.0,
+					12.5,
+					-228.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				20.0,
+				1.0,
+				140.0
+			]
+		},
+		{
+			"name": "ShaftWallN",
+			"path": "Geometry/ShaftWallN",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					361.0,
+					20.0,
+					-237.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				42.0,
+				40.0,
+				1.0
+			]
+		},
+		{
+			"name": "ShaftWallS",
+			"path": "Geometry/ShaftWallS",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					361.0,
+					20.0,
+					-205.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				42.0,
+				40.0,
+				1.0
+			]
+		},
+		{
+			"name": "ShaftWallW",
+			"path": "Geometry/ShaftWallW",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					340.5,
+					20.0,
+					-212.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				40.0,
+				13.0
+			]
+		},
+		{
+			"name": "ShaftFloor",
+			"path": "Geometry/ShaftFloor",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					340.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					12.0,
+					-2.0
+				],
+				[
+					12.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "ShaftLedge1",
+			"path": "Geometry/ShaftLedge1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					353.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					9.0,
+					4.0
+				],
+				[
+					9.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "ShaftLedge2",
+			"path": "Geometry/ShaftLedge2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					366.0,
+					0.0,
+					-224.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					16.0
+				],
+				[
+					15.0,
+					16.0
+				],
+				[
+					15.0,
+					18.0
+				],
+				[
+					0.0,
+					18.0
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "Exit",
+			"path": "Geometry/Exit",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					382.0,
+					0.0,
+					-219.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					28.0
+				],
+				[
+					60.0,
+					28.0
+				],
+				[
+					60.0,
+					30.0
+				],
+				[
+					0.0,
+					30.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "EndWall",
+			"path": "Geometry/EndWall",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					442.5,
+					34.0,
+					-228.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				8.0,
+				18.0
+			]
+		}
+	],
+	"loops": [],
+	"camera_volumes": [
+		{
+			"name": "HallSideView",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					106.0,
+					12.0,
+					-228.0
+				]
+			},
+			"size": [
+				192.0,
+				34.0,
+				10.0
+			],
+			"side_view": true,
+			"distance": 14.0
+		},
+		{
+			"name": "ShaftSideView",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					361.0,
+					20.0,
+					-228.0
+				]
+			},
+			"size": [
+				44.0,
+				44.0,
+				10.0
+			],
+			"side_view": true,
+			"distance": 14.0
+		}
+	],
+	"walls": [],
+	"rails": [
+		{
+			"name": "RiverRail",
+			"radius": 0.09,
+			"points": [
+				[
+					202.0,
+					1.4,
+					-222.0
+				],
+				[
+					203.9995,
+					1.4,
+					-222.0
+				],
+				[
+					206.0068,
+					1.4,
+					-222.0
+				],
+				[
+					207.9999,
+					1.4,
+					-222.0
+				],
+				[
+					209.9999,
+					1.4,
+					-222.0
+				],
+				[
+					211.9999,
+					1.4,
+					-222.0
+				],
+				[
+					214.0,
+					1.4,
+					-222.0
+				],
+				[
+					215.9999,
+					1.4,
+					-222.0
+				],
+				[
+					217.9999,
+					1.4,
+					-222.0
+				],
+				[
+					219.9999,
+					1.4,
+					-222.0
+				],
+				[
+					222.0,
+					1.4,
+					-222.0
+				],
+				[
+					224.0,
+					1.4,
+					-222.0
+				],
+				[
+					226.0,
+					1.4,
+					-222.0
+				],
+				[
+					228.0,
+					1.4,
+					-222.0
+				],
+				[
+					230.0,
+					1.4,
+					-222.0
+				],
+				[
+					232.0,
+					1.4,
+					-222.0
+				],
+				[
+					234.0,
+					1.4,
+					-222.0
+				],
+				[
+					236.0,
+					1.4,
+					-222.0
+				],
+				[
+					238.0,
+					1.4,
+					-222.0
+				],
+				[
+					240.0,
+					1.4,
+					-222.0
+				],
+				[
+					242.0,
+					1.4,
+					-222.0
+				],
+				[
+					244.0,
+					1.4,
+					-222.0
+				],
+				[
+					246.0,
+					1.4,
+					-222.0
+				],
+				[
+					248.0,
+					1.4,
+					-222.0
+				],
+				[
+					250.0,
+					1.4,
+					-222.0
+				],
+				[
+					252.0,
+					1.4,
+					-222.0
+				],
+				[
+					254.0001,
+					1.4,
+					-222.0
+				],
+				[
+					256.0001,
+					1.4,
+					-222.0
+				],
+				[
+					258.0,
+					1.4,
+					-222.0
+				],
+				[
+					260.0001,
+					1.4,
+					-222.0
+				],
+				[
+					262.0001,
+					1.4,
+					-222.0
+				],
+				[
+					264.0001,
+					1.4,
+					-222.0
+				],
+				[
+					265.9932,
+					1.4,
+					-222.0
+				],
+				[
+					268.0004,
+					1.4,
+					-222.0
+				],
+				[
+					270.0,
+					1.4,
+					-222.0
+				],
+				[
+					271.9995,
+					1.4,
+					-222.0
+				],
+				[
+					274.0068,
+					1.4,
+					-222.0
+				],
+				[
+					275.9999,
+					1.4,
+					-222.0
+				],
+				[
+					277.9999,
+					1.4,
+					-222.0
+				],
+				[
+					279.9999,
+					1.4,
+					-222.0
+				],
+				[
+					282.0,
+					1.4,
+					-222.0
+				],
+				[
+					283.9999,
+					1.4,
+					-222.0
+				],
+				[
+					285.9999,
+					1.4,
+					-222.0
+				],
+				[
+					287.9999,
+					1.4,
+					-222.0
+				],
+				[
+					290.0,
+					1.4,
+					-222.0
+				],
+				[
+					292.0,
+					1.4,
+					-222.0
+				],
+				[
+					294.0,
+					1.4,
+					-222.0
+				],
+				[
+					296.0,
+					1.4,
+					-222.0
+				],
+				[
+					298.0,
+					1.4,
+					-222.0
+				],
+				[
+					300.0,
+					1.4,
+					-222.0
+				],
+				[
+					302.0,
+					1.4,
+					-222.0
+				],
+				[
+					304.0,
+					1.4,
+					-222.0
+				],
+				[
+					306.0,
+					1.4,
+					-222.0
+				],
+				[
+					308.0,
+					1.4,
+					-222.0
+				],
+				[
+					310.0,
+					1.4,
+					-222.0
+				],
+				[
+					312.0,
+					1.4,
+					-222.0
+				],
+				[
+					314.0,
+					1.4,
+					-222.0
+				],
+				[
+					316.0001,
+					1.4,
+					-222.0
+				],
+				[
+					318.0,
+					1.4,
+					-222.0
+				],
+				[
+					320.0001,
+					1.4,
+					-222.0
+				],
+				[
+					322.0001,
+					1.4,
+					-222.0
+				],
+				[
+					324.0001,
+					1.4,
+					-222.0
+				],
+				[
+					326.0,
+					1.4,
+					-222.0
+				],
+				[
+					328.0001,
+					1.4,
+					-222.0
+				],
+				[
+					330.0001,
+					1.4,
+					-222.0
+				],
+				[
+					332.0001,
+					1.4,
+					-222.0
+				],
+				[
+					333.9932,
+					1.4,
+					-222.0
+				],
+				[
+					336.0005,
+					1.4,
+					-222.0
+				],
+				[
+					338.0,
+					1.4,
+					-222.0
+				]
+			]
+		}
+	],
+	"water": [
+		{
+			"name": "River",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					270.0,
+					0.35,
+					-228.0
+				]
+			},
+			"size": [
+				6.0,
+				1.0,
+				140.0
+			],
+			"current_speed": 12.0,
+			"tide_height": 0.0
+		}
+	],
+	"markers": [
+		{
+			"name": "Room1Wall",
+			"kind": "breakable_wall",
+			"position": [
+				9.6,
+				0.0,
+				-65.0
+			],
+			"size": [
+				10.0,
+				4.0,
+				1.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.6,
+					0.0,
+					-65.0
+				]
+			}
+		},
+		{
+			"name": "ExtraLife",
+			"kind": "extra_life",
+			"position": [
+				13.5,
+				0.0,
+				-65.0
+			]
+		},
+		{
+			"name": "RedRing2",
+			"kind": "hidden_collectible",
+			"position": [
+				16.2,
+				0.8,
+				-65.0
+			]
+		},
+		{
+			"name": "ChasmStone1",
+			"kind": "crumbling_platform",
+			"position": [
+				2.0,
+				0.0,
+				-116.0
+			],
+			"size": [
+				5.0,
+				1.0,
+				5.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					2.0,
+					0.0,
+					-116.0
+				]
+			}
+		},
+		{
+			"name": "ChasmStone2",
+			"kind": "crumbling_platform",
+			"position": [
+				2.0,
+				0.5,
+				-124.0
+			],
+			"size": [
+				5.0,
+				1.0,
+				5.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					2.0,
+					0.5,
+					-124.0
+				]
+			}
+		},
+		{
+			"name": "ChasmStone3",
+			"kind": "crumbling_platform",
+			"position": [
+				2.0,
+				1.0,
+				-132.0
+			],
+			"size": [
+				5.0,
+				1.0,
+				5.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					2.0,
+					1.0,
+					-132.0
+				]
+			}
+		},
+		{
+			"name": "RedRing1",
+			"kind": "hidden_collectible",
+			"position": [
+				2.0,
+				3.6,
+				-124.0
+			]
+		},
+		{
+			"name": "RingsBeach",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-6.0
+			]
+		},
+		{
+			"name": "MonitorBeachBoost",
+			"kind": "item_monitor",
+			"position": [
+				8.0,
+				0.0,
+				-18.0
+			]
+		},
+		{
+			"name": "MonitorBeachRings",
+			"kind": "item_monitor",
+			"position": [
+				-8.0,
+				0.0,
+				-18.0
+			]
+		},
+		{
+			"name": "RingsTunnel1",
+			"kind": "Node3D",
+			"position": [
+				-2.0,
+				0.8,
+				-36.0
+			]
+		},
+		{
+			"name": "MonitorTunnelShield",
+			"kind": "item_monitor",
+			"position": [
+				-6.0,
+				0.0,
+				-98.0
+			]
+		},
+		{
+			"name": "RingsLedge",
+			"kind": "Node3D",
+			"position": [
+				-7.0,
+				0.8,
+				-112.0
+			]
+		},
+		{
+			"name": "Checkpoint1",
+			"kind": "checkpoint",
+			"position": [
+				0.0,
+				0.0,
+				-150.0
+			]
+		},
+		{
+			"name": "RingsTunnel2",
+			"kind": "Node3D",
+			"position": [
+				2.0,
+				0.8,
+				-158.0
+			]
+		},
+		{
+			"name": "HallFerry",
+			"kind": "moving_platform",
+			"position": [
+				34.0,
+				0.0,
+				-228.0
+			],
+			"size": [
+				8.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					34.0,
+					0.0,
+					-228.0
+				]
+			},
+			"travel": [
+				0.0,
+				0.0,
+				-8.0
+			]
+		},
+		{
+			"name": "HallLedge1",
+			"kind": "crumbling_platform",
+			"position": [
+				63.0,
+				2.5,
+				-228.0
+			],
+			"size": [
+				8.0,
+				1.0,
+				6.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					63.0,
+					2.5,
+					-228.0
+				]
+			}
+		},
+		{
+			"name": "HallLedge2",
+			"kind": "crumbling_platform",
+			"position": [
+				69.0,
+				2.5,
+				-228.0
+			],
+			"size": [
+				8.0,
+				1.0,
+				6.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					69.0,
+					2.5,
+					-228.0
+				]
+			}
+		},
+		{
+			"name": "HallLift",
+			"kind": "moving_platform",
+			"position": [
+				84.0,
+				2.5,
+				-228.0
+			],
+			"size": [
+				8.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					84.0,
+					2.5,
+					-228.0
+				]
+			},
+			"travel": [
+				0.0,
+				9.5,
+				0.0
+			]
+		},
+		{
+			"name": "HallWall",
+			"kind": "breakable_wall",
+			"position": [
+				151.0,
+				0.0,
+				-228.0
+			],
+			"size": [
+				8.0,
+				4.0,
+				1.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					151.0,
+					0.0,
+					-228.0
+				]
+			}
+		},
+		{
+			"name": "RingsHall1",
+			"kind": "Node3D",
+			"position": [
+				14.0,
+				0.8,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsFerry",
+			"kind": "Node3D",
+			"position": [
+				34.0,
+				0.8,
+				-228.0
+			]
+		},
+		{
+			"name": "RedRing3",
+			"kind": "hidden_collectible",
+			"position": [
+				84.0,
+				16.5,
+				-228.0
+			]
+		},
+		{
+			"name": "SpikesHall",
+			"kind": "spikes",
+			"position": [
+				104.0,
+				12.0,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsHallHigh",
+			"kind": "Node3D",
+			"position": [
+				90.0,
+				12.8,
+				-228.0
+			]
+		},
+		{
+			"name": "SignRoll",
+			"kind": "Label3D",
+			"position": [
+				128.0,
+				13.5,
+				-231.5
+			],
+			"text_size": [
+				4.6,
+				1.44
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					128.0,
+					13.5,
+					-231.5
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RingsDescent",
+			"kind": "Node3D",
+			"position": [
+				122.0,
+				12.8,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsHall2",
+			"kind": "Node3D",
+			"position": [
+				160.0,
+				0.8,
+				-228.0
+			]
+		},
+		{
+			"name": "RedRing4",
+			"kind": "hidden_collectible",
+			"position": [
+				274.0,
+				2.3,
+				-222.0
+			]
+		},
+		{
+			"name": "Checkpoint2",
+			"kind": "checkpoint",
+			"position": [
+				212.0,
+				0.0,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsRiver",
+			"kind": "Node3D",
+			"position": [
+				220.0,
+				0.8,
+				-228.0
+			]
+		},
+		{
+			"name": "MonitorTunnel3Boost",
+			"kind": "item_monitor",
+			"position": [
+				226.0,
+				0.0,
+				-235.0
+			]
+		},
+		{
+			"name": "MonitorTunnel3Rings",
+			"kind": "item_monitor",
+			"position": [
+				300.0,
+				0.0,
+				-235.0
+			]
+		},
+		{
+			"name": "ShaftSpring",
+			"kind": "spring",
+			"position": [
+				350.0,
+				0.0,
+				-228.0
+			]
+		},
+		{
+			"name": "RedRing5",
+			"kind": "hidden_collectible",
+			"position": [
+				356.0,
+				10.5,
+				-228.0
+			]
+		},
+		{
+			"name": "ShaftLift",
+			"kind": "moving_platform",
+			"position": [
+				364.0,
+				6.0,
+				-228.0
+			],
+			"size": [
+				8.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					364.0,
+					6.0,
+					-228.0
+				]
+			},
+			"travel": [
+				0.0,
+				12.0,
+				0.0
+			]
+		},
+		{
+			"name": "ShaftRedSpring",
+			"kind": "spring",
+			"position": [
+				378.0,
+				18.0,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsShaft",
+			"kind": "Node3D",
+			"position": [
+				367.0,
+				18.8,
+				-228.0
+			]
+		},
+		{
+			"name": "RingsExit",
+			"kind": "Node3D",
+			"position": [
+				386.0,
+				30.8,
+				-228.0
+			]
+		},
+		{
+			"name": "MonitorExitRings",
+			"kind": "item_monitor",
+			"position": [
+				398.0,
+				30.0,
+				-234.0
+			]
+		},
+		{
+			"name": "Goal",
+			"kind": "goal",
+			"position": [
+				420.0,
+				30.0,
+				-228.0
+			]
+		},
+		{
+			"name": "ScuttlerBeach",
+			"kind": "scuttler",
+			"position": [
+				6.0,
+				0.0,
+				-10.0
+			]
+		},
+		{
+			"name": "ScuttlerTunnel1a",
+			"kind": "scuttler",
+			"position": [
+				-4.0,
+				0.0,
+				-50.0
+			]
+		},
+		{
+			"name": "ScuttlerTunnel1b",
+			"kind": "scuttler",
+			"position": [
+				4.0,
+				0.0,
+				-88.0
+			]
+		},
+		{
+			"name": "GullChasm",
+			"kind": "galegull",
+			"position": [
+				2.0,
+				4.5,
+				-128.0
+			]
+		},
+		{
+			"name": "ScuttlerTunnel2",
+			"kind": "scuttler",
+			"position": [
+				-4.0,
+				0.0,
+				-170.0
+			]
+		},
+		{
+			"name": "PearlshotTunnel2",
+			"kind": "pearlshot",
+			"position": [
+				6.0,
+				0.0,
+				-186.0
+			]
+		},
+		{
+			"name": "ScuttlerHall",
+			"kind": "scuttler",
+			"position": [
+				176.0,
+				0.0,
+				-228.0
+			]
+		},
+		{
+			"name": "GullHall",
+			"kind": "galegull",
+			"position": [
+				104.0,
+				16.0,
+				-228.0
+			]
+		},
+		{
+			"name": "FishRiver1",
+			"kind": "leapfin",
+			"position": [
+				240.0,
+				-0.8,
+				-233.0
+			]
+		},
+		{
+			"name": "FishRiver2",
+			"kind": "leapfin",
+			"position": [
+				272.0,
+				-0.8,
+				-223.0
+			]
+		},
+		{
+			"name": "ScuttlerTunnel3a",
+			"kind": "scuttler",
+			"position": [
+				296.0,
+				0.0,
+				-232.0
+			]
+		},
+		{
+			"name": "ScuttlerTunnel3b",
+			"kind": "scuttler",
+			"position": [
+				322.0,
+				0.0,
+				-225.0
+			]
+		},
+		{
+			"name": "PearlshotShaft",
+			"kind": "pearlshot",
+			"position": [
+				376.0,
+				18.0,
+				-230.5
+			]
+		},
+		{
+			"name": "ScuttlerExit",
+			"kind": "scuttler",
+			"position": [
+				406.0,
+				30.0,
+				-223.0
+			]
+		}
+	]
+}

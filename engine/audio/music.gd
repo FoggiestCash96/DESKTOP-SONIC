@@ -12,7 +12,7 @@ const FADE_IN := 0.5  ## Seconds the music takes to come back after something in
 const FAST_PITCH := 1.2  ## Speed shoes play a track with no fast version this much faster (and higher).
 
 ## Every music cue the engine asks for, so tests can check that a bank has them all.
-const CUES: Array[StringName] = [&"invincible", &"extra_life", &"clear", &"game_over"]
+const CUES: Array[StringName] = [&"invincible", &"drowning", &"extra_life", &"clear", &"game_over"]
 
 var bank: SoundBank  ## The music cues in use. Null has none.
 

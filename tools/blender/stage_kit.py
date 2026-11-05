@@ -226,11 +226,13 @@ class Stage:
     # --- Dressing ---
 
     def ground(self, piece: Piece, top: str, lip: str, cliff: str, bottom: float, lip_depth=(0.35, 0.75),
-               relief: float = 0.35, seed: int = 0) -> None:
+               relief: float = 0.35, seed: int = 0, cliff_rows: float = 1.6) -> None:
         """Solid ground: the walkable top (with UVs in metres for stripes), a lip of the top's colour
         hanging over each edge, and cliffs from the edges down to `bottom`, bumped outward. Where
         another piece covers an edge (a neighbour at the same height), it gets no cliff or lip, and
-        a cliff stops at the top of any lower piece it stands on."""
+        a cliff stops at the top of any lower piece it stands on. `cliff_rows` is how tall each row
+        of a cliff's faces is: coarser rows keep tall cliffs within the triangle budget (the bands'
+        colours come from the material, not the faces)."""
         for chain in piece.top_chains():
             self._top(piece, chain, top)
             runs = [([piece.world(p.x, p.y, z) for p in chain], outward)
@@ -239,7 +241,7 @@ class Stage:
                 end = chain[index]
                 runs.append(([piece.world(end.x, end.y, 0.0), piece.world(end.x, end.y, -piece.depth)], outward))
             for points, outward in runs:
-                self._cliff(piece, points, outward, bottom, cliff, relief, seed)
+                self._cliff(piece, points, outward, bottom, cliff, relief, seed, step=max(2.0, cliff_rows * 1.25), rows=cliff_rows)
                 self._lip(piece, points, outward, lip, lip_depth, seed)
 
     def slab(self, piece: Piece, top: str, side: str) -> None:

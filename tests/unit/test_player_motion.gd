@@ -335,3 +335,65 @@ func _jump_apex(hold_jump: bool) -> float:
 			vertical = PlayerMotion.release_cap(vertical, physics)
 		vertical = PlayerMotion.fall_speed(vertical, physics, TICK)
 	return height
+
+
+func test_underwater_values_are_the_classic_ones() -> void:
+	var wet := PlayerMotion.underwater(physics)
+	assert_almost_eq(wet.acc, 0.0234375 * PlayerPhysics.ACCEL, 1e-5, "acc halved")
+	assert_almost_eq(wet.dec, 0.25 * PlayerPhysics.ACCEL, 1e-5, "dec halved")
+	assert_almost_eq(wet.frc, 0.0234375 * PlayerPhysics.ACCEL, 1e-5, "frc halved")
+	assert_almost_eq(wet.top, 3.0 * PlayerPhysics.SPEED, 1e-5, "top halved")
+	assert_almost_eq(wet.air_acc, 0.046875 * PlayerPhysics.ACCEL, 1e-5, "air acc halved")
+	assert_almost_eq(wet.grv, 0.0625 * PlayerPhysics.ACCEL, 1e-5, "lighter gravity")
+	assert_almost_eq(wet.jmp, 3.5 * PlayerPhysics.SPEED, 1e-5, "lower jump")
+	assert_almost_eq(wet.jmp_release_cap, 2.0 * PlayerPhysics.SPEED, 1e-5, "release cap")
+	assert_almost_eq(wet.boost_speed, physics.boost_speed * 0.5, 1e-5, "the boost slows too")
+	assert_almost_eq(physics.top, 6.0 * PlayerPhysics.SPEED, 1e-5, "the dry values are untouched")
+
+
+func test_falling_into_water_takes_most_of_the_speed_away() -> void:
+	var after := PlayerMotion.water_entry(Vector3(8.0, -12.0, 0.0), physics)
+	assert_true(after.is_equal_approx(Vector3(4.0, -3.0, 0.0)), str(after))
+
+
+func test_leaving_the_water_while_rising_doubles_the_rise() -> void:
+	var out := PlayerMotion.water_exit(Vector3(3.0, 5.0, 0.0), physics)
+	assert_true(out.is_equal_approx(Vector3(3.0, 10.0, 0.0)), str(out))
+	var capped := PlayerMotion.water_exit(Vector3(0.0, 20.0, 0.0), physics)
+	assert_almost_eq(capped.y, physics.max_fall, 1e-5, "never faster than max_fall")
+	var sinking := PlayerMotion.water_exit(Vector3(0.0, -2.0, 0.0), physics)
+	assert_almost_eq(sinking.y, -2.0, 1e-5, "falling speed is left alone")
+
+
+func test_the_drowning_countdown_counts_five_to_zero_over_twelve_seconds() -> void:
+	assert_eq(PlayerMotion.drown_count(12.5, 12.0), -1, "not yet")
+	assert_eq(PlayerMotion.drown_count(12.0, 12.0), 5)
+	assert_eq(PlayerMotion.drown_count(10.5, 12.0), 5, "each number shows for two seconds")
+	assert_eq(PlayerMotion.drown_count(9.5, 12.0), 4)
+	assert_eq(PlayerMotion.drown_count(7.5, 12.0), 3)
+	assert_eq(PlayerMotion.drown_count(5.5, 12.0), 2)
+	assert_eq(PlayerMotion.drown_count(3.5, 12.0), 1)
+	assert_eq(PlayerMotion.drown_count(1.0, 12.0), 0)
+	assert_eq(PlayerMotion.drown_count(0.0, 12.0), -1, "drowned")
+
+
+func test_the_air_chimes_at_twenty_five_twenty_and_fifteen_seconds() -> void:
+	assert_true(PlayerMotion.air_warning(25.01, 24.99), "25")
+	assert_true(PlayerMotion.air_warning(20.01, 20.0), "20")
+	assert_true(PlayerMotion.air_warning(15.2, 14.9), "15")
+	assert_false(PlayerMotion.air_warning(24.9, 24.8), "between")
+	assert_false(PlayerMotion.air_warning(12.0, 11.9), "the countdown has its own music")
+
+
+func test_grinding_speeds_up_downhill_and_slows_uphill() -> void:
+	var down := Vector3(0.0, -0.5, -0.8660254)  # 30° down
+	var faster := PlayerMotion.grind_speed(10.0, down, physics, 1.0)
+	assert_almost_eq(faster, 10.0 + physics.slp_roll_down * 0.5 - physics.grind_frc, 1e-4, "downhill")
+	var slower := PlayerMotion.grind_speed(10.0, -down, physics, 1.0)
+	assert_almost_eq(slower, 10.0 - physics.slp_roll_up * 0.5 - physics.grind_frc, 1e-4, "uphill")
+	var flat := PlayerMotion.grind_speed(10.0, Vector3.FORWARD, physics, 1.0)
+	assert_almost_eq(flat, 10.0 - physics.grind_frc, 1e-4, "only friction on the flat")
+	var slow := PlayerMotion.grind_speed(physics.grind_min_speed, Vector3.FORWARD, physics, 1.0)
+	assert_almost_eq(slow, physics.grind_min_speed, 1e-4, "friction never stops a grind")
+	var stalled := PlayerMotion.grind_speed(1.0, -down, physics, 1.0)
+	assert_true(stalled < 0.0, "a climb can stop it and send it back")

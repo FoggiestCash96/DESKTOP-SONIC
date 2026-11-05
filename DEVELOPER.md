@@ -26,7 +26,7 @@ In the Godot Project Manager, choose **Import**, select `project.godot`, and ope
 ## Run the game
 
 - **F5** runs the game from the title screen. Press Enter (or A / Start on a controller) for the main menu: **Play** goes to the save slots and then the world map, where you pick an act; **Options** has the settings; **Test room** opens the greybox test room. Two developer shortcuts skip the menus without a save slot: F (Y) for the test room, Shift (X) for Act 8 and its boss.
-- **F6** runs whichever scene is open. Open `content/sonic/stages/emerald_shore/act_1.tscn`, `act_8.tscn` or `stages/greybox/test_room.tscn` to go straight there. Without a save slot nothing is saved, and the goal leads to the stage's `next_scene` (Act 1 to Act 8) or the title screen.
+- **F6** runs whichever scene is open. Open one of the acts in `content/sonic/stages/emerald_shore/` (`act_1.tscn` to `act_8.tscn`) or `stages/greybox/test_room.tscn` to go straight there. Without a save slot nothing is saved, and the goal leads to the stage's `next_scene` (each act to the next) or the title screen.
 
 You play Sonic, built by a script in Blender, with toon shading and animations for running, jumping, springs, skids and more. The camera follows behind as you run, adds speed lines and motion blur when you go fast, and you can turn it yourself at any time:
 
@@ -46,6 +46,8 @@ You play Sonic, built by a script in Blender, with toon shading and animations f
 
 Menus work with a controller (D-pad or stick, A to choose, B to go back), the keyboard (arrows, Enter, Esc) or the mouse. Every control can be remapped in Options. The mouse is captured while you play; if you alt-tab away, click the window to capture it again. The HUD shows rings, the stage clock, the act's red rings (filled once found), lives, the power-ups running, and the boost gauge. Rings, enemies and boost monitors fill the gauge; boosting smashes through enemies. Falling off the edge or getting hurt with no rings costs a life, and the stage restarts from the last checkpoint touched (or the start). After the last life it's game over and back to the title screen.
 
+Land on a grind rail, or run onto its end, to grind it: Q / E (LB / RB) hops to a rail beside it, and jump leaves it. Under water everything is slower and floatier: lower jumps, slow falls. Air lasts 30 s; touch a big bubble from a vent, or come up for air, before the count runs out. A roll, spin dash or boost smashes through walls of loose rock.
+
 Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, the second press is an air dash.
 
 **Emerald Shore Act 1** is the first greybox act, a speed act about 1.2 km long:
@@ -54,11 +56,19 @@ Badniks hurt you if you touch them standing up. Jump on them, roll into them, or
 - After the right turn there's a side-view pier, then a second loop.
 - Five red rings are hidden along the way.
 - Badniks along the way: crabs, gulls, a clam that fires pearls, and fish leaping across the pier.
-- The goal shows your time and rings, then moves on to Act 8.
+- The goal shows your time and rings, then moves on to Act 2.
+
+**Acts 2 to 7** follow on, each taking about as long to play:
+- **Act 2, Lush Palm Grove:** a treetop route of decks and rope bridges over a safe jungle floor, a ravine crossed on a bridge or on moving and crumbling platforms, a lift and a vine rail over the canopy.
+- **Act 3, Cascading Waterfall Basin:** waterslides whose current is faster than running, springs up tiers beside waterfalls, rails beside the slides, and a plunge pool crossed on floating logs.
+- **Act 4, Shallow Reef Lagoon:** packs of badniks on reef islets, homing chains of gulls (or a swim, or a raft) across deep channels, and waves to surf along the sandbars.
+- **Act 5, Underground Grotto:** caves with a hidden room, a chasm, a great hall and a shaft in side view, and a river tunnel with a current and a rail.
+- **Act 6, Tidal Cavern:** two caverns where the tide floods the low route on a timer (run it at low tide, swim or ride a raft at high tide) while the high ledges stay dry, and a tide pool to ride up.
+- **Act 7, Sunset Ridge Cliffs:** a fast cliff-top run with three loops, a spring cannon, big jumps (or bridges beside them), rails and a narrow ridge, toward the fortress.
 
 **Emerald Shore Act 8** is a short run along a fortress causeway (a homing chain across a gap, fish leaping over a bridge) to the beach where the boss waits. Eggman raises a wave and leaves; the crab mech that rises out of it takes 8 hits on its core, which opens after it slams its claws down. Jump the waves it sends, then hit the core. Beating it shows the results, then returns to the title screen.
 
-[docs/DESIGN.md](docs/DESIGN.md#71-emerald-shore-act-1-sunny-beachfront-greybox-milestone-6) maps it section by section.
+[docs/DESIGN.md](docs/DESIGN.md#7-worlds) maps each act section by section.
 
 The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right of the half-pipe), a long 20° hill for rolling (to the left of the ramps), steps, a wall and a 1 km runway. Top running speed is just enough for the loop; a spin dash clears the half-pipe's lip. The camera swings side-on at the loop, and again on a 2.5D stretch at the far end of the runway.
 
@@ -69,6 +79,8 @@ Follow the ring trail to the right of the start for the gimmick area, three lane
 - **Right lane:** item monitors (rings, shield, speed shoes, invincibility, magnet) with spikes to try them on.
 
 Five red rings are hidden around the room, and an extra life floats over the yellow spring.
+
+Past the right lane is the water and rails area: a pool to swim in (with an air vent, and a spring out), a shallow stream flowing over the floor, a tide pool that floods and drains with a raft on it, two grind rails side by side to hop between, a lift, a platform that crushes anyone under it against a low roof, a crumbling ledge, and a rock wall to smash through.
 
 Far to the left of the start, past the long hill, is the enemy gallery: a crab, a clam, a gull and a leaping fish to try jumping, rolling and homing attacks on, and a homing chain of three gulls across a gap between two platforms.
 
@@ -102,6 +114,12 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 | `engine/gimmicks/tidal_wave.tscn` | Washes along its −Z axis on a timer: set `size`, `reach` and the surge, backwash and rest times. Keep its path clear of overhangs, since the water follows the ground. |
 | `engine/gimmicks/goal.tscn` | The end of an act. Turn it so its −Z axis points the way the player runs through. |
 | `engine/gimmicks/rolling_wave.tscn` | One wave crest rolling along its −Z axis for `reach` metres. Bosses send these out; with `rolling` on it starts by itself. |
+| `engine/gimmicks/water_volume.tscn` | Water to swim in: its surface is the node's XZ plane, `size` sets its width, depth below the surface and length. A `current_speed` carries the player along its −Z axis (tilt the node to run a stream down a slope); a `tide_height` floods and drains it on a timer, staggered with `start_time`. Turn off `show_surface` where the stage's art draws the water. |
+| `engine/gimmicks/air_bubbles.tscn` | An air vent for the bottom of the water: a big bubble every `interval` seconds gives a breath. |
+| `engine/gimmicks/grind_rail.tscn` | A rail along its `Path3D` curve: edit the curve's points. It builds its own tube. Start it just past a ledge's edge, not inside the ledge, or players running off the ledge get knocked off it. |
+| `engine/gimmicks/moving_platform.tscn` | Moves by `travel` (in its own space) and back, or floats on the water named in `float_on`. Its origin is the middle of its top. Give players solid ground to wait on beside it. |
+| `engine/gimmicks/crumbling_platform.tscn` | Falls `delay` seconds after a player stands on it and comes back after `respawn_time`. Its origin is the middle of its top. |
+| `engine/gimmicks/breakable_wall.tscn` | Smashed by a player rolling or boosting into it. Its origin is the middle of its bottom. |
 
 A checkpoint counts anywhere through its gate: set `gate_width` to the width of the course. For a 2.5D section, tick `lock_depth` on a side-view camera volume as well as `side_view`; the player then stays on the box's middle plane.
 
@@ -231,15 +249,15 @@ Each `test_*` method gets a fresh instance. The available helpers are `assert_tr
 engine/           Reusable, franchise-free engine (no SEGA IP, enforced by a test)
   player/         Player controller, movement math and tuning resource
   camera/         Player camera, camera volumes and camera tuning
-  gimmicks/       Loop, springs, dash panels, spikes, checkpoints, tidal waves, goal; rails... later
+  gimmicks/       Loop, springs, dash panels, spikes, checkpoints, tidal waves, water, air bubbles, grind rails, moving and crumbling platforms, breakable walls, goal
   collectibles/   Rings, ring rows, scattered rings, item monitors, red rings, 1-ups
   enemies/        Enemy behaviours (walker, flyer, turret, leaper); base/ has the enemy and boss bases, homing targets, the boss arena, shots, explosions and freed animals
   systems/        Stage root script, GameState, SaveGame and GameSettings (autoloads), remappable controls, world map data
   audio/          Sfx and Music (autoloads) and the SoundBank resource
-  art/            Toon shaders (stripes, height bands, water, sky), the art import script, model skins, the ArtBank, and storms
+  art/            Toon shaders (stripes, height bands, water, waterfalls, sky), the art import script, model skins, the ArtBank, and storms
   debug/          F3 overlay (autoload "DebugOverlay") and fly camera
   greybox/        Grid shader, blockout materials and environment
-content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore Acts 1 and 8 with their art, the list of worlds), objects (models for the engine's objects, the art bank), materials, UI (title with its beach, menus, world map, HUD, translations) and audio (music, sounds, the sound bank)
+content/sonic/    Sonic-specific characters, badniks, bosses, stages (Emerald Shore's eight acts with their art, the list of worlds), objects (models for the engine's objects, the art bank), materials, UI (title with its beach, menus, world map, HUD, translations) and audio (music, sounds, the sound bank)
 stages/greybox/   Blockout and test scenes
 tests/            Script checker, test runner, base class, unit tests
 tools/blender/    Blender scripts: the glTF export, and the kits art is built with (art_kit, stage_kit)

@@ -1,0 +1,21 @@
+[gd_resource type="ShaderMaterial" format=3]
+
+[ext_resource type="Shader" path="res://engine/art/toon_water.gdshader" id="1_shader"]
+
+[resource]
+render_priority = -1
+shader = ExtResource("1_shader")
+shader_parameter/shallow_colour = Color(0.55, 0.94, 0.95, 0.7)
+shader_parameter/deep_colour = Color(0.2, 0.62, 0.86, 0.85)
+shader_parameter/foam_colour = Color(1, 1, 1, 1)
+shader_parameter/ripple_colour = Color(0.92, 1, 1, 1)
+shader_parameter/depth_fade = 1.5
+shader_parameter/foam_width = 0.25
+shader_parameter/ripple_size = 2.6
+shader_parameter/ripple_width = 0.045
+shader_parameter/ripple_strength = 0.35
+shader_parameter/ripple_patches = 0.1
+shader_parameter/ripple_speed = 1.5
+shader_parameter/ripple_fade = 80.0
+shader_parameter/roughness = 0.2
+shader_parameter/flow_stretch = 6.0

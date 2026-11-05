@@ -1,0 +1,22 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/air_bubbles.gd" id="1_a1rbb"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vent"]
+albedo_color = Color(0.45, 0.42, 0.4, 1)
+roughness = 0.9
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_vent"]
+top_radius = 0.3
+bottom_radius = 0.6
+height = 0.35
+radial_segments = 10
+rings = 1
+
+[node name="AirBubbles" type="Node3D"]
+script = ExtResource("1_a1rbb")
+
+[node name="Vent" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.175, 0)
+material_override = SubResource("StandardMaterial3D_vent")
+mesh = SubResource("CylinderMesh_vent")

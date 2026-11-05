@@ -1,0 +1,687 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_e1keo"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_4.ogg" id="2_gisj0"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_4_fast.ogg" id="3_3ny38"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/sunny_environment.tres" id="4_4i4mj"]
+[ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="5_32w8b"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="6_7evni"]
+[ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="7_128in"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="8_008qd"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/lagoon.tres" id="9_1dtp2"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="10_notjg"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="11_uu5y1"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="12_grog8"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_4_art.glb" id="13_r7xle"]
+[ext_resource type="Script" path="res://engine/gimmicks/water_volume.gd" id="14_7nbh4"]
+[ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="15_siplt"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="16_672x6"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/air_bubbles.tscn" id="17_32lf3"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="18_njbny"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="19_7sni8"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/tidal_wave.tscn" id="20_kl2y7"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="21_jpx5c"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/moving_platform.tscn" id="22_0t6fe"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="23_sae25"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="24_d802v"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="25_b7vtd"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="26_jk381"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="27_ms0n3"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="28_rydso"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_r6ii6"]
+size = Vector2(4000, 4000)
+
+[node name="EmeraldShoreAct4" type="Node3D" unique_id=1767811480]
+script = ExtResource("1_e1keo")
+title = "Emerald Shore Act 4: Shallow Reef Lagoon"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
+next_scene = "res://content/sonic/stages/emerald_shore/act_5.tscn"
+music = ExtResource("2_gisj0")
+fast_music = ExtResource("3_3ny38")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=968450821]
+environment = ExtResource("4_4i4mj")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=401031713]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.95
+shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="Player" parent="." unique_id=719696558 instance=ExtResource("5_32w8b")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, 4)
+character = ExtResource("6_7evni")
+kill_height = -30.0
+
+[node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("7_128in")]
+target = NodePath("../Player")
+
+[node name="HUD" parent="." unique_id=661223426 node_paths=PackedStringArray("target") instance=ExtResource("8_008qd")]
+target = NodePath("../Player")
+
+[node name="Sea" type="MeshInstance3D" parent="." unique_id=1487103263]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -1, -296)
+material_override = ExtResource("9_1dtp2")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_r6ii6")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=1018628518]
+
+[node name="Start" type="CSGPolygon3D" parent="Geometry" unique_id=1429415358]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, 12)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1, 52, -1, 52, 1, 0, 1)
+depth = 26.0
+material = ExtResource("10_notjg")
+
+[node name="StartBeach" type="CSGPolygon3D" parent="Geometry" unique_id=179112077]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, -40)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, -1.3, 0, 1)
+depth = 24.0
+material = ExtResource("11_uu5y1")
+
+[node name="Sandbar1" type="CSGPolygon3D" parent="Geometry" unique_id=2086763273]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 11, 0, -50)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 70, -3.3, 70, -1.3, 0, -1.3)
+depth = 22.0
+material = ExtResource("10_notjg")
+
+[node name="Islet1Beach" type="CSGPolygon3D" parent="Geometry" unique_id=372511388]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -120)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 12, -3.3, 12, 1.5, 0, -1.3)
+depth = 26.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet1" type="CSGPolygon3D" parent="Geometry" unique_id=1860472095]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -132)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -0.5, 28, -0.5, 28, 1.5, 0, 1.5)
+depth = 26.0
+material = ExtResource("10_notjg")
+
+[node name="Channel1Bed" type="CSGPolygon3D" parent="Geometry" unique_id=427391823]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 11, 0, -160)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -7, 15, -7, 15, -5, 0, -5)
+depth = 22.0
+material = ExtResource("10_notjg")
+
+[node name="Channel1Out" type="CSGPolygon3D" parent="Geometry" unique_id=329940302]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 11, 0, -175)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -7, 25, -7, 25, -1.3, 0, -5)
+depth = 22.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet2Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1198799917]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -200)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, 1, 0, -1.3)
+depth = 26.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet2" type="CSGPolygon3D" parent="Geometry" unique_id=1769631727]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 14, 0, -210)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1, 50, -1, 50, 1, 0, 1)
+depth = 28.0
+material = ExtResource("10_notjg")
+
+[node name="Sandbar2Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1871389855]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, -260)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, -1.3, 0, 1)
+depth = 24.0
+material = ExtResource("11_uu5y1")
+
+[node name="Sandbar2" type="CSGPolygon3D" parent="Geometry" unique_id=581690482]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 10, 0, -270)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 90, -3.3, 90, -1.3, 0, -1.3)
+depth = 20.0
+material = ExtResource("10_notjg")
+
+[node name="Islet3Slope" type="CSGPolygon3D" parent="Geometry" unique_id=633066357]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 11, 0, -360)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 20, -3.3, 20, 5, 0, -1.3)
+depth = 22.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet3" type="CSGPolygon3D" parent="Geometry" unique_id=43217503]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -380)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 3, 20, 3, 20, 5, 0, 5)
+depth = 26.0
+material = ExtResource("10_notjg")
+
+[node name="Corner" type="CSGPolygon3D" parent="Geometry" unique_id=1181455121]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 3, 26, 3, 26, 5, 0, 5)
+depth = 26.0
+material = ExtResource("10_notjg")
+
+[node name="ReefDown" type="CSGPolygon3D" parent="Geometry" unique_id=2048076710]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 13, 0, -408)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1.5, 10, -1.5, 10, 0.5, 0, 5)
+depth = 10.0
+material = ExtResource("11_uu5y1")
+
+[node name="ReefRidge" type="CSGPolygon3D" parent="Geometry" unique_id=1908017103]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 23, 0, -409)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1.5, 60, -1.5, 60, 0.5, 0, 0.5)
+depth = 8.0
+material = ExtResource("10_notjg")
+
+[node name="ReefPillar" type="CSGBox3D" parent="Geometry" unique_id=727933408]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55, 2.5, -421)
+visible = false
+use_collision = true
+size = Vector3(3, 6, 3)
+material = ExtResource("12_grog8")
+
+[node name="Channel2Bed" type="CSGPolygon3D" parent="Geometry" unique_id=1721795565]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 83, 0, -402)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 12, -6, 12, -4, 0, -4)
+depth = 22.0
+material = ExtResource("10_notjg")
+
+[node name="Channel2Out" type="CSGPolygon3D" parent="Geometry" unique_id=1668289636]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 95, 0, -402)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 20, -6, 20, -1.3, 0, -4)
+depth = 22.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet4Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1067635607]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 115, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, 1.5, 0, -1.3)
+depth = 26.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet4" type="CSGPolygon3D" parent="Geometry" unique_id=1157515630]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 125, 0, -398)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -0.5, 70, -0.5, 70, 1.5, 0, 1.5)
+depth = 30.0
+material = ExtResource("10_notjg")
+
+[node name="Channel3Bed" type="CSGPolygon3D" parent="Geometry" unique_id=1800628357]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 195, 0, -402)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 12, -6, 12, -4, 0, -4)
+depth = 22.0
+material = ExtResource("10_notjg")
+
+[node name="Channel3Out" type="CSGPolygon3D" parent="Geometry" unique_id=1402758722]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 207, 0, -402)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 20, -6, 20, -1.3, 0, -4)
+depth = 22.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet5Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1523295062]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 227, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, 1.5, 0, -1.3)
+depth = 26.0
+material = ExtResource("11_uu5y1")
+
+[node name="Islet5" type="CSGPolygon3D" parent="Geometry" unique_id=636616997]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 237, 0, -399)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -0.5, 40, -0.5, 40, 1.5, 0, 1.5)
+depth = 28.0
+material = ExtResource("10_notjg")
+
+[node name="Sandbar3Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1028826303]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 277, 0, -401)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, -1.3, 0, 1.5)
+depth = 24.0
+material = ExtResource("11_uu5y1")
+
+[node name="Sandbar3" type="CSGPolygon3D" parent="Geometry" unique_id=142564308]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 287, 0, -403)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 80, -3.3, 80, -1.3, 0, -1.3)
+depth = 20.0
+material = ExtResource("10_notjg")
+
+[node name="FinalBeach" type="CSGPolygon3D" parent="Geometry" unique_id=1773494917]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 367, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3.3, 10, -3.3, 10, 1, 0, -1.3)
+depth = 26.0
+material = ExtResource("11_uu5y1")
+
+[node name="FinalIslet" type="CSGPolygon3D" parent="Geometry" unique_id=1952723585]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 377, 0, -398)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1, 75, -1, 75, 1, 0, 1)
+depth = 30.0
+material = ExtResource("10_notjg")
+
+[node name="EndWall" type="CSGBox3D" parent="Geometry" unique_id=693305946]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 452.5, 4, -413)
+visible = false
+use_collision = true
+size = Vector3(1, 8, 30)
+material = ExtResource("12_grog8")
+
+[node name="Art" parent="." unique_id=6185751 instance=ExtResource("13_r7xle")]
+
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1227689559]
+
+[node name="Channel1Water" type="Node3D" parent="Gimmicks" unique_id=1179562980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -180)
+script = ExtResource("14_7nbh4")
+size = Vector3(22, 5.5, 42)
+show_surface = false
+
+[node name="RingsStart" type="Node3D" parent="Gimmicks" unique_id=1913131574]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -4)
+script = ExtResource("15_siplt")
+count = 8
+spacing = 3.0
+
+[node name="MonitorStartBoost" parent="Gimmicks" unique_id=1656777354 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 1, -16)
+item = 5
+
+[node name="MonitorStartRings" parent="Gimmicks" unique_id=1275694713 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 1, -16)
+
+[node name="RingsSandbar1" type="Node3D" parent="Gimmicks" unique_id=148623851]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, -0.49999994, -52)
+script = ExtResource("15_siplt")
+count = 12
+spacing = 5.0
+
+[node name="MonitorShield1" parent="Gimmicks" unique_id=1313400900 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, -108)
+item = 1
+
+[node name="RingsIslet1" type="Node3D" parent="Gimmicks" unique_id=688624107]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 2.3, -136)
+script = ExtResource("15_siplt")
+count = 6
+spacing = 3.0
+
+[node name="Channel1Bubbles" parent="Gimmicks" unique_id=1109148866 instance=ExtResource("17_32lf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -5, -168)
+interval = 3.5
+
+[node name="RedRing1" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("18_njbny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, -3.6, -171.5)
+
+[node name="RingsChannel1" type="Node3D" parent="Gimmicks" unique_id=1081350840]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -4.2, -163)
+script = ExtResource("15_siplt")
+count = 6
+spacing = 3.0
+
+[node name="Checkpoint1" parent="Gimmicks" unique_id=2131578673 instance=ExtResource("19_7sni8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -216)
+gate_width = 28.0
+
+[node name="MonitorShield2" parent="Gimmicks" unique_id=2073069780 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 1, -222)
+item = 1
+
+[node name="MonitorIslet2Rings" parent="Gimmicks" unique_id=662530023 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 10, 1, -222)
+
+[node name="RingsIslet2" type="Node3D" parent="Gimmicks" unique_id=80785487]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.8, -224)
+script = ExtResource("15_siplt")
+count = 8
+spacing = 4.0
+
+[node name="RingsSandbar2" type="Node3D" parent="Gimmicks" unique_id=455996864]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, -0.49999994, -276)
+script = ExtResource("15_siplt")
+count = 14
+spacing = 5.5
+
+[node name="Surf2" parent="Gimmicks" unique_id=1819294855 instance=ExtResource("20_kl2y7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1.3, -262)
+size = Vector2(20, 10)
+reach = 88.0
+backwash_time = 6.0
+
+[node name="RedRing4" parent="Gimmicks" unique_id=1659446839 instance=ExtResource("18_njbny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.2, -330)
+
+[node name="SignSurf" type="Label3D" parent="Gimmicks" unique_id=1350178981]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -11.5, 2.2, -268)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Surf the waves!"
+font_size = 56
+outline_size = 14
+
+[node name="RingsIslet3" type="Node3D" parent="Gimmicks" unique_id=992209372]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -384)
+script = ExtResource("15_siplt")
+count = 4
+spacing = 3.0
+
+[node name="RedRing2" parent="Gimmicks" unique_id=2021160301 instance=ExtResource("18_njbny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 14.5, -392)
+
+[node name="DashCorner" parent="Gimmicks" unique_id=1646487028 instance=ExtResource("21_jpx5c")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 5, -413)
+
+[node name="Channel2Water" type="Node3D" parent="Gimmicks" unique_id=2001731867]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 99, -1, -413)
+script = ExtResource("14_7nbh4")
+size = Vector3(22, 5, 34)
+show_surface = false
+
+[node name="Channel3Water" type="Node3D" parent="Gimmicks" unique_id=289112138]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 211, -1, -413)
+script = ExtResource("14_7nbh4")
+size = Vector3(22, 5, 34)
+show_surface = false
+
+[node name="RingsReef" type="Node3D" parent="Gimmicks" unique_id=1601915523]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 26, 1.3, -413)
+script = ExtResource("15_siplt")
+count = 18
+spacing = 3.0
+
+[node name="RedRing5" parent="Gimmicks" unique_id=1702672723 instance=ExtResource("18_njbny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 55, 6.4, -421)
+
+[node name="Raft" parent="Gimmicks" unique_id=98846517 node_paths=PackedStringArray("float_on") instance=ExtResource("22_0t6fe")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 86, -0.7, -413)
+size = Vector3(4, 0.5, 4)
+travel = Vector3(0, 0, -24)
+travel_time = 5.0
+pause_time = 1.5
+float_on = NodePath("../Channel2Water")
+look = 1
+
+[node name="Channel2Bubbles" parent="Gimmicks" unique_id=1586858925 instance=ExtResource("17_32lf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 90, -4, -409)
+interval = 3.5
+
+[node name="RedRing3" parent="Gimmicks" unique_id=2050115300 instance=ExtResource("18_njbny")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 91, -3, -406)
+
+[node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("23_sae25")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 94, -4, -419)
+
+[node name="RingsChannel2" type="Node3D" parent="Gimmicks" unique_id=1093793387]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 86, -3.2, -416)
+script = ExtResource("15_siplt")
+count = 6
+spacing = 3.0
+
+[node name="Checkpoint2" parent="Gimmicks" unique_id=249738449 instance=ExtResource("19_7sni8")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 131, 1.5, -413)
+gate_width = 30.0
+
+[node name="MonitorShield3" parent="Gimmicks" unique_id=1361479043 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 136, 1.5, -403)
+item = 1
+
+[node name="MonitorIslet4Boost" parent="Gimmicks" unique_id=638991342 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 136, 1.5, -423)
+item = 5
+
+[node name="RingsIslet4" type="Node3D" parent="Gimmicks" unique_id=44815794]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 140, 2.3, -413)
+script = ExtResource("15_siplt")
+count = 12
+spacing = 4.0
+
+[node name="Channel3Bubbles" parent="Gimmicks" unique_id=1412174737 instance=ExtResource("17_32lf3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 203, -4, -418)
+interval = 3.5
+
+[node name="RingsChannel3" type="Node3D" parent="Gimmicks" unique_id=1577911609]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 198, -3.2, -410)
+script = ExtResource("15_siplt")
+count = 6
+spacing = 3.0
+
+[node name="MonitorShield4" parent="Gimmicks" unique_id=1807826452 instance=ExtResource("16_672x6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 242, 1.5, -422)
+item = 1
+
+[node name="RingsIslet5" type="Node3D" parent="Gimmicks" unique_id=2015574202]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 240, 2.3, -410)
+script = ExtResource("15_siplt")
+count = 10
+spacing = 3.5
+
+[node name="RingsSandbar3" type="Node3D" parent="Gimmicks" unique_id=189244387]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 290, -0.49999994, -416)
+script = ExtResource("15_siplt")
+count = 12
+spacing = 5.5
+
+[node name="Surf3" parent="Gimmicks" unique_id=1345537819 instance=ExtResource("20_kl2y7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 279, -1.3, -413)
+size = Vector2(20, 10)
+reach = 78.0
+surge_time = 5.5
+backwash_time = 5.5
+start_time = 3.0
+
+[node name="RingsFinal" type="Node3D" parent="Gimmicks" unique_id=1881895562]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 382, 1.8, -413)
+script = ExtResource("15_siplt")
+count = 10
+spacing = 3.0
+
+[node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("24_d802v")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 422, 1, -413)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1383213351]
+
+[node name="ScuttlerSandbar1a" parent="Enemies" unique_id=1354843088 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, -1.3, -78)
+
+[node name="ScuttlerSandbar1b" parent="Enemies" unique_id=449788890 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, -1.3, -92)
+
+[node name="GullSandbar1" parent="Enemies" unique_id=1972243346 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 3.6, -100)
+
+[node name="PearlshotIslet1a" parent="Enemies" unique_id=445153036 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 1.5, -150)
+
+[node name="PearlshotIslet1b" parent="Enemies" unique_id=757384469 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 1.5, -150)
+
+[node name="ScuttlerIslet1" parent="Enemies" unique_id=1626011359 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1.5, -144)
+patrol_distance = 6.0
+
+[node name="GullChain1a" parent="Enemies" unique_id=838748872 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 4.5, -170)
+swoops = false
+
+[node name="GullChain1b" parent="Enemies" unique_id=1945202637 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.2, -181)
+swoops = false
+
+[node name="GullChain1c" parent="Enemies" unique_id=1483283605 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 5.8, -192)
+swoops = false
+
+[node name="FishChannel1" parent="Enemies" unique_id=1874287843 instance=ExtResource("28_rydso")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -6, -1.2, -176)
+leap_distance = 12.0
+hide_depth = 1.0
+
+[node name="ScuttlerIslet2a" parent="Enemies" unique_id=908017593 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 1, -232)
+
+[node name="ScuttlerIslet2b" parent="Enemies" unique_id=1893401979 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 1, -238)
+
+[node name="ScuttlerIslet2c" parent="Enemies" unique_id=1796943311 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 1, -248)
+
+[node name="PearlshotIslet2a" parent="Enemies" unique_id=1167783268 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -11, 1, -254)
+
+[node name="PearlshotIslet2b" parent="Enemies" unique_id=178865826 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 11, 1, -254)
+
+[node name="GullSandbar2a" parent="Enemies" unique_id=1078047835 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 4.2, -300)
+
+[node name="GullSandbar2b" parent="Enemies" unique_id=1797011566 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 4.2, -322)
+
+[node name="PearlshotIslet3a" parent="Enemies" unique_id=526377023 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 5, -392)
+
+[node name="PearlshotIslet3b" parent="Enemies" unique_id=1681405742 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9, 5, -392)
+
+[node name="GullIslet3" parent="Enemies" unique_id=1966253270 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, -392)
+swoops = false
+
+[node name="FishReef1" parent="Enemies" unique_id=978336286 instance=ExtResource("28_rydso")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 35, -1.2, -407)
+leap_distance = 12.0
+hide_depth = 1.0
+
+[node name="FishReef2" parent="Enemies" unique_id=938616061 instance=ExtResource("28_rydso")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 48, -1.2, -419)
+leap_distance = 12.0
+start_delay = 0.6
+hide_depth = 1.0
+
+[node name="FishReef3" parent="Enemies" unique_id=1895757276 instance=ExtResource("28_rydso")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 61, -1.2, -407)
+leap_distance = 12.0
+start_delay = 1.2
+hide_depth = 1.0
+
+[node name="FishReef4" parent="Enemies" unique_id=1166160796 instance=ExtResource("28_rydso")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 74, -1.2, -419)
+leap_distance = 12.0
+start_delay = 1.7999999999999998
+hide_depth = 1.0
+
+[node name="GullChain2a" parent="Enemies" unique_id=547105308 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 3.5, -413)
+swoops = false
+
+[node name="GullChain2b" parent="Enemies" unique_id=540639033 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 98, 4.5, -413)
+swoops = false
+
+[node name="GullChain2c" parent="Enemies" unique_id=1422830728 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 108, 5, -413)
+swoops = false
+
+[node name="ScuttlerIslet4a" parent="Enemies" unique_id=1931137631 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 148, 1.5, -421)
+
+[node name="ScuttlerIslet4b" parent="Enemies" unique_id=138166448 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 156, 1.5, -406)
+
+[node name="ScuttlerIslet4c" parent="Enemies" unique_id=496427570 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 166, 1.5, -417)
+
+[node name="ScuttlerIslet4d" parent="Enemies" unique_id=919215611 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 176, 1.5, -408)
+
+[node name="PearlshotIslet4a" parent="Enemies" unique_id=1295311237 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182, 1.5, -425)
+
+[node name="PearlshotIslet4b" parent="Enemies" unique_id=1228489268 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 182, 1.5, -401)
+
+[node name="GullIslet4a" parent="Enemies" unique_id=1255274661 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 4.5, -417)
+
+[node name="GullIslet4b" parent="Enemies" unique_id=1726232586 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 172, 4.5, -409)
+
+[node name="GullChain3a" parent="Enemies" unique_id=1482960365 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, 3.5, -413)
+swoops = false
+
+[node name="GullChain3b" parent="Enemies" unique_id=1557877968 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 210, 4.5, -413)
+swoops = false
+
+[node name="GullChain3c" parent="Enemies" unique_id=2114903700 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 220, 5, -413)
+swoops = false
+
+[node name="FishChannel3" parent="Enemies" unique_id=1930599550 instance=ExtResource("28_rydso")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 211, -1.2, -407)
+leap_distance = 12.0
+hide_depth = 1.0
+
+[node name="ScuttlerIslet5a" parent="Enemies" unique_id=1282461605 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 250, 1.5, -419)
+
+[node name="ScuttlerIslet5b" parent="Enemies" unique_id=173936370 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 262, 1.5, -407)
+
+[node name="PearlshotIslet5" parent="Enemies" unique_id=1927482098 instance=ExtResource("27_ms0n3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 270, 1.5, -413)
+
+[node name="GullIslet5a" parent="Enemies" unique_id=1049808257 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 256, 4.5, -410)
+
+[node name="GullIslet5b" parent="Enemies" unique_id=330077899 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 266, 4.5, -416)
+
+[node name="GullSandbar3" parent="Enemies" unique_id=1974104044 instance=ExtResource("26_jk381")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 327, 4.2, -410)
+
+[node name="ScuttlerFinal" parent="Enemies" unique_id=1554900325 instance=ExtResource("25_b7vtd")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 402, 1, -407)

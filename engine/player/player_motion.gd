@@ -243,3 +243,69 @@ static func with_speed_shoes(physics: PlayerPhysics) -> PlayerPhysics:
 	fast.air_acc *= factor
 	fast.roll_frc *= factor
 	return fast
+
+
+## Movement values underwater: a copy of `physics` with acc, dec, frc, top, air_acc, roll_frc and
+## boost_speed multiplied by water_factor, and the lighter gravity, lower jump and gentler knockback
+## of water_grv, water_jmp, water_jmp_release_cap and water_hurt_gravity, as the classic games swap
+## them in underwater.
+static func underwater(physics: PlayerPhysics) -> PlayerPhysics:
+	var wet := physics.duplicate() as PlayerPhysics
+	var factor := physics.water_factor
+	wet.acc *= factor
+	wet.dec *= factor
+	wet.frc *= factor
+	wet.top *= factor
+	wet.air_acc *= factor
+	wet.roll_frc *= factor
+	wet.boost_speed *= factor
+	wet.grv = physics.water_grv
+	wet.jmp = physics.water_jmp
+	wet.jmp_release_cap = physics.water_jmp_release_cap
+	wet.hurt_gravity = physics.water_hurt_gravity
+	return wet
+
+
+## Velocity on falling into water: the water takes away most of it, keeping water_entry_horizontal
+## of the horizontal part and water_entry_vertical of the vertical part.
+static func water_entry(velocity: Vector3, physics: PlayerPhysics) -> Vector3:
+	var horizontal := Vector3(velocity.x, 0.0, velocity.z) * physics.water_entry_horizontal
+	return horizontal + Vector3.UP * velocity.y * physics.water_entry_vertical
+
+
+## Velocity on leaving the water: rising speed is multiplied by water_exit_boost (up to max_fall),
+## so a jump from underwater carries the player out of it.
+static func water_exit(velocity: Vector3, physics: PlayerPhysics) -> Vector3:
+	if velocity.y <= 0.0:
+		return velocity
+	return Vector3(velocity.x, minf(velocity.y * physics.water_exit_boost, physics.max_fall), velocity.z)
+
+
+## The number the drowning countdown shows with `air` seconds of air left: 5 when `countdown`
+## seconds are left, one less every two seconds after that, 0 in the last two. -1 before it starts.
+static func drown_count(air: float, countdown: float) -> int:
+	if air > countdown or air <= 0.0:
+		return -1
+	return clampi(ceili(air / 2.0) - 1, 0, 5)
+
+
+## Whether the air ran down past one of the warning chimes (25, 20 and 15 seconds left) between
+## `before` and `after` seconds.
+static func air_warning(before: float, after: float) -> bool:
+	for warning: float in [25.0, 20.0, 15.0]:
+		if before > warning and after <= warning:
+			return true
+	return false
+
+
+## Grinding speed after `delta` seconds on a rail running along `direction` (a unit vector, the way
+## the player is going): gravity speeds them up downhill (slp_roll_down) and slows them uphill
+## (slp_roll_up), as when rolling, and grind_frc slows them a little, though never below
+## grind_min_speed: only a climb can stop a grind (and send it back down).
+static func grind_speed(speed: float, direction: Vector3, physics: PlayerPhysics, delta: float) -> float:
+	var climb := direction.dot(Vector3.UP)
+	var slope := physics.slp_roll_up if climb > 0.0 else physics.slp_roll_down
+	speed -= slope * climb * delta
+	if speed > physics.grind_min_speed:
+		speed = maxf(speed - physics.grind_frc * delta, physics.grind_min_speed)
+	return speed

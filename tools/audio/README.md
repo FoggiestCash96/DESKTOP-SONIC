@@ -12,7 +12,7 @@ python tools/audio/render.py
 
 | Command | Renders |
 |---|---|
-| `python tools/audio/render.py` | Everything (about 3 minutes) |
+| `python tools/audio/render.py` | Everything (about 20 minutes; each act's track takes 2 to 3 minutes with its fast version) |
 | `python tools/audio/render.py --music` | All the music |
 | `python tools/audio/render.py --sounds` | All the sound effects (a few seconds) |
 | `python tools/audio/render.py emerald_shore_1 jump` | One track and one sound, by name |
@@ -36,12 +36,19 @@ Sound effects work the same way: edit the recipe in `sounds.py` and re-render it
 |---|---|---|
 | `title.py` | Title screen, save slots and world map | F major, 120 |
 | `emerald_shore_1.py` | Emerald Shore Act 1 (and the test room) | F major, 150 |
+| `emerald_shore_2.py` | Emerald Shore Act 2 | B-flat major, 138 |
+| `emerald_shore_3.py` | Emerald Shore Act 3 | D major, 162 |
+| `emerald_shore_4.py` | Emerald Shore Act 4 | C major, 146 |
+| `emerald_shore_5.py` | Emerald Shore Act 5 | A minor, 120 |
+| `emerald_shore_6.py` | Emerald Shore Act 6 | E minor, 148 |
+| `emerald_shore_7.py` | Emerald Shore Act 7 | E-flat major, 164 |
 | `emerald_shore_8.py` | Emerald Shore Act 8, until the boss | D minor, 156 |
 | `boss.py` | Boss fights | C minor, 168 |
 | `invincible.py` | While invincible | A major, 168 |
 | `extra_life.py` | An extra life (the music stops for it) | B-flat major, 150 |
 | `act_clear.py` | The goal, or a boss beaten | F major, 140 |
 | `game_over.py` | The last life lost | D minor, 100 |
+| `drowning.py` | The last 12 seconds of air under water, instead of the music | D minor, 180 |
 
 ## Writing music
 
@@ -86,7 +93,7 @@ FAST = 1.25                     # Also render a version this much faster, for sp
 
 `Pad` holds each chord for as long as it lasts. Parts repeat to fill their section, so a one-bar pattern plays under an eight-bar section.
 
-**Instruments** are in `instruments.py`: `BRASS`, `BRASS_STABS`, `SLAP_BASS`, `SYNTH_BASS`, `STEEL`, `CLAV`, `EPIANO`, `BELL`, `POP_LEAD`, `ARP`, `PAD`, `STRINGS` and the drum `KIT`. `.copy()` makes a variation for one track, for example `STEEL.copy(name="steel solo", gain_db=-5.0)`; `gain_db`, `pan`, `reverb` and `echo` set its place in the mix.
+**Instruments** are in `instruments.py`: `BRASS`, `BRASS_STABS`, `SLAP_BASS`, `SYNTH_BASS`, `STEEL`, `CLAV`, `EPIANO`, `BELL`, `MARIMBA`, `POP_LEAD`, `FLUTE`, `ARP`, `PAD`, `STRINGS` and the drum `KIT`. `.copy()` makes a variation for one track, for example `STEEL.copy(name="steel solo", gain_db=-5.0)`; `gain_db`, `pan`, `reverb` and `echo` set its place in the mix. The kit's pieces copy the same way: `dict(KIT, timpani=KIT["timpani"].copy(gain_db=-11.0))` is a kit with softer timpani for one track.
 
 ## Levels
 

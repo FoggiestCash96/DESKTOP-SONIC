@@ -1,0 +1,557 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_mv4ee"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_7.ogg" id="2_rcpr6"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_7_fast.ogg" id="3_dl6bk"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/sunset_environment.tres" id="4_syt6l"]
+[ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="5_x0kr4"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="6_xt1s3"]
+[ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="7_wh7om"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="8_i2m2l"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sea.tres" id="9_o6bxk"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="10_a0455"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="11_8eaji"]
+[ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="12_s0bek"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/loop.tres" id="13_dnp6p"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="14_l7h0w"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_7_art.glb" id="15_j2pj8"]
+[ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="16_ees42"]
+[ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="17_ylwi0"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="18_078oq"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="19_vub6o"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="20_jsr0t"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="21_l1gob"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="22_c6ovs"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="23_a7uxi"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="24_i2drx"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="25_8wmid"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="26_h0tge"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="27_dycab"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_bn5hy"]
+size = Vector2(4000, 4000)
+
+[sub_resource type="Curve3D" id="Curve3D_f2yir"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 10, 13.3, -244, 0, 0, 0, 0, 0, 0, 10, 8.3, -302, 0, 0, 0, 0, 0, 0, 10, 3.3, -360),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_u8a1v"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 13.5, 13.3, -244, 0, 0, 0, 0, 0, 0, 13.5, 8.3, -302, 0, 0, 0, 0, 0, 0, 13.5, 3.3, -360),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_m3ug8"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 225, -2.7, -574, 0, 0, 0, 0, 0, 0, 225, -2.7, -690),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_dvsya"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 245, -2.7, -574, 0, 0, 0, 0, 0, 0, 245, -2.7, -690),
+"tilts": PackedFloat32Array(0, 0)
+}
+point_count = 2
+
+[node name="EmeraldShoreAct7" type="Node3D" unique_id=1754660278]
+script = ExtResource("1_mv4ee")
+title = "Emerald Shore Act 7: Sunset Ridge Cliffs"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
+next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
+music = ExtResource("2_rcpr6")
+fast_music = ExtResource("3_dl6bk")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2023925998]
+environment = ExtResource("4_syt6l")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=623400380]
+transform = Transform3D(-0.9438584, 0.07298383, -0.32218745, 0, 0.97529, 0.22092853, 0.3303504, 0.20852526, -0.9205356, 0, 0, 0)
+light_color = Color(1, 0.74, 0.52, 1)
+light_energy = 1.05
+shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="Player" parent="." unique_id=719696558 instance=ExtResource("5_x0kr4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40, 4)
+character = ExtResource("6_xt1s3")
+kill_height = -30.0
+
+[node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("7_wh7om")]
+target = NodePath("../Player")
+
+[node name="HUD" parent="." unique_id=661223426 node_paths=PackedStringArray("target") instance=ExtResource("8_i2m2l")]
+target = NodePath("../Player")
+
+[node name="Sea" type="MeshInstance3D" parent="." unique_id=1503764742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -14, -296)
+material_override = ExtResource("9_o6bxk")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_bn5hy")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=1033505246]
+
+[node name="Start" type="CSGPolygon3D" parent="Geometry" unique_id=2109278568]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 12, 0, 12)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 38, 52, 38, 52, 40, 0, 40)
+depth = 24.0
+material = ExtResource("10_a0455")
+
+[node name="Downhill1" type="CSGPolygon3D" parent="Geometry" unique_id=749167143]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 11, 0, -40)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 18, 80, 18, 80, 20, 0, 40)
+depth = 22.0
+material = ExtResource("11_8eaji")
+
+[node name="LoopFloor1" type="CSGPolygon3D" parent="Geometry" unique_id=19300002]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -120)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 18, 40, 18, 40, 20, 0, 20)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Loop1" type="Node3D" parent="Geometry" unique_id=693578360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3, 20.005, -135)
+script = ExtResource("12_s0bek")
+radius = 5.0
+exit_offset = 6.0
+material = ExtResource("13_dnp6p")
+
+[node name="Ramp1" type="CSGPolygon3D" parent="Geometry" unique_id=1245141592]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 0, 0, -160)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 18, 20, 18, 20, 24, 0, 20)
+depth = 13.0
+material = ExtResource("11_8eaji")
+
+[node name="SafeBridge1" type="CSGPolygon3D" parent="Geometry" unique_id=1618790722]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -160)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 19.5, 42, 15.5, 42, 16, 0, 20)
+depth = 6.0
+material = ExtResource("11_8eaji")
+
+[node name="Landing1" type="CSGPolygon3D" parent="Geometry" unique_id=772811870]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -202)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 10, 40, 10, 40, 12, 0, 16)
+depth = 26.0
+material = ExtResource("11_8eaji")
+
+[node name="RailRun" type="CSGPolygon3D" parent="Geometry" unique_id=2096982206]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 7, 0, -242)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 120, 0, 120, 2, 0, 12)
+depth = 20.0
+material = ExtResource("11_8eaji")
+
+[node name="Ledge1" type="CSGPolygon3D" parent="Geometry" unique_id=2116952013]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -362)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 38, 0, 38, 2, 0, 2)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Corner1" type="CSGPolygon3D" parent="Geometry" unique_id=857032750]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 26, 0, 26, 2, 0, 2)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Ledge2" type="CSGPolygon3D" parent="Geometry" unique_id=1606050099]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 13, 0, -401)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 47, 0, 47, 2, 0, 2)
+depth = 24.0
+material = ExtResource("10_a0455")
+
+[node name="Ledge3" type="CSGPolygon3D" parent="Geometry" unique_id=2056738596]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 76, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 64, 0, 64, 2, 0, 2)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Loop2" type="Node3D" parent="Geometry" unique_id=1246291956]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 105, 2.005, -416)
+script = ExtResource("12_s0bek")
+radius = 5.0
+exit_offset = 6.0
+material = ExtResource("13_dnp6p")
+
+[node name="Ramp2" type="CSGPolygon3D" parent="Geometry" unique_id=1882007976]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 140, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0, 20, 0, 20, 6, 0, 2)
+depth = 13.0
+material = ExtResource("11_8eaji")
+
+[node name="SafeBridge2" type="CSGPolygon3D" parent="Geometry" unique_id=1170902913]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 140, 0, -419)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 1.5, 42, -2.5, 42, -2, 0, 2)
+depth = 6.0
+material = ExtResource("11_8eaji")
+
+[node name="Landing2" type="CSGPolygon3D" parent="Geometry" unique_id=509306063]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 182, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 40, -8, 40, -6, 0, -2)
+depth = 26.0
+material = ExtResource("11_8eaji")
+
+[node name="Corner2" type="CSGPolygon3D" parent="Geometry" unique_id=505942996]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 222, 0, -400)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 26, -8, 26, -6, 0, -6)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Run3" type="CSGPolygon3D" parent="Geometry" unique_id=1802240386]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 246, 0, -426)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 40, -8, 40, -6, 0, -6)
+depth = 22.0
+material = ExtResource("10_a0455")
+
+[node name="Downhill3" type="CSGPolygon3D" parent="Geometry" unique_id=1188004425]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 246, 0, -466)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -11, 30, -11, 30, -9, 0, -6)
+depth = 22.0
+material = ExtResource("11_8eaji")
+
+[node name="LoopFloor3" type="CSGPolygon3D" parent="Geometry" unique_id=361991014]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 248, 0, -496)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -11, 36, -11, 36, -9, 0, -9)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="Loop3" type="Node3D" parent="Geometry" unique_id=1805499814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 232, -8.995, -510)
+script = ExtResource("12_s0bek")
+radius = 5.0
+exit_offset = 6.0
+material = ExtResource("13_dnp6p")
+
+[node name="Rise3" type="CSGPolygon3D" parent="Geometry" unique_id=862712173]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 246, 0, -532)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -11, 40, -11, 40, -4, 0, -9)
+depth = 22.0
+material = ExtResource("11_8eaji")
+
+[node name="Ridge" type="CSGPolygon3D" parent="Geometry" unique_id=1714906405]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 242, 0, -572)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 120, -6, 120, -4, 0, -4)
+depth = 14.0
+material = ExtResource("10_a0455")
+
+[node name="SeaStack" type="CSGBox3D" parent="Geometry" unique_id=900519252]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252, -9, -626)
+visible = false
+use_collision = true
+size = Vector3(4, 10, 4)
+material = ExtResource("14_l7h0w")
+
+[node name="FinalStraight" type="CSGPolygon3D" parent="Geometry" unique_id=610059990]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 248, 0, -692)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -6, 110, -6, 110, -4, 0, -4)
+depth = 26.0
+material = ExtResource("10_a0455")
+
+[node name="EndWall" type="CSGBox3D" parent="Geometry" unique_id=2041835535]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, 0, -802.5)
+visible = false
+use_collision = true
+size = Vector3(26, 8, 1)
+material = ExtResource("14_l7h0w")
+
+[node name="Art" parent="." unique_id=1739483169 instance=ExtResource("15_j2pj8")]
+
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1626321347]
+
+[node name="RailRunA" type="Path3D" parent="Gimmicks" unique_id=1472957059]
+curve = SubResource("Curve3D_f2yir")
+script = ExtResource("16_ees42")
+
+[node name="RailRunB" type="Path3D" parent="Gimmicks" unique_id=1718004738]
+curve = SubResource("Curve3D_u8a1v")
+script = ExtResource("16_ees42")
+
+[node name="RingsStart" type="Node3D" parent="Gimmicks" unique_id=890531165]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40.8, -4)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 3.0
+
+[node name="MonitorStartBoost" parent="Gimmicks" unique_id=1656777354 instance=ExtResource("18_078oq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 40, -18)
+item = 5
+
+[node name="MonitorStartRings" parent="Gimmicks" unique_id=122377419 instance=ExtResource("18_078oq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 40, -18)
+
+[node name="DashStart" parent="Gimmicks" unique_id=1646487028 instance=ExtResource("19_vub6o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 40, -34)
+
+[node name="RingsDownhill1" type="Node3D" parent="Gimmicks" unique_id=1138016303]
+transform = Transform3D(1, 0, 0, 0, 0.9702957, -0.2419219, 0, 0.2419219, 0.9702957, 0, 40.8, -46)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 8.0
+
+[node name="RedRing1" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("20_jsr0t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 29.3, -135)
+
+[node name="DashRamp1" parent="Gimmicks" unique_id=349005190 instance=ExtResource("19_vub6o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 20, -157)
+
+[node name="SignJump1" type="Label3D" parent="Gimmicks" unique_id=1569401520]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1, 24.5, -150)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "← jump        bridge →"
+font_size = 64
+outline_size = 14
+
+[node name="RingsJump1" type="Node3D" parent="Gimmicks" unique_id=1333037385]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 25.4, -183)
+script = ExtResource("17_ylwi0")
+count = 6
+spacing = 3.5
+arc_height = 2.0
+
+[node name="RedRing2" parent="Gimmicks" unique_id=1160036434 instance=ExtResource("20_jsr0t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 25.6, -188)
+
+[node name="RingsBridge1" type="Node3D" parent="Gimmicks" unique_id=870544890]
+transform = Transform3D(1, 0, 0, 0, 0.99556196, 0.09410831, 0, -0.09410831, 0.99556196, 6, 20.8, -164)
+script = ExtResource("17_ylwi0")
+count = 8
+spacing = 4.5
+
+[node name="RingsRailRun" type="Node3D" parent="Gimmicks" unique_id=846763316]
+transform = Transform3D(1, 0, 0, 0, 0.99649286, -0.08367784, 0, 0.08367784, 0.99649286, -3, 12.8, -250)
+script = ExtResource("17_ylwi0")
+count = 12
+spacing = 9.0
+
+[node name="RingsRailB" type="Node3D" parent="Gimmicks" unique_id=2015108522]
+transform = Transform3D(1, 0, 0, 0, 0.9963453, -0.08541692, 0, 0.08541692, 0.9963453, 13.5, 13.67, -250)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 11.0
+
+[node name="RedRing3" parent="Gimmicks" unique_id=982632354 instance=ExtResource("20_jsr0t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 11.95, -270)
+
+[node name="Checkpoint1" parent="Gimmicks" unique_id=2131578673 instance=ExtResource("21_l1gob")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, -370)
+gate_width = 26.0
+
+[node name="MonitorLedge1Shoes" parent="Gimmicks" unique_id=1388783681 instance=ExtResource("18_078oq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 2, -386)
+item = 2
+
+[node name="DashCorner1" parent="Gimmicks" unique_id=1989621153 instance=ExtResource("19_vub6o")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 0, 2, -413)
+
+[node name="SpringCannon" parent="Gimmicks" unique_id=1587388821 instance=ExtResource("22_c6ovs")]
+transform = Transform3D(0.52991927, 0.8480481, 0, -0.8480481, 0.52991927, 0, 0, 0, 1, 56, 2, -413)
+speed = 30.0
+keep_momentum = false
+
+[node name="SignCannon" type="Label3D" parent="Gimmicks" unique_id=1366135261]
+transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 48, 5.5, -404)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Spring cannon!"
+font_size = 52
+outline_size = 14
+
+[node name="RingsLedge2" type="Node3D" parent="Gimmicks" unique_id=748487442]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 18, 2.8, -413)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 3.0
+
+[node name="RedRing4" parent="Gimmicks" unique_id=1657039807 instance=ExtResource("20_jsr0t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 7.6, -413)
+
+[node name="RingsLedge3" type="Node3D" parent="Gimmicks" unique_id=1395626551]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 84, 2.8, -409)
+script = ExtResource("17_ylwi0")
+spacing = 3.0
+
+[node name="DashLoop2" parent="Gimmicks" unique_id=575976061 instance=ExtResource("19_vub6o")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 95, 2, -416)
+
+[node name="DashRamp2" parent="Gimmicks" unique_id=2047101527 instance=ExtResource("19_vub6o")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 137, 2, -406.5)
+
+[node name="RingsJump2" type="Node3D" parent="Gimmicks" unique_id=1946515332]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 162, 7.4, -406.5)
+script = ExtResource("17_ylwi0")
+count = 6
+spacing = 3.5
+arc_height = 2.0
+
+[node name="RingsBridge2" type="Node3D" parent="Gimmicks" unique_id=1052205713]
+transform = Transform3D(-4.371139e-08, 0.09410831, -0.99556196, 0, 0.99556196, 0.09410831, 1, 4.113605e-09, -4.3517396e-08, 144, 2.8, -422)
+script = ExtResource("17_ylwi0")
+count = 8
+spacing = 4.5
+
+[node name="MonitorLanding2Boost" parent="Gimmicks" unique_id=1937303433 instance=ExtResource("18_078oq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 205, -5, -404)
+item = 5
+
+[node name="DashCorner2" parent="Gimmicks" unique_id=1712217708 instance=ExtResource("19_vub6o")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -6, -413)
+
+[node name="RidgeRailL" type="Path3D" parent="Gimmicks" unique_id=1423566715]
+curve = SubResource("Curve3D_m3ug8")
+script = ExtResource("16_ees42")
+
+[node name="RidgeRailR" type="Path3D" parent="Gimmicks" unique_id=107927006]
+curve = SubResource("Curve3D_dvsya")
+script = ExtResource("16_ees42")
+
+[node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("23_a7uxi")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 252, -4, -626)
+
+[node name="RingsRun3" type="Node3D" parent="Gimmicks" unique_id=948170294]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -5.2, -430)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 3.5
+
+[node name="RedRing5" parent="Gimmicks" unique_id=1516676723 instance=ExtResource("20_jsr0t")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 233.9, 0.3, -510)
+
+[node name="RingsRise3" type="Node3D" parent="Gimmicks" unique_id=1346269558]
+transform = Transform3D(1, 0, 0, 0, 0.9923319, 0.123601474, 0, -0.123601474, 0.9923319, 235, -8.2, -536)
+script = ExtResource("17_ylwi0")
+count = 8
+spacing = 4.5
+
+[node name="Checkpoint2" parent="Gimmicks" unique_id=1483353507 instance=ExtResource("21_l1gob")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -4, -580)
+gate_width = 30.0
+
+[node name="RingsRidge" type="Node3D" parent="Gimmicks" unique_id=1074547571]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -3.2, -586)
+script = ExtResource("17_ylwi0")
+count = 20
+spacing = 5.0
+
+[node name="RingsRidgeRail" type="Node3D" parent="Gimmicks" unique_id=1678752898]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 245, -1.81, -590)
+script = ExtResource("17_ylwi0")
+count = 10
+spacing = 9.0
+
+[node name="MonitorFinalRings" parent="Gimmicks" unique_id=382863224 instance=ExtResource("18_078oq")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 227, -4, -720)
+
+[node name="RingsFinal" type="Node3D" parent="Gimmicks" unique_id=853664706]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -3.2, -700)
+script = ExtResource("17_ylwi0")
+count = 20
+spacing = 3.5
+
+[node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("24_i2drx")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -4, -780)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=1892541630]
+
+[node name="ScuttlerStart" parent="Enemies" unique_id=1354843088 instance=ExtResource("25_8wmid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 40, -24)
+patrol_distance = 3.5
+
+[node name="GullDownhill1" parent="Enemies" unique_id=1972243346 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -5, 33, -80)
+swoops = false
+
+[node name="ScuttlerLoopFloor1" parent="Enemies" unique_id=262089584 instance=ExtResource("25_8wmid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 20, -148)
+patrol_distance = 2.0
+
+[node name="PearlshotLanding1" parent="Enemies" unique_id=445153036 instance=ExtResource("27_dycab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 15, -222)
+
+[node name="GullRailRun" parent="Enemies" unique_id=1089179685 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 10, -300)
+
+[node name="ScuttlerLedge1" parent="Enemies" unique_id=286620290 instance=ExtResource("25_8wmid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 2, -392)
+
+[node name="ScuttlerLedge2" parent="Enemies" unique_id=1429367437 instance=ExtResource("25_8wmid")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 36, 2, -407)
+
+[node name="GullCannon1" parent="Enemies" unique_id=492280052 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 63, 5.5, -419)
+swoops = false
+
+[node name="GullCannon2" parent="Enemies" unique_id=1165698890 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 69, 6, -419)
+swoops = false
+
+[node name="GullCannon3" parent="Enemies" unique_id=1514658543 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 75, 6.5, -419)
+swoops = false
+
+[node name="ScuttlerLedge3" parent="Enemies" unique_id=1754363230 instance=ExtResource("25_8wmid")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 128, 2, -420)
+
+[node name="PearlshotLanding2" parent="Enemies" unique_id=420748681 instance=ExtResource("27_dycab")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200, -4, -422)
+
+[node name="ScuttlerRun3" parent="Enemies" unique_id=484721780 instance=ExtResource("25_8wmid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 240, -6, -452)
+
+[node name="GullRidge1" parent="Enemies" unique_id=290895589 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 232, 0, -620)
+
+[node name="GullRidge2" parent="Enemies" unique_id=1472122277 instance=ExtResource("26_h0tge")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 238, 0, -660)
+
+[node name="ScuttlerFinal" parent="Enemies" unique_id=1584790336 instance=ExtResource("25_8wmid")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241, -4, -740)

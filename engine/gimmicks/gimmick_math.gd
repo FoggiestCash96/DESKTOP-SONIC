@@ -1,6 +1,7 @@
 class_name GimmickMath
 extends RefCounted
-## Math for springs, bouncing objects and tidal waves, kept free of nodes so the unit tests can call it.
+## Math for springs, bouncing objects, tidal waves, tides, moving platforms and breakable walls,
+## kept free of nodes so the unit tests can call it.
 
 const ALONG_GROUND := 0.5  ## A launch direction this close to the surface (cosine from its normal, about 60°) runs along the ground.
 
@@ -39,3 +40,42 @@ static func wave_cycle(time: float, surge_time: float, backwash_time: float, res
 	if t < backwash_time:
 		return Vector2(1.0 - t / backwash_time, -1.0)
 	return Vector2.ZERO
+
+
+## How high a tide is `time` seconds into its cycle, from 0 (low) to 1 (high): it stays low for
+## `low_time`, rises over `rise_time`, stays high for `high_time` and falls over `fall_time`, easing
+## in and out of each change.
+static func tide_level(time: float, low_time: float, rise_time: float, high_time: float, fall_time: float) -> float:
+	var t := fposmod(time, low_time + rise_time + high_time + fall_time)
+	if t < low_time:
+		return 0.0
+	t -= low_time
+	if t < rise_time:
+		return smoothstep(0.0, 1.0, t / rise_time)
+	t -= rise_time
+	if t < high_time:
+		return 1.0
+	t -= high_time
+	return 1.0 - smoothstep(0.0, 1.0, t / fall_time)
+
+
+## How far along its run a moving platform is `time` seconds into its cycle, from 0 (at its start)
+## to 1 (at the far end): it travels out over `travel_time`, easing in and out, waits `pause_time`,
+## travels back and waits again.
+static func platform_travel(time: float, travel_time: float, pause_time: float) -> float:
+	var t := fposmod(time, 2.0 * (travel_time + pause_time))
+	if t < travel_time:
+		return smoothstep(0.0, 1.0, t / travel_time)
+	t -= travel_time
+	if t < pause_time:
+		return 1.0
+	t -= pause_time
+	if t < travel_time:
+		return 1.0 - smoothstep(0.0, 1.0, t / travel_time)
+	return 0.0
+
+
+## Whether something moving at `velocity` smashes a breakable wall that lies in `direction` (a unit
+## vector toward it): it has to be closing on the wall at `speed` or faster.
+static func breaks_wall(velocity: Vector3, direction: Vector3, speed: float) -> bool:
+	return velocity.dot(direction) >= speed

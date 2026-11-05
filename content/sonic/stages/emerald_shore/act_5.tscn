@@ -1,0 +1,693 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_3oi8y"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_5.ogg" id="2_6k00a"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_5_fast.ogg" id="3_fwh7x"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/grotto_environment.tres" id="4_20ipa"]
+[ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="5_bnoe7"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="6_culhj"]
+[ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="7_qygt7"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="8_8e2db"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sea.tres" id="9_gy3vc"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="10_u4qge"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="11_uhvuw"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="12_g6a7c"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_5_art.glb" id="13_0q3ah"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/breakable_wall.tscn" id="14_5acfn"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="15_h35dy"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="16_xqqyt"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/crumbling_platform.tscn" id="17_0nud4"]
+[ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="18_midyv"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="19_irkde"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="20_hsluc"]
+[ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="21_0eak7"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/moving_platform.tscn" id="22_qomrk"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spikes.tscn" id="23_7xvn7"]
+[ext_resource type="Script" path="res://engine/gimmicks/water_volume.gd" id="24_b7btb"]
+[ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="25_3wovf"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="26_eqsee"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="27_wdrpj"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="28_dsdcj"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="29_su2qy"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="30_mddt6"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="31_rnt04"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_x6p3j"]
+size = Vector2(4000, 4000)
+
+[sub_resource type="Curve3D" id="Curve3D_ds04h"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 202, 1.4, -222, 0, 0, 0, 0, 0, 0, 270, 1.4, -222, 0, 0, 0, 0, 0, 0, 338, 1.4, -222),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="EmeraldShoreAct5" type="Node3D" unique_id=1673616371]
+script = ExtResource("1_3oi8y")
+title = "Emerald Shore Act 5: Underground Grotto"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
+next_scene = "res://content/sonic/stages/emerald_shore/act_6.tscn"
+music = ExtResource("2_6k00a")
+fast_music = ExtResource("3_fwh7x")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1838862647]
+environment = ExtResource("4_20ipa")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=1454859368]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.95
+shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="Player" parent="." unique_id=719696558 instance=ExtResource("5_bnoe7")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+character = ExtResource("6_culhj")
+kill_height = -30.0
+
+[node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("7_qygt7")]
+target = NodePath("../Player")
+
+[node name="HUD" parent="." unique_id=661223426 node_paths=PackedStringArray("target") instance=ExtResource("8_8e2db")]
+target = NodePath("../Player")
+
+[node name="Sea" type="MeshInstance3D" parent="." unique_id=169848305]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -14, -296)
+material_override = ExtResource("9_gy3vc")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_x6p3j")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=1883781404]
+
+[node name="Beach" type="CSGPolygon3D" parent="Geometry" unique_id=1443743486]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 15, 0, 12)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 42, -2, 42, 0, 0, 0)
+depth = 30.0
+material = ExtResource("10_u4qge")
+
+[node name="Tunnel1" type="CSGPolygon3D" parent="Geometry" unique_id=180558566]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -30)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 80, -2, 80, 0, 0, 0)
+depth = 18.0
+material = ExtResource("10_u4qge")
+
+[node name="Tunnel1WallL" type="CSGBox3D" parent="Geometry" unique_id=1498442530]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 6, -70)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 80)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel1WallR1" type="CSGBox3D" parent="Geometry" unique_id=2070909345]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 6, -45)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 30)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel1WallR2" type="CSGBox3D" parent="Geometry" unique_id=1754185875]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 6, -90)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 40)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel1Roof" type="CSGBox3D" parent="Geometry" unique_id=1398675448]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, -70)
+visible = false
+use_collision = true
+size = Vector3(20, 1, 80)
+material = ExtResource("11_uhvuw")
+
+[node name="Room1" type="CSGPolygon3D" parent="Geometry" unique_id=611272786]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 9, 0, -60)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 9, -2, 9, 0, 0, 0)
+depth = 10.0
+material = ExtResource("10_u4qge")
+
+[node name="Room1Back" type="CSGBox3D" parent="Geometry" unique_id=1939289240]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 18.5, 6, -65)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 12)
+material = ExtResource("11_uhvuw")
+
+[node name="Room1SideN" type="CSGBox3D" parent="Geometry" unique_id=1791678815]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 6, -70.5)
+visible = false
+use_collision = true
+size = Vector3(10, 12, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="Room1SideS" type="CSGBox3D" parent="Geometry" unique_id=1396372228]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 6, -59.5)
+visible = false
+use_collision = true
+size = Vector3(10, 12, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="Room1Roof" type="CSGBox3D" parent="Geometry" unique_id=827605989]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 12.5, -65)
+visible = false
+use_collision = true
+size = Vector3(10, 1, 12)
+material = ExtResource("11_uhvuw")
+
+[node name="Room1Lintel" type="CSGBox3D" parent="Geometry" unique_id=1728499315]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 8, -65)
+visible = false
+use_collision = true
+size = Vector3(1, 8, 10)
+material = ExtResource("11_uhvuw")
+
+[node name="ChasmLedge" type="CSGPolygon3D" parent="Geometry" unique_id=431137217]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -5, 0, -110)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 30, -2, 30, 0, 0, 0)
+depth = 4.0
+material = ExtResource("10_u4qge")
+
+[node name="ChasmWallL" type="CSGBox3D" parent="Geometry" unique_id=818991130]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 6, -125)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 30)
+material = ExtResource("11_uhvuw")
+
+[node name="ChasmWallR" type="CSGBox3D" parent="Geometry" unique_id=1548982174]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 6, -125)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 30)
+material = ExtResource("11_uhvuw")
+
+[node name="ChasmRoof" type="CSGBox3D" parent="Geometry" unique_id=1200628693]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, -125)
+visible = false
+use_collision = true
+size = Vector3(20, 1, 30)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel2" type="CSGPolygon3D" parent="Geometry" unique_id=829487643]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -140)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 60, -2, 60, 0, 0, 0)
+depth = 18.0
+material = ExtResource("10_u4qge")
+
+[node name="Tunnel2WallL" type="CSGBox3D" parent="Geometry" unique_id=1016220744]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9.5, 6, -170)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 60)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel2WallR" type="CSGBox3D" parent="Geometry" unique_id=183060927]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 9.5, 6, -170)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 60)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel2Roof" type="CSGBox3D" parent="Geometry" unique_id=1593094292]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 12.5, -170)
+visible = false
+use_collision = true
+size = Vector3(20, 1, 60)
+material = ExtResource("11_uhvuw")
+
+[node name="HallCorner" type="CSGPolygon3D" parent="Geometry" unique_id=2026268369]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -200)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 32, -2, 32, 0, 0, 0)
+depth = 18.0
+material = ExtResource("10_u4qge")
+
+[node name="HallWallW" type="CSGBox3D" parent="Geometry" unique_id=812184597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 15, -220)
+visible = false
+use_collision = true
+size = Vector3(1, 30, 42)
+material = ExtResource("11_uhvuw")
+
+[node name="HallWallN" type="CSGBox3D" parent="Geometry" unique_id=1406341455]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95, 15, -241.5)
+visible = false
+use_collision = true
+size = Vector3(211, 30, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="HallWallS" type="CSGBox3D" parent="Geometry" unique_id=754201830]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 105, 15, -203.5)
+visible = false
+use_collision = true
+size = Vector3(191, 30, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="HallRoof" type="CSGBox3D" parent="Geometry" unique_id=1916371771]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95, 30.5, -222)
+visible = false
+use_collision = true
+size = Vector3(211, 1, 40)
+material = ExtResource("11_uhvuw")
+
+[node name="HallFloor1" type="CSGPolygon3D" parent="Geometry" unique_id=677394216]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 9, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 23, -2, 23, 0, 0, 0)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="HallStep" type="CSGPolygon3D" parent="Geometry" unique_id=1135783342]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 46, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0.5, 14, 0.5, 14, 2.5, 0, 2.5)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="HallLanding" type="CSGPolygon3D" parent="Geometry" unique_id=1510892996]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 72, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 0.5, 10, 0.5, 10, 2.5, 0, 2.5)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="HallHigh" type="CSGPolygon3D" parent="Geometry" unique_id=785505967]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 86, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 10, 33, 10, 33, 12, 0, 12)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="HallDescent" type="CSGPolygon3D" parent="Geometry" unique_id=606482188]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 119, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 28, -2, 28, 0, 0, 12)
+depth = 8.0
+material = ExtResource("12_g6a7c")
+
+[node name="HallFloor2" type="CSGPolygon3D" parent="Geometry" unique_id=2124616945]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 147, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 53, -2, 53, 0, 0, 0)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="HallWallE1" type="CSGBox3D" parent="Geometry" unique_id=145078654]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200.5, 15, -211)
+visible = false
+use_collision = true
+size = Vector3(1, 30, 15)
+material = ExtResource("11_uhvuw")
+
+[node name="HallWallE2" type="CSGBox3D" parent="Geometry" unique_id=1806323868]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 200.5, 21, -230)
+visible = false
+use_collision = true
+size = Vector3(1, 18, 22)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel3" type="CSGPolygon3D" parent="Geometry" unique_id=320719118]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 200, 0, -219)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 140, -2, 140, 0, 0, 0)
+depth = 18.0
+material = ExtResource("10_u4qge")
+
+[node name="Tunnel3WallL" type="CSGBox3D" parent="Geometry" unique_id=838415280]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 270, 6, -237.5)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 140)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel3WallR" type="CSGBox3D" parent="Geometry" unique_id=1961639067]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 270, 6, -218.5)
+visible = false
+use_collision = true
+size = Vector3(1, 12, 140)
+material = ExtResource("11_uhvuw")
+
+[node name="Tunnel3Roof" type="CSGBox3D" parent="Geometry" unique_id=440499077]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 270, 12.5, -228)
+visible = false
+use_collision = true
+size = Vector3(20, 1, 140)
+material = ExtResource("11_uhvuw")
+
+[node name="ShaftWallN" type="CSGBox3D" parent="Geometry" unique_id=1244021938]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 361, 20, -237.5)
+visible = false
+use_collision = true
+size = Vector3(42, 40, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="ShaftWallS" type="CSGBox3D" parent="Geometry" unique_id=95382164]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 361, 20, -205.5)
+visible = false
+use_collision = true
+size = Vector3(42, 40, 1)
+material = ExtResource("11_uhvuw")
+
+[node name="ShaftWallW" type="CSGBox3D" parent="Geometry" unique_id=900475550]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 340.5, 20, -212)
+visible = false
+use_collision = true
+size = Vector3(1, 40, 13)
+material = ExtResource("11_uhvuw")
+
+[node name="ShaftFloor" type="CSGPolygon3D" parent="Geometry" unique_id=663821741]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 340, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 12, -2, 12, 0, 0, 0)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="ShaftLedge1" type="CSGPolygon3D" parent="Geometry" unique_id=1188274252]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 353, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 9, 4, 9, 6, 0, 6)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="ShaftLedge2" type="CSGPolygon3D" parent="Geometry" unique_id=1717925952]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 366, 0, -224)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 16, 15, 16, 15, 18, 0, 18)
+depth = 8.0
+material = ExtResource("10_u4qge")
+
+[node name="Exit" type="CSGPolygon3D" parent="Geometry" unique_id=1336827119]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 382, 0, -219)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 28, 60, 28, 60, 30, 0, 30)
+depth = 18.0
+material = ExtResource("10_u4qge")
+
+[node name="EndWall" type="CSGBox3D" parent="Geometry" unique_id=773551761]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 442.5, 34, -228)
+visible = false
+use_collision = true
+size = Vector3(1, 8, 18)
+material = ExtResource("11_uhvuw")
+
+[node name="Art" parent="." unique_id=1253416384 instance=ExtResource("13_0q3ah")]
+
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1217481691]
+
+[node name="Room1Wall" parent="Gimmicks" unique_id=1079680876 instance=ExtResource("14_5acfn")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.6, 0, -65)
+size = Vector3(10, 4, 1)
+
+[node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("15_h35dy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -65)
+
+[node name="RedRing2" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("16_xqqyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.2, 0.8, -65)
+
+[node name="ChasmStone1" parent="Gimmicks" unique_id=1336936344 instance=ExtResource("17_0nud4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -116)
+size = Vector3(5, 1, 5)
+
+[node name="ChasmStone2" parent="Gimmicks" unique_id=1807649841 instance=ExtResource("17_0nud4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.5, -124)
+size = Vector3(5, 1, 5)
+
+[node name="ChasmStone3" parent="Gimmicks" unique_id=1340570956 instance=ExtResource("17_0nud4")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 1, -132)
+size = Vector3(5, 1, 5)
+
+[node name="RedRing1" parent="Gimmicks" unique_id=1211033912 instance=ExtResource("16_xqqyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3.6, -124)
+
+[node name="RingsBeach" type="Node3D" parent="Gimmicks" unique_id=65160650]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -6)
+script = ExtResource("18_midyv")
+count = 8
+spacing = 3.0
+
+[node name="MonitorBeachBoost" parent="Gimmicks" unique_id=1656777354 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8, 0, -18)
+item = 5
+
+[node name="MonitorBeachRings" parent="Gimmicks" unique_id=1823873990 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 0, -18)
+
+[node name="RingsTunnel1" type="Node3D" parent="Gimmicks" unique_id=1555684277]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0.8, -36)
+script = ExtResource("18_midyv")
+count = 12
+spacing = 5.5
+
+[node name="MonitorTunnelShield" parent="Gimmicks" unique_id=885282384 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6, 0, -98)
+item = 1
+
+[node name="RingsLedge" type="Node3D" parent="Gimmicks" unique_id=1463646179]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0.8, -112)
+script = ExtResource("18_midyv")
+count = 8
+spacing = 3.5
+
+[node name="Checkpoint1" parent="Gimmicks" unique_id=2131578673 instance=ExtResource("20_hsluc")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -150)
+gate_width = 18.0
+
+[node name="RingsTunnel2" type="Node3D" parent="Gimmicks" unique_id=1591478486]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0.8, -158)
+script = ExtResource("18_midyv")
+count = 10
+spacing = 4.0
+
+[node name="HallSideView" type="Node3D" parent="Gimmicks" unique_id=1684219089]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 106, 12, -228)
+script = ExtResource("21_0eak7")
+size = Vector3(192, 34, 10)
+pitch_degrees = -5.0
+distance = 14.0
+side_view = true
+lock_depth = true
+avoid_walls = false
+
+[node name="HallFerry" parent="Gimmicks" unique_id=1128276198 instance=ExtResource("22_qomrk")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 34, 0, -228)
+size = Vector3(8, 0.5, 4)
+travel = Vector3(0, 0, -8)
+travel_time = 2.0
+pause_time = 2.0
+
+[node name="HallLedge1" parent="Gimmicks" unique_id=1104642754 instance=ExtResource("17_0nud4")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 63, 2.5, -228)
+size = Vector3(8, 1, 6)
+
+[node name="HallLedge2" parent="Gimmicks" unique_id=220404662 instance=ExtResource("17_0nud4")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 69, 2.5, -228)
+size = Vector3(8, 1, 6)
+
+[node name="HallLift" parent="Gimmicks" unique_id=347110402 instance=ExtResource("22_qomrk")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 84, 2.5, -228)
+size = Vector3(8, 0.5, 4)
+travel = Vector3(0, 9.5, 0)
+travel_time = 2.5
+pause_time = 1.5
+
+[node name="HallWall" parent="Gimmicks" unique_id=1032854367 instance=ExtResource("14_5acfn")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 151, 0, -228)
+size = Vector3(8, 4, 1)
+
+[node name="RingsHall1" type="Node3D" parent="Gimmicks" unique_id=1145072133]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.8, -228)
+script = ExtResource("18_midyv")
+count = 8
+spacing = 3.0
+
+[node name="RingsFerry" type="Node3D" parent="Gimmicks" unique_id=448899871]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 34, 0.8, -228)
+script = ExtResource("18_midyv")
+count = 3
+spacing = 3.0
+
+[node name="RedRing3" parent="Gimmicks" unique_id=96532942 instance=ExtResource("16_xqqyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 84, 16.5, -228)
+
+[node name="SpikesHall" parent="Gimmicks" unique_id=119470117 instance=ExtResource("23_7xvn7")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 104, 12, -228)
+size = Vector2(2, 8)
+
+[node name="RingsHallHigh" type="Node3D" parent="Gimmicks" unique_id=970256917]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 90, 12.8, -228)
+script = ExtResource("18_midyv")
+count = 6
+spacing = 3.0
+
+[node name="SignRoll" type="Label3D" parent="Gimmicks" unique_id=295122712]
+transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 128, 13.5, -231.5)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Roll or boost
+to smash through!"
+font_size = 52
+outline_size = 14
+
+[node name="RingsDescent" type="Node3D" parent="Gimmicks" unique_id=910151773]
+transform = Transform3D(-4.371139e-08, -0.3939419, -0.91913533, 0, 0.91913533, -0.3939419, 1, -1.7219747e-08, -4.017668e-08, 122, 12.8, -228)
+script = ExtResource("18_midyv")
+count = 6
+spacing = 4.5
+
+[node name="RingsHall2" type="Node3D" parent="Gimmicks" unique_id=90011789]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 160, 0.8, -228)
+script = ExtResource("18_midyv")
+count = 10
+spacing = 3.0
+
+[node name="River" type="Node3D" parent="Gimmicks" unique_id=1768230905]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 270, 0.35, -228)
+script = ExtResource("24_b7btb")
+size = Vector3(6, 1, 140)
+current_speed = 12.0
+
+[node name="RiverRail" type="Path3D" parent="Gimmicks" unique_id=1748965499]
+curve = SubResource("Curve3D_ds04h")
+script = ExtResource("25_3wovf")
+
+[node name="RedRing4" parent="Gimmicks" unique_id=1766635998 instance=ExtResource("16_xqqyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 274, 2.3, -222)
+
+[node name="Checkpoint2" parent="Gimmicks" unique_id=1379143950 instance=ExtResource("20_hsluc")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 212, 0, -228)
+gate_width = 18.0
+
+[node name="RingsRiver" type="Node3D" parent="Gimmicks" unique_id=1031307273]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 220, 0.8, -228)
+script = ExtResource("18_midyv")
+count = 20
+spacing = 5.0
+
+[node name="MonitorTunnel3Boost" parent="Gimmicks" unique_id=1533662615 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 226, 0, -235)
+item = 5
+
+[node name="MonitorTunnel3Rings" parent="Gimmicks" unique_id=1019035468 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, 0, -235)
+
+[node name="ShaftSideView" type="Node3D" parent="Gimmicks" unique_id=1791680129]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 361, 20, -228)
+script = ExtResource("21_0eak7")
+size = Vector3(44, 44, 10)
+pitch_degrees = -5.0
+distance = 14.0
+side_view = true
+lock_depth = true
+avoid_walls = false
+
+[node name="ShaftSpring" parent="Gimmicks" unique_id=1587388821 instance=ExtResource("26_eqsee")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 350, 0, -228)
+
+[node name="RedRing5" parent="Gimmicks" unique_id=1299103717 instance=ExtResource("16_xqqyt")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 356, 10.5, -228)
+
+[node name="ShaftLift" parent="Gimmicks" unique_id=646891135 instance=ExtResource("22_qomrk")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 364, 6, -228)
+size = Vector3(8, 0.5, 4)
+travel = Vector3(0, 12, 0)
+pause_time = 1.5
+
+[node name="ShaftRedSpring" parent="Gimmicks" unique_id=532217208 instance=ExtResource("26_eqsee")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 378, 18, -228)
+speed = 30.0
+
+[node name="RingsShaft" type="Node3D" parent="Gimmicks" unique_id=1042196449]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 367, 18.8, -228)
+script = ExtResource("18_midyv")
+count = 3
+spacing = 3.0
+
+[node name="RingsExit" type="Node3D" parent="Gimmicks" unique_id=1451587259]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 386, 30.8, -228)
+script = ExtResource("18_midyv")
+count = 10
+spacing = 3.0
+
+[node name="MonitorExitRings" parent="Gimmicks" unique_id=52522747 instance=ExtResource("19_irkde")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 398, 30, -234)
+
+[node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("27_wdrpj")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 420, 30, -228)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=2040572484]
+
+[node name="ScuttlerBeach" parent="Enemies" unique_id=1354843088 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -10)
+patrol_distance = 3.5
+
+[node name="ScuttlerTunnel1a" parent="Enemies" unique_id=1589781303 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -50)
+
+[node name="ScuttlerTunnel1b" parent="Enemies" unique_id=237026092 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, -88)
+
+[node name="GullChasm" parent="Enemies" unique_id=1972243346 instance=ExtResource("29_su2qy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 4.5, -128)
+swoops = false
+
+[node name="ScuttlerTunnel2" parent="Enemies" unique_id=212837670 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, -170)
+
+[node name="PearlshotTunnel2" parent="Enemies" unique_id=445153036 instance=ExtResource("30_mddt6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 0, -186)
+
+[node name="ScuttlerHall" parent="Enemies" unique_id=1086820231 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 176, 0, -228)
+
+[node name="GullHall" parent="Enemies" unique_id=1349403313 instance=ExtResource("29_su2qy")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 104, 16, -228)
+
+[node name="FishRiver1" parent="Enemies" unique_id=1874287843 instance=ExtResource("31_rnt04")]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 240, -0.8, -233)
+leap_height = 3.5
+leap_distance = 10.0
+leap_time = 1.2
+hide_depth = 1.0
+
+[node name="FishRiver2" parent="Enemies" unique_id=1110519265 instance=ExtResource("31_rnt04")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 272, -0.8, -223)
+leap_height = 3.5
+leap_distance = 10.0
+leap_time = 1.2
+start_delay = 0.6
+hide_depth = 1.0
+
+[node name="ScuttlerTunnel3a" parent="Enemies" unique_id=1255349158 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 296, 0, -232)
+
+[node name="ScuttlerTunnel3b" parent="Enemies" unique_id=1199386056 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 322, 0, -225)
+
+[node name="PearlshotShaft" parent="Enemies" unique_id=686289778 instance=ExtResource("30_mddt6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 376, 18, -230.5)
+
+[node name="ScuttlerExit" parent="Enemies" unique_id=1922509256 instance=ExtResource("28_dsdcj")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 406, 30, -223)

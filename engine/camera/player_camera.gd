@@ -4,7 +4,8 @@ extends Camera3D
 ## motion, widens the field of view with speed, keeps world-up through loops, and never sits inside
 ## geometry. Camera volumes take over with fixed or side-on views for set pieces and 2.5D sections.
 ## When the player dies it stops following and watches them fall. At high speed it adds speed lines
-## and a radial motion blur (%SpeedEffects). Orbit with the mouse (captured while playing; click to
+## and a radial motion blur (%SpeedEffects), and below the surface of water it tints the view
+## (%Underwater). Orbit with the mouse (captured while playing; click to
 ## recapture) or the camera_* actions; camera_recenter swings the camera behind the player. All
 ## tuning lives in `settings`.
 
@@ -32,6 +33,7 @@ var _speed_lines := 0.0  # Strength of the speed effects, smoothed.
 var _blur := 0.0
 
 @onready var _effects: ColorRect = %SpeedEffects
+@onready var _underwater: ColorRect = %Underwater
 
 
 func _ready() -> void:
@@ -77,6 +79,7 @@ func _process(delta: float) -> void:
 	if target == null:
 		return
 	_update_speed_effects(delta)
+	_underwater.visible = WaterVolume.find(get_tree(), global_position) != null
 	if target.is_dead():
 		_watch_fall()
 		return

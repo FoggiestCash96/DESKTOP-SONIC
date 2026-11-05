@@ -309,6 +309,95 @@ def splash() -> np.ndarray:
     return place(parts, 0.6)
 
 
+def air_warning() -> np.ndarray:
+    """Two quick high chimes: the air is running low."""
+    ding = bell(1318.5, 0.3, 0.5)
+    return place([(0.0, ding), (0.16, ding * 0.8)], 0.6)
+
+
+def breathe() -> np.ndarray:
+    """A gulp of air from a bubble: a rising bloop and a few little bubbles."""
+    n = ns(0.22)
+    gulp = synth.sine(synth.curve([(0.0, 260.0), (0.18, 720.0)], n, exponential=True))
+    gulp = gulp * synth.adsr(0.16, 0.006, 0.06, 0.6, 0.06, length=n)
+    parts = [(0.0, gulp)]
+    for i in range(4):
+        drop_len = ns(0.06)
+        f0 = 900.0 + 500.0 * (synth.wobble("gulp", i) + 1.0)
+        drop = synth.sine(synth.curve([(0.0, f0), (0.06, f0 * 1.8)], drop_len, True)) * synth.decay_env(drop_len, 0.05)
+        parts.append((0.12 + i * 0.045, drop * 0.35))
+    return place(parts, 0.45)
+
+
+def drown() -> np.ndarray:
+    """A gurgling fall in pitch, wobbling, with bubbles rising past."""
+    seconds = 1.6
+    n = ns(seconds)
+    t = times(n)
+    freq = synth.curve([(0.0, 520.0), (seconds, 90.0)], n, exponential=True) * (1.0 + 0.08 * np.sin(synth.TAU * 9.0 * t))
+    gurgle = synth.filt(synth.wave("triangle", freq), "lowpass", 2400.0) * synth.adsr(1.4, 0.01, 0.3, 0.8, 0.2, length=n)
+    parts = [(0.0, gurgle * 0.8)]
+    for i in range(10):
+        drop_len = ns(0.07)
+        f0 = 500.0 + 700.0 * (synth.wobble("drown", i) + 1.0)
+        drop = synth.sine(synth.curve([(0.0, f0), (0.07, f0 * 1.7)], drop_len, True)) * synth.decay_env(drop_len, 0.05)
+        parts.append((0.05 + i * 0.14 + 0.04 * synth.wobble("drown at", i), drop * 0.3))
+    return place(parts, seconds + 0.1)
+
+
+def grind() -> np.ndarray:
+    """Landing on a rail: a metal clank and the start of the scrape."""
+    n = ns(0.5)
+    clank = synth.fm(np.full(n, 640.0), 0.05, 1.0, [
+        Op(ratio=2.76, level=2.4, decay=0.12, sustain=0.0, release=0.1, velocity=0.0),
+        Op(ratio=1.0, level=0.8, decay=0.35, sustain=0.0, release=0.2, velocity=0.0),
+        Op(ratio=5.4, level=1.0, decay=0.06, sustain=0.0, release=0.05, velocity=0.0),
+        Op(ratio=1.0, level=0.0)], 4)
+    scrape = synth.filt(synth.noise(n, 60), "bandpass", 3600.0, 2.5) * synth.curve([(0.0, 0.0), (0.05, 0.6), (0.5, 0.0)], n)
+    return clank * 0.7 + scrape
+
+
+def grind_loop() -> np.ndarray:
+    """Grinding along a rail: a bright metal scrape with crackling sparks, looping seamlessly."""
+    seconds, cross = 2.0, 0.4
+    n = ns(seconds + cross)
+    t = times(n)
+    scrape = synth.filt(synth.noise(n, 61), "bandpass", 3200.0, 3.0) * 0.7
+    ring = synth.filt(synth.noise(n, 62), "bandpass", 5200.0, 8.0) * 0.5
+    hum = synth.filt(synth.pink(n, 63), "lowpass", 600.0) * 0.4
+    sparks = synth.filt((synth.noise(n, 64) > 0.995) * 1.0, "highpass", 2500.0) * 0.5
+    sway = 0.85 + 0.1 * np.sin(synth.TAU * 3.0 * t) + 0.05 * np.sin(synth.TAU * 7.0 * t + 1.0)
+    return synth.seamless_loop((scrape + ring + hum + sparks) * sway, cross)
+
+
+def crumble() -> np.ndarray:
+    """A ledge giving way: a low rumble with stones cracking off."""
+    seconds = 0.9
+    n = ns(seconds)
+    rumble = synth.filt(synth.pink(n, 65), "lowpass", 260.0) * synth.curve([(0.0, 0.0), (0.1, 1.0), (seconds, 0.0)], n)
+    parts = [(0.0, rumble * 1.4)]
+    for i in range(7):
+        crack_len = ns(0.05)
+        crack = synth.filt(synth.noise(crack_len, 66 + i), "bandpass", 900.0 + 300.0 * i, 1.2) * synth.decay_env(crack_len, 0.03)
+        parts.append((0.05 + i * 0.1 + 0.03 * synth.wobble("crumble", i), crack * 0.6))
+    return place(parts, seconds)
+
+
+def wall_break() -> np.ndarray:
+    """Smashing through a rock wall: a heavy thump, a crunch and rocks clattering away."""
+    seconds = 1.1
+    n = ns(seconds)
+    thump = synth.sine(synth.curve([(0.0, 120.0), (0.2, 45.0)], n, exponential=True)) * synth.decay_env(n, 0.3)
+    crunch = synth.sweep(synth.noise(n, 70), "lowpass", synth.curve([(0.0, 5000.0), (0.6, 600.0)], n, True), 0.8)
+    crunch *= synth.decay_env(n, 0.4)
+    parts = [(0.0, thump), (0.0, crunch * 0.8)]
+    for i in range(9):
+        knock_len = ns(0.06)
+        knock = synth.filt(synth.noise(knock_len, 71 + i), "bandpass", 700.0 + 180.0 * i, 2.0) * synth.decay_env(knock_len, 0.04)
+        parts.append((0.15 + i * 0.08 + 0.03 * synth.wobble("wall", i), knock * (0.5 - 0.03 * i)))
+    return place(parts, seconds)
+
+
 # --- Enemies and the boss -----------------------------------------------------------------
 
 def enemy_pop() -> np.ndarray:
@@ -432,7 +521,8 @@ SOUNDS = {
     "boost_loop": boost_loop, "air_boost": air_boost, "quickstep": quickstep,
     "monitor": monitor, "shield": shield, "magnet": magnet, "boost_fill": boost_fill, "spring": spring,
     "dash_panel": dash_panel, "checkpoint": checkpoint, "goal": goal, "red_ring": red_ring,
-    "wave": wave, "splash": splash,
+    "wave": wave, "splash": splash, "air_warning": air_warning, "breathe": breathe, "drown": drown,
+    "grind": grind, "grind_loop": grind_loop, "crumble": crumble, "wall_break": wall_break,
     "enemy_pop": enemy_pop, "explosion": explosion, "enemy_shot": enemy_shot, "boss_hit": boss_hit,
     "boss_slam": boss_slam, "boss_sweep": boss_sweep, "boss_charge": boss_charge, "boss_roar": boss_roar,
     "ship": ship,
@@ -451,9 +541,11 @@ LEVELS = {
     "boss_hit": -16.0, "boss_slam": -16.0, "boss_sweep": -19.0, "boss_charge": -19.0, "boss_roar": -17.0,
     "ship": -20.0, "ui_move": -28.0, "ui_confirm": -24.0, "ui_back": -25.0, "ui_locked": -24.0,
     "ui_pause": -24.0, "ui_start": -19.0,
+    "air_warning": -19.0, "breathe": -19.0, "drown": -17.0, "grind": -20.0, "grind_loop": -27.0,
+    "crumble": -19.0, "wall_break": -16.0,
 }
 
-LOOPS = {"boost_loop"}
+LOOPS = {"boost_loop", "grind_loop"}
 
 
 def loudness(audio: np.ndarray) -> float:
