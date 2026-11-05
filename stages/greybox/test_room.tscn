@@ -26,6 +26,12 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="22_302h5"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="23_qajct"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="24_ysvsk"]
+[ext_resource type="Script" path="res://engine/gimmicks/water_volume.gd" id="27_6daj8"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/air_bubbles.tscn" id="28_vbrpa"]
+[ext_resource type="Script" path="res://engine/gimmicks/moving_platform.gd" id="29_k8xy3"]
+[ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="30_qcmr0"]
+[ext_resource type="Script" path="res://engine/gimmicks/crumbling_platform.gd" id="31_ekwhm"]
+[ext_resource type="Script" path="res://engine/gimmicks/breakable_wall.gd" id="32_fxy16"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -46,6 +52,20 @@ emission_energy_multiplier = 0.2
 top_radius = 2.5
 bottom_radius = 2.5
 height = 0.04
+
+[sub_resource type="Curve3D" id="Curve3D_heo0c"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 160, 1.2, -80, 0, 0, 0, 0, 0, 0, 160, 0.8, -110, 0, 0, 0, 0, 0, 0, 160, 0.8, -130, 0, 0, 0, 0, 0, 0, 160, 2.5, -150, 0, 0, 0, 0, 0, 0, 160, 1, -175),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_603m0"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 163, 1.2, -80, 0, 0, 0, 0, 0, 0, 163, 0.8, -110, 0, 0, 0, 0, 0, 0, 163, 0.8, -130, 0, 0, 0, 0, 0, 0, 163, 2.5, -150, 0, 0, 0, 0, 0, 0, 163, 1, -175),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
 
 [node name="TestRoom" type="Node3D" unique_id=1758518970]
 script = ExtResource("1_3v71b")
@@ -1000,3 +1020,187 @@ swoops = false
 [node name="ChainGull3" parent="EnemyGallery" unique_id=1371841489 instance=ExtResource("23_qajct")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -130, 6.2, -64)
 swoops = false
+
+[node name="WaterAndRails" type="Node3D" parent="." unique_id=1335077452]
+
+[node name="SignWater" type="Label3D" parent="WaterAndRails" unique_id=767429404]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 172, 4, 4)
+pixel_size = 0.01
+billboard = 1
+text = "Water, rails, platforms
+and breakable walls →"
+font_size = 64
+
+[node name="PoolWallNorth" type="CSGBox3D" parent="WaterAndRails" unique_id=2083108816]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 2, -51.5)
+use_collision = true
+size = Vector3(16, 4, 1)
+material = ExtResource("6_x61iv")
+
+[node name="PoolWallSouth" type="CSGBox3D" parent="WaterAndRails" unique_id=150016563]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 2, -28.5)
+use_collision = true
+size = Vector3(16, 4, 1)
+material = ExtResource("6_x61iv")
+
+[node name="PoolWallWest" type="CSGBox3D" parent="WaterAndRails" unique_id=2106297940]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152.5, 2, -40)
+use_collision = true
+size = Vector3(1, 4, 22)
+material = ExtResource("6_x61iv")
+
+[node name="PoolWallEast" type="CSGBox3D" parent="WaterAndRails" unique_id=480824425]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 167.5, 2, -40)
+use_collision = true
+size = Vector3(1, 4, 22)
+material = ExtResource("6_x61iv")
+
+[node name="PoolRamp" type="CSGPolygon3D" parent="WaterAndRails" unique_id=1577844603]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 158, 0, -3)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 14, 0, 14, 4, 0, 0)
+depth = 4.0
+material = ExtResource("5_k0xv2")
+
+[node name="Pool" type="Node3D" parent="WaterAndRails" unique_id=337938397]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 160, 3.6, -40)
+script = ExtResource("27_6daj8")
+size = Vector3(14, 3.6, 22)
+
+[node name="AirBubbles" parent="WaterAndRails" unique_id=1224429244 instance=ExtResource("28_vbrpa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 163, 0, -46)
+
+[node name="PoolSpring" parent="WaterAndRails" unique_id=1355954110 instance=ExtResource("16_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 156, 0, -48)
+
+[node name="Stream" type="Node3D" parent="WaterAndRails" unique_id=867079360]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176, 0.35, -40)
+script = ExtResource("27_6daj8")
+size = Vector3(6, 0.5, 40)
+current_speed = 10.0
+
+[node name="SignStream" type="Label3D" parent="WaterAndRails" unique_id=870415475]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176, 3, -16)
+pixel_size = 0.01
+billboard = 1
+text = "Stream ↑"
+font_size = 48
+
+[node name="TideWallNorth" type="CSGBox3D" parent="WaterAndRails" unique_id=880432832]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 188, 2, -46.5)
+use_collision = true
+size = Vector3(8, 4, 1)
+material = ExtResource("6_x61iv")
+
+[node name="TideWallSouth" type="CSGBox3D" parent="WaterAndRails" unique_id=381734437]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 188, 2, -33.5)
+use_collision = true
+size = Vector3(8, 4, 1)
+material = ExtResource("6_x61iv")
+
+[node name="TideWallWest" type="CSGBox3D" parent="WaterAndRails" unique_id=30493646]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 184.5, 2, -40)
+use_collision = true
+size = Vector3(1, 4, 12)
+material = ExtResource("6_x61iv")
+
+[node name="TideWallEast" type="CSGBox3D" parent="WaterAndRails" unique_id=221982090]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 191.5, 2, -40)
+use_collision = true
+size = Vector3(1, 4, 12)
+material = ExtResource("6_x61iv")
+
+[node name="TidePool" type="Node3D" parent="WaterAndRails" unique_id=1329478086]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 188, 0.8, -40)
+script = ExtResource("27_6daj8")
+size = Vector3(6, 0.8, 12)
+tide_height = 2.6
+tide_low_time = 4.0
+tide_rise_time = 4.0
+tide_high_time = 4.0
+tide_fall_time = 4.0
+
+[node name="TideRaft" type="AnimatableBody3D" parent="WaterAndRails" unique_id=1456942527 node_paths=PackedStringArray("float_on")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 188, 1.1, -43)
+script = ExtResource("29_k8xy3")
+size = Vector3(3, 0.5, 3)
+float_on = NodePath("../TidePool")
+look = 1
+
+[node name="Rail1" type="Path3D" parent="WaterAndRails" unique_id=1637745891]
+curve = SubResource("Curve3D_heo0c")
+script = ExtResource("30_qcmr0")
+
+[node name="Rail2" type="Path3D" parent="WaterAndRails" unique_id=1909587140]
+curve = SubResource("Curve3D_603m0")
+script = ExtResource("30_qcmr0")
+
+[node name="SignRails" type="Label3D" parent="WaterAndRails" unique_id=2069041201]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 161.5, 4, -74)
+pixel_size = 0.01
+billboard = 1
+text = "Jump onto a rail.
+Quickstep hops across."
+font_size = 48
+
+[node name="Ledge" type="CSGBox3D" parent="WaterAndRails" unique_id=1105023792]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176, 3, -100)
+use_collision = true
+size = Vector3(6, 6, 6)
+material = ExtResource("6_x61iv")
+
+[node name="Lift" type="AnimatableBody3D" parent="WaterAndRails" unique_id=1166942597]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176, 0.5, -95)
+script = ExtResource("29_k8xy3")
+size = Vector3(3, 0.5, 3)
+travel = Vector3(0, 5.5, 0)
+pause_time = 1.5
+
+[node name="CrushRoof" type="CSGBox3D" parent="WaterAndRails" unique_id=1509992937]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 3.25, -100)
+use_collision = true
+size = Vector3(4, 0.5, 4)
+material = ExtResource("6_x61iv")
+
+[node name="Crusher" type="AnimatableBody3D" parent="WaterAndRails" unique_id=190788336]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0.5, -100)
+script = ExtResource("29_k8xy3")
+size = Vector3(3, 0.5, 3)
+travel = Vector3(0, 2.4, 0)
+travel_time = 2.0
+pause_time = 1.5
+
+[node name="SignCrusher" type="Label3D" parent="WaterAndRails" unique_id=870560119]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 5, -97)
+pixel_size = 0.01
+billboard = 1
+text = "Crusher"
+font_size = 48
+
+[node name="Crumbling" type="AnimatableBody3D" parent="WaterAndRails" unique_id=1558097030]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 176, 6, -110)
+script = ExtResource("31_ekwhm")
+
+[node name="WallLaneLeft" type="CSGBox3D" parent="WaterAndRails" unique_id=578914195]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 181.5, 2, -140)
+use_collision = true
+size = Vector3(1, 4, 40)
+material = ExtResource("6_x61iv")
+
+[node name="WallLaneRight" type="CSGBox3D" parent="WaterAndRails" unique_id=496062697]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 190.5, 2, -140)
+use_collision = true
+size = Vector3(1, 4, 40)
+material = ExtResource("6_x61iv")
+
+[node name="BreakableWall" type="StaticBody3D" parent="WaterAndRails" unique_id=418278141]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 0, -140)
+script = ExtResource("32_fxy16")
+size = Vector3(8, 4, 1)
+
+[node name="SignWall" type="Label3D" parent="WaterAndRails" unique_id=1490992961]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 5.5, -128)
+pixel_size = 0.01
+billboard = 1
+text = "Roll or boost through"
+font_size = 48

@@ -1,0 +1,6 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/gimmicks/water_volume.gd" id="1_w4t3r"]
+
+[node name="WaterVolume" type="Node3D"]
+script = ExtResource("1_w4t3r")

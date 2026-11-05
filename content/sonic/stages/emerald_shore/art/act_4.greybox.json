@@ -1,0 +1,2338 @@
+{
+	"stage": "res://content/sonic/stages/emerald_shore/act_4.tscn",
+	"sea_height": -1.0,
+	"player_start": {
+		"x": [
+			1.0,
+			0.0,
+			0.0
+		],
+		"y": [
+			0.0,
+			1.0,
+			0.0
+		],
+		"z": [
+			0.0,
+			0.0,
+			1.0
+		],
+		"origin": [
+			0.0,
+			1.0,
+			4.0
+		]
+	},
+	"pieces": [
+		{
+			"name": "Start",
+			"path": "Geometry/Start",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					12.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					52.0,
+					-1.0
+				],
+				[
+					52.0,
+					1.0
+				],
+				[
+					0.0,
+					1.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "StartBeach",
+			"path": "Geometry/StartBeach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					12.0,
+					0.0,
+					-40.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					-1.3
+				],
+				[
+					0.0,
+					1.0
+				]
+			],
+			"depth": 24.0
+		},
+		{
+			"name": "Sandbar1",
+			"path": "Geometry/Sandbar1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					11.0,
+					0.0,
+					-50.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					70.0,
+					-3.3
+				],
+				[
+					70.0,
+					-1.3
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Islet1Beach",
+			"path": "Geometry/Islet1Beach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-120.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					12.0,
+					-3.3
+				],
+				[
+					12.0,
+					1.5
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Islet1",
+			"path": "Geometry/Islet1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-132.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-0.5
+				],
+				[
+					28.0,
+					-0.5
+				],
+				[
+					28.0,
+					1.5
+				],
+				[
+					0.0,
+					1.5
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Channel1Bed",
+			"path": "Geometry/Channel1Bed",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					11.0,
+					0.0,
+					-160.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-7.0
+				],
+				[
+					15.0,
+					-7.0
+				],
+				[
+					15.0,
+					-5.0
+				],
+				[
+					0.0,
+					-5.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Channel1Out",
+			"path": "Geometry/Channel1Out",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					11.0,
+					0.0,
+					-175.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-7.0
+				],
+				[
+					25.0,
+					-7.0
+				],
+				[
+					25.0,
+					-1.3
+				],
+				[
+					0.0,
+					-5.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Islet2Beach",
+			"path": "Geometry/Islet2Beach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-200.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					1.0
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Islet2",
+			"path": "Geometry/Islet2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					14.0,
+					0.0,
+					-210.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					50.0,
+					-1.0
+				],
+				[
+					50.0,
+					1.0
+				],
+				[
+					0.0,
+					1.0
+				]
+			],
+			"depth": 28.0
+		},
+		{
+			"name": "Sandbar2Beach",
+			"path": "Geometry/Sandbar2Beach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					12.0,
+					0.0,
+					-260.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					-1.3
+				],
+				[
+					0.0,
+					1.0
+				]
+			],
+			"depth": 24.0
+		},
+		{
+			"name": "Sandbar2",
+			"path": "Geometry/Sandbar2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					10.0,
+					0.0,
+					-270.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					90.0,
+					-3.3
+				],
+				[
+					90.0,
+					-1.3
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "Islet3Slope",
+			"path": "Geometry/Islet3Slope",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					11.0,
+					0.0,
+					-360.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					20.0,
+					-3.3
+				],
+				[
+					20.0,
+					5.0
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Islet3",
+			"path": "Geometry/Islet3",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-380.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					3.0
+				],
+				[
+					20.0,
+					3.0
+				],
+				[
+					20.0,
+					5.0
+				],
+				[
+					0.0,
+					5.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Corner",
+			"path": "Geometry/Corner",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-400.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					3.0
+				],
+				[
+					26.0,
+					3.0
+				],
+				[
+					26.0,
+					5.0
+				],
+				[
+					0.0,
+					5.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "ReefDown",
+			"path": "Geometry/ReefDown",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					-408.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.5
+				],
+				[
+					10.0,
+					-1.5
+				],
+				[
+					10.0,
+					0.5
+				],
+				[
+					0.0,
+					5.0
+				]
+			],
+			"depth": 10.0
+		},
+		{
+			"name": "ReefRidge",
+			"path": "Geometry/ReefRidge",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					23.0,
+					0.0,
+					-409.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.5
+				],
+				[
+					60.0,
+					-1.5
+				],
+				[
+					60.0,
+					0.5
+				],
+				[
+					0.0,
+					0.5
+				]
+			],
+			"depth": 8.0
+		},
+		{
+			"name": "ReefPillar",
+			"path": "Geometry/ReefPillar",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					55.0,
+					2.5,
+					-421.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				3.0,
+				6.0,
+				3.0
+			]
+		},
+		{
+			"name": "Channel2Bed",
+			"path": "Geometry/Channel2Bed",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					83.0,
+					0.0,
+					-402.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					12.0,
+					-6.0
+				],
+				[
+					12.0,
+					-4.0
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Channel2Out",
+			"path": "Geometry/Channel2Out",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					95.0,
+					0.0,
+					-402.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					20.0,
+					-6.0
+				],
+				[
+					20.0,
+					-1.3
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Islet4Beach",
+			"path": "Geometry/Islet4Beach",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					115.0,
+					0.0,
+					-400.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					1.5
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Islet4",
+			"path": "Geometry/Islet4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					125.0,
+					0.0,
+					-398.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-0.5
+				],
+				[
+					70.0,
+					-0.5
+				],
+				[
+					70.0,
+					1.5
+				],
+				[
+					0.0,
+					1.5
+				]
+			],
+			"depth": 30.0
+		},
+		{
+			"name": "Channel3Bed",
+			"path": "Geometry/Channel3Bed",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					195.0,
+					0.0,
+					-402.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					12.0,
+					-6.0
+				],
+				[
+					12.0,
+					-4.0
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Channel3Out",
+			"path": "Geometry/Channel3Out",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					207.0,
+					0.0,
+					-402.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-6.0
+				],
+				[
+					20.0,
+					-6.0
+				],
+				[
+					20.0,
+					-1.3
+				],
+				[
+					0.0,
+					-4.0
+				]
+			],
+			"depth": 22.0
+		},
+		{
+			"name": "Islet5Beach",
+			"path": "Geometry/Islet5Beach",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					227.0,
+					0.0,
+					-400.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					1.5
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Islet5",
+			"path": "Geometry/Islet5",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					237.0,
+					0.0,
+					-399.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-0.5
+				],
+				[
+					40.0,
+					-0.5
+				],
+				[
+					40.0,
+					1.5
+				],
+				[
+					0.0,
+					1.5
+				]
+			],
+			"depth": 28.0
+		},
+		{
+			"name": "Sandbar3Beach",
+			"path": "Geometry/Sandbar3Beach",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					277.0,
+					0.0,
+					-401.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					-1.3
+				],
+				[
+					0.0,
+					1.5
+				]
+			],
+			"depth": 24.0
+		},
+		{
+			"name": "Sandbar3",
+			"path": "Geometry/Sandbar3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					287.0,
+					0.0,
+					-403.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					80.0,
+					-3.3
+				],
+				[
+					80.0,
+					-1.3
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 20.0
+		},
+		{
+			"name": "FinalBeach",
+			"path": "Geometry/FinalBeach",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					367.0,
+					0.0,
+					-400.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.3
+				],
+				[
+					10.0,
+					-3.3
+				],
+				[
+					10.0,
+					1.0
+				],
+				[
+					0.0,
+					-1.3
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "FinalIslet",
+			"path": "Geometry/FinalIslet",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					377.0,
+					0.0,
+					-398.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.0
+				],
+				[
+					75.0,
+					-1.0
+				],
+				[
+					75.0,
+					1.0
+				],
+				[
+					0.0,
+					1.0
+				]
+			],
+			"depth": 30.0
+		},
+		{
+			"name": "EndWall",
+			"path": "Geometry/EndWall",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					452.5,
+					4.0,
+					-413.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				8.0,
+				30.0
+			]
+		}
+	],
+	"loops": [],
+	"camera_volumes": [],
+	"walls": [],
+	"rails": [],
+	"water": [
+		{
+			"name": "Channel1Water",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					0.0,
+					-1.0,
+					-180.0
+				]
+			},
+			"size": [
+				22.0,
+				5.5,
+				42.0
+			],
+			"current_speed": 0.0,
+			"tide_height": 0.0
+		},
+		{
+			"name": "Channel2Water",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					99.0,
+					-1.0,
+					-413.0
+				]
+			},
+			"size": [
+				22.0,
+				5.0,
+				34.0
+			],
+			"current_speed": 0.0,
+			"tide_height": 0.0
+		},
+		{
+			"name": "Channel3Water",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					211.0,
+					-1.0,
+					-413.0
+				]
+			},
+			"size": [
+				22.0,
+				5.0,
+				34.0
+			],
+			"current_speed": 0.0,
+			"tide_height": 0.0
+		}
+	],
+	"markers": [
+		{
+			"name": "RingsStart",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				1.8,
+				-4.0
+			]
+		},
+		{
+			"name": "MonitorStartBoost",
+			"kind": "item_monitor",
+			"position": [
+				8.0,
+				1.0,
+				-16.0
+			]
+		},
+		{
+			"name": "MonitorStartRings",
+			"kind": "item_monitor",
+			"position": [
+				-8.0,
+				1.0,
+				-16.0
+			]
+		},
+		{
+			"name": "RingsSandbar1",
+			"kind": "Node3D",
+			"position": [
+				-3.0,
+				-0.5,
+				-52.0
+			]
+		},
+		{
+			"name": "MonitorShield1",
+			"kind": "item_monitor",
+			"position": [
+				0.0,
+				-1.3,
+				-108.0
+			]
+		},
+		{
+			"name": "RingsIslet1",
+			"kind": "Node3D",
+			"position": [
+				5.0,
+				2.3,
+				-136.0
+			]
+		},
+		{
+			"name": "Channel1Bubbles",
+			"kind": "air_bubbles",
+			"position": [
+				6.0,
+				-5.0,
+				-168.0
+			]
+		},
+		{
+			"name": "RedRing1",
+			"kind": "hidden_collectible",
+			"position": [
+				6.0,
+				-3.6,
+				-171.5
+			]
+		},
+		{
+			"name": "RingsChannel1",
+			"kind": "Node3D",
+			"position": [
+				-5.0,
+				-4.2,
+				-163.0
+			]
+		},
+		{
+			"name": "Checkpoint1",
+			"kind": "checkpoint",
+			"position": [
+				0.0,
+				1.0,
+				-216.0
+			]
+		},
+		{
+			"name": "MonitorShield2",
+			"kind": "item_monitor",
+			"position": [
+				-10.0,
+				1.0,
+				-222.0
+			]
+		},
+		{
+			"name": "MonitorIslet2Rings",
+			"kind": "item_monitor",
+			"position": [
+				10.0,
+				1.0,
+				-222.0
+			]
+		},
+		{
+			"name": "RingsIslet2",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				1.8,
+				-224.0
+			]
+		},
+		{
+			"name": "RingsSandbar2",
+			"kind": "Node3D",
+			"position": [
+				3.0,
+				-0.5,
+				-276.0
+			]
+		},
+		{
+			"name": "Surf2",
+			"kind": "tidal_wave",
+			"position": [
+				0.0,
+				-1.3,
+				-262.0
+			]
+		},
+		{
+			"name": "RedRing4",
+			"kind": "hidden_collectible",
+			"position": [
+				0.0,
+				3.2,
+				-330.0
+			]
+		},
+		{
+			"name": "SignSurf",
+			"kind": "Label3D",
+			"position": [
+				-11.5,
+				2.2,
+				-268.0
+			],
+			"text_size": [
+				4.14,
+				0.77
+			],
+			"transform": {
+				"x": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"origin": [
+					-11.5,
+					2.2,
+					-268.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RingsIslet3",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				5.8,
+				-384.0
+			]
+		},
+		{
+			"name": "RedRing2",
+			"kind": "hidden_collectible",
+			"position": [
+				0.0,
+				14.5,
+				-392.0
+			]
+		},
+		{
+			"name": "DashCorner",
+			"kind": "dash_panel",
+			"position": [
+				0.0,
+				5.0,
+				-413.0
+			]
+		},
+		{
+			"name": "RingsReef",
+			"kind": "Node3D",
+			"position": [
+				26.0,
+				1.3,
+				-413.0
+			]
+		},
+		{
+			"name": "RedRing5",
+			"kind": "hidden_collectible",
+			"position": [
+				55.0,
+				6.4,
+				-421.0
+			]
+		},
+		{
+			"name": "Raft",
+			"kind": "moving_platform",
+			"position": [
+				86.0,
+				-0.7,
+				-413.0
+			],
+			"size": [
+				4.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					86.0,
+					-0.7,
+					-413.0
+				]
+			},
+			"travel": [
+				0.0,
+				0.0,
+				-24.0
+			]
+		},
+		{
+			"name": "Channel2Bubbles",
+			"kind": "air_bubbles",
+			"position": [
+				90.0,
+				-4.0,
+				-409.0
+			]
+		},
+		{
+			"name": "RedRing3",
+			"kind": "hidden_collectible",
+			"position": [
+				91.0,
+				-3.0,
+				-406.0
+			]
+		},
+		{
+			"name": "ExtraLife",
+			"kind": "extra_life",
+			"position": [
+				94.0,
+				-4.0,
+				-419.0
+			]
+		},
+		{
+			"name": "RingsChannel2",
+			"kind": "Node3D",
+			"position": [
+				86.0,
+				-3.2,
+				-416.0
+			]
+		},
+		{
+			"name": "Checkpoint2",
+			"kind": "checkpoint",
+			"position": [
+				131.0,
+				1.5,
+				-413.0
+			]
+		},
+		{
+			"name": "MonitorShield3",
+			"kind": "item_monitor",
+			"position": [
+				136.0,
+				1.5,
+				-403.0
+			]
+		},
+		{
+			"name": "MonitorIslet4Boost",
+			"kind": "item_monitor",
+			"position": [
+				136.0,
+				1.5,
+				-423.0
+			]
+		},
+		{
+			"name": "RingsIslet4",
+			"kind": "Node3D",
+			"position": [
+				140.0,
+				2.3,
+				-413.0
+			]
+		},
+		{
+			"name": "Channel3Bubbles",
+			"kind": "air_bubbles",
+			"position": [
+				203.0,
+				-4.0,
+				-418.0
+			]
+		},
+		{
+			"name": "RingsChannel3",
+			"kind": "Node3D",
+			"position": [
+				198.0,
+				-3.2,
+				-410.0
+			]
+		},
+		{
+			"name": "MonitorShield4",
+			"kind": "item_monitor",
+			"position": [
+				242.0,
+				1.5,
+				-422.0
+			]
+		},
+		{
+			"name": "RingsIslet5",
+			"kind": "Node3D",
+			"position": [
+				240.0,
+				2.3,
+				-410.0
+			]
+		},
+		{
+			"name": "RingsSandbar3",
+			"kind": "Node3D",
+			"position": [
+				290.0,
+				-0.5,
+				-416.0
+			]
+		},
+		{
+			"name": "Surf3",
+			"kind": "tidal_wave",
+			"position": [
+				279.0,
+				-1.3,
+				-413.0
+			]
+		},
+		{
+			"name": "RingsFinal",
+			"kind": "Node3D",
+			"position": [
+				382.0,
+				1.8,
+				-413.0
+			]
+		},
+		{
+			"name": "Goal",
+			"kind": "goal",
+			"position": [
+				422.0,
+				1.0,
+				-413.0
+			]
+		},
+		{
+			"name": "ScuttlerSandbar1a",
+			"kind": "scuttler",
+			"position": [
+				-5.0,
+				-1.3,
+				-78.0
+			]
+		},
+		{
+			"name": "ScuttlerSandbar1b",
+			"kind": "scuttler",
+			"position": [
+				5.0,
+				-1.3,
+				-92.0
+			]
+		},
+		{
+			"name": "GullSandbar1",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				3.6,
+				-100.0
+			]
+		},
+		{
+			"name": "PearlshotIslet1a",
+			"kind": "pearlshot",
+			"position": [
+				-9.0,
+				1.5,
+				-150.0
+			]
+		},
+		{
+			"name": "PearlshotIslet1b",
+			"kind": "pearlshot",
+			"position": [
+				9.0,
+				1.5,
+				-150.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet1",
+			"kind": "scuttler",
+			"position": [
+				0.0,
+				1.5,
+				-144.0
+			]
+		},
+		{
+			"name": "GullChain1a",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				4.5,
+				-170.0
+			]
+		},
+		{
+			"name": "GullChain1b",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				5.2,
+				-181.0
+			]
+		},
+		{
+			"name": "GullChain1c",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				5.8,
+				-192.0
+			]
+		},
+		{
+			"name": "FishChannel1",
+			"kind": "leapfin",
+			"position": [
+				-6.0,
+				-1.2,
+				-176.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet2a",
+			"kind": "scuttler",
+			"position": [
+				-6.0,
+				1.0,
+				-232.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet2b",
+			"kind": "scuttler",
+			"position": [
+				6.0,
+				1.0,
+				-238.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet2c",
+			"kind": "scuttler",
+			"position": [
+				0.0,
+				1.0,
+				-248.0
+			]
+		},
+		{
+			"name": "PearlshotIslet2a",
+			"kind": "pearlshot",
+			"position": [
+				-11.0,
+				1.0,
+				-254.0
+			]
+		},
+		{
+			"name": "PearlshotIslet2b",
+			"kind": "pearlshot",
+			"position": [
+				11.0,
+				1.0,
+				-254.0
+			]
+		},
+		{
+			"name": "GullSandbar2a",
+			"kind": "galegull",
+			"position": [
+				-4.0,
+				4.2,
+				-300.0
+			]
+		},
+		{
+			"name": "GullSandbar2b",
+			"kind": "galegull",
+			"position": [
+				4.0,
+				4.2,
+				-322.0
+			]
+		},
+		{
+			"name": "PearlshotIslet3a",
+			"kind": "pearlshot",
+			"position": [
+				-9.0,
+				5.0,
+				-392.0
+			]
+		},
+		{
+			"name": "PearlshotIslet3b",
+			"kind": "pearlshot",
+			"position": [
+				9.0,
+				5.0,
+				-392.0
+			]
+		},
+		{
+			"name": "GullIslet3",
+			"kind": "galegull",
+			"position": [
+				0.0,
+				10.0,
+				-392.0
+			]
+		},
+		{
+			"name": "FishReef1",
+			"kind": "leapfin",
+			"position": [
+				35.0,
+				-1.2,
+				-407.0
+			]
+		},
+		{
+			"name": "FishReef2",
+			"kind": "leapfin",
+			"position": [
+				48.0,
+				-1.2,
+				-419.0
+			]
+		},
+		{
+			"name": "FishReef3",
+			"kind": "leapfin",
+			"position": [
+				61.0,
+				-1.2,
+				-407.0
+			]
+		},
+		{
+			"name": "FishReef4",
+			"kind": "leapfin",
+			"position": [
+				74.0,
+				-1.2,
+				-419.0
+			]
+		},
+		{
+			"name": "GullChain2a",
+			"kind": "galegull",
+			"position": [
+				88.0,
+				3.5,
+				-413.0
+			]
+		},
+		{
+			"name": "GullChain2b",
+			"kind": "galegull",
+			"position": [
+				98.0,
+				4.5,
+				-413.0
+			]
+		},
+		{
+			"name": "GullChain2c",
+			"kind": "galegull",
+			"position": [
+				108.0,
+				5.0,
+				-413.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet4a",
+			"kind": "scuttler",
+			"position": [
+				148.0,
+				1.5,
+				-421.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet4b",
+			"kind": "scuttler",
+			"position": [
+				156.0,
+				1.5,
+				-406.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet4c",
+			"kind": "scuttler",
+			"position": [
+				166.0,
+				1.5,
+				-417.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet4d",
+			"kind": "scuttler",
+			"position": [
+				176.0,
+				1.5,
+				-408.0
+			]
+		},
+		{
+			"name": "PearlshotIslet4a",
+			"kind": "pearlshot",
+			"position": [
+				182.0,
+				1.5,
+				-425.0
+			]
+		},
+		{
+			"name": "PearlshotIslet4b",
+			"kind": "pearlshot",
+			"position": [
+				182.0,
+				1.5,
+				-401.0
+			]
+		},
+		{
+			"name": "GullIslet4a",
+			"kind": "galegull",
+			"position": [
+				160.0,
+				4.5,
+				-417.0
+			]
+		},
+		{
+			"name": "GullIslet4b",
+			"kind": "galegull",
+			"position": [
+				172.0,
+				4.5,
+				-409.0
+			]
+		},
+		{
+			"name": "GullChain3a",
+			"kind": "galegull",
+			"position": [
+				200.0,
+				3.5,
+				-413.0
+			]
+		},
+		{
+			"name": "GullChain3b",
+			"kind": "galegull",
+			"position": [
+				210.0,
+				4.5,
+				-413.0
+			]
+		},
+		{
+			"name": "GullChain3c",
+			"kind": "galegull",
+			"position": [
+				220.0,
+				5.0,
+				-413.0
+			]
+		},
+		{
+			"name": "FishChannel3",
+			"kind": "leapfin",
+			"position": [
+				211.0,
+				-1.2,
+				-407.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet5a",
+			"kind": "scuttler",
+			"position": [
+				250.0,
+				1.5,
+				-419.0
+			]
+		},
+		{
+			"name": "ScuttlerIslet5b",
+			"kind": "scuttler",
+			"position": [
+				262.0,
+				1.5,
+				-407.0
+			]
+		},
+		{
+			"name": "PearlshotIslet5",
+			"kind": "pearlshot",
+			"position": [
+				270.0,
+				1.5,
+				-413.0
+			]
+		},
+		{
+			"name": "GullIslet5a",
+			"kind": "galegull",
+			"position": [
+				256.0,
+				4.5,
+				-410.0
+			]
+		},
+		{
+			"name": "GullIslet5b",
+			"kind": "galegull",
+			"position": [
+				266.0,
+				4.5,
+				-416.0
+			]
+		},
+		{
+			"name": "GullSandbar3",
+			"kind": "galegull",
+			"position": [
+				327.0,
+				4.2,
+				-410.0
+			]
+		},
+		{
+			"name": "ScuttlerFinal",
+			"kind": "scuttler",
+			"position": [
+				402.0,
+				1.0,
+				-407.0
+			]
+		}
+	]
+}

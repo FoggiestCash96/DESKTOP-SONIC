@@ -21,7 +21,10 @@ func tick(delta: float) -> void:
 
 
 func after_move(_delta: float) -> void:
-	if player.is_on_floor() and player.velocity.dot(player.get_floor_normal()) <= 0.0:
+	# Land on a floor unless moving away from it. Skimming down a slope, the move cancels any
+	# speed into it and leaves the velocity level, pointing slightly away from the surface; not
+	# rising counts as landing then, or the player would glide down the slope in the air.
+	if player.is_on_floor() and (player.velocity.dot(player.get_floor_normal()) <= 0.0 or player.velocity.y <= 0.0):
 		player.land()
 		if player.state != self:
 			player.ground_speed = 0.0

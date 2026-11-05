@@ -19,6 +19,15 @@ script = ExtResource("1_c0d6a")
 [node name="Effects" type="CanvasLayer" parent="." unique_id=1478645052]
 layer = 0
 
+[node name="Underwater" type="ColorRect" parent="Effects" unique_id=1185409261]
+unique_name_in_owner = true
+visible = false
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+mouse_filter = 2
+color = Color(0.08, 0.42, 0.72, 0.3)
+
 [node name="SpeedEffects" type="ColorRect" parent="Effects" unique_id=706984968]
 unique_name_in_owner = true
 visible = false

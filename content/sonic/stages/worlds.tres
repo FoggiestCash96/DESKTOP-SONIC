@@ -12,26 +12,32 @@ scene = "res://content/sonic/stages/emerald_shore/act_1.tscn"
 [sub_resource type="Resource" id="Resource_wc8pr"]
 script = ExtResource("3_lod5s")
 title = "Act 2: Lush Palm Grove"
+scene = "res://content/sonic/stages/emerald_shore/act_2.tscn"
 
 [sub_resource type="Resource" id="Resource_nc1n1"]
 script = ExtResource("3_lod5s")
 title = "Act 3: Cascading Waterfall Basin"
+scene = "res://content/sonic/stages/emerald_shore/act_3.tscn"
 
 [sub_resource type="Resource" id="Resource_h3ci7"]
 script = ExtResource("3_lod5s")
 title = "Act 4: Shallow Reef Lagoon"
+scene = "res://content/sonic/stages/emerald_shore/act_4.tscn"
 
 [sub_resource type="Resource" id="Resource_pulec"]
 script = ExtResource("3_lod5s")
 title = "Act 5: Underground Grotto"
+scene = "res://content/sonic/stages/emerald_shore/act_5.tscn"
 
 [sub_resource type="Resource" id="Resource_bty0q"]
 script = ExtResource("3_lod5s")
 title = "Act 6: Tidal Cavern"
+scene = "res://content/sonic/stages/emerald_shore/act_6.tscn"
 
 [sub_resource type="Resource" id="Resource_cb8xl"]
 script = ExtResource("3_lod5s")
 title = "Act 7: Sunset Ridge Cliffs"
+scene = "res://content/sonic/stages/emerald_shore/act_7.tscn"
 
 [sub_resource type="Resource" id="Resource_87gyl"]
 script = ExtResource("3_lod5s")

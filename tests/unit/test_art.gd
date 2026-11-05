@@ -8,6 +8,12 @@ extends "res://tests/test_suite.gd"
 const ExportGreybox := preload("res://tools/godot/export_greybox.gd")
 const ACTS := {
 	"res://content/sonic/stages/emerald_shore/act_1.tscn": "res://content/sonic/stages/emerald_shore/art/act_1.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_2.tscn": "res://content/sonic/stages/emerald_shore/art/act_2.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_3.tscn": "res://content/sonic/stages/emerald_shore/art/act_3.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_4.tscn": "res://content/sonic/stages/emerald_shore/art/act_4.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_5.tscn": "res://content/sonic/stages/emerald_shore/art/act_5.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_6.tscn": "res://content/sonic/stages/emerald_shore/art/act_6.greybox.json",
+	"res://content/sonic/stages/emerald_shore/act_7.tscn": "res://content/sonic/stages/emerald_shore/art/act_7.greybox.json",
 	"res://content/sonic/stages/emerald_shore/act_8.tscn": "res://content/sonic/stages/emerald_shore/art/act_8.greybox.json",
 }
 ## The models the engine's objects ask the bank for (ArtBank.model), and the scenes they dress.
@@ -21,7 +27,10 @@ const MODELS := {
 	&"spikes": "res://engine/gimmicks/spikes.tscn",
 	&"animal": "res://engine/enemies/base/animal.tscn",
 }
-const MATERIALS: Array[StringName] = [&"spikes_plate", &"wave_water", &"wave_foam"]  ## ArtBank.material
+## ArtBank.material: for meshes the engine builds itself (waves, spike plates, water surfaces, rails,
+## bubbles, platforms and breakable walls).
+const MATERIALS: Array[StringName] = [&"spikes_plate", &"wave_water", &"wave_foam", &"water", &"water_flowing", &"rail",
+		&"bubble", &"platform_stone", &"crumbling_rock", &"log_bark", &"breakable_rock"]
 const BADNIKS: Array[String] = [
 	"res://content/sonic/enemies/scuttler.tscn",
 	"res://content/sonic/enemies/galegull.tscn",

@@ -1,0 +1,3519 @@
+{
+	"stage": "res://content/sonic/stages/emerald_shore/act_2.tscn",
+	"sea_height": -14.0,
+	"player_start": {
+		"x": [
+			1.0,
+			0.0,
+			0.0
+		],
+		"y": [
+			0.0,
+			1.0,
+			0.0
+		],
+		"z": [
+			0.0,
+			0.0,
+			1.0
+		],
+		"origin": [
+			0.0,
+			0.0,
+			4.0
+		]
+	},
+	"pieces": [
+		{
+			"name": "Start",
+			"path": "Geometry/Start",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					13.0,
+					0.0,
+					12.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					52.0,
+					-2.0
+				],
+				[
+					52.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Floor1",
+			"path": "Geometry/Floor1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-40.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					90.0,
+					-2.0
+				],
+				[
+					90.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "FloorRise",
+			"path": "Geometry/FloorRise",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-130.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					30.0,
+					-2.0
+				],
+				[
+					30.0,
+					6.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 18.0
+		},
+		{
+			"name": "TrunkRight1",
+			"path": "Geometry/TrunkRight1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-50.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkRight2",
+			"path": "Geometry/TrunkRight2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-63.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkLeft2",
+			"path": "Geometry/TrunkLeft2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-7.6,
+					4.5,
+					-59.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkRight3",
+			"path": "Geometry/TrunkRight3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-76.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkRight4",
+			"path": "Geometry/TrunkRight4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-89.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkLeft4",
+			"path": "Geometry/TrunkLeft4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-7.6,
+					4.5,
+					-85.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkRight5",
+			"path": "Geometry/TrunkRight5",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-102.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkRight6",
+			"path": "Geometry/TrunkRight6",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-115.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "TrunkLeft6",
+			"path": "Geometry/TrunkLeft6",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-7.6,
+					4.5,
+					-111.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkRight7",
+			"path": "Geometry/TrunkRight7",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					7.6,
+					5.0,
+					-128.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 10.0
+		},
+		{
+			"name": "Deck1",
+			"path": "Geometry/Deck1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-9.0,
+					0.0,
+					-40.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.5
+				],
+				[
+					28.0,
+					5.5
+				],
+				[
+					28.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 7.0
+		},
+		{
+			"name": "Bridge1",
+			"path": "Geometry/Bridge1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-11.2,
+					0.0,
+					-68.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.7
+				],
+				[
+					16.0,
+					5.7
+				],
+				[
+					16.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 2.6
+		},
+		{
+			"name": "Deck2",
+			"path": "Geometry/Deck2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-9.0,
+					0.0,
+					-84.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.5
+				],
+				[
+					14.0,
+					5.5
+				],
+				[
+					14.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 7.0
+		},
+		{
+			"name": "Deck3",
+			"path": "Geometry/Deck3",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-9.0,
+					0.0,
+					-104.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.5
+				],
+				[
+					18.0,
+					5.5
+				],
+				[
+					18.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 7.0
+		},
+		{
+			"name": "Bridge2",
+			"path": "Geometry/Bridge2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-11.2,
+					0.0,
+					-122.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.7
+				],
+				[
+					18.0,
+					5.7
+				],
+				[
+					18.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 2.6
+		},
+		{
+			"name": "Deck4",
+			"path": "Geometry/Deck4",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					-9.0,
+					0.0,
+					-140.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.5
+				],
+				[
+					20.0,
+					5.5
+				],
+				[
+					20.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 7.0
+		},
+		{
+			"name": "TrunkDeck1",
+			"path": "Geometry/TrunkDeck1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-16.8,
+					6.5,
+					-50.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.6,
+			"height": 13.0
+		},
+		{
+			"name": "TrunkDeck2",
+			"path": "Geometry/TrunkDeck2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-16.8,
+					6.5,
+					-80.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.6,
+			"height": 13.0
+		},
+		{
+			"name": "TrunkDeck3",
+			"path": "Geometry/TrunkDeck3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-16.8,
+					6.5,
+					-110.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.6,
+			"height": 13.0
+		},
+		{
+			"name": "TrunkDeck4",
+			"path": "Geometry/TrunkDeck4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-16.8,
+					6.5,
+					-140.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.6,
+			"height": 13.0
+		},
+		{
+			"name": "Alcove",
+			"path": "Geometry/Alcove",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-86.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					7.0,
+					-2.0
+				],
+				[
+					7.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 10.0
+		},
+		{
+			"name": "AlcoveBack",
+			"path": "Geometry/AlcoveBack",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					16.5,
+					2.5,
+					-91.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				1.0,
+				5.0,
+				12.0
+			]
+		},
+		{
+			"name": "AlcoveSideNorth",
+			"path": "Geometry/AlcoveSideNorth",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					12.5,
+					2.5,
+					-96.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				7.0,
+				5.0,
+				1.0
+			]
+		},
+		{
+			"name": "AlcoveSideSouth",
+			"path": "Geometry/AlcoveSideSouth",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					12.5,
+					2.5,
+					-85.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				7.0,
+				5.0,
+				1.0
+			]
+		},
+		{
+			"name": "Merge",
+			"path": "Geometry/Merge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-160.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					40.0,
+					4.0
+				],
+				[
+					40.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 25.0
+		},
+		{
+			"name": "RopeBridge",
+			"path": "Geometry/RopeBridge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					8.0,
+					0.0,
+					-200.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					5.6
+				],
+				[
+					60.0,
+					5.6
+				],
+				[
+					60.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "FarBank",
+			"path": "Geometry/FarBank",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-260.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					40.0,
+					4.0
+				],
+				[
+					40.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 25.0
+		},
+		{
+			"name": "Corner",
+			"path": "Geometry/Corner",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-300.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					26.0,
+					4.0
+				],
+				[
+					26.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 25.0
+		},
+		{
+			"name": "Canopy1",
+			"path": "Geometry/Canopy1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					9.0,
+					0.0,
+					-300.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					55.0,
+					4.0
+				],
+				[
+					55.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Canopy2",
+			"path": "Geometry/Canopy2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					64.0,
+					0.0,
+					-300.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					64.0,
+					4.0
+				],
+				[
+					64.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "HighShelf",
+			"path": "Geometry/HighShelf",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					74.0,
+					0.0,
+					-326.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					14.0
+				],
+				[
+					50.0,
+					14.0
+				],
+				[
+					50.0,
+					16.0
+				],
+				[
+					0.0,
+					16.0
+				]
+			],
+			"depth": 10.0
+		},
+		{
+			"name": "Canopy3",
+			"path": "Geometry/Canopy3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					136.0,
+					0.0,
+					-300.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					64.0,
+					4.0
+				],
+				[
+					64.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Corner2",
+			"path": "Geometry/Corner2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					200.0,
+					0.0,
+					-300.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					26.0,
+					4.0
+				],
+				[
+					26.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "TrunkCanopy1",
+			"path": "Geometry/TrunkCanopy1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					24.0,
+					10.5,
+					-301.4
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkCanopy2",
+			"path": "Geometry/TrunkCanopy2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					64.0,
+					10.5,
+					-301.4
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkCanopy3",
+			"path": "Geometry/TrunkCanopy3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					104.0,
+					10.5,
+					-301.4
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkCanopy4",
+			"path": "Geometry/TrunkCanopy4",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					144.0,
+					10.5,
+					-301.4
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "Terrace1",
+			"path": "Geometry/Terrace1",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-326.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					4.0
+				],
+				[
+					40.0,
+					4.0
+				],
+				[
+					40.0,
+					6.0
+				],
+				[
+					0.0,
+					6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Terrace2",
+			"path": "Geometry/Terrace2",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-366.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					1.0
+				],
+				[
+					40.0,
+					1.0
+				],
+				[
+					40.0,
+					3.0
+				],
+				[
+					0.0,
+					3.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Terrace3",
+			"path": "Geometry/Terrace3",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-406.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					30.0,
+					-2.0
+				],
+				[
+					30.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "LogRun",
+			"path": "Geometry/LogRun",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-436.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-2.0
+				],
+				[
+					60.0,
+					-2.0
+				],
+				[
+					60.0,
+					0.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "Log1",
+			"path": "Geometry/Log1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					215.0,
+					0.6,
+					-452.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				22.0,
+				1.2,
+				1.4
+			]
+		},
+		{
+			"name": "Log2",
+			"path": "Geometry/Log2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					215.0,
+					0.6,
+					-470.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				22.0,
+				1.2,
+				1.4
+			]
+		},
+		{
+			"name": "Log3",
+			"path": "Geometry/Log3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					215.0,
+					0.6,
+					-488.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				22.0,
+				1.2,
+				1.4
+			]
+		},
+		{
+			"name": "LoopRun",
+			"path": "Geometry/LoopRun",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-496.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-8.0
+				],
+				[
+					30.0,
+					-8.0
+				],
+				[
+					30.0,
+					-6.0
+				],
+				[
+					0.0,
+					0.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "LoopFloor",
+			"path": "Geometry/LoopFloor",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-526.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-8.0
+				],
+				[
+					34.0,
+					-8.0
+				],
+				[
+					34.0,
+					-6.0
+				],
+				[
+					0.0,
+					-6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "LoopExit",
+			"path": "Geometry/LoopExit",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					226.0,
+					0.0,
+					-560.0
+				]
+			},
+			"material": "greybox_slope",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-8.0
+				],
+				[
+					24.0,
+					-8.0
+				],
+				[
+					24.0,
+					-1.0
+				],
+				[
+					0.0,
+					-6.0
+				]
+			],
+			"depth": 26.0
+		},
+		{
+			"name": "RiverBridge",
+			"path": "Geometry/RiverBridge",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					209.0,
+					0.0,
+					-584.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-1.4
+				],
+				[
+					16.0,
+					-1.4
+				],
+				[
+					16.0,
+					-1.0
+				],
+				[
+					0.0,
+					-1.0
+				]
+			],
+			"depth": 4.0
+		},
+		{
+			"name": "Beach",
+			"path": "Geometry/Beach",
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					228.0,
+					0.0,
+					-600.0
+				]
+			},
+			"material": "greybox_floor",
+			"type": "polygon",
+			"polygon": [
+				[
+					0.0,
+					-3.0
+				],
+				[
+					100.0,
+					-3.0
+				],
+				[
+					100.0,
+					-1.0
+				],
+				[
+					0.0,
+					-1.0
+				]
+			],
+			"depth": 30.0
+		},
+		{
+			"name": "EndWall",
+			"path": "Geometry/EndWall",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					213.0,
+					3.0,
+					-700.5
+				]
+			},
+			"material": "greybox_wall",
+			"type": "box",
+			"size": [
+				30.0,
+				8.0,
+				1.0
+			]
+		},
+		{
+			"name": "TrunkTerrace1",
+			"path": "Geometry/TrunkTerrace1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					202.0,
+					10.5,
+					-340.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkTerrace2",
+			"path": "Geometry/TrunkTerrace2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					224.0,
+					7.5,
+					-380.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		},
+		{
+			"name": "TrunkTerrace3",
+			"path": "Geometry/TrunkTerrace3",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					202.0,
+					4.5,
+					-420.0
+				]
+			},
+			"material": "greybox_wall",
+			"type": "cylinder",
+			"radius": 0.55,
+			"height": 9.0
+		}
+	],
+	"loops": [
+		{
+			"name": "Loop",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					210.0,
+					-5.995,
+					-538.0
+				]
+			},
+			"radius": 5.0,
+			"width": 4.0,
+			"exit_offset": 6.0,
+			"curb_height": 0.6
+		}
+	],
+	"camera_volumes": [],
+	"walls": [],
+	"rails": [
+		{
+			"name": "VineRail",
+			"radius": 0.09,
+			"points": [
+				[
+					124.6,
+					15.85,
+					-334.0
+				],
+				[
+					126.5125,
+					15.5732,
+					-333.4967
+				],
+				[
+					128.4254,
+					15.2963,
+					-332.9933
+				],
+				[
+					130.3382,
+					15.0195,
+					-332.4899
+				],
+				[
+					132.251,
+					14.7426,
+					-331.9866
+				],
+				[
+					134.164,
+					14.4657,
+					-331.4832
+				],
+				[
+					136.0723,
+					14.1868,
+					-330.97
+				],
+				[
+					137.875,
+					13.8484,
+					-330.1797
+				],
+				[
+					139.6785,
+					13.5103,
+					-329.3906
+				],
+				[
+					141.4819,
+					13.1722,
+					-328.6017
+				],
+				[
+					143.2853,
+					12.834,
+					-327.8127
+				],
+				[
+					145.0886,
+					12.4959,
+					-327.0237
+				],
+				[
+					146.892,
+					12.1577,
+					-326.2347
+				],
+				[
+					148.6955,
+					11.8196,
+					-325.4457
+				],
+				[
+					150.4988,
+					11.4815,
+					-324.6568
+				],
+				[
+					152.2928,
+					11.1456,
+					-323.8536
+				],
+				[
+					154.0569,
+					10.818,
+					-322.9716
+				],
+				[
+					155.8192,
+					10.4907,
+					-322.0904
+				],
+				[
+					157.5813,
+					10.1635,
+					-321.2094
+				],
+				[
+					159.3436,
+					9.8362,
+					-320.3282
+				],
+				[
+					161.1057,
+					9.5089,
+					-319.4472
+				],
+				[
+					162.868,
+					9.1817,
+					-318.566
+				],
+				[
+					164.6303,
+					8.8544,
+					-317.6848
+				],
+				[
+					166.4279,
+					8.5572,
+					-316.893
+				],
+				[
+					168.3575,
+					8.3643,
+					-316.4106
+				],
+				[
+					170.286,
+					8.1714,
+					-315.9285
+				],
+				[
+					172.2146,
+					7.9785,
+					-315.4464
+				],
+				[
+					174.1432,
+					7.7857,
+					-314.9642
+				],
+				[
+					176.0718,
+					7.5928,
+					-314.4821
+				],
+				[
+					178.0,
+					7.4,
+					-314.0
+				]
+			]
+		},
+		{
+			"name": "LogRail",
+			"radius": 0.09,
+			"points": [
+				[
+					202.5,
+					2.6,
+					-440.0
+				],
+				[
+					202.5,
+					2.5871,
+					-441.928
+				],
+				[
+					202.5,
+					2.5743,
+					-443.8572
+				],
+				[
+					202.5,
+					2.5614,
+					-445.786
+				],
+				[
+					202.5,
+					2.5486,
+					-447.7147
+				],
+				[
+					202.5,
+					2.5357,
+					-449.6433
+				],
+				[
+					202.5,
+					2.5229,
+					-451.572
+				],
+				[
+					202.5,
+					2.51,
+					-453.5007
+				],
+				[
+					202.5,
+					2.4971,
+					-455.4294
+				],
+				[
+					202.5,
+					2.4843,
+					-457.3581
+				],
+				[
+					202.5,
+					2.4714,
+					-459.2867
+				],
+				[
+					202.5,
+					2.4586,
+					-461.2155
+				],
+				[
+					202.5,
+					2.4457,
+					-463.1442
+				],
+				[
+					202.5,
+					2.4328,
+					-465.0728
+				],
+				[
+					202.5,
+					2.42,
+					-467.0015
+				],
+				[
+					202.5,
+					2.4071,
+					-468.9312
+				],
+				[
+					202.5,
+					2.3857,
+					-470.8578
+				],
+				[
+					202.5,
+					2.3536,
+					-472.7867
+				],
+				[
+					202.5,
+					2.3214,
+					-474.7155
+				],
+				[
+					202.5,
+					2.2893,
+					-476.6439
+				],
+				[
+					202.5,
+					2.2571,
+					-478.5724
+				],
+				[
+					202.5,
+					2.225,
+					-480.5008
+				],
+				[
+					202.5,
+					2.1928,
+					-482.4293
+				],
+				[
+					202.5,
+					2.1607,
+					-484.3578
+				],
+				[
+					202.5,
+					2.1286,
+					-486.2863
+				],
+				[
+					202.5,
+					2.0964,
+					-488.2147
+				],
+				[
+					202.5,
+					2.0643,
+					-490.1431
+				],
+				[
+					202.5,
+					2.0321,
+					-492.0721
+				],
+				[
+					202.5,
+					2.0,
+					-494.0
+				]
+			]
+		}
+	],
+	"water": [],
+	"markers": [
+		{
+			"name": "SecretWall",
+			"kind": "breakable_wall",
+			"position": [
+				9.6,
+				0.0,
+				-91.0
+			],
+			"size": [
+				10.0,
+				4.0,
+				1.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					9.6,
+					0.0,
+					-91.0
+				]
+			}
+		},
+		{
+			"name": "ExtraLife",
+			"kind": "extra_life",
+			"position": [
+				13.5,
+				0.0,
+				-91.0
+			]
+		},
+		{
+			"name": "RingsStart",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-4.0
+			]
+		},
+		{
+			"name": "MonitorStartRings",
+			"kind": "item_monitor",
+			"position": [
+				-7.0,
+				0.0,
+				-14.0
+			]
+		},
+		{
+			"name": "MonitorStartBoost",
+			"kind": "item_monitor",
+			"position": [
+				7.0,
+				0.0,
+				-14.0
+			]
+		},
+		{
+			"name": "SpringToDecks",
+			"kind": "spring",
+			"position": [
+				-6.5,
+				0.0,
+				-44.0
+			]
+		},
+		{
+			"name": "SignTreetops",
+			"kind": "Label3D",
+			"position": [
+				-6.5,
+				3.6,
+				-37.0
+			],
+			"text_size": [
+				4.61,
+				0.78
+			],
+			"transform": {
+				"x": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"origin": [
+					-6.5,
+					3.6,
+					-37.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RingsFloor1",
+			"kind": "Node3D",
+			"position": [
+				1.0,
+				0.8,
+				-48.0
+			]
+		},
+		{
+			"name": "RingsFloor2",
+			"kind": "Node3D",
+			"position": [
+				-1.0,
+				0.8,
+				-100.0
+			]
+		},
+		{
+			"name": "RingsDeck1",
+			"kind": "Node3D",
+			"position": [
+				-12.5,
+				6.8,
+				-46.0
+			]
+		},
+		{
+			"name": "RingsBridge1",
+			"kind": "Node3D",
+			"position": [
+				-12.5,
+				6.8,
+				-70.0
+			]
+		},
+		{
+			"name": "RingsDeckGap",
+			"kind": "Node3D",
+			"position": [
+				-12.5,
+				6.8,
+				-96.0
+			]
+		},
+		{
+			"name": "RedRing1",
+			"kind": "hidden_collectible",
+			"position": [
+				-12.5,
+				9.6,
+				-101.0
+			]
+		},
+		{
+			"name": "MonitorDeckShield",
+			"kind": "item_monitor",
+			"position": [
+				-14.0,
+				6.0,
+				-112.0
+			]
+		},
+		{
+			"name": "RingsBridge2",
+			"kind": "Node3D",
+			"position": [
+				-12.5,
+				6.8,
+				-124.0
+			]
+		},
+		{
+			"name": "RingsRise",
+			"kind": "Node3D",
+			"position": [
+				0.0,
+				0.8,
+				-132.0
+			]
+		},
+		{
+			"name": "Checkpoint1",
+			"kind": "checkpoint",
+			"position": [
+				-3.5,
+				6.0,
+				-172.0
+			]
+		},
+		{
+			"name": "MonitorMergeBoost",
+			"kind": "item_monitor",
+			"position": [
+				-14.0,
+				6.0,
+				-190.0
+			]
+		},
+		{
+			"name": "SignRavine",
+			"kind": "Label3D",
+			"position": [
+				-3.5,
+				9.5,
+				-196.0
+			],
+			"text_size": [
+				7.79,
+				0.89
+			],
+			"transform": {
+				"x": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"origin": [
+					-3.5,
+					9.5,
+					-196.0
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RavinePlatform1",
+			"kind": "moving_platform",
+			"position": [
+				-10.0,
+				6.0,
+				-204.0
+			],
+			"size": [
+				4.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.0,
+					6.0,
+					-204.0
+				]
+			},
+			"travel": [
+				0.0,
+				0.0,
+				-12.0
+			]
+		},
+		{
+			"name": "RavineLedge1",
+			"kind": "crumbling_platform",
+			"position": [
+				-10.0,
+				6.0,
+				-224.0
+			],
+			"size": [
+				4.0,
+				1.0,
+				4.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.0,
+					6.0,
+					-224.0
+				]
+			}
+		},
+		{
+			"name": "RavineLedge2",
+			"kind": "crumbling_platform",
+			"position": [
+				-10.0,
+				6.5,
+				-233.0
+			],
+			"size": [
+				4.0,
+				1.0,
+				4.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.0,
+					6.5,
+					-233.0
+				]
+			}
+		},
+		{
+			"name": "RavinePlatform2",
+			"kind": "moving_platform",
+			"position": [
+				-10.0,
+				6.5,
+				-242.0
+			],
+			"size": [
+				4.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					-10.0,
+					6.5,
+					-242.0
+				]
+			},
+			"travel": [
+				0.0,
+				0.0,
+				-12.0
+			]
+		},
+		{
+			"name": "RedRing2",
+			"kind": "hidden_collectible",
+			"position": [
+				-10.0,
+				9.6,
+				-233.0
+			]
+		},
+		{
+			"name": "MonitorRavineShoes",
+			"kind": "item_monitor",
+			"position": [
+				-10.0,
+				6.5,
+				-233.5
+			]
+		},
+		{
+			"name": "RingsBridge",
+			"kind": "Node3D",
+			"position": [
+				6.0,
+				6.8,
+				-204.0
+			]
+		},
+		{
+			"name": "MonitorBridgeRings",
+			"kind": "item_monitor",
+			"position": [
+				6.0,
+				6.0,
+				-258.0
+			]
+		},
+		{
+			"name": "RingsFarBank",
+			"kind": "Node3D",
+			"position": [
+				-3.5,
+				6.8,
+				-268.0
+			]
+		},
+		{
+			"name": "DashCorner",
+			"kind": "dash_panel",
+			"position": [
+				-3.5,
+				6.0,
+				-313.0
+			]
+		},
+		{
+			"name": "RingsCorner",
+			"kind": "Node3D",
+			"position": [
+				-2.0,
+				6.8,
+				-313.0
+			]
+		},
+		{
+			"name": "PitLedge",
+			"kind": "crumbling_platform",
+			"position": [
+				132.0,
+				6.0,
+				-313.0
+			],
+			"size": [
+				4.0,
+				1.0,
+				6.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					132.0,
+					6.0,
+					-313.0
+				]
+			}
+		},
+		{
+			"name": "RingsCanopy1",
+			"kind": "Node3D",
+			"position": [
+				14.0,
+				6.8,
+				-309.0
+			]
+		},
+		{
+			"name": "Lift",
+			"kind": "moving_platform",
+			"position": [
+				71.0,
+				6.0,
+				-328.0
+			],
+			"size": [
+				4.0,
+				0.5,
+				4.0
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					71.0,
+					6.0,
+					-328.0
+				]
+			},
+			"travel": [
+				0.0,
+				10.0,
+				0.0
+			]
+		},
+		{
+			"name": "SignLift",
+			"kind": "Label3D",
+			"position": [
+				66.0,
+				10.5,
+				-325.8
+			],
+			"text_size": [
+				1.14,
+				0.78
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					-1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					66.0,
+					10.5,
+					-325.8
+				]
+			},
+			"billboard": false
+		},
+		{
+			"name": "RingsShelf",
+			"kind": "Node3D",
+			"position": [
+				78.0,
+				16.8,
+				-331.0
+			]
+		},
+		{
+			"name": "RedRing3",
+			"kind": "hidden_collectible",
+			"position": [
+				120.0,
+				16.9,
+				-334.0
+			]
+		},
+		{
+			"name": "RedRing5",
+			"kind": "hidden_collectible",
+			"position": [
+				152.0,
+				12.1,
+				-324.0
+			]
+		},
+		{
+			"name": "RingsCanopy2",
+			"kind": "Node3D",
+			"position": [
+				70.0,
+				6.8,
+				-309.0
+			]
+		},
+		{
+			"name": "RingsPit",
+			"kind": "Node3D",
+			"position": [
+				126.0,
+				6.8,
+				-311.0
+			]
+		},
+		{
+			"name": "Checkpoint2",
+			"kind": "checkpoint",
+			"position": [
+				146.0,
+				6.0,
+				-313.0
+			]
+		},
+		{
+			"name": "RingsCanopy3",
+			"kind": "Node3D",
+			"position": [
+				152.0,
+				6.8,
+				-317.0
+			]
+		},
+		{
+			"name": "LookoutSpring",
+			"kind": "spring",
+			"position": [
+				186.0,
+				6.0,
+				-322.0
+			]
+		},
+		{
+			"name": "RedRing4",
+			"kind": "hidden_collectible",
+			"position": [
+				186.0,
+				23.5,
+				-322.0
+			]
+		},
+		{
+			"name": "MonitorCanopyRings",
+			"kind": "item_monitor",
+			"position": [
+				190.0,
+				6.0,
+				-307.0
+			]
+		},
+		{
+			"name": "DashCorner2",
+			"kind": "dash_panel",
+			"position": [
+				213.0,
+				6.0,
+				-313.0
+			]
+		},
+		{
+			"name": "RingsTerrace1",
+			"kind": "Node3D",
+			"position": [
+				215.0,
+				6.8,
+				-332.0
+			]
+		},
+		{
+			"name": "MonitorTerraceInvincible",
+			"kind": "item_monitor",
+			"position": [
+				205.0,
+				3.0,
+				-390.0
+			]
+		},
+		{
+			"name": "RingsTerrace2",
+			"kind": "Node3D",
+			"position": [
+				211.0,
+				3.8,
+				-372.0
+			]
+		},
+		{
+			"name": "RingsLog1",
+			"kind": "Node3D",
+			"position": [
+				215.0,
+				0.8,
+				-449.0
+			]
+		},
+		{
+			"name": "RingsLog2",
+			"kind": "Node3D",
+			"position": [
+				215.0,
+				0.8,
+				-467.0
+			]
+		},
+		{
+			"name": "RingsLog3",
+			"kind": "Node3D",
+			"position": [
+				215.0,
+				0.8,
+				-485.0
+			]
+		},
+		{
+			"name": "RingsLogRail",
+			"kind": "Node3D",
+			"position": [
+				202.5,
+				3.3,
+				-446.0
+			]
+		},
+		{
+			"name": "RingsLoopRun",
+			"kind": "Node3D",
+			"position": [
+				210.0,
+				0.8,
+				-500.0
+			]
+		},
+		{
+			"name": "RingsRiver",
+			"kind": "Node3D",
+			"position": [
+				216.0,
+				-0.2,
+				-582.0
+			]
+		},
+		{
+			"name": "RingsRiverBridge",
+			"kind": "Node3D",
+			"position": [
+				207.0,
+				-0.2,
+				-586.0
+			]
+		},
+		{
+			"name": "RingsBeach",
+			"kind": "Node3D",
+			"position": [
+				213.0,
+				-0.2,
+				-608.0
+			]
+		},
+		{
+			"name": "MonitorBeachRings",
+			"kind": "item_monitor",
+			"position": [
+				205.0,
+				-1.0,
+				-640.0
+			]
+		},
+		{
+			"name": "Goal",
+			"kind": "goal",
+			"position": [
+				213.0,
+				-1.0,
+				-672.0
+			]
+		},
+		{
+			"name": "ScuttlerStart",
+			"kind": "scuttler",
+			"position": [
+				5.0,
+				0.0,
+				-24.0
+			]
+		},
+		{
+			"name": "ScuttlerFloor1",
+			"kind": "scuttler",
+			"position": [
+				2.0,
+				0.0,
+				-66.0
+			]
+		},
+		{
+			"name": "ScuttlerFloor2",
+			"kind": "scuttler",
+			"position": [
+				-2.0,
+				0.0,
+				-110.0
+			]
+		},
+		{
+			"name": "PearlshotDeck3",
+			"kind": "pearlshot",
+			"position": [
+				-10.5,
+				6.0,
+				-118.0
+			]
+		},
+		{
+			"name": "GullDeckGap",
+			"kind": "galegull",
+			"position": [
+				-12.5,
+				4.2,
+				-101.0
+			]
+		},
+		{
+			"name": "GullRavine1",
+			"kind": "galegull",
+			"position": [
+				-10.0,
+				10.0,
+				-226.0
+			]
+		},
+		{
+			"name": "GullRavine2",
+			"kind": "galegull",
+			"position": [
+				-10.0,
+				10.5,
+				-244.0
+			]
+		},
+		{
+			"name": "ScuttlerBridge",
+			"kind": "scuttler",
+			"position": [
+				6.0,
+				6.0,
+				-236.0
+			]
+		},
+		{
+			"name": "ScuttlerFarBank",
+			"kind": "scuttler",
+			"position": [
+				-8.0,
+				6.0,
+				-282.0
+			]
+		},
+		{
+			"name": "PearlshotCanopy1",
+			"kind": "pearlshot",
+			"position": [
+				44.0,
+				6.0,
+				-322.0
+			]
+		},
+		{
+			"name": "GullChain1",
+			"kind": "galegull",
+			"position": [
+				88.0,
+				10.0,
+				-324.0
+			]
+		},
+		{
+			"name": "GullChain2",
+			"kind": "galegull",
+			"position": [
+				96.0,
+				13.5,
+				-331.0
+			]
+		},
+		{
+			"name": "ScuttlerCanopy3",
+			"kind": "scuttler",
+			"position": [
+				168.0,
+				6.0,
+				-308.0
+			]
+		},
+		{
+			"name": "ScuttlerTerrace",
+			"kind": "scuttler",
+			"position": [
+				217.0,
+				3.0,
+				-386.0
+			]
+		},
+		{
+			"name": "ScuttlerLogs",
+			"kind": "scuttler",
+			"position": [
+				217.0,
+				0.0,
+				-478.0
+			]
+		},
+		{
+			"name": "GullRiver",
+			"kind": "galegull",
+			"position": [
+				216.0,
+				3.5,
+				-592.0
+			]
+		},
+		{
+			"name": "ScuttlerBeach",
+			"kind": "scuttler",
+			"position": [
+				219.0,
+				-1.0,
+				-630.0
+			]
+		},
+		{
+			"name": "PearlshotBeach",
+			"kind": "pearlshot",
+			"position": [
+				203.0,
+				-1.0,
+				-652.0
+			]
+		}
+	]
+}

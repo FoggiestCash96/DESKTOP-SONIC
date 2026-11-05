@@ -4,15 +4,17 @@ extends SceneTree
 ##
 ##     godot --headless --path . --script res://tools/godot/export_greybox.gd -- <stage.tscn> <out.json>
 ##
-## It records every CSG shape that is the root of its own CSG tree (polygons in depth mode, and
-## boxes; anything else is baked into triangles), the loops, the camera volumes (so scenery can keep
-## out of a side view's line of sight), invisible walls (boxes on static bodies in the Geometry
-## group, so the art can show what stops the player), where the gimmicks and enemies are,
-## the sea's height and the player's start. Positions are world
+## It records every CSG shape that is the root of its own CSG tree (polygons in depth mode, boxes
+## and cylinders, such as tree trunks; anything else is baked into triangles), the loops, the camera
+## volumes (so scenery can keep out of a side view's line of sight), invisible walls (boxes on
+## static bodies in the Geometry group, so the art can show what stops the player), grind rails
+## (points along them), bodies of water, where the gimmicks and enemies are (with the size and
+## travel of platforms and breakable walls), the sea's height and the player's start. Positions are world
 ## positions in Godot's axes (Y up), rounded to 0.1 mm so the file only changes when the greybox does.
 ## The stage isn't added to the scene tree, so none of its scripts run.
 
 const PRECISION := 0.0001
+const RAIL_STEP := 2.0  ## Rails are written as points about this far apart (m).
 
 
 func _initialize() -> void:
@@ -37,6 +39,8 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 	var loops: Array[Dictionary] = []
 	var camera_volumes: Array[Dictionary] = []
 	var walls: Array[Dictionary] = []
+	var rails: Array[Dictionary] = []
+	var waters: Array[Dictionary] = []
 	var markers: Array[Dictionary] = []
 	var sea_height: Variant = null
 	var player_start: Variant = null
@@ -64,6 +68,24 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 						"transform": _transform(world_transform(shape_node as Node3D)),
 						"size": _vector(box.size),
 					})
+		elif _script_file(node) == "grind_rail.gd":
+			var rail := node as Path3D
+			var points: Array[Array] = []
+			var length := rail.curve.get_baked_length()
+			var steps := maxi(1, ceili(length / RAIL_STEP))
+			for i in steps + 1:
+				var local := rail.curve.sample_baked(length * float(i) / float(steps), true)
+				points.append(_vector(world_transform(rail) * local))
+			rails.append({"name": String(rail.name), "radius": _number(rail.get("radius") as float), "points": points})
+		elif _script_file(node) == "water_volume.gd":
+			var water := node as Node3D
+			waters.append({
+				"name": String(water.name),
+				"transform": _transform(world_transform(water)),
+				"size": _vector(water.get("size") as Vector3),
+				"current_speed": _number(water.get("current_speed") as float),
+				"tide_height": _number(water.get("tide_height") as float),
+			})
 		elif node is CameraVolume:
 			var volume := node as CameraVolume
 			camera_volumes.append({
@@ -84,6 +106,12 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 				"kind": kind,
 				"position": _vector(world_transform(node as Node3D).origin),
 			}
+			if _script_file(node) in ["moving_platform.gd", "crumbling_platform.gd", "breakable_wall.gd"]:
+				# What the art keeps clear of: the platform's size, and where it travels.
+				marker.size = _vector(node.get("size") as Vector3)
+				marker.transform = _transform(world_transform(node as Node3D))
+				if _script_file(node) == "moving_platform.gd":
+					marker.travel = _vector(node.get("travel") as Vector3)
 			if node is Label3D:
 				# A sign: the art puts a board behind it, so it needs the text's size and facing.
 				var label := node as Label3D
@@ -101,6 +129,8 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 		"loops": loops,
 		"camera_volumes": camera_volumes,
 		"walls": walls,
+		"rails": rails,
+		"water": waters,
 		"markers": markers,
 	}
 
@@ -125,6 +155,10 @@ static func _piece(shape: CSGShape3D, stage: Node) -> Dictionary:
 	elif simple and shape is CSGBox3D:
 		piece.type = "box"
 		piece.size = _vector((shape as CSGBox3D).size)
+	elif simple and shape is CSGCylinder3D:
+		piece.type = "cylinder"
+		piece.radius = _number((shape as CSGCylinder3D).radius)
+		piece.height = _number((shape as CSGCylinder3D).height)
 	else:
 		# Anything else: its triangles in the shape's own space.
 		piece.type = "mesh"
@@ -140,6 +174,13 @@ static func _piece(shape: CSGShape3D, stage: Node) -> Dictionary:
 					triangles.append(_vector(vertices[index]))
 		piece.triangles = triangles
 	return piece
+
+
+## The file name of the node's script, or "". (Gimmicks that name the player can't be named here:
+## a --script tool compiles what it names before the autoloads the player needs exist.)
+static func _script_file(node: Node) -> String:
+	var script := node.get_script() as Script
+	return script.resource_path.get_file() if script else ""
 
 
 ## The node's transform relative to the stage's root, worked out without the node being in a tree.

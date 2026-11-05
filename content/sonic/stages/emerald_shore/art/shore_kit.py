@@ -2,7 +2,9 @@
 act build scripts next to this file (see tools/blender/stage_kit.py for how a stage is dressed).
 
 Green grass tops over sandstone cliffs in warm horizontal bands, white sand, wooden piers on
-posts, palms leaning out over a turquoise sea, and islands and sea stacks on the horizon.
+posts, palms leaning out over a turquoise sea, and islands and sea stacks on the horizon. For
+Acts 2 to 7 too: jungle palms and ferns, fallen logs, waterfalls, coral, cave rock with
+stalactites and glowing crystals, and supports for grind rails.
 """
 
 import math
@@ -486,3 +488,243 @@ def scatter_scenery(stage, sea: float, zones, seed, stacks: int = 14, islands: i
 
     place(stacks, stack_range, make_stack, 5.0)
     place(islands, island_range, make_island, 60.0)
+
+
+# --- Acts 2 to 7: jungle, cascades, reefs, caves and the sunset ridge ----------------------------
+
+CAVE_ROCK = material("cave_rock", (0.44, 0.38, 0.40))
+CAVE_FLOOR = material("cave_floor", (0.58, 0.50, 0.45))
+RIVERBED = material("riverbed", (0.48, 0.58, 0.60))
+REEF = material("reef", (0.96, 0.62, 0.50))
+WATERFALL = material("waterfall", (0.62, 0.90, 1.0))
+CRYSTAL = material("crystal", (0.70, 0.95, 1.0))
+CAVE_LIP = paint((0.36, 0.31, 0.33))
+STALACTITE = paint((0.50, 0.44, 0.45))
+JUNGLE_LEAF = paint((0.13, 0.50, 0.18), two_sided=True)
+FERN = paint((0.24, 0.62, 0.20), two_sided=True)
+VINE = paint((0.20, 0.46, 0.16))
+BARK = paint((0.46, 0.32, 0.20))
+BARK_END = paint((0.80, 0.64, 0.42))
+CORALS = [paint(colour) for colour in ((0.98, 0.44, 0.52), (1.0, 0.62, 0.26), (0.68, 0.42, 0.92), (1.0, 0.86, 0.36), (0.40, 0.84, 0.86))]
+SEAWEED = paint((0.22, 0.58, 0.32), two_sided=True)
+CRYSTAL_TINTS = [(0.70, 0.95, 1.0), (0.86, 0.72, 1.0), (0.60, 1.0, 0.86)]
+
+
+def cave_rock(stage, piece, top: str = CAVE_ROCK) -> None:
+    """A cave wall or roof: the box as the greybox has it, all in rock."""
+    stage.slab(piece, top, CAVE_ROCK)
+
+
+def cave_floor(stage, piece, bottom: float, seed) -> None:
+    """A cave's floor: pebbly rock on top, rock below its edges."""
+    stage.ground(piece, CAVE_FLOOR, CAVE_LIP, CAVE_ROCK, bottom, lip_depth=(0.15, 0.3), relief=0.25, seed=seed)
+
+
+def stalactites(stage, piece, spacing: float = 4.0, longest: float = 3.0, seed=0) -> None:
+    """Rock spikes hanging from a roof's underside, at most `longest` metres long."""
+    r = rng("stalactites", piece.name, seed)
+    under = piece.bottom()
+    left = min(p.x for p in piece.polygon)
+    right = max(p.x for p in piece.polygon)
+    along = int((right - left) / spacing)
+    across = max(1, int(piece.depth / spacing))
+    for i in range(along):
+        for j in range(across):
+            if r.random() < 0.45:
+                continue
+            x = left + (i + r.uniform(0.2, 0.8)) * (right - left) / along
+            z = -(j + r.uniform(0.2, 0.8)) * piece.depth / across
+            point = piece.world(x, piece.local_y(under), z)
+            length = r.uniform(0.6, longest)
+            cone = art_kit.lathe([(r.uniform(0.25, 0.5), 0.0), (0.04, -length)], 6, cap_bottom=False)
+            stage.batch(point, SCENERY).add(art_kit.transformed(cone, Matrix.Translation(point)), STALACTITE, smooth=True)
+
+
+def crystals(stage, piece, side: int, spacing: float = 9.0, seed=0) -> None:
+    """Glowing crystal clusters set into one long face of a wall (`side` 0 is its local z = 0
+    face, 1 the other), low down so they light the floor beside it."""
+    r = rng("crystals", piece.name, seed)
+    left = min(p.x for p in piece.polygon)
+    right = max(p.x for p in piece.polygon)
+    bottom = min(p.y for p in piece.polygon)
+    z = 0.0 if side == 0 else -piece.depth
+    outward = piece.across if side == 0 else -piece.across
+    distance = r.uniform(0.0, spacing)
+    while distance < right - left:
+        base = piece.world(left + distance, bottom + r.uniform(0.3, 2.5), z)
+        distance += r.uniform(spacing * 0.6, spacing * 1.4)
+        tint = CRYSTAL_TINTS[r.randrange(len(CRYSTAL_TINTS))]
+        batch = stage.batch(base, SCENERY)
+        for k in range(r.randint(3, 5)):
+            length = r.uniform(0.6, 1.6)
+            radius = r.uniform(0.12, 0.22)
+            prism = art_kit.lathe([(radius, 0.0), (radius, length * 0.75), (0.0, length)], 6, cap_bottom=False)
+            # Pointing out of the wall, fanned up and sideways.
+            direction = (outward + UP * r.uniform(-0.2, 0.9) + piece.axis * r.uniform(-0.6, 0.6)).normalized()
+            rotation = UP.rotation_difference(direction).to_matrix().to_4x4()
+            spot = base - outward * 0.3 + piece.axis * r.uniform(-0.3, 0.3)
+            batch.add(art_kit.transformed(prism, Matrix.Translation(spot) @ rotation), CRYSTAL, colour=tint)
+
+
+def waterfall(stage, left: Vector, right: Vector, bottom: float, seed, lean: float = 0.6) -> None:
+    """A curtain of water from the edge between `left` and `right` (at their height) down to
+    `bottom`, bowing out by `lean` metres, with white water at its foot."""
+    r = rng("waterfall", seed)
+    width = (right - left).length
+    across = max(2, math.ceil(width / 1.5))
+    height = left.y - bottom
+    down = max(3, math.ceil(height / 1.5))
+    outward = (right - left).cross(UP).normalized()
+    vertices, colours, uvs_by_vertex = [], [], []
+    for i in range(down + 1):
+        t = i / down
+        bow = lean * math.sin(t * math.pi * 0.5)
+        for j in range(across + 1):
+            s = j / across
+            top_point = left.lerp(right, s)
+            ripple = 0.08 * math.sin(s * 9.0 + t * 4.0 + r.uniform(0, 0.3))
+            vertices.append(Vector((top_point.x, top_point.y - height * t, top_point.z)) + outward * (bow + ripple))
+            foam = max(0.0, (t - 0.82) / 0.18)
+            colours.append((foam, foam, foam))
+            uvs_by_vertex.append((s * width, t * height))
+    faces, uvs = [], []
+    for i in range(down):
+        for j in range(across):
+            a = i * (across + 1) + j
+            face = art_kit._orient((a, a + 1, a + across + 2, a + across + 1), vertices, outward)
+            faces.append(face)
+            uvs.append([uvs_by_vertex[k] for k in face])
+    middle = left.lerp(right, 0.5)
+    stage.batch(middle).add((vertices, faces), WATERFALL, colour=colours, uvs=uvs)
+    # Spray where it lands.
+    batch = stage.batch(middle, SCENERY)
+    for k in range(max(3, int(width / 1.2))):
+        spot = left.lerp(right, r.uniform(0.0, 1.0)) + outward * (lean + r.uniform(0.0, 0.6))
+        spot.y = bottom + r.uniform(0.0, 0.4)
+        puff = art_kit.blob(r.uniform(0.4, 0.8), 0.3, r.randint(0, 999), 7, 4, squash=(1.0, 0.6, 1.0))
+        batch.add(art_kit.transformed(puff, Matrix.Translation(spot)), WHITE_PAINT, smooth=True)
+
+
+def jungle_tree(batch, base: Vector, height: float, radius: float, seed) -> None:
+    """A tall jungle palm with a trunk `radius` thick at the bottom (matching its collider) and a
+    full crown of fronds and broad leaves, with a few vines hanging from it."""
+    r = rng("jungle", seed)
+    rings = 6
+    points, radii, shade = [], [], []
+    lean = Vector((r.uniform(-0.3, 0.3), 0, r.uniform(-0.3, 0.3)))
+    for i in range(rings + 1):
+        t = i / rings
+        points.append(base + UP * (height * t) + lean * (t * t))
+        radii.append(radius * (1.0 - 0.35 * t))
+    for i in range(rings + 1):
+        value = 1.0 if i % 2 == 0 else 0.8
+        shade.extend([(value, value, value)] * 7)
+    batch.add(art_kit.tube(points, radii, 7), PALM_TRUNK, smooth=True, colour=shade)
+    top = points[-1]
+    for k in range(8):
+        angle = math.tau * k / 8 + r.uniform(-0.2, 0.2)
+        _frond(batch, top, angle, r.uniform(3.6, 4.6), r.uniform(0.8, 1.2), r.uniform(0.2, 0.45), 5)
+    for k in range(2):
+        offset = Vector((r.uniform(-1.2, 1.2), r.uniform(-0.4, 0.4), r.uniform(-1.2, 1.2)))
+        leaf = art_kit.blob(r.uniform(1.2, 1.8), 0.3, r.randint(0, 999), 7, 4, squash=(1.0, 0.55, 1.0))
+        batch.add(art_kit.transformed(leaf, Matrix.Translation(top + offset)), JUNGLE_LEAF, smooth=True)
+    for k in range(3):
+        angle = r.uniform(0, math.tau)
+        start = top + Vector((math.cos(angle), -0.2, math.sin(angle))) * 1.6
+        length = r.uniform(2.0, 4.0)
+        vine = [start, start + Vector((0.1, -length * 0.5, 0.05)), start + Vector((0.0, -length, 0.1))]
+        batch.add(art_kit.tube(vine, [0.05, 0.04, 0.03], 4), VINE)
+
+
+def ferns(batch, base: Vector, seed) -> None:
+    """A fern of arching fronds, to run through."""
+    r = rng("fern", seed)
+    for k in range(r.randint(5, 7)):
+        angle = math.tau * k / 6 + r.uniform(-0.3, 0.3)
+        out = Vector((math.cos(angle), 0, math.sin(angle)))
+        side = out.cross(UP) * 0.09
+        length = r.uniform(0.6, 1.0)
+        vertices, faces = [], []
+        for i in range(4):
+            s = i / 3
+            spine = base + out * (length * s) + UP * (0.55 * math.sin(math.pi * s * 0.8))
+            width = 1.0 - s * 0.8
+            vertices.extend([spine - side * width, spine + side * width])
+        for i in range(3):
+            a = 2 * i
+            faces.append((a, a + 1, a + 3, a + 2))
+        batch.add((vertices, faces), FERN, colour=[(0.8, 0.8, 0.8)] * 2 + [(1, 1, 1)] * 6)
+
+
+def fallen_log(stage, piece) -> None:
+    """A fallen tree trunk lying across the way where the greybox has a box: bark round its length,
+    pale cut rings at its ends."""
+    left = min(p.x for p in piece.polygon)
+    right = max(p.x for p in piece.polygon)
+    low = min(p.y for p in piece.polygon)
+    high = max(p.y for p in piece.polygon)
+    long_x = right - left >= piece.depth
+    radius = (high - low) * 0.5
+    if long_x:
+        a, b = piece.world(left, (low + high) / 2, -piece.depth / 2), piece.world(right, (low + high) / 2, -piece.depth / 2)
+    else:
+        a, b = piece.world((left + right) / 2, (low + high) / 2, 0.0), piece.world((left + right) / 2, (low + high) / 2, -piece.depth)
+    batch = stage.batch(a.lerp(b, 0.5))
+    batch.add(art_kit.tube([a, a.lerp(b, 0.5), b], [radius, radius * 1.04, radius], 10), BARK, smooth=True)
+    for end, toward in ((a, a - b), (b, b - a)):
+        disc = art_kit.lathe([(radius * 0.98, 0.0), (radius * 0.98, 0.02)], 10)
+        rotation = UP.rotation_difference(toward.normalized()).to_matrix().to_4x4()
+        batch.add(art_kit.transformed(disc, Matrix.Translation(end) @ rotation), BARK_END)
+
+
+def coral(batch, base: Vector, size: float, seed) -> None:
+    """A coral head: branching tubes, a round brain coral and a frond or two of weed."""
+    r = rng("coral", seed)
+    colour = CORALS[r.randrange(len(CORALS))]
+    for k in range(r.randint(3, 6)):
+        angle = r.uniform(0, math.tau)
+        lean = Vector((math.cos(angle), 0, math.sin(angle))) * r.uniform(0.2, 0.5)
+        length = size * r.uniform(0.6, 1.2)
+        start = base + Vector((r.uniform(-0.3, 0.3), 0, r.uniform(-0.3, 0.3))) * size
+        branch = [start, start + (UP + lean * 0.5) * length * 0.5, start + (UP + lean) * length]
+        batch.add(art_kit.tube(branch, [size * 0.12, size * 0.09, size * 0.05], 5), colour, smooth=True)
+    other = CORALS[r.randrange(len(CORALS))]
+    brain = art_kit.blob(size * r.uniform(0.35, 0.55), 0.2, r.randint(0, 999), 9, 5, squash=(1.0, 0.7, 1.0))
+    batch.add(art_kit.transformed(brain, Matrix.Translation(base + Vector((size * 0.4, 0, -size * 0.3)))), other, smooth=True)
+    for k in range(2):
+        spot = base + Vector((r.uniform(-1, 1), 0, r.uniform(-1, 1))) * size * 0.6
+        tip = spot + UP * size * r.uniform(0.8, 1.5) + Vector((r.uniform(-0.3, 0.3), 0, r.uniform(-0.3, 0.3)))
+        side = Vector((0.12, 0, 0)) * size
+        batch.add(([spot - side, spot + side, tip + side * 0.3, tip - side * 0.3], [(0, 1, 2, 3)]), SEAWEED)
+
+
+def reef_floor(stage, piece, count: int, seed) -> None:
+    """Coral scattered over a sea bed or sandbar's top, all small enough to run (or swim) through."""
+    r = rng("reef floor", piece.name, seed)
+    chains = piece.top_chains()
+    if not chains:
+        return
+    for k in range(count):
+        chain = chains[r.randrange(len(chains))]
+        a, b = chain[0], chain[-1]
+        local = a.lerp(b, r.uniform(0.05, 0.95))
+        point = piece.world(local.x, local.y, -r.uniform(0.5, piece.depth - 0.5))
+        coral(stage.batch(point, SCENERY), point, r.uniform(0.35, 0.7), (piece.name, k))
+
+
+def rail_supports(stage, sea: float, spacing: float = 8.0) -> None:
+    """Posts holding up each grind rail, every `spacing` metres, down to the ground below or into
+    the sea; none where a post would stand on ground a player can run on."""
+    for rail in stage.data.get("rails", []):
+        points = [Vector(p) for p in rail["points"]]
+        total = sum((b - a).length for a, b in zip(points, points[1:]))
+        count = max(1, round(total / spacing))
+        for i in range(count + 1):
+            point = _point_along(points, total * i / count)
+            below = stage.top_below(point - UP * 0.2)
+            if below is not None and point.y - below < 6.0:
+                continue  # Over ground a player can reach: the rail floats there.
+            foot = below if below is not None else sea - 3.0
+            stage.posts([(point.x, point.z)], point.y - rail["radius"] - 0.05, foot, 0.12, WOOD_DARK, segments=6)
+            bracket = art_kit.box((0.5, 0.12, 0.3), (0, 0, 0))
+            stage.batch(point).add(art_kit.transformed(bracket, Matrix.Translation(point - UP * (rail["radius"] + 0.08))), WOOD_DARK)

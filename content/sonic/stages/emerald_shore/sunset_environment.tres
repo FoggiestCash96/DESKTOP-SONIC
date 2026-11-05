@@ -1,0 +1,38 @@
+[gd_resource type="Environment" format=3]
+
+[ext_resource type="Shader" path="res://engine/art/toon_sky.gdshader" id="1_sky"]
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_sky"]
+shader = ExtResource("1_sky")
+shader_parameter/top_colour = Color(0.22, 0.2, 0.52, 1)
+shader_parameter/horizon_colour = Color(1, 0.62, 0.38, 1)
+shader_parameter/below_colour = Color(0.78, 0.46, 0.4, 1)
+shader_parameter/gradient_curve = 0.42
+shader_parameter/sun_colour = Color(1, 0.86, 0.55, 1)
+shader_parameter/sun_size = 0.09
+shader_parameter/sun_halo = 0.6
+shader_parameter/cloud_colour = Color(1, 0.74, 0.62, 1)
+shader_parameter/cloud_shade_colour = Color(0.62, 0.42, 0.58, 1)
+shader_parameter/cloud_cover = 0.48
+shader_parameter/cloud_scale = 1.1
+shader_parameter/cloud_offset = Vector2(0, 0)
+shader_parameter/flash = 0.0
+
+[sub_resource type="Sky" id="Sky_sunset"]
+sky_material = SubResource("ShaderMaterial_sky")
+
+[resource]
+background_mode = 2
+sky = SubResource("Sky_sunset")
+ambient_light_source = 3
+ambient_light_sky_contribution = 0.8
+ambient_light_energy = 0.75
+reflected_light_source = 2
+tonemap_mode = 0
+glow_enabled = true
+glow_intensity = 0.3
+glow_bloom = 0.05
+fog_enabled = true
+fog_light_color = Color(1, 0.66, 0.5, 1)
+fog_density = 0.0016
+fog_sky_affect = 0.0

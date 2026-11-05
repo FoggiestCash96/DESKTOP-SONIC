@@ -67,3 +67,28 @@ func test_an_arched_ring_line_peaks_in_the_middle() -> void:
 	assert_almost_eq(RingLine.ring_position(2, 5, 1.5, 2.0).y, 2.0, 1e-5, "middle ring at the full height")
 	assert_almost_eq(RingLine.ring_position(0, 5, 1.5, 2.0).y, 0.0, 1e-5, "ends on the line")
 	assert_almost_eq(RingLine.ring_position(4, 5, 1.5, 2.0).y, 0.0, 1e-5)
+
+
+func test_a_tide_waits_low_rises_waits_high_and_falls() -> void:
+	assert_almost_eq(GimmickMath.tide_level(5.0, 10.0, 6.0, 8.0, 6.0), 0.0, 1e-6, "low")
+	assert_almost_eq(GimmickMath.tide_level(13.0, 10.0, 6.0, 8.0, 6.0), 0.5, 1e-6, "halfway up")
+	assert_almost_eq(GimmickMath.tide_level(20.0, 10.0, 6.0, 8.0, 6.0), 1.0, 1e-6, "high")
+	assert_almost_eq(GimmickMath.tide_level(27.0, 10.0, 6.0, 8.0, 6.0), 0.5, 1e-6, "halfway down")
+	assert_almost_eq(GimmickMath.tide_level(35.0, 10.0, 6.0, 8.0, 6.0), 0.0, 1e-6, "low again, the next cycle")
+	assert_true(GimmickMath.tide_level(11.0, 10.0, 6.0, 8.0, 6.0) < 1.0 / 6.0, "eases into the rise")
+
+
+func test_a_platform_travels_out_waits_and_comes_back() -> void:
+	assert_almost_eq(GimmickMath.platform_travel(0.0, 3.0, 1.0), 0.0, 1e-6, "at the start")
+	assert_almost_eq(GimmickMath.platform_travel(1.5, 3.0, 1.0), 0.5, 1e-6, "halfway out")
+	assert_almost_eq(GimmickMath.platform_travel(3.5, 3.0, 1.0), 1.0, 1e-6, "waiting at the far end")
+	assert_almost_eq(GimmickMath.platform_travel(5.5, 3.0, 1.0), 0.5, 1e-6, "halfway back")
+	assert_almost_eq(GimmickMath.platform_travel(7.5, 3.0, 1.0), 0.0, 1e-6, "waiting at the start")
+	assert_almost_eq(GimmickMath.platform_travel(9.5, 3.0, 1.0), 0.5, 1e-6, "and again")
+
+
+func test_only_a_fast_enough_approach_breaks_a_wall() -> void:
+	assert_true(GimmickMath.breaks_wall(Vector3(0.0, 0.0, -10.0), Vector3.FORWARD, 3.0), "rolling into it")
+	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, -2.0), Vector3.FORWARD, 3.0), "too slow")
+	assert_false(GimmickMath.breaks_wall(Vector3(10.0, 0.0, 0.0), Vector3.FORWARD, 3.0), "passing along it")
+	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, 10.0), Vector3.FORWARD, 3.0), "going away")

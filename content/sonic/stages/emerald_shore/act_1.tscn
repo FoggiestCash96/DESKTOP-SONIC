@@ -38,7 +38,7 @@ size = Vector2(4000, 4000)
 script = ExtResource("1_4hkn0")
 title = "Emerald Shore Act 1: Sunny Beachfront"
 hub_scene = "res://content/sonic/ui/map/world_map.tscn"
-next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
+next_scene = "res://content/sonic/stages/emerald_shore/act_2.tscn"
 music = ExtResource("2_epgkl")
 fast_music = ExtResource("3_dqho4")
 

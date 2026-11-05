@@ -1,0 +1,908 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://engine/systems/stage.gd" id="1_yek4f"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_2.ogg" id="2_bdla1"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/emerald_shore_2_fast.ogg" id="3_3sajq"]
+[ext_resource type="Environment" path="res://content/sonic/stages/emerald_shore/sunny_environment.tres" id="4_10hds"]
+[ext_resource type="PackedScene" path="res://engine/player/player.tscn" id="5_8vr0l"]
+[ext_resource type="Resource" path="res://content/sonic/characters/sonic/sonic.tres" id="6_roeob"]
+[ext_resource type="PackedScene" path="res://engine/camera/player_camera.tscn" id="7_di6lt"]
+[ext_resource type="PackedScene" path="res://content/sonic/ui/hud/hud.tscn" id="8_myej3"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sea.tres" id="9_rkgom"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_floor.tres" id="10_cr551"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_slope.tres" id="11_tfso4"]
+[ext_resource type="Material" path="res://engine/greybox/greybox_wall.tres" id="12_v5jrw"]
+[ext_resource type="Script" path="res://engine/gimmicks/loop_track.gd" id="13_2nq1y"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/loop.tres" id="14_20qow"]
+[ext_resource type="PackedScene" path="res://content/sonic/stages/emerald_shore/art/act_2_art.glb" id="15_r4joi"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/breakable_wall.tscn" id="16_l53ls"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/extra_life.tscn" id="17_4ijst"]
+[ext_resource type="Script" path="res://engine/collectibles/ring_line.gd" id="18_7oigp"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/item_monitor.tscn" id="19_1vsia"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="20_fp1fg"]
+[ext_resource type="PackedScene" path="res://engine/collectibles/hidden_collectible.tscn" id="21_0tffl"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/checkpoint.tscn" id="22_86bcu"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/moving_platform.tscn" id="23_iypp6"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/crumbling_platform.tscn" id="24_1hqy5"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="25_yaxw0"]
+[ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="26_p1vtm"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="27_s0esa"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="28_mx5k3"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="29_ilrs3"]
+[ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="30_xkbml"]
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_ntvp0"]
+size = Vector2(4000, 4000)
+
+[sub_resource type="Curve3D" id="Curve3D_x5802"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 124.6, 15.85, -334, 0, 0, 0, 0, 0, 0, 136, 14.2, -331, 0, 0, 0, 0, 0, 0, 152, 11.2, -324, 0, 0, 0, 0, 0, 0, 166, 8.6, -317, 0, 0, 0, 0, 0, 0, 178, 7.4, -314),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0)
+}
+point_count = 5
+
+[sub_resource type="Curve3D" id="Curve3D_og0o8"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 202.5, 2.6, -440, 0, 0, 0, 0, 0, 0, 202.5, 2.4, -470, 0, 0, 0, 0, 0, 0, 202.5, 2, -494),
+"tilts": PackedFloat32Array(0, 0, 0)
+}
+point_count = 3
+
+[node name="EmeraldShoreAct2" type="Node3D" unique_id=2104053087]
+script = ExtResource("1_yek4f")
+title = "Emerald Shore Act 2: Lush Palm Grove"
+hub_scene = "res://content/sonic/ui/map/world_map.tscn"
+next_scene = "res://content/sonic/stages/emerald_shore/act_3.tscn"
+music = ExtResource("2_bdla1")
+fast_music = ExtResource("3_3sajq")
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=287367256]
+environment = ExtResource("4_10hds")
+
+[node name="Sun" type="DirectionalLight3D" parent="." unique_id=504021228]
+transform = Transform3D(0.81915206, 0.46984634, -0.32898995, 0, 0.57357645, 0.81915206, 0.57357645, -0.6710101, 0.46984634, 0, 0, 0)
+light_color = Color(1, 0.97, 0.92, 1)
+light_energy = 0.95
+shadow_enabled = true
+directional_shadow_max_distance = 150.0
+
+[node name="Player" parent="." unique_id=719696558 instance=ExtResource("5_8vr0l")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4)
+character = ExtResource("6_roeob")
+kill_height = -30.0
+
+[node name="PlayerCamera" parent="." unique_id=612909978 node_paths=PackedStringArray("target") instance=ExtResource("7_di6lt")]
+target = NodePath("../Player")
+
+[node name="HUD" parent="." unique_id=661223426 node_paths=PackedStringArray("target") instance=ExtResource("8_myej3")]
+target = NodePath("../Player")
+
+[node name="Sea" type="MeshInstance3D" parent="." unique_id=818220293]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 300, -14, -296)
+material_override = ExtResource("9_rkgom")
+cast_shadow = 0
+mesh = SubResource("PlaneMesh_ntvp0")
+
+[node name="Geometry" type="Node3D" parent="." unique_id=608769728]
+
+[node name="Start" type="CSGPolygon3D" parent="Geometry" unique_id=825193806]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 13, 0, 12)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 52, -2, 52, 0, 0, 0)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Floor1" type="CSGPolygon3D" parent="Geometry" unique_id=1923738119]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -40)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 90, -2, 90, 0, 0, 0)
+depth = 18.0
+material = ExtResource("10_cr551")
+
+[node name="FloorRise" type="CSGPolygon3D" parent="Geometry" unique_id=1195392060]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -130)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 30, -2, 30, 6, 0, 0)
+depth = 18.0
+material = ExtResource("11_tfso4")
+
+[node name="TrunkRight1" type="CSGCylinder3D" parent="Geometry" unique_id=1226957388]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -50)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight2" type="CSGCylinder3D" parent="Geometry" unique_id=1922218146]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -63)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkLeft2" type="CSGCylinder3D" parent="Geometry" unique_id=1661411058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 4.5, -59)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight3" type="CSGCylinder3D" parent="Geometry" unique_id=16199222]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -76)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight4" type="CSGCylinder3D" parent="Geometry" unique_id=417990124]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -89)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkLeft4" type="CSGCylinder3D" parent="Geometry" unique_id=484355622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 4.5, -85)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight5" type="CSGCylinder3D" parent="Geometry" unique_id=375329171]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -102)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight6" type="CSGCylinder3D" parent="Geometry" unique_id=222404185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -115)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkLeft6" type="CSGCylinder3D" parent="Geometry" unique_id=392001361]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7.6, 4.5, -111)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkRight7" type="CSGCylinder3D" parent="Geometry" unique_id=1788494112]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.6, 5, -128)
+visible = false
+use_collision = true
+radius = 0.55
+height = 10.0
+material = ExtResource("12_v5jrw")
+
+[node name="Deck1" type="CSGPolygon3D" parent="Geometry" unique_id=109810978]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9, 0, -40)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.5, 28, 5.5, 28, 6, 0, 6)
+depth = 7.0
+material = ExtResource("10_cr551")
+
+[node name="Bridge1" type="CSGPolygon3D" parent="Geometry" unique_id=432943514]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -11.2, 0, -68)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.7, 16, 5.7, 16, 6, 0, 6)
+depth = 2.6
+material = ExtResource("10_cr551")
+
+[node name="Deck2" type="CSGPolygon3D" parent="Geometry" unique_id=1377334582]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9, 0, -84)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.5, 14, 5.5, 14, 6, 0, 6)
+depth = 7.0
+material = ExtResource("10_cr551")
+
+[node name="Deck3" type="CSGPolygon3D" parent="Geometry" unique_id=893223809]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9, 0, -104)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.5, 18, 5.5, 18, 6, 0, 6)
+depth = 7.0
+material = ExtResource("10_cr551")
+
+[node name="Bridge2" type="CSGPolygon3D" parent="Geometry" unique_id=2062261963]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -11.2, 0, -122)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.7, 18, 5.7, 18, 6, 0, 6)
+depth = 2.6
+material = ExtResource("10_cr551")
+
+[node name="Deck4" type="CSGPolygon3D" parent="Geometry" unique_id=764496661]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, -9, 0, -140)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.5, 20, 5.5, 20, 6, 0, 6)
+depth = 7.0
+material = ExtResource("10_cr551")
+
+[node name="TrunkDeck1" type="CSGCylinder3D" parent="Geometry" unique_id=758383344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.8, 6.5, -50)
+visible = false
+use_collision = true
+radius = 0.6
+height = 13.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkDeck2" type="CSGCylinder3D" parent="Geometry" unique_id=1307913764]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.8, 6.5, -80)
+visible = false
+use_collision = true
+radius = 0.6
+height = 13.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkDeck3" type="CSGCylinder3D" parent="Geometry" unique_id=1755749498]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.8, 6.5, -110)
+visible = false
+use_collision = true
+radius = 0.6
+height = 13.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkDeck4" type="CSGCylinder3D" parent="Geometry" unique_id=1718724911]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -16.8, 6.5, -140)
+visible = false
+use_collision = true
+radius = 0.6
+height = 13.0
+material = ExtResource("12_v5jrw")
+
+[node name="Alcove" type="CSGPolygon3D" parent="Geometry" unique_id=1008856376]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 9, 0, -86)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 7, -2, 7, 0, 0, 0)
+depth = 10.0
+material = ExtResource("10_cr551")
+
+[node name="AlcoveBack" type="CSGBox3D" parent="Geometry" unique_id=685266683]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.5, 2.5, -91)
+visible = false
+use_collision = true
+size = Vector3(1, 5, 12)
+material = ExtResource("12_v5jrw")
+
+[node name="AlcoveSideNorth" type="CSGBox3D" parent="Geometry" unique_id=748545269]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 2.5, -96.5)
+visible = false
+use_collision = true
+size = Vector3(7, 5, 1)
+material = ExtResource("12_v5jrw")
+
+[node name="AlcoveSideSouth" type="CSGBox3D" parent="Geometry" unique_id=247179622]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 12.5, 2.5, -85.5)
+visible = false
+use_collision = true
+size = Vector3(7, 5, 1)
+material = ExtResource("12_v5jrw")
+
+[node name="Merge" type="CSGPolygon3D" parent="Geometry" unique_id=108675434]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -160)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 40, 4, 40, 6, 0, 6)
+depth = 25.0
+material = ExtResource("10_cr551")
+
+[node name="RopeBridge" type="CSGPolygon3D" parent="Geometry" unique_id=1283393193]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 8, 0, -200)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 5.6, 60, 5.6, 60, 6, 0, 6)
+depth = 4.0
+material = ExtResource("10_cr551")
+
+[node name="FarBank" type="CSGPolygon3D" parent="Geometry" unique_id=245533090]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -260)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 40, 4, 40, 6, 0, 6)
+depth = 25.0
+material = ExtResource("10_cr551")
+
+[node name="Corner" type="CSGPolygon3D" parent="Geometry" unique_id=317881375]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 9, 0, -300)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 26, 4, 26, 6, 0, 6)
+depth = 25.0
+material = ExtResource("10_cr551")
+
+[node name="Canopy1" type="CSGPolygon3D" parent="Geometry" unique_id=1189489139]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 9, 0, -300)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 55, 4, 55, 6, 0, 6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Canopy2" type="CSGPolygon3D" parent="Geometry" unique_id=1498855154]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 64, 0, -300)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 64, 4, 64, 6, 0, 6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="HighShelf" type="CSGPolygon3D" parent="Geometry" unique_id=1945206812]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 74, 0, -326)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 14, 50, 14, 50, 16, 0, 16)
+depth = 10.0
+material = ExtResource("10_cr551")
+
+[node name="Canopy3" type="CSGPolygon3D" parent="Geometry" unique_id=49662341]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 136, 0, -300)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 64, 4, 64, 6, 0, 6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Corner2" type="CSGPolygon3D" parent="Geometry" unique_id=2011448723]
+transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 200, 0, -300)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 26, 4, 26, 6, 0, 6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="TrunkCanopy1" type="CSGCylinder3D" parent="Geometry" unique_id=1672687814]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 24, 10.5, -301.4)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkCanopy2" type="CSGCylinder3D" parent="Geometry" unique_id=584776158]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 64, 10.5, -301.4)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkCanopy3" type="CSGCylinder3D" parent="Geometry" unique_id=1352862480]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 104, 10.5, -301.4)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkCanopy4" type="CSGCylinder3D" parent="Geometry" unique_id=699522069]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 144, 10.5, -301.4)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="Terrace1" type="CSGPolygon3D" parent="Geometry" unique_id=1459874925]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -326)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 4, 40, 4, 40, 6, 0, 6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Terrace2" type="CSGPolygon3D" parent="Geometry" unique_id=1523376928]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -366)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, 1, 40, 1, 40, 3, 0, 3)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Terrace3" type="CSGPolygon3D" parent="Geometry" unique_id=1095984003]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -406)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 30, -2, 30, 0, 0, 0)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="LogRun" type="CSGPolygon3D" parent="Geometry" unique_id=526830596]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -436)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -2, 60, -2, 60, 0, 0, 0)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Log1" type="CSGBox3D" parent="Geometry" unique_id=1426658399]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.6, -452)
+visible = false
+use_collision = true
+size = Vector3(22, 1.2, 1.4)
+material = ExtResource("12_v5jrw")
+
+[node name="Log2" type="CSGBox3D" parent="Geometry" unique_id=421870273]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.6, -470)
+visible = false
+use_collision = true
+size = Vector3(22, 1.2, 1.4)
+material = ExtResource("12_v5jrw")
+
+[node name="Log3" type="CSGBox3D" parent="Geometry" unique_id=1203262917]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.6, -488)
+visible = false
+use_collision = true
+size = Vector3(22, 1.2, 1.4)
+material = ExtResource("12_v5jrw")
+
+[node name="LoopRun" type="CSGPolygon3D" parent="Geometry" unique_id=1687400364]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -496)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 30, -8, 30, -6, 0, 0)
+depth = 26.0
+material = ExtResource("11_tfso4")
+
+[node name="LoopFloor" type="CSGPolygon3D" parent="Geometry" unique_id=2023527051]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -526)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 34, -8, 34, -6, 0, -6)
+depth = 26.0
+material = ExtResource("10_cr551")
+
+[node name="Loop" type="Node3D" parent="Geometry" unique_id=2089383187]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 210, -5.995, -538)
+script = ExtResource("13_2nq1y")
+radius = 5.0
+exit_offset = 6.0
+material = ExtResource("14_20qow")
+
+[node name="LoopExit" type="CSGPolygon3D" parent="Geometry" unique_id=1963720951]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 226, 0, -560)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -8, 24, -8, 24, -1, 0, -6)
+depth = 26.0
+material = ExtResource("11_tfso4")
+
+[node name="RiverBridge" type="CSGPolygon3D" parent="Geometry" unique_id=1252127871]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 209, 0, -584)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -1.4, 16, -1.4, 16, -1, 0, -1)
+depth = 4.0
+material = ExtResource("10_cr551")
+
+[node name="Beach" type="CSGPolygon3D" parent="Geometry" unique_id=932952078]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 228, 0, -600)
+visible = false
+use_collision = true
+polygon = PackedVector2Array(0, -3, 100, -3, 100, -1, 0, -1)
+depth = 30.0
+material = ExtResource("10_cr551")
+
+[node name="EndWall" type="CSGBox3D" parent="Geometry" unique_id=2042857366]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213, 3, -700.5)
+visible = false
+use_collision = true
+size = Vector3(30, 8, 1)
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkTerrace1" type="CSGCylinder3D" parent="Geometry" unique_id=426897160]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 202, 10.5, -340)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkTerrace2" type="CSGCylinder3D" parent="Geometry" unique_id=2112964742]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 224, 7.5, -380)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="TrunkTerrace3" type="CSGCylinder3D" parent="Geometry" unique_id=1914395516]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 202, 4.5, -420)
+visible = false
+use_collision = true
+radius = 0.55
+height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="Art" parent="." unique_id=576910400 instance=ExtResource("15_r4joi")]
+
+[node name="Gimmicks" type="Node3D" parent="." unique_id=1443699427]
+
+[node name="SecretWall" parent="Gimmicks" unique_id=180054694 instance=ExtResource("16_l53ls")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.6, 0, -91)
+size = Vector3(10, 4, 1)
+
+[node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("17_4ijst")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -91)
+
+[node name="RingsStart" type="Node3D" parent="Gimmicks" unique_id=1975207551]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -4)
+script = ExtResource("18_7oigp")
+count = 8
+spacing = 3.0
+
+[node name="MonitorStartRings" parent="Gimmicks" unique_id=1656777354 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -7, 0, -14)
+
+[node name="MonitorStartBoost" parent="Gimmicks" unique_id=1717601325 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7, 0, -14)
+item = 5
+
+[node name="SpringToDecks" parent="Gimmicks" unique_id=1587388821 instance=ExtResource("20_fp1fg")]
+transform = Transform3D(0.9612617, -0.27563736, 0, 0.27563736, 0.9612617, 0, 0, 0, 1, -6.5, 0, -44)
+keep_momentum = false
+
+[node name="SignTreetops" type="Label3D" parent="Gimmicks" unique_id=765013636]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -6.5, 3.6, -37)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "↖ to the treetops"
+font_size = 56
+outline_size = 14
+
+[node name="RingsFloor1" type="Node3D" parent="Gimmicks" unique_id=1108276207]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, 0.8, -48)
+script = ExtResource("18_7oigp")
+count = 10
+spacing = 4.0
+
+[node name="RingsFloor2" type="Node3D" parent="Gimmicks" unique_id=2016649542]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, 0.8, -100)
+script = ExtResource("18_7oigp")
+count = 8
+spacing = 4.0
+
+[node name="RingsDeck1" type="Node3D" parent="Gimmicks" unique_id=827999029]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 6.8, -46)
+script = ExtResource("18_7oigp")
+count = 6
+spacing = 3.0
+
+[node name="RingsBridge1" type="Node3D" parent="Gimmicks" unique_id=1935681638]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 6.8, -70)
+script = ExtResource("18_7oigp")
+spacing = 3.0
+
+[node name="RingsDeckGap" type="Node3D" parent="Gimmicks" unique_id=1088942281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 6.8, -96)
+script = ExtResource("18_7oigp")
+spacing = 2.5
+arc_height = 3.0
+
+[node name="RedRing1" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("21_0tffl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 9.6, -101)
+
+[node name="MonitorDeckShield" parent="Gimmicks" unique_id=1294413109 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 6, -112)
+item = 1
+
+[node name="RingsBridge2" type="Node3D" parent="Gimmicks" unique_id=1446958820]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 6.8, -124)
+script = ExtResource("18_7oigp")
+spacing = 3.0
+
+[node name="RingsRise" type="Node3D" parent="Gimmicks" unique_id=1924033273]
+transform = Transform3D(1, 0, 0, 0, 0.98061466, -0.19594614, 0, 0.19594614, 0.98061466, 0, 0.8, -132)
+script = ExtResource("18_7oigp")
+count = 7
+spacing = 4.2
+
+[node name="Checkpoint1" parent="Gimmicks" unique_id=2131578673 instance=ExtResource("22_86bcu")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 6, -172)
+gate_width = 25.0
+
+[node name="MonitorMergeBoost" parent="Gimmicks" unique_id=1933162623 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -14, 6, -190)
+item = 5
+
+[node name="SignRavine" type="Label3D" parent="Gimmicks" unique_id=945973759]
+transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, -3.5, 9.5, -196)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "← platforms        bridge →"
+font_size = 64
+outline_size = 14
+
+[node name="RavinePlatform1" parent="Gimmicks" unique_id=2058234599 instance=ExtResource("23_iypp6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6, -204)
+size = Vector3(4, 0.5, 4)
+travel = Vector3(0, 0, -12)
+travel_time = 2.5
+pause_time = 1.2
+
+[node name="RavineLedge1" parent="Gimmicks" unique_id=301031515 instance=ExtResource("24_1hqy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6, -224)
+
+[node name="RavineLedge2" parent="Gimmicks" unique_id=1702587335 instance=ExtResource("24_1hqy5")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6.5, -233)
+
+[node name="RavinePlatform2" parent="Gimmicks" unique_id=2616033 instance=ExtResource("23_iypp6")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6.5, -242)
+size = Vector3(4, 0.5, 4)
+travel = Vector3(0, 0, -12)
+travel_time = 2.5
+pause_time = 1.2
+start_time = 1.8
+
+[node name="RedRing2" parent="Gimmicks" unique_id=1493049728 instance=ExtResource("21_0tffl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 9.6, -233)
+
+[node name="MonitorRavineShoes" parent="Gimmicks" unique_id=155840456 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 6.5, -233.5)
+item = 2
+
+[node name="RingsBridge" type="Node3D" parent="Gimmicks" unique_id=1009799193]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 6.8, -204)
+script = ExtResource("18_7oigp")
+count = 12
+spacing = 4.5
+
+[node name="MonitorBridgeRings" parent="Gimmicks" unique_id=466111528 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 6, 6, -258)
+
+[node name="RingsFarBank" type="Node3D" parent="Gimmicks" unique_id=974678543]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.5, 6.8, -268)
+script = ExtResource("18_7oigp")
+count = 6
+spacing = 3.0
+
+[node name="DashCorner" parent="Gimmicks" unique_id=1646487028 instance=ExtResource("25_yaxw0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -3.5, 6, -313)
+
+[node name="RingsCorner" type="Node3D" parent="Gimmicks" unique_id=1293655133]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, -2, 6.8, -313)
+script = ExtResource("18_7oigp")
+count = 4
+spacing = 3.0
+
+[node name="PitLedge" parent="Gimmicks" unique_id=240329257 instance=ExtResource("24_1hqy5")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 132, 6, -313)
+size = Vector3(4, 1, 6)
+
+[node name="RingsCanopy1" type="Node3D" parent="Gimmicks" unique_id=890076240]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 6.8, -309)
+script = ExtResource("18_7oigp")
+count = 10
+spacing = 4.0
+
+[node name="Lift" parent="Gimmicks" unique_id=1454335192 instance=ExtResource("23_iypp6")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 71, 6, -328)
+size = Vector3(4, 0.5, 4)
+travel = Vector3(0, 10, 0)
+pause_time = 1.5
+
+[node name="SignLift" type="Label3D" parent="Gimmicks" unique_id=1076645337]
+transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 66, 10.5, -325.8)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "↑ lift"
+font_size = 56
+outline_size = 14
+
+[node name="RingsShelf" type="Node3D" parent="Gimmicks" unique_id=521726082]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 78, 16.8, -331)
+script = ExtResource("18_7oigp")
+count = 10
+spacing = 4.0
+
+[node name="RedRing3" parent="Gimmicks" unique_id=537752436 instance=ExtResource("21_0tffl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 120, 16.9, -334)
+
+[node name="VineRail" type="Path3D" parent="Gimmicks" unique_id=493201612]
+curve = SubResource("Curve3D_x5802")
+script = ExtResource("26_p1vtm")
+
+[node name="RedRing5" parent="Gimmicks" unique_id=1370142593 instance=ExtResource("21_0tffl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152, 12.1, -324)
+
+[node name="RingsCanopy2" type="Node3D" parent="Gimmicks" unique_id=79666794]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 70, 6.8, -309)
+script = ExtResource("18_7oigp")
+count = 12
+spacing = 4.5
+
+[node name="RingsPit" type="Node3D" parent="Gimmicks" unique_id=1413341827]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 126, 6.8, -311)
+script = ExtResource("18_7oigp")
+spacing = 2.5
+arc_height = 3.0
+
+[node name="Checkpoint2" parent="Gimmicks" unique_id=1030518889 instance=ExtResource("22_86bcu")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 146, 6, -313)
+gate_width = 26.0
+
+[node name="RingsCanopy3" type="Node3D" parent="Gimmicks" unique_id=673716183]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 152, 6.8, -317)
+script = ExtResource("18_7oigp")
+count = 10
+spacing = 4.0
+
+[node name="LookoutSpring" parent="Gimmicks" unique_id=1904858298 instance=ExtResource("20_fp1fg")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 6, -322)
+speed = 30.0
+
+[node name="RedRing4" parent="Gimmicks" unique_id=2082024283 instance=ExtResource("21_0tffl")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 23.5, -322)
+
+[node name="MonitorCanopyRings" parent="Gimmicks" unique_id=2030960987 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 190, 6, -307)
+
+[node name="DashCorner2" parent="Gimmicks" unique_id=138227907 instance=ExtResource("25_yaxw0")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213, 6, -313)
+
+[node name="LogRail" type="Path3D" parent="Gimmicks" unique_id=63047757]
+curve = SubResource("Curve3D_og0o8")
+script = ExtResource("26_p1vtm")
+
+[node name="RingsTerrace1" type="Node3D" parent="Gimmicks" unique_id=242808914]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 6.8, -332)
+script = ExtResource("18_7oigp")
+count = 8
+spacing = 4.0
+
+[node name="MonitorTerraceInvincible" parent="Gimmicks" unique_id=863968820 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 205, 3, -390)
+item = 3
+
+[node name="RingsTerrace2" type="Node3D" parent="Gimmicks" unique_id=1249326259]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 211, 3.8, -372)
+script = ExtResource("18_7oigp")
+count = 8
+spacing = 4.0
+
+[node name="RingsLog1" type="Node3D" parent="Gimmicks" unique_id=1013156710]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.8, -449)
+script = ExtResource("18_7oigp")
+count = 3
+spacing = 2.5
+arc_height = 2.5
+
+[node name="RingsLog2" type="Node3D" parent="Gimmicks" unique_id=690965053]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.8, -467)
+script = ExtResource("18_7oigp")
+count = 3
+spacing = 2.5
+arc_height = 2.5
+
+[node name="RingsLog3" type="Node3D" parent="Gimmicks" unique_id=803504442]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 215, 0.8, -485)
+script = ExtResource("18_7oigp")
+count = 3
+spacing = 2.5
+arc_height = 2.5
+
+[node name="RingsLogRail" type="Node3D" parent="Gimmicks" unique_id=408811175]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 202.5, 3.3, -446)
+script = ExtResource("18_7oigp")
+count = 8
+spacing = 5.0
+
+[node name="RingsLoopRun" type="Node3D" parent="Gimmicks" unique_id=1057465410]
+transform = Transform3D(1, 0, 0, 0, 0.98061466, -0.19594614, 0, 0.19594614, 0.98061466, 210, 0.8, -500)
+script = ExtResource("18_7oigp")
+count = 6
+spacing = 5.0
+
+[node name="RingsRiver" type="Node3D" parent="Gimmicks" unique_id=1603150180]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216, -0.19999999, -582)
+script = ExtResource("18_7oigp")
+count = 6
+spacing = 3.0
+arc_height = 3.5
+
+[node name="RingsRiverBridge" type="Node3D" parent="Gimmicks" unique_id=1340996421]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 207, -0.19999999, -586)
+script = ExtResource("18_7oigp")
+count = 4
+spacing = 3.0
+
+[node name="RingsBeach" type="Node3D" parent="Gimmicks" unique_id=1907411980]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213, -0.19999999, -608)
+script = ExtResource("18_7oigp")
+count = 14
+spacing = 3.0
+
+[node name="MonitorBeachRings" parent="Gimmicks" unique_id=688002743 instance=ExtResource("19_1vsia")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 205, -1, -640)
+
+[node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("27_s0esa")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213, -1, -672)
+
+[node name="Enemies" type="Node3D" parent="." unique_id=107247366]
+
+[node name="ScuttlerStart" parent="Enemies" unique_id=1354843088 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 5, 0, -24)
+patrol_distance = 3.5
+
+[node name="ScuttlerFloor1" parent="Enemies" unique_id=40603217 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -66)
+
+[node name="ScuttlerFloor2" parent="Enemies" unique_id=855391542 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, -110)
+
+[node name="PearlshotDeck3" parent="Enemies" unique_id=445153036 instance=ExtResource("29_ilrs3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10.5, 6, -118)
+
+[node name="GullDeckGap" parent="Enemies" unique_id=1972243346 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -12.5, 4.2, -101)
+swoops = false
+
+[node name="GullRavine1" parent="Enemies" unique_id=2003257906 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 10, -226)
+swoops = false
+
+[node name="GullRavine2" parent="Enemies" unique_id=361831456 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -10, 10.5, -244)
+swoops = false
+
+[node name="ScuttlerBridge" parent="Enemies" unique_id=1459701814 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 6, 6, -236)
+patrol_distance = 8.0
+
+[node name="ScuttlerFarBank" parent="Enemies" unique_id=1587075929 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -8, 6, -282)
+
+[node name="PearlshotCanopy1" parent="Enemies" unique_id=237973545 instance=ExtResource("29_ilrs3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 6, -322)
+
+[node name="GullChain1" parent="Enemies" unique_id=1470558972 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 10, -324)
+swoops = false
+
+[node name="GullChain2" parent="Enemies" unique_id=291645748 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96, 13.5, -331)
+swoops = false
+
+[node name="ScuttlerCanopy3" parent="Enemies" unique_id=2027039242 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 168, 6, -308)
+
+[node name="ScuttlerTerrace" parent="Enemies" unique_id=822194686 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 217, 3, -386)
+
+[node name="ScuttlerLogs" parent="Enemies" unique_id=438798979 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 217, 0, -478)
+
+[node name="GullRiver" parent="Enemies" unique_id=1493208328 instance=ExtResource("30_xkbml")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 216, 3.5, -592)
+swoops = false
+
+[node name="ScuttlerBeach" parent="Enemies" unique_id=1214552637 instance=ExtResource("28_mx5k3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 219, -1, -630)
+
+[node name="PearlshotBeach" parent="Enemies" unique_id=1491763826 instance=ExtResource("29_ilrs3")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 203, -1, -652)

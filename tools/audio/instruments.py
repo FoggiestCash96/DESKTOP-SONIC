@@ -1,6 +1,7 @@
 """The instruments the music is played on: FM brass, slap bass, steel drums, clavinet, electric
-piano and bells after the Sega Genesis's FM chip, band-limited synth leads and pads, and a
-synthesised drum kit with tropical percussion. Each is tuned here once and shared by every track.
+piano, bells and marimba after the Sega Genesis's FM chip, band-limited synth leads, a flute and
+pads, and a synthesised drum kit with tropical percussion. Each is tuned here once and shared by
+every track.
 
 An instrument's mix settings (gain_db, pan, reverb and echo sends) can be changed for one track
 with .copy(): `BRASS.copy(name="brass stabs", pan=-0.2)`.
@@ -270,10 +271,22 @@ BELL = FM("bells", algorithm=4, ops=[
     Op(ratio=2.0, level=0.2, attack=0.001, decay=1.0, sustain=0.0, release=0.4),
 ], gain_db=-12.0, pan=0.3, reverb=0.3, echo=0.15, tail=0.6)
 
+MARIMBA = FM("marimba", algorithm=4, ops=[
+    Op(ratio=4.0, level=1.0, attack=0.001, decay=0.05, sustain=0.0, release=0.04, velocity=0.8, key_scale=-0.25),
+    Op(ratio=1.0, level=0.8, attack=0.001, decay=0.8, sustain=0.0, release=0.3, key_scale=-0.1),
+    Op(ratio=7.0, level=0.7, attack=0.001, decay=0.015, sustain=0.0, release=0.02, velocity=0.9),
+    Op(ratio=4.0, level=0.12, attack=0.001, decay=0.15, sustain=0.0, release=0.08),
+], gain_db=-9.0, pan=-0.2, reverb=0.2, echo=0.05, tail=0.35)
+
 POP_LEAD = Wave("pop lead", [("saw", -8.0, 0.45), ("saw", 8.0, 0.45), ("square", 0.0, 0.3)],
                 attack=0.008, decay=0.3, sustain=0.75, release=0.12, cutoff=2400.0, cutoff_env=3200.0,
                 cutoff_decay=0.3, resonance=0.9, vibrato=15.0, vibrato_rate=5.6, vibrato_delay=0.2,
                 mono=True, glide=0.05, gain_db=-7.0, reverb=0.2, echo=0.22)
+
+FLUTE = Wave("flute", [("triangle", 0.0, 0.8), ("square", 0.0, 0.12), ("triangle", 6.0, 0.25)], attack=0.045,
+             decay=0.25, sustain=0.85, release=0.1, cutoff=2800.0, cutoff_env=1800.0, cutoff_decay=0.12,
+             resonance=0.5, vibrato=16.0, vibrato_rate=5.2, vibrato_delay=0.22, scoop=20.0, scoop_time=0.05,
+             mono=True, glide=0.05, gain_db=-5.0, pan=0.12, reverb=0.25, echo=0.14)
 
 ARP = Wave("arp synth", [("pulse", 0.0, 0.7), ("pulse", 7.0, 0.3)], width=0.25, attack=0.002, decay=0.12,
            sustain=0.25, release=0.06, cutoff=3500.0, cutoff_env=4000.0, cutoff_decay=0.1,

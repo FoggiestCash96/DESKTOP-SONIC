@@ -11,6 +11,14 @@
 [ext_resource type="PackedScene" path="res://content/sonic/objects/extra_life.glb" id="9_arfs8"]
 [ext_resource type="PackedScene" path="res://content/sonic/objects/spikes.glb" id="10_ws44r"]
 [ext_resource type="PackedScene" path="res://content/sonic/objects/animal.glb" id="11_idclh"]
+[ext_resource type="Material" path="res://content/sonic/materials/breakable_rock.tres" id="20_breaka"]
+[ext_resource type="Material" path="res://content/sonic/materials/bubble.tres" id="21_bubble"]
+[ext_resource type="Material" path="res://content/sonic/materials/crumbling_rock.tres" id="22_crumbl"]
+[ext_resource type="Material" path="res://content/sonic/materials/log_bark.tres" id="23_log_ba"]
+[ext_resource type="Material" path="res://content/sonic/materials/platform_stone.tres" id="24_platfo"]
+[ext_resource type="Material" path="res://content/sonic/materials/rail.tres" id="25_rail"]
+[ext_resource type="Material" path="res://content/sonic/materials/water.tres" id="26_water"]
+[ext_resource type="Material" path="res://content/sonic/materials/water_flowing.tres" id="27_water_"]
 [ext_resource type="Script" path="res://engine/art/art_bank.gd" id="12_u6kul"]
 
 [resource]
@@ -26,7 +34,15 @@ models = Dictionary[StringName, PackedScene]({
 &"spring": ExtResource("4_lth88")
 })
 materials = Dictionary[StringName, Material]({
+&"breakable_rock": ExtResource("20_breaka"),
+&"bubble": ExtResource("21_bubble"),
+&"crumbling_rock": ExtResource("22_crumbl"),
+&"log_bark": ExtResource("23_log_ba"),
+&"platform_stone": ExtResource("24_platfo"),
+&"rail": ExtResource("25_rail"),
 &"spikes_plate": ExtResource("1_da1pj"),
+&"water": ExtResource("26_water"),
+&"water_flowing": ExtResource("27_water_"),
 &"wave_foam": ExtResource("3_adfmr"),
 &"wave_water": ExtResource("2_f2uxf")
 })

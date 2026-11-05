@@ -1,6 +1,7 @@
 // Cartoon water for a sea or lake drawn as one flat surface: light over the shallows, darker where
 // it's deep, a band of white foam wherever it meets something standing in it, and drifting ripple
 // lines that fade out with distance. It reads the depth buffer to tell how deep the water is.
+// `flow` drifts the ripples and foam along with a current, for streams and rivers.
 shader_type spatial;
 render_mode blend_mix, cull_disabled, depth_draw_always, diffuse_toon, specular_toon;
 
@@ -17,6 +18,8 @@ uniform float ripple_speed : hint_range(0.0, 5.0) = 0.35;
 uniform float ripple_patches : hint_range(0.0, 1.0) = 0.5; // how much of the surface has no ripples
 uniform float ripple_fade : hint_range(1.0, 2000.0) = 150.0; // m from the camera where ripples have gone
 uniform float roughness : hint_range(0.0, 1.0) = 0.25;
+instance uniform vec2 flow = vec2(0.0, 0.0); // m/s the ripples drift at, along world X and Z (each water surface sets its own)
+uniform float flow_stretch : hint_range(1.0, 8.0) = 1.0; // ripples drawn this much longer along the flow
 uniform sampler2D depth_texture : hint_depth_texture, filter_nearest;
 
 varying vec3 world_position;
@@ -74,11 +77,18 @@ void fragment() {
 	vec4 colour = mix(shallow_colour, deep_colour, clamp(water / depth_fade, 0.0, 1.0));
 
 	float fade = 1.0 - clamp(length(VERTEX) / ripple_fade, 0.0, 1.0);
-	float ripples = 1.0 - step(ripple_width, cell_border(world_position.xz / ripple_size, TIME * ripple_speed));
-	ripples *= step(ripple_patches, value_noise(world_position.xz / (ripple_size * 4.0) + vec2(TIME * 0.05, 0.0)));
+	vec2 drift = world_position.xz - flow * TIME;
+	float flow_speed = length(flow);
+	if (flow_speed > 0.001) {
+		// Measured along the flow and across it, with the length along it squeezed into streaks.
+		vec2 along = flow / flow_speed;
+		drift = vec2(dot(drift, along) / flow_stretch, dot(drift, vec2(-along.y, along.x)));
+	}
+	float ripples = 1.0 - step(ripple_width, cell_border(drift / ripple_size, TIME * ripple_speed));
+	ripples *= step(ripple_patches, value_noise(drift / (ripple_size * 4.0) + vec2(TIME * 0.05, 0.0)));
 	colour.rgb = mix(colour.rgb, ripple_colour.rgb, ripples * fade * ripple_strength);
 
-	float foam_edge = foam_width * (0.7 + 0.6 * value_noise(world_position.xz * 0.7 + vec2(TIME * 0.3, 0.0)));
+	float foam_edge = foam_width * (0.7 + 0.6 * value_noise(drift * 0.7 + vec2(TIME * 0.3, 0.0)));
 	if (water < foam_edge) {
 		colour = foam_colour;
 	}

@@ -157,8 +157,9 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 | Quickstep | Yes, built with the boost (2.5 m sideways), §5.8 |
 | Drift | Yes, later |
 | Stomp/bounce | Yes |
-| Grind rails (`Path3D`), wall-run and wall-jump | Yes |
-| Swimming (half acc/dec/frc/top and gravity, air timer) | Yes |
+| Grind rails (`Path3D`) | Yes, built in Milestone 10 for Acts 2 to 7 (§5.7) |
+| Wall-run and wall-jump | Yes, later |
+| Swimming (half acc/dec/frc/top and gravity, air timer) | Yes, built in Milestone 10 with drowning (§5.9) |
 | Light speed dash | **Yes**, chosen 2026-10-29 (`special` button along ring trails). Built once rings exist. |
 | Insta-shield and elemental shields | No |
 
@@ -172,7 +173,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 - **Shield:** takes the next hit instead of the rings, with the same knockback and flashing.
 - **Hit with no rings:** the player dies. They hop up at 13.1 m/s and fall through everything, and the camera stops to watch. 2 s later the stage restarts from the last checkpoint, a life down.
 - **Lives:** you start with **5**. Extra lives come only from a unique hidden 1-up object in each act. Each gives a life once per visit, and one found before a death stays found. Losing the last life shows GAME OVER for 3 s, then the world map returns (or the title screen, with no save slot) with 5 lives again. Nothing on the save slot is lost.
-- **Pit deaths** are on: falling below `kill_height` (y = −50 m) costs a life the same way. **Crush deaths** are on too, but come with the first moving solid objects, as there is nothing to be crushed by yet.
+- **Pit deaths** are on: falling below `kill_height` (y = −50 m) costs a life the same way. **Crush deaths** are on too (since Milestone 10): a moving platform that squeezes the player into the level kills them, rings or not. So does **drowning** (§5.9).
 - **Item monitors** (decided 2026-10-30):
 
 | Item | Effect |
@@ -215,6 +216,12 @@ All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and ev
 - **Goal** (Milestone 6): running through it stops the clock and takes the controls away while the player coasts to a stop. The results (time, rings, red rings) show for 6 s, then the stage moves on: to its `next_scene`, or the title screen until the world map exists.
 - **Tidal waves** (Milestone 6, Emerald Shore's Tidal Surge, decided 2026-10-30 as waves that push, with swimming later): a `TidalWave` washes along its −Z axis on a timer. The surge carries the player toward 17 m/s at 25 m/s², faster than running, so riding one gets up slopes too steep to run up. Then the water drains back as a deeper sheet, dragging toward the shore at up to 6 m/s at 8 m/s²: more than friction, so it moves a player standing still, while a runner only slows down. Then it rests. The water hugs the ground under it.
 - **Rolling waves** (Milestone 8): a single crest that rolls along its −Z axis for `reach` metres, hugging the ground, then sinks away. A player it catches is carried along at its speed; jump it to stay clear. Bosses send them out (§9.3).
+- **Water** (Milestone 10, for Acts 2 to 7): a `WaterVolume` is a box of water whose surface is its node's XZ plane. Below the surface the player swims (§5.9) and the camera tints the view. Water can have a **current** that carries the player along its −Z axis (`current_speed`, pushing at 15 m/s²); tilted, it runs a stream down a slope, as on Act 3's waterslides, where the current (16 to 18 m/s) beats running. It can have a **tide** that raises the surface by `tide_height` on a timer (low, rising, high, falling), flooding whatever lies below, as in Act 6. Its surface uses the toon water shader, streaked along a current.
+- **Air bubbles:** a vent under water breathes out a trickle of small bubbles, and every `interval` seconds (3.5 to 4) a big one that rises. Touching a big one gives the player a breath (§5.9).
+- **Grind rails:** a `GrindRail` follows its curve and builds its own tube. Landing on it, or running onto its end, grinds along it: gravity speeds the player up downhill and slows them uphill (as when rolling), friction takes a little off (0.5 m/s², but never below 5 m/s), and pushing the stick the way they're going speeds them up to top speed. The boost holds its speed on a rail too. Jump leaves it with a jump, a quickstep hops to a rail up to 5 m beside it, and its end throws the player on into the air. A rail catches feet within 0.6 m, and not again for 0.3 s after leaving it.
+- **Moving platforms:** a `MovingPlatform` travels back and forth by `travel` in its own space, easing in and out and waiting at each end, or floats on a `WaterVolume`, rising and falling with its tide. Players ride it. One that squeezes a player into the level crushes them (§5.5). It looks like a stone slab or a raft of logs.
+- **Crumbling platforms:** a `CrumblingPlatform` shakes for 0.5 s once a player stands on it, then falls, and comes back 6 s later. A run across a row of them holds.
+- **Breakable walls:** a `BreakableWall` of loose rocks. Rolling (or spin dashing) or boosting into it at 3 m/s or more smashes through without slowing down, and the rocks fly apart; anything else stops against it. It comes back when the stage reloads. Acts 2, 3, 5 and 6 hide their extra lives behind one.
 - **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
 - **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
 
@@ -227,6 +234,17 @@ Built after Milestone 9 (decided 2026-10-31). The values are in `player_physics.
 - **The gauge** (decided: about 5 s per full gauge): boosting on the ground uses **20% a second**; each act starts **a third full**; each ring adds **2%** (50 rings fill it), each enemy destroyed **10%**, and a boost monitor fills it.
 - **Quickstep** (`quickstep_left` / `quickstep_right`: Q / E, LB / RB): running on the ground at 8 m/s or faster, the player shifts **2.5 m** sideways in 0.12 s, keeping their speed and heading, for dodging at boost speed. Not on 2.5D paths.
 - **Feedback:** while boosting the speed lines and motion blur show at full strength, the view widens to 95°, a shell of light surrounds the player, and a burst of air marks the start. The HUD's boost gauge sits at the bottom right (§10.4).
+
+### 5.9 Swimming and drowning
+
+Built in Milestone 10 for Acts 2 to 7 (decided 2026-11-02: the classic rules). The values are in `player_physics.tres` (the "Water" group).
+
+- **Under water** (the player's middle below a `WaterVolume`'s surface): acceleration, deceleration, friction, top speed, air acceleration, roll friction and the boost's speed are halved, as the classic games halve them. Gravity is 0.0625 px/frame² (7.03 m/s²), a jump leaves at 3.5 px/frame (6.56 m/s), and letting go of jump early caps the rise at 2 px/frame (3.75 m/s).
+- **In and out:** falling in keeps half the horizontal speed and a quarter of the vertical, with a splash. Leaving the water while rising doubles the upward speed, so a jump from under the surface carries the player out.
+- **Slopes:** with the acceleration halved, slopes steeper than about 11° can't be run up under water. The acts' ways out of the water are gentler than that (Act 3's pool ramp is 8°).
+- **Air:** 30 s. Chimes warn at 25, 20 and 15 s left. With 12 s left the drowning music (§11.2) takes over from the stage's, and a big count from 5 down to 0 shows high in the middle of the screen, one number every 2 s. At 0 the player drowns, which costs a life, rings or not.
+- **Breathing:** surfacing, or touching a big air bubble (§5.7), fills the air again and ends the countdown and its music. A breath from a bubble holds the player still for 0.35 s.
+- The view under water is tinted blue.
 
 ## 6. Camera
 
@@ -282,9 +300,98 @@ All three modes are needed because stages are hybrid:
 
 Falling into the sea (below y = −30) costs a life. The five red rings: the two loop tops, the gap to the deck, the plank, and one over a yellow spring by the rollers that needs you to stand still on it.
 
-**Badniks** (Milestone 8): a crab on the beach start, a gull where the beach drops to the tidal flats (clear of where players wait for a wave), a hovering gull below the jump to the high deck (a stepping stone for anyone who comes up short), a crab on the deck, a clam and a crab on the low road, a gull over the merge, fish leaping across the pier, and a crab on the rollers. The goal leads on to Act 8 until Acts 2 to 7 exist. Milestone 8 also closed the pier's last gap, below the end of the high plank: players coming down long from the plank or the red spring fell into it with no warning.
+**Badniks** (Milestone 8): a crab on the beach start, a gull where the beach drops to the tidal flats (clear of where players wait for a wave), a hovering gull below the jump to the high deck (a stepping stone for anyone who comes up short), a crab on the deck, a clam and a crab on the low road, a gull over the merge, fish leaping across the pier, and a crab on the rollers. The goal leads on to Act 2 (to Act 8 until Acts 2 to 7 existed). Milestone 8 also closed the pier's last gap, below the end of the high plank: players coming down long from the plank or the red spring fell into it with no warning.
 
-### 7.2 Emerald Shore Act 8: Stormy Coastal Fortress (Milestone 8, art in Milestone 10)
+### 7.2 Emerald Shore Acts 2 to 7 (Milestone 10)
+
+Decided 2026-11-02, so the demo has all eight acts (the user: "The game should have stages 1 though 8. Not 1 and 8."):
+
+| Act | Focus | The idea |
+|---|---|---|
+| 2: Lush Palm Grove | Platforming | A treetop route on springs and rope bridges over the jungle floor |
+| 3: Cascading Waterfall Basin | Speed | Race down the cascades, and climb the tiers between them |
+| 4: Shallow Reef Lagoon | Combat | Badnik packs and homing chains between reef islets, and big waves |
+| 5: Underground Grotto | Platforming | Caves, 2.5D stretches and hidden rooms |
+| 6: Tidal Cavern | Mixed | The tide floods the low route on a timer; the high ledges stay dry |
+| 7: Sunset Ridge Cliffs | Speed | The long cliff-top run toward the fortress: loops and big jumps |
+
+- **Length:** like Act 1: a good run takes about 80 to 100 s and a first careful one 2 to 3 minutes, so the speed acts run about 1 to 1.3 km and the platforming ones less.
+- **New gimmicks:** all four offered: flowing and rising water (waterfall currents that carry the player, a tide that rises and falls), grind rails, moving and crumbling platforms (which bring crush deaths in), and breakable walls that a roll, spin dash or boost smashes open.
+- **Swimming and drowning** in the water acts (Shallow Reef Lagoon, Tidal Cavern), with the classic rules: slower movement and lighter gravity underwater, 30 s of air with a countdown and its music, air bubbles to breathe, and drowning costs a life.
+- **Music:** a new track for each act, written with `tools/audio/` like the others, each Emerald Shore's tune in its act's setting, with speed-shoe versions.
+
+Built 2026-11-02 to 11-05. Each is `content/sonic/stages/emerald_shore/act_<n>.tscn`, and each act's goal leads on to the next (Act 7's to Act 8). Falling into the sea (below y = −30) costs a life in all of them. An autopilot drives each act from the start to the goal on its safest route, in 76 to 82 s on the stage clock, then tries its other routes and gimmicks one by one.
+
+#### Act 2: Lush Palm Grove
+
+About 0.9 km in three legs. Platforming: a treetop route over a safe jungle floor.
+
+1. **The jungle floor** (heading −Z): an 18 m wide floor between palm trunks, the safe route. A diagonal spring on its left ("to the treetops") throws the player up to the treetop route: decks 6 m up joined by rope bridges, with a red ring over the gap between two decks and a shield. A fall from the decks lands on the floor. A breakable wall on the floor's right hides an alcove with the extra life.
+2. **The ravine:** the routes meet at checkpoint 1 above a ravine. A long rope bridge on the right crosses it safely; on the left, two moving platforms and two crumbling ledges between them cross faster, with speed shoes and a red ring on the second ledge.
+3. **The canopy** (heading +X): a lift, or a homing chain on two gulls, climbs to a high shelf 16 m up, with a red ring at its end. From there a vine rail runs down over the canopy, with a red ring along it. Below, the canopy carries on over a pit (a crumbling ledge in it), past checkpoint 2, to a red spring with a red ring high above it.
+4. **The terraces** (heading −Z): down three terraces to fallen logs across the way (or a rail above them on the left), a loop, a bridge over the river, and the beach with the goal.
+
+Badniks: crabs on the start, the floor, the rope bridge (patrolling it), the far bank, the canopy, the terraces, the logs and the beach; clams on the third deck, the canopy and the beach; gulls hovering under the decks' gap and over the ravine's platforms as stepping stones, two for the homing chain, and one over the river.
+
+#### Act 3: Cascading Waterfall Basin
+
+About 1 km in two legs, from a plateau 60 m up down to the sea. Speed: waterslides whose current is faster than running.
+
+1. **The first cascade** (heading −Z): a dash panel sends the player down a 140 m waterslide, with a current of 18 m/s down its middle ("Ride the current!").
+2. **The tiers:** a basin with a loop (a red ring at its top), then three tiers, each climbed by a yellow spring beside a waterfall. A red spring on the top tier throws the player up to a red ring.
+3. **The second cascade:** 160 m down to the second basin, with a rail beside the stream for a faster line and a red ring over the rail. In the basin, a breakable wall hides the extra life, and checkpoint 1.
+4. **The third cascade** (heading +X): 120 m down, with another rail, to a plunge pool crossed on three floating logs or swum, with a red ring over its middle. The pool is shallow, and its ramp out a gentle 8°. Checkpoint 2.
+5. **The last cascade** down to the beach, a loop with the fifth red ring at its top, and the goal.
+
+Badniks: crabs on the start, both basins, the bank past the pool and the beach; clams on the middle tier and the ledge before the third cascade; gulls hovering by the top tier and over the third cascade's rail, and one swooping over the beach; fish leaping out of the second cascade's stream and out of the plunge pool.
+
+#### Act 4: Shallow Reef Lagoon
+
+About 0.85 km in two legs. Combat: packs of badniks on reef islets, homing chains across the channels between them, and waves to surf. The lagoon's surface is the sea's (y = −1): sandbars lie just under it, to wade through at full speed, and islets stand above it. Only the three channels are deep enough to swim in, with air bubbles on their beds and gentle slopes out; beyond the sandbars the open sea is a fall. A shield waits before each pack.
+
+1. **Sandbar and first islet** (heading −Z): two crabs and a gull on the sandbar, then two clams and a crab on the islet.
+2. **The first channel:** a homing chain of three gulls across it, or a swim past a red ring by the air bubbles. A fish leaps across.
+3. **The second islet:** checkpoint 1, and a pack of three crabs and two clams.
+4. **The surfing sandbar:** waves wash along a 90 m sandbar every 14 s ("Surf the waves!"), with a red ring above it to jump for and gulls over it.
+5. **The high islet,** 5 m up: two clams and a hovering gull, with a red ring high above them, reached off the gull.
+6. **The reef ridge** (heading +X): a narrow coral ridge with four fish leaping over it in turn, and a red ring on a coral pillar beside it.
+7. **The second channel:** a drifting raft, a homing chain, or a swim past the extra life on the bed and a red ring by the bubbles.
+8. **The big islet:** checkpoint 2 and the biggest pack: four crabs, two clams and two gulls.
+9. **The third channel** (gulls or a swim), a pack of two crabs, a clam and two gulls, a second surfing sandbar, and the goal on the last islet.
+
+#### Act 5: Underground Grotto
+
+About 0.7 km. Platforming in caves, under a dim sky of its own (`grotto_environment.tres`), with two 2.5D stretches.
+
+1. **Into the cave** (heading −Z): a tunnel from the beach. A breakable wall under a rock lintel on its right hides a room with the extra life and a red ring.
+2. **The chasm:** a narrow ledge along the left wall (safe), or three crumbling stones across the middle, with a red ring over the second. Checkpoint 1.
+3. **The great hall,** crossed in 2.5D (heading +X): a pit with a platform shuttling over it, two crumbling ledges end to end over another pit (keep running and they hold), a lift to a high ledge (a red ring above its top stop), spikes, and a rock wall across the way to roll or boost through ("Roll or boost to smash through!").
+4. **The river tunnel,** in 3D again: a river with a 12 m/s current, a rail beside it with a red ring on its line, and fish leaping across. Checkpoint 2.
+5. **The shaft,** climbed in 2.5D: a spring to a ledge (a red ring above it), a lift, and a red spring up into the daylight, the exit and the goal.
+
+Badniks: crabs on the beach, in the tunnels, in the hall and at the exit; clams in the second tunnel and the shaft; a gull hovering over the chasm (a stepping stone) and one in the hall; two fish in the river.
+
+#### Act 6: Tidal Cavern
+
+About 0.6 km in two legs, under the grotto's sky. Mixed: two sea caverns whose tide rises 4.5 m on a 28 s cycle (9 s low, 5 s rising, 9 s high, 5 s falling). The low route along each cavern's floor is quick at low tide and under water at high tide: swim it, with air bubbles along the way, or ride a raft up with the water. The high route along ledges over it stays dry, with its own hazards ("Low tide: run. High tide: swim, or take the ledges.").
+
+1. **The first cavern** (heading −Z): a spring up to the ledges, a red ring over the gap between the first two, a clam, three crumbling ledges in a row, a gull, and a rail down to the dry midpoint. Below, two rafts (a red ring over the first, reached by riding it up at high tide), a crab and a fish.
+2. **The dry midpoint:** checkpoint 1, and a dash panel round the corner.
+3. **The second cavern** (heading +X), its tide out of step with the first: on the ledges, a shuttling platform over a gap (a red ring over it), a clam, a nook behind a breakable wall with the extra life, and a rail with a red ring on its line. Below, checkpoint 2, two rafts, two crabs and a fish.
+4. **The tide pool:** a chamber whose water rises 7.5 m. Swim or ride a raft up to the exit at high tide ("Ride the tide up!"); at low tide a red spring throws the player up to it, or a ledge goes round. The fifth red ring is by the pool's air bubbles.
+5. **The exit,** a crab and the goal outside.
+
+#### Act 7: Sunset Ridge Cliffs
+
+About 1 km in three legs, from 40 m up down to just above the sea, under a sunset sky (`sunset_environment.tres`) with a low, warm sun ahead of the final straight. Speed: the long cliff-top run toward the fortress.
+
+1. **Leg one** (heading −Z): a dash panel and a long downhill to a loop (a red ring at its top), then a dash panel and a ramp to jump a chasm (a red ring over it), or a sloping bridge beside it. A 120 m downhill follows, with two rails over the cliff edge and a red ring on the outer one, to checkpoint 1 and speed shoes.
+2. **Leg two** (heading +X): a spring cannon (a red spring tilted to throw anyone who touches it over a 16 m chasm, with a red ring on its arc) or a homing chain of three gulls beside it, a loop, and a second big jump from a dash panel and a ramp, or a bridge.
+3. **Leg three** (heading −Z): a loop (the fifth red ring at its top), a narrow ridge with rails on both sides over the void (checkpoint 2, and gulls swooping), the extra life on a sea stack off the ridge, and the final straight with Act 8's fortress out at sea ahead.
+
+Badniks: crabs on the start, the first loop's floor, the ledges, the third leg's run and the final straight; clams on both landings; gulls over the first downhill and the rail run, three by the cannon, and two over the ridge.
+
+### 7.3 Emerald Shore Act 8: Stormy Coastal Fortress (Milestone 8, art in Milestone 10)
 
 `content/sonic/stages/emerald_shore/act_8.tscn`, under a stormy sky (`stormy_environment.tres`): a short run along a walled causeway to the boss.
 
@@ -325,7 +432,7 @@ The model shows, in order of priority: death, hurt, the ball (jumping, rolling o
 
 ### 8.3 The art pass (Milestone 10)
 
-Decided 2026-11-01: the art pass covers the stages and scenery, the objects, the badniks and the boss, and a rebuilt Sonic, all **built by scripts in Blender**, so anyone can change and rebuild them. Emerald Shore's land is **banded sandstone**: green grass tops over warm sandstone cliffs in horizontal bands, white sand, palms and a turquoise sea, a look of its own rather than Green Hill's checkerboard. The collision stays exactly the greybox's, so the art changed nothing about how the acts play. The test room stays a greybox. The demo will have **all eight of Emerald Shore's acts** (decided 2026-11-01), so Acts 2 to 7 come next, dressed the same way.
+Decided 2026-11-01: the art pass covers the stages and scenery, the objects, the badniks and the boss, and a rebuilt Sonic, all **built by scripts in Blender**, so anyone can change and rebuild them. Emerald Shore's land is **banded sandstone**: green grass tops over warm sandstone cliffs in horizontal bands, white sand, palms and a turquoise sea, a look of its own rather than Green Hill's checkerboard. The collision stays exactly the greybox's, so the art changed nothing about how the acts play. The test room stays a greybox. The demo has **all eight of Emerald Shore's acts** (decided 2026-11-01): Acts 2 to 7 were built and dressed the same way afterwards (2026-11-05).
 
 **Stages.** An act's greybox stays in the act, hidden, as its collision (a hidden CSG shape still collides). `tools/godot/export_greybox.gd` writes it as JSON next to the act's art (`act_<n>.greybox.json`): every piece's profile and placement, the loops, the camera volumes, invisible walls, signs, gimmicks and enemies. The act's build script (`build_act_<n>.py`) dresses each piece by name with the world's kit (`shore_kit.py`, `fortress_kit.py`, using `tools/blender/stage_kit.py`) and exports `act_<n>_art.glb`, which the act shows as its `Art`. The rules that keep the art honest:
 
@@ -336,6 +443,8 @@ Decided 2026-11-01: the art pass covers the stages and scenery, the objects, the
 - A piece the build script doesn't name stops the build, and a unit test fails when an act's greybox has changed since its art was built.
 
 Act 1 is a sandstone coast: striped grass, sand, rippled wet sand on the tidal flats, a wooden pier and a high deck, palms, sea stacks, islands and a lighthouse past the goal. Act 8 is Eggman's fortress: tiled stone causeways and walls in block courses with lamps, a steel bridge on pylons with hazard stripes, the shore's sand and cliffs around the arena, a fence along its sea wall, three steel towers out at sea with lit windows and red beacons, rain and lightning. The greybox's floating labels became signs: "Wait for a wave, then ride it up!", the fork's banner, the turn arrow and "Homing attack across!". The act-name labels (the title card shows the name) and "2.5D pier" (a note for developers) are gone.
+
+Acts 2 to 7 add to the shore's kit (`shore_kit.py`). Act 2 is a jungle: tall palms around the greybox's trunks, ferns, plank decks and rope bridges on posts, and fallen logs. Act 3 has riverbeds under its streams and waterfalls down every tier and off the plateau and the second basin into the sea, drawn by `waterfall.gdshader`. Act 4's lagoon has its own sea (`lagoon.tres`, with a thin line of foam where the sandbars break the surface), wet sand and reef floors under the water, a coral ridge, and coral heads out in the lagoon. Acts 5 and 6 are caves: rough rock walls and roofs with stalactites, glowing crystals in the walls, rocky mounds over the roofs so the caves read as hills from outside, tide pools of coral on Act 6's floors, and a dim sky of their own (`grotto_environment.tres`). Act 7 is the coast at sunset (`sunset_environment.tres`), with a low, warm sun ahead of the final straight and three of the fortress's towers dark out at sea. Rails stand on posts down to the ground or into the sea, never on ground a player can run on (`rail_supports`). The water volumes draw their own surfaces (streaked along a current), and the rails, platforms, crumbling ledges, breakable walls and bubbles build their own meshes from their settings, with materials from the art bank (`water`, `water_flowing`, `rail`, `platform_stone`, `log_bark`, `crumbling_rock`, `breakable_rock`, `bubble`).
 
 **Looks.** The big surfaces use shaders in `engine/art/`, tuned in materials next to the art:
 
@@ -353,6 +462,8 @@ Everything else is painted: its colour is in its vertex colours, on one shared m
 **Title screen.** A live beach behind the menu: Sonic on a rock in the shallows, palms, sea stacks and the lighthouse, with the camera drifting slowly (`content/sonic/ui/title/title_backdrop.tscn`).
 
 **Measured** (1280×720, triangles drawn in the frame, shadows not counted): Act 1's art is 118,606 triangles in 55 chunks and Act 8's 42,678. From Act 1's start, which sees the whole first straight, the frame draws about 106,000 triangles; every other spot checked in either act draws 17,000 to 80,000, within the budget of 100,000 per visible region (§8.1). Rings stop being drawn beyond 120 m, where they're a few pixels across.
+
+Acts 2 to 7's art is 74,956, 65,780, 98,732, 66,428, 63,661 and 76,935 triangles in 30 to 48 chunks. Counted every frame along each act's autopilot run (everything drawn, at 1280×720, shadows not counted), the median frame draws 29,000 (Act 5) to 62,000 (Act 4) triangles and the busiest 77,000 to 109,000. Acts 3 to 6 stay under 100,000 all the way. Acts 2 and 7 go over in 6 to 8% of their frames, along their first straights, as Act 1's start does: in those views the art draws 54,000 to 64,000 triangles (Act 1's start: 78,000 of 105,000), well within the budget, and the rest is about 25,000 for the rings in sight (each a 384-triangle torus, drawn out to 120 m), the badniks and Sonic.
 
 ## 9. Enemies and bosses
 
@@ -409,7 +520,7 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 
 - **Title screen:** Enter, A or Start brings up the main menu: Play, Options, Test room and Quit. Two developer shortcuts skip the menus without a save slot: F or Y opens the test room, Shift or X Act 8's boss.
 - **Play** leads to the save slots, then the **world map** (decided 2026-10-31: a menu map for now). The six worlds sit along a path, with the chosen world's eight acts listed beside it: each act's best time, most rings and red rings found (out of 5), whether it is cleared, locked or not built yet, and the boss act marked. Left and right pick a world, up and down an act, and jump plays it.
-- **Unlocking:** a world's first built act is open from the start; each later act opens when the built act before it is cleared, so Act 8 opens after Act 1 until Acts 2 to 7 exist. A world opens once the world before it is beaten (its last built act cleared).
+- **Unlocking:** a world's first built act is open from the start; each later act opens when the built act before it is cleared (Act 8 opened after Act 1 until Acts 2 to 7 existed). A world opens once the world before it is beaten (its last built act cleared).
 - **After an act:** the results show for 6 s (a jump press after 1.5 s skips them), then the world map returns with the next act to play chosen. Leaving an act from the pause menu returns to its place on the map. With no save slot, as when a stage is run on its own, the goal leads to the stage's `next_scene` or the title screen instead.
 - **Pause:** Start or Esc pauses the game: resume, restart from the last checkpoint (once one is touched), restart the act, the options, or quit to the world map (the title screen without a save slot). The game can't be paused once the goal is reached or the player has died.
 
@@ -452,7 +563,7 @@ Decided 2026-10-31: **original music, composed in code** and changeable at any t
 
 ### 11.1 How it's made
 
-- `tools/audio/` renders everything: `python tools/audio/render.py` (Python 3 with numpy and SciPy, and FFmpeg for Ogg Vorbis). Each track is written as notes in `tools/audio/music/<track>.py`, in a small text notation (`tools/audio/README.md`), and played on instruments modelled on the Genesis's FM chip (`instruments.py`): FM brass, slap bass, steel drums, clavinet, electric piano and bells, plus synth leads, pads and strings, and a synthesised drum kit with congas, shaker, timbales and timpani. The sound effects are short recipes in `sounds.py`.
+- `tools/audio/` renders everything: `python tools/audio/render.py` (Python 3 with numpy and SciPy, and FFmpeg for Ogg Vorbis). Each track is written as notes in `tools/audio/music/<track>.py`, in a small text notation (`tools/audio/README.md`), and played on instruments modelled on the Genesis's FM chip (`instruments.py`): FM brass, slap bass, steel drums, clavinet, electric piano, bells and marimba, plus synth leads, a flute, pads and strings, and a synthesised drum kit with congas, shaker, timbales and timpani. The sound effects are short recipes in `sounds.py`.
 - **Levels:** music is mixed to −17 LUFS with peaks under −1 dB, and an automatic EQ nudges each track toward a typical mix's tonal balance. Each sound effect has its own loudness, from −15 LUFS (the boost) to −28 (a menu tick); frequent sounds sit lower. Renders are exact, so re-rendering unchanged music leaves the files alone.
 - **Loops:** the music loops from the end of its intro, seamlessly (the loop is rendered twice and the second pass kept, so echoes and reverb carry over the seam). The loop point is written into the `.ogg.import` file. A looping sound effect (the boost's rush of air) carries its loop points in its WAV.
 - **Changing it** (asked for: the user may want to change the music later): edit a track's notes and re-render it; or replace its `.ogg` with a recording from any tool, setting the loop in Godot's Import dock; or point a stage, a menu or the sound bank at another file. None of these needs code.
@@ -463,20 +574,27 @@ Decided 2026-10-31: **original music, composed in code** and changeable at any t
 |---|---|---|
 | Title (`title.ogg`) | Title screen, save slots and world map, carrying on between them | Act 1's hook, relaxed: electric piano and bells over a light groove, after a brass fanfare. F major, 120 BPM. |
 | Emerald Shore Act 1 (`emerald_shore_1.ogg`) | Act 1 and the test room | Tropical funk: brass on the hook, slap bass, steel drums, a clavinet on the off-beats, congas and shaker. A lyrical bridge and a slap bass and steel drum breakdown. F major, 150 BPM, a 4-bar intro and a 51 s loop. |
+| Emerald Shore Act 2 (`emerald_shore_2.ogg`) | Act 2 | The tune in the jungle, with a bounce: brass and a wooden flute over a marimba, slap bass, tom-toms, congas and claves. A bridge that climbs on the flute, and a tom-tom breakdown with a marimba solo. B-flat major, 138 BPM. |
+| Emerald Shore Act 3 (`emerald_shore_3.ogg`) | Act 3 | At a sprint: brass over arpeggios tumbling like the falls, bells for the spray, a driving octave bass and four-on-the-floor drums. A bridge over rising arpeggios for the tiers, and a cascade of bells. D major, 162 BPM. |
+| Emerald Shore Act 4 (`emerald_shore_4.ogg`) | Act 4 | A calypso to fight to: steel drums on the tune, punching brass, cowbell and timbales. A glassy bridge as if under water, and a brass riff in A minor for the badnik packs. C major, 146 BPM. |
+| Emerald Shore Act 5 (`emerald_shore_5.ogg`) | Act 5 | The tune in the dark: a cave flute over a marimba, bells dripping through a long echo and light hand drums, in a big, ringing room. A warm bridge in C major for the hidden rooms. A minor, 120 BPM. |
+| Emerald Shore Act 6 (`emerald_shore_6.ogg`) | Act 6 | A race against the tide: a new tune grown from the hook's opening on a synth lead, a pulsing bass and percussion ticking like a clock, strings climbing over timpani, and a ticking marimba riff. E minor, 148 BPM. |
+| Emerald Shore Act 7 (`emerald_shore_7.ogg`) | Act 7 | Full tilt into the evening: brass, strings and a galloping beat, a wistful bridge on a synth lead, then Act 8's stormy hook in C minor, with thunder, as the fortress comes into view. E-flat major, 164 BPM. |
 | Emerald Shore Act 8 (`emerald_shore_8.ogg`) | Act 8, until the boss | The same tune stormy: D minor, a driving synth bass, strings, timpani and thunder, and a pounding steel drum riff. 156 BPM. |
 | Boss (`boss.ogg`) | Boss fights, from the boss's entrance | A churning bass ostinato, brass and racing arpeggios, then strings over 3-3-2 brass stabs. C minor, 168 BPM. |
 | Invincibility (`invincible.ogg`) | Instead of the music while invincible | Heroic brass and a four-on-the-floor beat. A major, 168 BPM. |
 | Extra life (`extra_life.ogg`) | A jingle; the music stops for it and carries on afterwards | About 4 s. B-flat major. |
 | Act clear (`act_clear.ogg`) | A jingle at the goal or when a boss is beaten, over the results | A 5 s fanfare, then its last chord rings out. F major. |
 | Game over (`game_over.ogg`) | A jingle when the last life is lost | A slow falling phrase of 5 s, ringing out. D minor. |
+| Drowning (`drowning.ogg`) | Instead of the music for the last 12 s of air under water (§5.9) | Alarm bells rising a semitone every bar over a pulsing bass, then one frantic bar that repeats. D minor, 180 BPM. |
 
-**Speed shoes** switch a stage's music to its `_fast` version (rendered 25% faster at the same pitch) from the same point in the tune, and back when they run out. Music without a fast version plays 20% faster and higher instead. The **drowning countdown** waits for swimming.
+**Speed shoes** switch a stage's music to its `_fast` version (rendered 25% faster at the same pitch) from the same point in the tune, and back when they run out. Music without a fast version plays 20% faster and higher instead. Every act's track has a fast version.
 
 ### 11.3 In the game
 
 - **Engine:** two autoloads in `engine/audio/`. `Sfx` plays sound effects by name (`Sfx.play(&"jump")`); `Music` plays the music. Both take their sounds from a `SoundBank` resource, named by the project setting `game/audio/sound_bank` (`content/sonic/audio/sound_bank.tres`), which maps each of the engine's sound names and music cues to a file. A name the bank doesn't have stays silent, so the engine runs without content.
-- **Music:** a stage plays its `music` as it loads, carrying on if it's already playing (restarting from the pause menu); after a death it starts from the top, since dying fades it out. A menu's music carries on from one menu to the next. Invincibility's music replaces the track while it lasts, and the track picks up where it stopped. A jingle cuts in: the extra life's hands back, the act clear's and game over's don't. A boss arena starts its `music` as the fight begins and fades it when the boss is beaten. Dying fades the music over a second. The music pauses with the game.
-- **Sounds:** the player's own sounds are heard the same everywhere. Things in the world (a badnik popping, a shot, a fish's splash, a tidal wave washing up the beach, the boss) are heard from where they are, fading out by 80 m. Rings alternate between the speakers. Up to four plays of one sound overlap. Menus get their sounds without any code of their own: a tick when the focus moves, a blip when a button is pressed, another on back.
+- **Music:** a stage plays its `music` as it loads, carrying on if it's already playing (restarting from the pause menu); after a death it starts from the top, since dying fades it out. A menu's music carries on from one menu to the next. Invincibility's music replaces the track while it lasts, and the track picks up where it stopped; so does the drowning countdown's, until the player breathes or drowns. A jingle cuts in: the extra life's hands back, the act clear's and game over's don't. A boss arena starts its `music` as the fight begins and fades it when the boss is beaten. Dying fades the music over a second. The music pauses with the game.
+- **Sounds:** the player's own sounds are heard the same everywhere. Things in the world (a badnik popping, a shot, a fish's splash, a tidal wave washing up the beach, a wall breaking, a ledge crumbling, the boss) are heard from where they are, fading out by 80 m. Rings alternate between the speakers. Up to four plays of one sound overlap. Menus get their sounds without any code of their own: a tick when the focus moves, a blip when a button is pressed, another on back.
 - **Buses:** music on Music, sound effects on SFX, each with its slider (§10.2). Sound effects pause with the game, except the menus'.
 
 ---
@@ -487,7 +605,6 @@ Each one is grouped by the milestone where it starts to block work.
 
 | Needed by | Decision |
 |---|---|
-| **Acts 2 to 7** (next) | Each act's route and gimmicks, and its music: Lush Palm Grove, Cascading Waterfall Basin, Shallow Reef Lagoon, Underground Grotto, Tidal Cavern and Sunset Ridge Cliffs. Whether the water acts get swimming. |
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
 | **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; GameJolt |
 
@@ -504,6 +621,6 @@ Each one is grouped by the milestone where it starts to block work.
 | 7 | Character art pipeline: Blender → glTF → AnimationTree | **Done** |
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
-| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11) and the art pass done (2026-11-01, §8.3). The demo will have all eight of Emerald Shore's acts, so Acts 2 to 7 come next, then the demo release |
+| 10 | Art and audio pass, then a public demo release | **In progress:** audio done (2026-10-31, §11), the art pass done (2026-11-01, §8.3), and Acts 2 to 7 built with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9). Next: the demo release |
 
 **Scope plan:** 48 acts is a lot of content. Finish World 1 as a complete vertical slice (all its gimmicks, enemies and the boss) before greyboxing other worlds. Problems found in World 1 are much cheaper to fix than problems spread across six worlds.

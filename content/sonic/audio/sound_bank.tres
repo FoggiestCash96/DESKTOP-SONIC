@@ -47,6 +47,14 @@
 [ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_locked.wav" id="45_a4x7o"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_pause.wav" id="46_kp54c"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/ui_start.wav" id="47_8u0qp"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/air_warning.wav" id="60_newair_"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/breathe.wav" id="61_newbrea"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/drown.wav" id="62_newdrow"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/grind.wav" id="63_newgrin"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/grind_loop.wav" id="64_newgrin"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/crumble.wav" id="65_newcrum"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/wall_break.wav" id="66_newwall"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/music/drowning.ogg" id="70_drown"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tdlpc"]
 playback_mode = 1
@@ -95,6 +103,7 @@ script = ExtResource("5_r2fip")
 sounds = Dictionary[StringName, AudioStream]({
 &"air_boost": ExtResource("15_t3yfu"),
 &"air_dash": ExtResource("12_onhr8"),
+&"air_warning": ExtResource("60_newair_"),
 &"boost": ExtResource("13_u01as"),
 &"boost_fill": ExtResource("24_ch7py"),
 &"boost_loop": ExtResource("14_kt8rm"),
@@ -103,13 +112,18 @@ sounds = Dictionary[StringName, AudioStream]({
 &"boss_roar": ExtResource("40_ls8ik"),
 &"boss_slam": ExtResource("37_mmpfk"),
 &"boss_sweep": ExtResource("38_0sei2"),
+&"breathe": ExtResource("61_newbrea"),
 &"checkpoint": ExtResource("28_0080k"),
+&"crumble": ExtResource("65_newcrum"),
 &"dash_panel": ExtResource("27_76tyf"),
 &"death": ExtResource("21_mk64t"),
+&"drown": ExtResource("62_newdrow"),
 &"enemy_pop": SubResource("AudioStreamRandomizer_l5cwm"),
 &"enemy_shot": SubResource("AudioStreamRandomizer_u4lby"),
 &"explosion": SubResource("AudioStreamRandomizer_7nub7"),
 &"goal": ExtResource("29_y5ul0"),
+&"grind": ExtResource("63_newgrin"),
+&"grind_loop": ExtResource("64_newgrin"),
 &"homing": ExtResource("11_vs68e"),
 &"jump": ExtResource("6_kxll2"),
 &"magnet": ExtResource("23_xjjqm"),
@@ -133,10 +147,12 @@ sounds = Dictionary[StringName, AudioStream]({
 &"ui_move": ExtResource("42_ufnty"),
 &"ui_pause": ExtResource("46_kp54c"),
 &"ui_start": ExtResource("47_8u0qp"),
+&"wall_break": ExtResource("66_newwall"),
 &"wave": ExtResource("31_y3sd7")
 })
 music = Dictionary[StringName, AudioStream]({
 &"clear": ExtResource("3_nug18"),
+&"drowning": ExtResource("70_drown"),
 &"extra_life": ExtResource("2_b4adm"),
 &"game_over": ExtResource("4_o5oed"),
 &"invincible": ExtResource("1_a8442")
