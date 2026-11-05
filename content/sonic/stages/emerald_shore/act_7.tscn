@@ -340,7 +340,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1.1, 29.3, -135)
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6.5, 20, -157)
 
 [node name="SignJump1" type="Label3D" parent="Gimmicks" unique_id=1569401520]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 1, 24.5, -150)
+transform = Transform3D(1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, 1, 1, 24.5, -150)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)
@@ -397,7 +397,7 @@ speed = 30.0
 keep_momentum = false
 
 [node name="SignCannon" type="Label3D" parent="Gimmicks" unique_id=1366135261]
-transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 48, 5.5, -404)
+transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 48, 5.5, -404)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)

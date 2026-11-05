@@ -31,4 +31,4 @@ Sonic the Hedgehog and all related characters, names, logos and trademarks are t
 
 ## 4. Third-party assets
 
-Assets made by others keep their own licenses. Each one must be listed in [CREDITS.md](CREDITS.md) with its author, source and license before it's merged.
+Assets made by others keep their own licenses. They live in `thirdparty/`, each in a folder with its license, and each must be listed in [CREDITS.md](CREDITS.md) with its author, source and license before it's merged. The release downloads include those licenses.

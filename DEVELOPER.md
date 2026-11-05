@@ -144,7 +144,7 @@ blender --background --factory-startup --python content/sonic/stages/emerald_sho
 godot --headless --path . --import
 ```
 
-The build script dresses every greybox piece by name (grass, sand, piers...) and stops if a piece has no style, so a new piece can't slip in without art. For a new act, copy a build script, list its pieces, and add the result to the act as an instance named `Art`; then hide the greybox's CSG shapes (leave `use_collision` on), give the `Sea` the world's water material and the `WorldEnvironment` its sky. Hints are `Label3D`s with billboard off: the art puts a board behind each one. A unit test fails when an act's greybox has changed since its art was built.
+The build script dresses every greybox piece by name (grass, sand, piers...) and stops if a piece has no style, so a new piece can't slip in without art. For a new act, copy a build script, list its pieces, and add the result to the act as an instance named `Art`; then hide the greybox's CSG shapes (leave `use_collision` on), give the `Sea` the world's water material and the `WorldEnvironment` its sky. Hints are `Label3D`s with billboard off: the art puts a board behind each one. A label's text faces its +Z axis, so turn it to face the players coming toward it (on a 2.5D stretch, the camera). A unit test fails when an act's greybox has changed since its art was built.
 
 ### Models for objects, badniks and bosses
 
@@ -263,6 +263,7 @@ tests/            Script checker, test runner, base class, unit tests
 tools/blender/    Blender scripts: the glTF export, and the kits art is built with (art_kit, stage_kit)
 tools/godot/      Godot scripts that write a stage's greybox or a scene's layout as JSON for the Blender scripts
 tools/audio/      The music and sound effects, written as notes and recipes, and the synth that renders them
+thirdparty/       Assets made by others, each folder with its license: the DejaVu font for symbols the default font lacks
 docs/             Design decisions and the AI session prompt
 ```
 
@@ -295,8 +296,8 @@ docs/             Design decisions and the AI session prompt
 
 ## Releases
 
-- **Test build:** on GitHub, go to **Actions → CI → Run workflow**. The Windows, Linux and macOS builds appear as a downloadable artifact on the run page.
-- **Release:** bump `application/config/version` in Project Settings, commit, then tag and push:
+- **Test build:** on GitHub, go to **Actions → CI → Run workflow** and pick the branch. The Windows, Linux and macOS builds appear as a downloadable artifact on the run page. Try one before each release.
+- **Release:** write the release page's notes in `docs/releases/v<version>.md` (without that file, GitHub lists the merged pull requests instead), bump `application/config/version` in Project Settings if it changed, commit, then tag and push:
 
 ```bash
 git tag v0.1.0
@@ -306,7 +307,7 @@ git tag v0.1.0
 git push origin v0.1.0
 ```
 
-CI exports all three platforms and publishes a GitHub pre-release with generated notes.
+CI exports all three platforms, puts the licenses, the credits and the bundled font's license in every download, and publishes a GitHub pre-release with the notes.
 
 - When upgrading Godot, change `GODOT_VERSION` in `.github/workflows/ci.yml` and the version in this file together.
 - Release builds check out LFS files. GitHub meters LFS storage and bandwidth, so keep large source files (such as `.blend`) reasonably sized.

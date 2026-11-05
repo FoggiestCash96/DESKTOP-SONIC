@@ -89,13 +89,19 @@ jobs:
           godot --headless --path . --export-release "macOS" build/macos/SonicVelocityRun.zip
 
       - name: Package
+        # Every download carries the licenses and credits, and the bundled font's license, which
+        # must travel with every copy of the font.
         run: |
+          mkdir -p build/notices
+          cp LICENSE LICENSE-ASSETS.md CREDITS.md README.md build/notices/
+          cp thirdparty/fonts/dejavu/LICENSE build/notices/LICENSE-DejaVu-fonts.txt
           for platform in windows linux; do
-            cp LICENSE LICENSE-ASSETS.md README.md "build/$platform/"
+            cp build/notices/* "build/$platform/"
           done
           (cd build/windows && zip -qr ../SonicVelocityRun-windows.zip .)
           tar -czf build/SonicVelocityRun-linux.tar.gz -C build/linux .
           mv build/macos/SonicVelocityRun.zip build/SonicVelocityRun-macos.zip
+          (cd build/notices && zip -q ../SonicVelocityRun-macos.zip ./*)
           ls -lh build/
 
       - uses: actions/upload-artifact@v7
@@ -110,12 +116,19 @@ jobs:
         if: startsWith(github.ref, 'refs/tags/v')
         env:
           GH_TOKEN: ${{ github.token }}
-        # Marked as a pre-release while the game is in 0.x.
+        # Marked as a pre-release while the game is in 0.x. The notes come from
+        # docs/releases/<tag>.md, or are generated from the merged pull requests without one.
         run: |
+          notes="docs/releases/$GITHUB_REF_NAME.md"
+          if [ -f "$notes" ]; then
+            notes_args=(--notes-file "$notes")
+          else
+            notes_args=(--generate-notes)
+          fi
           gh release create "$GITHUB_REF_NAME" \
             build/SonicVelocityRun-windows.zip \
             build/SonicVelocityRun-linux.tar.gz \
             build/SonicVelocityRun-macos.zip \
             --title "Sonic Velocity Run $GITHUB_REF_NAME" \
-            --generate-notes \
+            "${notes_args[@]}" \
             --prerelease

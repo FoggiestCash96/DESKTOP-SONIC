@@ -432,7 +432,7 @@ item = 1
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -9, 5, -24)
 
 [node name="SignTide" type="Label3D" parent="Gimmicks" unique_id=1184593673]
-transform = Transform3D(-1, 0, 8.742278e-08, 0, 1, 0, -8.742278e-08, 0, -1, 4, 8.5, -26)
+transform = Transform3D(1, 0, -1.509958e-07, 0, 1, 0, 1.509958e-07, 0, 1, 4, 8.5, -26)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)
@@ -568,7 +568,7 @@ float_on = NodePath("../TidePool")
 look = 1
 
 [node name="SignPool" type="Label3D" parent="Gimmicks" unique_id=172376325]
-transform = Transform3D(1.1924881e-08, 0, 1, 0, 1, 0, -1, 0, 1.1924881e-08, 286, 12, -205.5)
+transform = Transform3D(7.54979e-08, 0, -1, 0, 1, 0, 1, 0, 7.54979e-08, 286, 12, -205.5)
 pixel_size = 0.01
 double_sided = false
 modulate = Color(1, 0.97, 0.88, 1)
