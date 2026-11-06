@@ -195,6 +195,70 @@ def quickstep() -> np.ndarray:
     return whoosh(0.14, 2200.0, 5200.0, 3000.0, 38, q=1.0, rise=0.35)
 
 
+
+def stomp() -> np.ndarray:
+    """A stomp: a spinning rush of air dropping in pitch as the player slams down."""
+    n = ns(0.4)
+    t = times(n)
+    rush = whoosh(0.4, 4200.0, 2600.0, 500.0, 90, q=0.9, rise=0.12)
+    spin = 0.7 + 0.3 * np.sin(synth.TAU * 30.0 * t)
+    zap = synth.sine(synth.curve([(0.0, 900.0), (0.18, 250.0)], n, exponential=True)) * synth.decay_env(n, 0.18)
+    return rush * spin + zap * 0.35
+
+
+def stomp_land() -> np.ndarray:
+    """A stomp landing: a heavy thump with a crunch of grit."""
+    n = ns(0.45)
+    thump = synth.sine(synth.curve([(0.0, 115.0), (0.18, 42.0)], n, exponential=True)) * synth.decay_env(n, 0.32)
+    crunch = synth.sweep(synth.noise(n, 91), "lowpass", synth.curve([(0.0, 4200.0), (0.3, 500.0)], n, True), 0.8)
+    return thump + crunch * synth.decay_env(n, 0.22) * 0.55
+
+
+def drop_dash() -> np.ndarray:
+    """A drop dash charging: a quick rising rev with a click, so the player knows it's ready."""
+    n = ns(0.24)
+    t = times(n)
+    freq = synth.curve([(0.0, 380.0), (0.16, 980.0), (0.24, 1000.0)], n, exponential=True)
+    rev = synth.filt(synth.wave("saw", freq), "lowpass", 4000.0) * (0.65 + 0.35 * np.sin(synth.TAU * 40.0 * t))
+    click = synth.filt(synth.noise(ns(0.012), 92), "highpass", 2500.0) * synth.decay_env(ns(0.012), 0.008)
+    return place([(0.0, rev * synth.adsr(0.14, 0.004, 0.08, 0.7, 0.09, length=n)), (0.0, click * 0.7)], 0.24)
+
+
+def peel_out() -> np.ndarray:
+    """A Super Peel Out revving: a whine climbing as the legs spin faster, over the half second it takes."""
+    n = ns(0.7)
+    t = times(n)
+    freq = synth.curve([(0.0, 160.0), (0.5, 1150.0), (0.7, 1200.0)], n, exponential=True)
+    flutter = 0.6 + 0.4 * np.sin(synth.TAU * np.cumsum(synth.curve([(0.0, 8.0), (0.5, 40.0), (0.7, 42.0)], n)) / RATE)
+    whine = synth.filt(synth.wave("pulse", freq, width=0.3) * 0.6 + synth.wave("triangle", freq) * 0.4, "lowpass", 4500.0)
+    air = synth.sweep(synth.noise(n, 93), "bandpass", synth.curve([(0.0, 600.0), (0.6, 3500.0)], n, True), 1.0) * 0.3
+    return (whine * flutter + air) * synth.adsr(0.55, 0.01, 0.3, 0.9, 0.15, length=n)
+
+
+def light_dash() -> np.ndarray:
+    """A light speed dash: a bright shimmering rush, with a chime."""
+    rush = whoosh(0.7, 2500.0, 6500.0, 3200.0, 94, q=0.9, rise=0.15)
+    n = ns(0.7)
+    t = times(n)
+    shimmer = 0.75 + 0.25 * np.sin(synth.TAU * 22.0 * t)
+    return place([(0.0, rush * shimmer), (0.0, bell(2093.0, 0.5, 1.2) * 0.35), (0.06, bell(2637.0, 0.45, 1.0) * 0.25)], 0.75)
+
+
+def wall_kick() -> np.ndarray:
+    """A wall jump: a kick off the wall, with a rush of air up and away."""
+    n = ns(0.15)
+    kick = synth.sine(synth.curve([(0.0, 170.0), (0.12, 70.0)], n, exponential=True)) * synth.decay_env(n, 0.12)
+    tap = synth.filt(synth.noise(ns(0.02), 95), "bandpass", 1400.0, 1.2) * synth.decay_env(ns(0.02), 0.015)
+    return place([(0.0, kick * 0.8), (0.0, tap * 0.6), (0.02, whoosh(0.28, 1400.0, 3600.0, 2000.0, 96, rise=0.3) * 0.7)], 0.32)
+
+
+def wall_cling() -> np.ndarray:
+    """Grabbing hold of a wall: a soft slap."""
+    n = ns(0.1)
+    slap = synth.filt(synth.noise(n, 97), "bandpass", 1100.0, 0.9) * synth.decay_env(n, 0.05)
+    thud = synth.sine(synth.curve([(0.0, 140.0), (0.08, 90.0)], n, exponential=True)) * synth.decay_env(n, 0.07)
+    return slap * 0.7 + thud * 0.5
+
 # --- Items and gimmicks ------------------------------------------------------------------
 
 def monitor() -> np.ndarray:
@@ -519,6 +583,8 @@ SOUNDS = {
     "ring_left": ring_left, "ring_right": ring_right, "ring_loss": ring_loss, "death": death,
     "shield_loss": shield_loss, "homing": homing, "air_dash": air_dash, "boost": boost,
     "boost_loop": boost_loop, "air_boost": air_boost, "quickstep": quickstep,
+    "stomp": stomp, "stomp_land": stomp_land, "drop_dash": drop_dash, "peel_out": peel_out,
+    "light_dash": light_dash, "wall_kick": wall_kick, "wall_cling": wall_cling,
     "monitor": monitor, "shield": shield, "magnet": magnet, "boost_fill": boost_fill, "spring": spring,
     "dash_panel": dash_panel, "checkpoint": checkpoint, "goal": goal, "red_ring": red_ring,
     "wave": wave, "splash": splash, "air_warning": air_warning, "breathe": breathe, "drown": drown,
@@ -543,6 +609,8 @@ LEVELS = {
     "ui_pause": -24.0, "ui_start": -19.0,
     "air_warning": -19.0, "breathe": -19.0, "drown": -17.0, "grind": -20.0, "grind_loop": -27.0,
     "crumble": -19.0, "wall_break": -16.0,
+    "stomp": -18.0, "stomp_land": -17.0, "drop_dash": -20.0, "peel_out": -19.0, "light_dash": -18.0,
+    "wall_kick": -19.0, "wall_cling": -21.0,
 }
 
 LOOPS = {"boost_loop", "grind_loop"}

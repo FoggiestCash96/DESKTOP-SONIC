@@ -11,6 +11,7 @@ const LOST_RINGS_PER_CIRCLE := 16  ## Scattered rings fly out in circles of this
 const LOST_RING_STEEP := 60.0  ## Alternate scattered rings fly out this many degrees above the horizontal...
 const LOST_RING_SHALLOW := 30.0  ## ...and the others this many.
 const HOMING_OVERHEAD := 1.0  ## A homing target closer than this horizontally (m) is straight above or below, and counts as in front.
+const LIGHT_DASH_TOUCH := 0.25  ## A ring closer than this to a light speed dash (m) is the one being collected now.
 
 
 ## Ground speed after one tick of running. `input_strength` (0 to 1) is how far the stick is
@@ -245,10 +246,10 @@ static func with_speed_shoes(physics: PlayerPhysics) -> PlayerPhysics:
 	return fast
 
 
-## Movement values underwater: a copy of `physics` with acc, dec, frc, top, air_acc, roll_frc and
-## boost_speed multiplied by water_factor, and the lighter gravity, lower jump and gentler knockback
-## of water_grv, water_jmp, water_jmp_release_cap and water_hurt_gravity, as the classic games swap
-## them in underwater.
+## Movement values underwater: a copy of `physics` with acc, dec, frc, top, air_acc, roll_frc,
+## boost_speed and the stomp, drop dash and peel out speeds multiplied by water_factor, and the
+## lighter gravity, lower jump and gentler knockback of water_grv, water_jmp,
+## water_jmp_release_cap and water_hurt_gravity, as the classic games swap them in underwater.
 static func underwater(physics: PlayerPhysics) -> PlayerPhysics:
 	var wet := physics.duplicate() as PlayerPhysics
 	var factor := physics.water_factor
@@ -259,6 +260,10 @@ static func underwater(physics: PlayerPhysics) -> PlayerPhysics:
 	wet.air_acc *= factor
 	wet.roll_frc *= factor
 	wet.boost_speed *= factor
+	wet.stomp_speed *= factor
+	wet.drop_dash_speed *= factor
+	wet.drop_dash_max *= factor
+	wet.peel_out_speed *= factor
 	wet.grv = physics.water_grv
 	wet.jmp = physics.water_jmp
 	wet.jmp_release_cap = physics.water_jmp_release_cap
@@ -309,3 +314,51 @@ static func grind_speed(speed: float, direction: Vector3, physics: PlayerPhysics
 	if speed > physics.grind_min_speed:
 		speed = maxf(speed - physics.grind_frc * delta, physics.grind_min_speed)
 	return speed
+
+
+## A drop dash's launch speed, the classic way. `along` is the speed the player was already
+## going along the launch direction (negative against it): going that way they keep a quarter of
+## it on top of drop_dash_speed, up to drop_dash_max; against it they launch at drop_dash_speed.
+static func drop_dash_speed(along: float, physics: PlayerPhysics) -> float:
+	if along > 0.0:
+		return minf(along * 0.25 + physics.drop_dash_speed, physics.drop_dash_max)
+	return physics.drop_dash_speed
+
+
+## `heading` after `delta` seconds of a drift turning to `side` (1 right, -1 left) on a surface
+## with normal `normal`: drift_turn_rate with the stick pushed fully into the turn (`into` 1), half
+## that with it straight or away (`into` 0 or less).
+static func drift_heading(heading: Vector3, normal: Vector3, side: float, into: float, physics: PlayerPhysics, delta: float) -> Vector3:
+	var strength := clampf(0.5 + 0.5 * into, 0.5, 1.0)
+	var angle := deg_to_rad(physics.drift_turn_rate) * strength * delta
+	return heading.rotated(normal.normalized(), -angle * signf(side)).normalized()
+
+
+## Which of `rings` (positions) a light speed dash at `from`, going `direction`, goes to next: the
+## nearest within `reach` that isn't behind it, nor the one being touched now (closer than
+## LIGHT_DASH_TOUCH). With `direction` zero, to start a dash, the nearest within reach. Returns
+## its index, or -1 with none.
+static func light_dash_next(from: Vector3, direction: Vector3, rings: Array[Vector3], reach: float) -> int:
+	var best := -1
+	var best_distance := INF
+	for i in rings.size():
+		var offset := rings[i] - from
+		var distance := offset.length()
+		if distance > reach or distance >= best_distance:
+			continue
+		if direction != Vector3.ZERO and (distance < LIGHT_DASH_TOUCH or offset.dot(direction) < 0.0):
+			continue
+		best = i
+		best_distance = distance
+	return best
+
+
+## The kick off a wall-jump panel facing out along `normal`: wall_jump_out away from it, on the
+## horizontal plane, and wall_jump_up up.
+static func wall_jump_velocity(normal: Vector3, physics: PlayerPhysics) -> Vector3:
+	var out := Vector3(normal.x, 0.0, normal.z)
+	if out.length_squared() < 1e-6:
+		out = Vector3.ZERO
+	else:
+		out = out.normalized()
+	return out * physics.wall_jump_out + Vector3.UP * physics.wall_jump_up

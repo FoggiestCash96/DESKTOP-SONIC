@@ -32,6 +32,8 @@
 [ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="30_qcmr0"]
 [ext_resource type="Script" path="res://engine/gimmicks/crumbling_platform.gd" id="31_ekwhm"]
 [ext_resource type="Script" path="res://engine/gimmicks/breakable_wall.gd" id="32_fxy16"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/wall_jump_panel.tscn" id="33_k8xy3"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/wall_run_strip.tscn" id="34_qcmr0"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -1203,4 +1205,108 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 5.5, -128)
 pixel_size = 0.01
 billboard = 1
 text = "Roll or boost through"
+font_size = 48
+
+[node name="Moves" type="Node3D" parent="." unique_id=258477897]
+
+[node name="SignMoves" type="Label3D" parent="Moves" unique_id=537248848]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 60, 4.5, -108)
+pixel_size = 0.01
+billboard = 1
+text = "Moves: stomp, drop dash, peel out,
+drift, light speed dash, wall jumps, wall run"
+font_size = 56
+
+[node name="StompTower" type="CSGBox3D" parent="Moves" unique_id=1743842063]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 3, -135)
+use_collision = true
+size = Vector3(8, 6, 8)
+material = ExtResource("6_x61iv")
+
+[node name="StompRamp" type="CSGPolygon3D" parent="Moves" unique_id=902349577]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 54, 0, -115)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 16, 0, 16, 6, 0, 0)
+depth = 8.0
+material = ExtResource("5_k0xv2")
+
+[node name="SignStomp" type="Label3D" parent="Moves" unique_id=1901266937]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 9, -135)
+pixel_size = 0.01
+billboard = 1
+text = "Stomp: roll in the air"
+font_size = 48
+
+[node name="StompCrab" parent="Moves" unique_id=683730885 instance=ExtResource("21_y7hr1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 50, 0, -146)
+patrol_distance = 0.0
+
+[node name="StompMonitor" parent="Moves" unique_id=930350749 instance=ExtResource("19_ysvsk")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 44, 0, -146)
+
+[node name="LightDashTrail" type="Node3D" parent="Moves" unique_id=2091751540]
+transform = Transform3D(1, 0, 0, 0, 0.9781476, -0.2079117, 0, 0.2079117, 0.9781476, 70, 1.5, -133)
+script = ExtResource("12_aqf77")
+count = 10
+spacing = 3.0
+
+[node name="LightDashLedge" type="CSGBox3D" parent="Moves" unique_id=698143925]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 3, -164)
+use_collision = true
+size = Vector3(8, 6, 8)
+material = ExtResource("6_x61iv")
+
+[node name="SignLightDash" type="Label3D" parent="Moves" unique_id=1743581749]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 70, 4, -126)
+pixel_size = 0.01
+billboard = 1
+text = "Light speed dash: special (F / Y)
+near the rings"
+font_size = 48
+
+[node name="ShaftWall" type="CSGBox3D" parent="Moves" unique_id=334142298]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 95, 7, -145)
+use_collision = true
+size = Vector3(1, 14, 10)
+material = ExtResource("6_x61iv")
+
+[node name="ShaftBlock" type="CSGBox3D" parent="Moves" unique_id=1485840344]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 107, 4.5, -145)
+use_collision = true
+size = Vector3(9, 9, 10)
+material = ExtResource("6_x61iv")
+
+[node name="PanelWest" parent="Moves" unique_id=247418984 instance=ExtResource("33_k8xy3")]
+transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 95.5, 7, -145)
+size = Vector2(4, 13)
+
+[node name="PanelEast" parent="Moves" unique_id=957761942 instance=ExtResource("33_k8xy3")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 102.5, 4.75, -145)
+size = Vector2(4, 8.5)
+
+[node name="SignWallJump" type="Label3D" parent="Moves" unique_id=1934668805]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 99, 15, -138)
+pixel_size = 0.01
+billboard = 1
+text = "Wall jumps: jump at a panel,
+then jump again"
+font_size = 48
+
+[node name="RunWall" type="CSGBox3D" parent="Moves" unique_id=2061393612]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 125, 5, -200)
+use_collision = true
+size = Vector3(1, 10, 100)
+material = ExtResource("6_x61iv")
+
+[node name="RunStrip" parent="Moves" unique_id=116473469 instance=ExtResource("34_qcmr0")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 124.5, 3, -240)
+length = 80.0
+height = 2.5
+
+[node name="SignWallRun" type="Label3D" parent="Moves" unique_id=220736670]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 118, 6.5, -152)
+pixel_size = 0.01
+billboard = 1
+text = "Wall run: jump at the strip
+running fast"
 font_size = 48

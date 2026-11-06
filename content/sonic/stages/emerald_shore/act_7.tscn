@@ -500,6 +500,24 @@ spacing = 3.5
 [node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("24_i2drx")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 235, -4, -780)
 
+[node name="RingsLightDash" type="Node3D" parent="Gimmicks" unique_id=591610240]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 56, 2.8, -423)
+script = ExtResource("17_ylwi0")
+count = 9
+spacing = 3.0
+arc_height = 2.5
+
+[node name="SignLightDash" type="Label3D" parent="Gimmicks" unique_id=1347084984]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 48, 5.5, -422)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Light speed dash:
+special (F / Y) by the rings"
+font_size = 52
+outline_size = 14
+
 [node name="Enemies" type="Node3D" parent="." unique_id=1892541630]
 
 [node name="ScuttlerStart" parent="Enemies" unique_id=1354843088 instance=ExtResource("25_8wmid")]

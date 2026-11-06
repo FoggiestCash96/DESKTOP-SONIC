@@ -28,9 +28,9 @@ const MODELS := {
 	&"animal": "res://engine/enemies/base/animal.tscn",
 }
 ## ArtBank.material: for meshes the engine builds itself (waves, spike plates, water surfaces, rails,
-## bubbles, platforms and breakable walls).
+## bubbles, platforms, breakable walls, wall-jump panels and wall-run strips).
 const MATERIALS: Array[StringName] = [&"spikes_plate", &"wave_water", &"wave_foam", &"water", &"water_flowing", &"rail",
-		&"bubble", &"platform_stone", &"crumbling_rock", &"log_bark", &"breakable_rock"]
+		&"bubble", &"platform_stone", &"crumbling_rock", &"log_bark", &"breakable_rock", &"wall_jump_panel", &"wall_run_strip"]
 const BADNIKS: Array[String] = [
 	"res://content/sonic/enemies/scuttler.tscn",
 	"res://content/sonic/enemies/galegull.tscn",

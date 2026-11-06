@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" path="res://engine/gimmicks/dash_panel.tscn" id="25_yaxw0"]
 [ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="26_p1vtm"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="27_s0esa"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/wall_jump_panel.tscn" id="28_bdla1"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="28_mx5k3"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="29_ilrs3"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="30_xkbml"]
@@ -350,7 +351,7 @@ material = ExtResource("10_cr551")
 transform = Transform3D(1, 0, 6.123032e-17, 0, 1, 0, -6.123032e-17, 0, 1, 74, 0, -326)
 visible = false
 use_collision = true
-polygon = PackedVector2Array(0, 14, 50, 14, 50, 16, 0, 16)
+polygon = PackedVector2Array(0, 4, 50, 4, 50, 16, 0, 16)
 depth = 10.0
 material = ExtResource("10_cr551")
 
@@ -531,6 +532,13 @@ visible = false
 use_collision = true
 radius = 0.55
 height = 9.0
+material = ExtResource("12_v5jrw")
+
+[node name="ChimneyPillar" type="CSGBox3D" parent="Geometry" unique_id=485126876]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, 12, -319)
+visible = false
+use_collision = true
+size = Vector3(4, 16, 1)
 material = ExtResource("12_v5jrw")
 
 [node name="Art" parent="." unique_id=576910400 instance=ExtResource("15_r4joi")]
@@ -843,6 +851,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 205, -1, -640)
 [node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("27_s0esa")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 213, -1, -672)
 
+[node name="WallJumpShelf" parent="Gimmicks" unique_id=688212998 instance=ExtResource("28_bdla1")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 110, 11.25, -326)
+size = Vector2(4, 9.5)
+
+[node name="WallJumpPillar" parent="Gimmicks" unique_id=1068572681 instance=ExtResource("28_bdla1")]
+transform = Transform3D(-1, 0, -8.742278e-08, 0, 1, 0, 8.742278e-08, 0, -1, 110, 13, -319.5)
+size = Vector2(4, 13)
+
+[node name="SignWallJump" type="Label3D" parent="Gimmicks" unique_id=439917882]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 100, 10.5, -322)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Wall jump: jump at a blue panel,
+then jump again to climb!"
+font_size = 48
+outline_size = 14
+
 [node name="Enemies" type="Node3D" parent="." unique_id=107247366]
 
 [node name="ScuttlerStart" parent="Enemies" unique_id=1354843088 instance=ExtResource("28_mx5k3")]
@@ -885,7 +912,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 88, 10, -324)
 swoops = false
 
 [node name="GullChain2" parent="Enemies" unique_id=291645748 instance=ExtResource("30_xkbml")]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96, 13.5, -331)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 96, 16.5, -324.8)
 swoops = false
 
 [node name="ScuttlerCanopy3" parent="Enemies" unique_id=2027039242 instance=ExtResource("28_mx5k3")]

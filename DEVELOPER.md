@@ -34,10 +34,15 @@ You play Sonic, built by a script in Blender, with toon shading and animations f
 |---|---|---|
 | Move (relative to the camera) | W A S D | Left stick |
 | Jump (hold for a higher jump) | Space | A |
-| In the air: homing attack (with a target in reach) or air dash | Space again | A again |
+| In the air: homing attack (with a target in reach) or air dash (a tap) | Space again | A again |
+| Drop dash: in the air, hold the second press, and keep holding as you land | Space again (hold) | A again (hold) |
+| Stomp (in the air) | Ctrl | B |
 | Roll (hold while moving) | Ctrl | B |
 | Spin dash: hold while still, tap jump to charge, let go to launch | Ctrl, then Space | B, then A |
 | Boost (hold; in the air, an air boost) | Shift | X or RT |
+| Drift (hold while running fast and steering) | C | LT |
+| Super Peel Out: standing still, hold drift and tap jump, then let go of drift | C, then Space | LT, then A |
+| Light speed dash (by a ring) | F | Y |
 | Quickstep left / right (running fast) | Q / E | LB / RB |
 | Orbit the camera | Mouse or arrow keys | Right stick |
 | Swing the camera behind the player | Middle mouse button | Right stick click |
@@ -48,7 +53,9 @@ Menus work with a controller (D-pad or stick, A to choose, B to go back), the ke
 
 Land on a grind rail, or run onto its end, to grind it: Q / E (LB / RB) hops to a rail beside it, and jump leaves it. Under water everything is slower and floatier: lower jumps, slow falls. Air lasts 30 s; touch a big bubble from a vent, or come up for air, before the count runs out. A roll, spin dash or boost smashes through walls of loose rock.
 
-Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, the second press is an air dash.
+Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, a quick tap of the second press is an air dash, and holding it charges a drop dash that launches you rolling as you land (let go first to cancel it).
+
+The stomp slams you straight down, smashing badniks and monitors on the way. The Super Peel Out revs up on the spot: after half a second, letting go of drift launches you running at full speed. Drifting slides you round corners far tighter than running turns. The light speed dash zips you along a trail of rings, even across a gap or up into the air. Jump at a blue wall-jump panel to cling to it, and jump again to kick off: two facing panels make a climb. Jump at a gold strip on a wall while running fast to run along the wall.
 
 **Emerald Shore Act 1** is the first greybox act, a speed act about 1.2 km long:
 - Waves wash up the tidal flats every 15 seconds. Ride one up the steep slope.
@@ -59,12 +66,12 @@ Badniks hurt you if you touch them standing up. Jump on them, roll into them, or
 - The goal shows your time and rings, then moves on to Act 2.
 
 **Acts 2 to 7** follow on, each taking about as long to play:
-- **Act 2, Lush Palm Grove:** a treetop route of decks and rope bridges over a safe jungle floor, a ravine crossed on a bridge or on moving and crumbling platforms, a lift and a vine rail over the canopy.
+- **Act 2, Lush Palm Grove:** a treetop route of decks and rope bridges over a safe jungle floor, a ravine crossed on a bridge or on moving and crumbling platforms, a lift, a homing chain or a wall-jump climb up to a high shelf, and a vine rail down from it.
 - **Act 3, Cascading Waterfall Basin:** waterslides whose current is faster than running, springs up tiers beside waterfalls, rails beside the slides, and a plunge pool crossed on floating logs.
 - **Act 4, Shallow Reef Lagoon:** packs of badniks on reef islets, homing chains of gulls (or a swim, or a raft) across deep channels, and waves to surf along the sandbars.
-- **Act 5, Underground Grotto:** caves with a hidden room, a chasm, a great hall and a shaft in side view, and a river tunnel with a current and a rail.
+- **Act 5, Underground Grotto:** caves with a hidden room, a chasm (crossed on a ledge, on crumbling stones, or by running along the wall), a great hall and a shaft in side view, and a river tunnel with a current and a rail.
 - **Act 6, Tidal Cavern:** two caverns where the tide floods the low route on a timer (run it at low tide, swim or ride a raft at high tide) while the high ledges stay dry, and a tide pool to ride up.
-- **Act 7, Sunset Ridge Cliffs:** a fast cliff-top run with three loops, a spring cannon, big jumps (or bridges beside them), rails and a narrow ridge, toward the fortress.
+- **Act 7, Sunset Ridge Cliffs:** a fast cliff-top run with three loops, a spring cannon (or a homing chain, or a light speed dash) over a chasm, big jumps (or bridges beside them), rails and a narrow ridge, toward the fortress.
 
 **Emerald Shore Act 8** is a short run along a fortress causeway (a homing chain across a gap, fish leaping over a bridge) to the beach where the boss waits. Eggman raises a wave and leaves; the crab mech that rises out of it takes 8 hits on its core, which opens after it slams its claws down. Jump the waves it sends, then hit the core. Beating it shows the results, then returns to the title screen.
 
@@ -81,6 +88,8 @@ Follow the ring trail to the right of the start for the gimmick area, three lane
 Five red rings are hidden around the room, and an extra life floats over the yellow spring.
 
 Past the right lane is the water and rails area: a pool to swim in (with an air vent, and a spring out), a shallow stream flowing over the floor, a tide pool that floods and drains with a raft on it, two grind rails side by side to hop between, a lift, a platform that crushes anyone under it against a low roof, a crumbling ledge, and a rock wall to smash through.
+
+Beyond the far end of the gimmick lanes is the moves area: a tower to stomp off onto a crab and a monitor, a ring trail up to a ledge for the light speed dash, a shaft with wall-jump panels on both sides, and a long wall with a wall-run strip. The drop dash, Super Peel Out and drift work anywhere.
 
 Far to the left of the start, past the long hill, is the enemy gallery: a crab, a clam, a gull and a leaping fish to try jumping, rolling and homing attacks on, and a homing chain of three gulls across a gap between two platforms.
 
@@ -120,6 +129,8 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 | `engine/gimmicks/moving_platform.tscn` | Moves by `travel` (in its own space) and back, or floats on the water named in `float_on`. Its origin is the middle of its top. Give players solid ground to wait on beside it. |
 | `engine/gimmicks/crumbling_platform.tscn` | Falls `delay` seconds after a player stands on it and comes back after `respawn_time`. Its origin is the middle of its top. |
 | `engine/gimmicks/breakable_wall.tscn` | Smashed by a player rolling or boosting into it. Its origin is the middle of its bottom. |
+| `engine/gimmicks/wall_jump_panel.tscn` | A patch of wall to cling to and kick off. Put it flat on a wall, its +Z axis pointing out of the wall; its origin is the middle of the panel and `size` its width and height. Face two panels across a shaft 6 to 7 m wide for a climb (each kick gains about 3 m), and make the side to finish on the lower one, so the last kick lands on top of it. |
+| `engine/gimmicks/wall_run_strip.tscn` | A band along a wall to run on, at 10 m/s or more. Put it on a wall with its +Z axis pointing out of the wall; the player runs along its X axis for `length` metres from its origin, at its origin's height, and the band is `height` tall. Start it a little before where the run should begin, so players can jump at it from the ground. |
 
 A checkpoint counts anywhere through its gate: set `gate_width` to the width of the course. For a 2.5D section, tick `lock_depth` on a side-view camera volume as well as `side_view`; the player then stays on the box's middle plane.
 

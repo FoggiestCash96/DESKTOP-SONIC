@@ -397,3 +397,56 @@ func test_grinding_speeds_up_downhill_and_slows_uphill() -> void:
 	assert_almost_eq(slow, physics.grind_min_speed, 1e-4, "friction never stops a grind")
 	var stalled := PlayerMotion.grind_speed(1.0, -down, physics, 1.0)
 	assert_true(stalled < 0.0, "a climb can stop it and send it back")
+
+
+func test_the_moves_use_the_classic_values() -> void:
+	assert_almost_eq(physics.stomp_speed, 30.0, 1e-6, "stomp: 16 px/frame")
+	assert_almost_eq(physics.drop_dash_time, 20.0 / 60.0, 1e-6, "drop dash: held 20 frames")
+	assert_almost_eq(physics.drop_dash_speed, 15.0, 1e-6, "drop dash: 8 px/frame")
+	assert_almost_eq(physics.drop_dash_max, 22.5, 1e-6, "drop dash: at most 12 px/frame")
+	assert_almost_eq(physics.peel_out_time, 0.5, 1e-6, "peel out: 30 frames of revving")
+	assert_almost_eq(physics.peel_out_speed, 22.5, 1e-6, "peel out: 12 px/frame")
+
+
+func test_a_drop_dash_keeps_a_quarter_of_the_speed_going_its_way() -> void:
+	assert_almost_eq(PlayerMotion.drop_dash_speed(0.0, physics), 15.0, 1e-4, "from a standstill")
+	assert_almost_eq(PlayerMotion.drop_dash_speed(10.0, physics), 17.5, 1e-4, "a quarter of 10 m/s on top")
+	assert_almost_eq(PlayerMotion.drop_dash_speed(40.0, physics), 22.5, 1e-4, "never past the cap")
+	assert_almost_eq(PlayerMotion.drop_dash_speed(-12.0, physics), 15.0, 1e-4, "against the way the player was going")
+
+
+func test_underwater_the_launches_are_halved() -> void:
+	var wet := PlayerMotion.underwater(physics)
+	assert_almost_eq(wet.stomp_speed, 15.0, 1e-4, "stomp")
+	assert_almost_eq(wet.drop_dash_speed, 7.5, 1e-4, "drop dash")
+	assert_almost_eq(wet.drop_dash_max, 11.25, 1e-4, "drop dash cap")
+	assert_almost_eq(wet.peel_out_speed, 11.25, 1e-4, "peel out")
+
+
+func test_a_drift_turns_its_way_faster_with_the_stick_into_it() -> void:
+	var right := PlayerMotion.drift_heading(Vector3.FORWARD, Vector3.UP, 1.0, 1.0, physics, 0.1)
+	assert_true(right.x > 0.0, "a right drift turns right")
+	assert_almost_eq(rad_to_deg(Vector3.FORWARD.angle_to(right)), physics.drift_turn_rate * 0.1, 1e-3, "at the full rate")
+	var left := PlayerMotion.drift_heading(Vector3.FORWARD, Vector3.UP, -1.0, 0.0, physics, 0.1)
+	assert_true(left.x < 0.0, "a left drift turns left")
+	assert_almost_eq(rad_to_deg(Vector3.FORWARD.angle_to(left)), physics.drift_turn_rate * 0.05, 1e-3, "half the rate with the stick straight")
+	var away := PlayerMotion.drift_heading(Vector3.FORWARD, Vector3.UP, 1.0, -1.0, physics, 0.1)
+	assert_almost_eq(rad_to_deg(Vector3.FORWARD.angle_to(away)), physics.drift_turn_rate * 0.05, 1e-3, "never less than half")
+
+
+func test_the_light_speed_dash_goes_to_the_nearest_ring_ahead() -> void:
+	var rings: Array[Vector3] = [Vector3(0, 0, -5), Vector3(0, 0, -2), Vector3(0, 0, 3), Vector3(0, 0, -9)]
+	assert_eq(PlayerMotion.light_dash_next(Vector3.ZERO, Vector3.ZERO, rings, 3.0), 1, "the nearest to start, any way")
+	assert_eq(PlayerMotion.light_dash_next(Vector3(0, 0, -2), Vector3.FORWARD, rings, 6.0), 0, "then the next one ahead")
+	assert_eq(PlayerMotion.light_dash_next(Vector3(0, 0, -5), Vector3.FORWARD, rings, 6.0), 3, "skipping those behind")
+	assert_eq(PlayerMotion.light_dash_next(Vector3(0, 0, -9), Vector3.FORWARD, rings, 6.0), -1, "none left ahead within reach")
+	var empty: Array[Vector3] = []
+	assert_eq(PlayerMotion.light_dash_next(Vector3.ZERO, Vector3.ZERO, empty, 3.0), -1, "no rings at all")
+
+
+func test_a_wall_jump_kicks_away_and_up() -> void:
+	var kick := PlayerMotion.wall_jump_velocity(Vector3.RIGHT, physics)
+	assert_almost_eq(kick.x, physics.wall_jump_out, 1e-4, "away from the wall")
+	assert_almost_eq(kick.y, physics.wall_jump_up, 1e-4, "and up")
+	var tilted := PlayerMotion.wall_jump_velocity(Vector3(0.0, 0.6, 0.8), physics)
+	assert_almost_eq(Vector2(tilted.x, tilted.z).length(), physics.wall_jump_out, 1e-4, "always level away from it")
