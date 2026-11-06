@@ -1,6 +1,6 @@
 extends "res://tests/test_suite.gd"
-## Spring launches, bounces and tidal waves (engine/gimmicks/gimmick_math.gd), where a RingLine
-## puts its rings, and how a loop's curbs rise.
+## Spring launches, bounces and tidal waves (engine/gimmicks/gimmick_math.gd), where a homing
+## attack aims at a spring, where a RingLine puts its rings, and how a loop's curbs rise.
 
 const YELLOW_SPRING := 18.75  ## The classic yellow spring, 10 px/frame.
 const DIAGONAL := Vector3(0.0, 0.70710678, -0.70710678)  ## Up and along -Z, 45° each.
@@ -31,6 +31,24 @@ func test_only_springs_lying_on_their_side_run_along_the_ground() -> void:
 	assert_true(GimmickMath.runs_along(Vector3(0.0, 0.34, -0.94), Vector3.UP), "20° up")
 	assert_false(GimmickMath.runs_along(DIAGONAL, Vector3.UP), "45° up")
 	assert_false(GimmickMath.runs_along(Vector3.UP, Vector3.UP), "straight up")
+
+
+func test_a_homing_attack_aims_at_a_springs_axis_just_above_its_pad() -> void:
+	# Springs play sounds through the Sfx autoload, so the scene is read rather than run.
+	var state := (load("res://engine/gimmicks/spring.tscn") as PackedScene).get_state()
+	var target := _saved(state, &"HomingTarget")
+	assert_true(target.has("transform"), "spring.tscn has a HomingTarget")
+	if not target.has("transform"):
+		return
+	assert_true(target.get("unique_name_in_owner", false), "the spring finds it as %HomingTarget")
+	assert_eq((target["script"] as Script).resource_path, "res://engine/enemies/base/homing_target.gd")
+	var at := (target["transform"] as Transform3D).origin
+	assert_true(is_zero_approx(at.x) and is_zero_approx(at.z), "on the spring's axis: %s" % at)
+	var pad := _saved(state, &"Pad")
+	var catch_box := _saved(state, &"Shape")
+	var pad_top := (pad["transform"] as Transform3D).origin.y + (pad["mesh"] as CylinderMesh).height * 0.5
+	var box_top := (catch_box["transform"] as Transform3D).origin.y + (catch_box["shape"] as BoxShape3D).size.y * 0.5
+	assert_true(at.y > pad_top and at.y < box_top, "above the pad (%.2f m), inside the catch box (to %.2f m): %.2f m" % [pad_top, box_top, at.y])
 
 
 func test_a_bounce_reverses_and_shrinks_the_speed_into_the_surface() -> void:
@@ -92,3 +110,14 @@ func test_only_a_fast_enough_approach_breaks_a_wall() -> void:
 	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, -2.0), Vector3.FORWARD, 3.0), "too slow")
 	assert_false(GimmickMath.breaks_wall(Vector3(10.0, 0.0, 0.0), Vector3.FORWARD, 3.0), "passing along it")
 	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, 10.0), Vector3.FORWARD, 3.0), "going away")
+
+
+# The properties saved on the node named `node_name` in a scene, by name, without instancing it.
+func _saved(state: SceneState, node_name: StringName) -> Dictionary:
+	var found := {}
+	for node in state.get_node_count():
+		if state.get_node_name(node) != node_name:
+			continue
+		for i in state.get_node_property_count(node):
+			found[String(state.get_node_property_name(node, i))] = state.get_node_property_value(node, i)
+	return found

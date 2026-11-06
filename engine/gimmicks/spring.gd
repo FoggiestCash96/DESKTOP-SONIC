@@ -4,6 +4,12 @@ extends Area3D
 ## A spring. Touching it launches the player along the spring's +Y axis (turn the node to aim it).
 ## An upward spring keeps the player's running speed by default, as classic springs do, and a
 ## spring lying on its side sends a grounded player along the ground instead.
+##
+## It's a homing target too (%HomingTarget, where the middle of the player's ball rests on the pad).
+## A homing attack that reaches it puts the ball there and launches the player exactly along the
+## spring at its speed, keeping nothing of the attack's own speed, so every homing launch from a
+## spring flies the same way. The homing attack skips the spring that launched the player until
+## they land.
 
 const YELLOW := Color(1.0, 0.85, 0.15)
 const RED := Color(0.95, 0.2, 0.15)
@@ -19,6 +25,7 @@ const RED_FROM := 24.0  ## Springs at least this fast (m/s) are painted red, lik
 var _launched: Array[Player] = []  # Players still touching since their launch, so each touch launches once.
 
 @onready var _pad: MeshInstance3D = %Pad
+@onready var _homing_target: HomingTarget = %HomingTarget
 
 
 func _ready() -> void:
@@ -48,10 +55,14 @@ func _physics_process(_delta: float) -> void:
 
 func _launch(player: Player) -> void:
 	var direction := global_basis.y.normalized()
+	var homing := player.is_homing()
+	if homing:
+		player.move_ball_to(_homing_target.global_position)
 	if player.is_grounded() and GimmickMath.runs_along(direction, player.ground_normal):
 		player.push_along_ground(direction, speed, false, control_lock)
 	else:
-		player.launch(GimmickMath.spring_velocity(player.velocity, direction, speed, keep_momentum), control_lock)
+		var velocity := GimmickMath.spring_velocity(player.velocity, direction, speed, keep_momentum and not homing)
+		player.launch(velocity, control_lock, _homing_target)
 	Sfx.play(&"spring")
 	var squash := create_tween()
 	squash.tween_property(_pad, "scale:y", 0.4, 0.05)

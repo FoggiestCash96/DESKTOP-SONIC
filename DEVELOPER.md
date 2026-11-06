@@ -53,7 +53,7 @@ Menus work with a controller (D-pad or stick, A to choose, B to go back), the ke
 
 Land on a grind rail, or run onto its end, to grind it: Q / E (LB / RB) hops to a rail beside it, and jump leaves it. Under water everything is slower and floatier: lower jumps, slow falls. Air lasts 30 s; touch a big bubble from a vent, or come up for air, before the count runs out. A roll, spin dash or boost smashes through walls of loose rock.
 
-Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. With nothing in reach, a quick tap of the second press is an air dash, and holding it charges a drop dash that launches you rolling as you land (let go first to cancel it).
+Badniks hurt you if you touch them standing up. Jump on them, roll into them, or homing attack them: in the air, a yellow reticle marks what a second jump press would lock on to, and each hit bounces you up ready for the next. Springs are targets too: homing into one launches you straight along it, ready to home in on whatever is next. With nothing in reach, a quick tap of the second press is an air dash, and holding it charges a drop dash that launches you rolling as you land (let go first to cancel it).
 
 The stomp slams you straight down, smashing badniks and monitors on the way. The Super Peel Out revs up on the spot: after half a second, letting go of drift launches you running at full speed. Drifting slides you round corners far tighter than running turns. The light speed dash zips you along a trail of rings, even across a gap or up into the air. Jump at a blue wall-jump panel to cling to it, and jump again to kick off: two facing panels make a climb. Jump at a gold strip on a wall while running fast to run along the wall.
 
@@ -82,7 +82,7 @@ The test room has 15°, 30° and 45° ramps, a half-pipe, a loop (to the right o
 Follow the ring trail to the right of the start for the gimmick area, three lanes running away from you:
 
 - **Left lane:** rings, a dash panel, a checkpoint, then spikes.
-- **Middle lane:** springs (yellow, red, diagonal onto a ledge, and one lying on its side).
+- **Middle lane:** springs (yellow, red, diagonal onto a ledge, and one lying on its side), to run over or homing attack.
 - **Right lane:** item monitors (rings, shield, speed shoes, invincibility, magnet) with spikes to try them on.
 
 Five red rings are hidden around the room, and an extra life floats over the yellow spring.
@@ -112,7 +112,7 @@ Drag these scenes into a stage. A stage's root node needs `engine/systems/stage.
 
 | Scene | Notes |
 |---|---|
-| `engine/gimmicks/spring.tscn` | Launches along its +Y axis, so turn it to aim. `speed` 18.75 is the yellow spring and 30 the red one. Turn off `keep_momentum` for exact diagonal launches. On its side it pushes a grounded player along the ground. |
+| `engine/gimmicks/spring.tscn` | Launches along its +Y axis, so turn it to aim. `speed` 18.75 is the yellow spring and 30 the red one. Turn off `keep_momentum` for exact diagonal launches. On its side it pushes a grounded player along the ground. It's a homing target: a homing attack that reaches it puts the player on its pad and launches them exactly along it, whatever `keep_momentum` says, so aim a spring meant for homing at where it should land. |
 | `engine/gimmicks/dash_panel.tscn` | Sends a grounded player along its −Z axis (the arrows) at `speed` or faster. |
 | `engine/gimmicks/spikes.tscn` | Set `size` for the bed's footprint. |
 | `engine/gimmicks/checkpoint.tscn` | The player restarts 1 m in front of it, facing its −Z axis. |
@@ -178,7 +178,7 @@ Drag a badnik from `content/sonic/enemies/` into a stage (under an `Enemies` nod
 | Scene | Behaviour | Placing it |
 |---|---|---|
 | `scuttler.tscn` | Walker | Patrols along its own X axis, `patrol_distance` either side. Keep its patrol on solid ground. |
-| `galegull.tscn` | Flyer | Untick `swoops` for a hovering stepping stone in a homing chain; chained targets want to be within 12 m of each other. |
+| `galegull.tscn` | Flyer | Untick `swoops` for a hovering stepping stone in a homing chain; chained targets want to be within 12 m of each other, and nearer each other than any spring, since the homing attack picks the nearest target in reach. |
 | `pearlshot.tscn` | Turret | Fires at the player from `notice_range` away. Give players something to hide behind, or a way round. |
 | `leapfin.tscn` | Leaper | Put it at the water's surface. With `leap_distance` it leaps along its −Z axis and back; stagger neighbours with `start_delay`. |
 

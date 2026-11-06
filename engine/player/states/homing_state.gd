@@ -2,8 +2,9 @@ class_name HomingState
 extends PlayerState
 ## A homing attack: curled up, flying straight at a target at homing_speed and following it as it
 ## moves. When the attack lands, whatever was hit bounces the player off it (Player.rebound_from()
-## or Player.bounce_back()). The attack gives up, carrying on through the air, if the target goes
-## away or can no longer be hit, or after homing_max_time.
+## or Player.bounce_back()), or launches them if it's a spring (Spring). The attack gives up,
+## carrying on through the air, if the target goes away or can no longer be hit, or after
+## homing_max_time.
 
 var target: HomingTarget
 var _elapsed := 0.0
