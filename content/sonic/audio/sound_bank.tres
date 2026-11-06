@@ -55,6 +55,13 @@
 [ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/crumble.wav" id="65_newcrum"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/wall_break.wav" id="66_newwall"]
 [ext_resource type="AudioStream" path="res://content/sonic/audio/music/drowning.ogg" id="70_drown"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/stomp.wav" id="80_m11stom"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/stomp_land.wav" id="81_m11stom"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/drop_dash.wav" id="82_m11drop"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/peel_out.wav" id="83_m11peel"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/light_dash.wav" id="84_m11ligh"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/wall_kick.wav" id="85_m11wall"]
+[ext_resource type="AudioStream" path="res://content/sonic/audio/sounds/wall_cling.wav" id="86_m11wall"]
 
 [sub_resource type="AudioStreamRandomizer" id="AudioStreamRandomizer_tdlpc"]
 playback_mode = 1
@@ -148,6 +155,13 @@ sounds = Dictionary[StringName, AudioStream]({
 &"ui_pause": ExtResource("46_kp54c"),
 &"ui_start": ExtResource("47_8u0qp"),
 &"wall_break": ExtResource("66_newwall"),
+&"stomp": ExtResource("80_m11stom"),
+&"stomp_land": ExtResource("81_m11stom"),
+&"drop_dash": ExtResource("82_m11drop"),
+&"peel_out": ExtResource("83_m11peel"),
+&"light_dash": ExtResource("84_m11ligh"),
+&"wall_kick": ExtResource("85_m11wall"),
+&"wall_cling": ExtResource("86_m11wall"),
 &"wave": ExtResource("31_y3sd7")
 })
 music = Dictionary[StringName, AudioStream]({

@@ -143,15 +143,15 @@ MODERN
 |---|---|---|
 | Roll (down while moving) | Y | Uses the `roll_*` constants |
 | Spin Dash | Y | Classic: release speed `8 + floor(charge)/2`, charge capped at 8 |
-| Drop Dash | Y | Mania-style. Hold jump in the air for `[[20]]` frames |
-| Super Peel Out | Y | |
+| Drop Dash | Y | Mania-style. Hold jump in the air for `[[20]]` frames. Built in Milestone 11 (decided 2026-11-05: the hold charges it only with no homing target in reach; a tap is the air dash). DESIGN.md §5.10. |
+| Super Peel Out | Y | Built in Milestone 11: standing still, hold drift and tap jump, 0.5 s to 22.5 m/s. DESIGN.md §5.10. |
 | Homing Attack | Y | Lock-on range 12 m, cone 90° (decided 2026-10-29). Built in Milestone 8, with the air dash: DESIGN.md §9.2. |
 | Air Dash / Jump Dash | Y | |
-| Light Speed Dash (ring trails) | Y | Decided 2026-10-29. Built once rings exist. |
+| Light Speed Dash (ring trails) | Y | Decided 2026-10-29. Built in Milestone 11: the special button by a ring, 40 m/s along the trail. DESIGN.md §5.10. |
 | Boost | Y | Gauge filled by rings and enemies (decided 2026-10-29). Built 2026-10-31 with an air boost and the quickstep: 30 m/s, about 5 s per full gauge, a 2.5 m quickstep (DESIGN.md §5.8). |
-| Stomp / Bounce | Y | |
+| Stomp / Bounce | Y | The stomp (decided 2026-11-05): roll in the air. Built in Milestone 11, DESIGN.md §5.10. |
 | Grind rails | Y | `Path3D`-driven; balance optional |
-| Wall-run / wall-jump | Y | |
+| Wall-run / wall-jump | Y | On marked walls only (decided 2026-11-05): wall-jump panels and wall-run strips. Built in Milestone 11, DESIGN.md §5.10. |
 | Swimming / underwater | Y | Classic: halve acc/dec/frc/top and gravity, apply an air timer |
 | Insta-shield / shields | N | Fire, Bubble, Lightning, as in S3&K |
 
@@ -327,6 +327,7 @@ res://
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
 10. ~~Art and audio pass, then a public demo release.~~ **Done 2026-11-05.** Audio 2026-10-31: original music and about 40 sound effects, all made in code (`tools/audio/`). Art pass 2026-11-01: the acts, objects, badniks, boss, Sonic and title screen, all script-built in Blender. Acts 2 to 7 2026-11-05, with water, grind rails, moving and crumbling platforms, breakable walls, swimming and their own music. The first public demo, v0.1.0, with all eight of Emerald Shore's acts, on GitHub Releases.
+11. The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running. **In progress** (decided 2026-11-05): all built, with a moves area in the test room and spots in Emerald Shore Acts 2, 5 and 7.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 

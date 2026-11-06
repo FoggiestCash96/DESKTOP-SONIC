@@ -20,6 +20,8 @@
 [ext_resource type="Material" path="res://content/sonic/materials/water.tres" id="26_water"]
 [ext_resource type="Material" path="res://content/sonic/materials/water_flowing.tres" id="27_water_"]
 [ext_resource type="Script" path="res://engine/art/art_bank.gd" id="12_u6kul"]
+[ext_resource type="Material" path="res://content/sonic/materials/wall_jump_panel.tres" id="40_walljp"]
+[ext_resource type="Material" path="res://content/sonic/materials/wall_run_strip.tres" id="41_wallrn"]
 
 [resource]
 script = ExtResource("12_u6kul")
@@ -42,6 +44,8 @@ materials = Dictionary[StringName, Material]({
 &"rail": ExtResource("25_rail"),
 &"spikes_plate": ExtResource("1_da1pj"),
 &"water": ExtResource("26_water"),
+&"wall_jump_panel": ExtResource("40_walljp"),
+&"wall_run_strip": ExtResource("41_wallrn"),
 &"water_flowing": ExtResource("27_water_"),
 &"wave_foam": ExtResource("3_adfmr"),
 &"wave_water": ExtResource("2_f2uxf")

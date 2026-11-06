@@ -2784,6 +2784,51 @@
 			]
 		},
 		{
+			"name": "RingsLightDash",
+			"kind": "Node3D",
+			"position": [
+				56.0,
+				2.8,
+				-423.0
+			]
+		},
+		{
+			"name": "SignLightDash",
+			"kind": "Label3D",
+			"position": [
+				48.0,
+				5.5,
+				-422.0
+			],
+			"text_size": [
+				6.35,
+				1.44
+			],
+			"transform": {
+				"x": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					-1.0,
+					0.0,
+					0.0
+				],
+				"origin": [
+					48.0,
+					5.5,
+					-422.0
+				]
+			},
+			"billboard": false
+		},
+		{
 			"name": "ScuttlerStart",
 			"kind": "scuttler",
 			"position": [

@@ -27,6 +27,7 @@
 [ext_resource type="Script" path="res://engine/gimmicks/grind_rail.gd" id="25_3wovf"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/spring.tscn" id="26_eqsee"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/goal.tscn" id="27_wdrpj"]
+[ext_resource type="PackedScene" path="res://engine/gimmicks/wall_run_strip.tscn" id="28_6k00a"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="28_dsdcj"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="29_su2qy"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="30_mddt6"]
@@ -636,6 +637,34 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 398, 30, -234)
 
 [node name="Goal" parent="Gimmicks" unique_id=1196609197 instance=ExtResource("27_wdrpj")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 420, 30, -228)
+
+[node name="WallRunChasm" parent="Gimmicks" unique_id=165967272 instance=ExtResource("28_6k00a")]
+transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9, 3, -142)
+length = 42.0
+height = 2.5
+
+[node name="RingsWallRunIn" type="Node3D" parent="Gimmicks" unique_id=176593678]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 7.8, 0.8, -92)
+script = ExtResource("18_midyv")
+count = 4
+spacing = 3.0
+
+[node name="RingsWallRun" type="Node3D" parent="Gimmicks" unique_id=106376608]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 8.4, 3, -112)
+script = ExtResource("18_midyv")
+count = 8
+spacing = 3.5
+
+[node name="SignWallRun" type="Label3D" parent="Gimmicks" unique_id=687859281]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 3, 6, -94)
+pixel_size = 0.01
+double_sided = false
+modulate = Color(1, 0.97, 0.88, 1)
+outline_modulate = Color(0.25, 0.14, 0.07, 1)
+text = "Running fast? Jump at the gold strip
+to run along the wall!"
+font_size = 48
+outline_size = 14
 
 [node name="Enemies" type="Node3D" parent="." unique_id=2040572484]
 

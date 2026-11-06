@@ -10,6 +10,7 @@ extends Camera3D
 ## tuning lives in `settings`.
 
 const COLLISION_MASK := (1 << 0) | (1 << 7)  # world, camera_collision
+const PIVOT_RETURN := 2.0  ## How fast the pivot comes back once the player stops moving it off themselves (m/s).
 
 @export var target: Player
 @export var settings: CameraSettings = preload("res://engine/camera/camera_settings.tres")
@@ -26,6 +27,7 @@ var _blend_from := Vector4.ZERO  # Yaw, pitch, distance and field of view when t
 var _view := Vector4.ZERO  # Yaw, pitch, distance and field of view being shown.
 var _arm := 0.0  # Camera distance after walls are taken into account.
 var _aim_ahead := Vector3.ZERO
+var _pivot_offset := Vector3.ZERO  # Player.camera_offset(), eased back.
 var _input_yaw := 0.0
 var _input_held := false  # The stick has been held since the camera last switched views.
 var _probe := PhysicsShapeQueryParameters3D.new()
@@ -196,7 +198,13 @@ func _update_input_yaw() -> void:
 
 
 func _place(delta: float) -> void:
-	var pivot := target.get_global_transform_interpolated().origin + Vector3.UP * settings.height
+	# Off the player at once (so the pivot never ends up in a wall), back gradually (as they leave it).
+	var shift := target.camera_offset()
+	if shift.length_squared() >= _pivot_offset.length_squared():
+		_pivot_offset = shift
+	else:
+		_pivot_offset = _pivot_offset.move_toward(shift, PIVOT_RETURN * delta)
+	var pivot := target.get_global_transform_interpolated().origin + Vector3.UP * settings.height + _pivot_offset
 	var ahead := CameraMath.look_ahead(target.velocity, settings.look_ahead_time, settings.look_ahead_max)
 	if _volume and _volume.side_view:
 		var path := _volume.global_basis.x.normalized()

@@ -77,6 +77,36 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export var quickstep_time: float = 0.12  ## Seconds a quickstep takes.
 @export var quickstep_min_speed: float = 8.0  ## Quickstep only works running at least this fast (m/s).
 
+@export_group("Stomp")
+@export var stomp_speed: float = 16.0 * SPEED  ## Speed of a stomp, straight down (m/s): the classic top falling speed.
+
+@export_group("Drop dash")
+@export var drop_dash_time: float = 20.0 / CLASSIC_FPS  ## Seconds the second jump press must be held, with no homing target, to charge a drop dash.
+@export var drop_dash_speed: float = 8.0 * SPEED  ## A drop dash launches a roll at this speed (m/s), plus a quarter of the speed already going that way...
+@export var drop_dash_max: float = 12.0 * SPEED  ## ...up to this (m/s).
+
+@export_group("Super Peel Out")
+@export var peel_out_time: float = 30.0 / CLASSIC_FPS  ## Seconds of revving before the peel out is ready.
+@export var peel_out_speed: float = 12.0 * SPEED  ## Running speed it launches at (m/s).
+
+@export_group("Drift")
+@export var drift_min_speed: float = 10.0  ## A drift needs at least this speed (m/s).
+@export var drift_turn_rate: float = 300.0  ## How fast a drift turns with the stick pushed into the turn (degrees per second); half that with it straight.
+
+@export_group("Light speed dash")
+@export var light_dash_reach: float = 3.0  ## A ring this close to the player starts a light speed dash (m)...
+@export var light_dash_link: float = 6.0  ## ...which goes on to each next ring this close (m)...
+@export var light_dash_speed: float = 40.0  ## ...at this speed (m/s)...
+@export var light_dash_exit_speed: float = 15.0  ## ...and carries on from the last ring at this speed (m/s).
+
+@export_group("Walls")
+@export var wall_cling_time: float = 1.0  ## Seconds a player can cling to a wall-jump panel before falling off.
+@export var wall_cling_slide: float = 2.0  ## How fast they slide down it meanwhile (m/s).
+@export var wall_jump_out: float = 9.0  ## A wall jump's speed away from the wall (m/s)...
+@export var wall_jump_up: float = 13.0  ## ...and up (m/s).
+@export var wall_jump_lock: float = 0.25  ## Seconds the stick is ignored after a wall jump, so the player arcs away from the wall.
+@export var wall_run_min_speed: float = 10.0  ## A wall-run strip catches a player going at least this fast along it (m/s).
+
 @export_group("Enemies")
 @export var rebound_slowdown: float = 1.0 * SPEED  ## Destroying an enemy in the air while rising, or from below its middle, only slows the player by this much (m/s). From above they bounce back up.
 

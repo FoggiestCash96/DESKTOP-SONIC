@@ -151,16 +151,16 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 
 | Move | Status |
 |---|---|
-| Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes |
+| Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes: the roll and spin dash built in Milestone 3, the drop dash and Super Peel Out in Milestone 11 (§5.10) |
 | Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built in Milestone 8 (§9.2). |
 | Boost, air boost | Yes, built 2026-10-31 (decided then: 30 m/s on the ground and in the air, about 5 s per full gauge), §5.8 |
 | Quickstep | Yes, built with the boost (2.5 m sideways), §5.8 |
-| Drift | Yes, later |
-| Stomp/bounce | Yes |
+| Drift | Yes, Milestone 11 (§5.10) |
+| Stomp/bounce | The stomp (decided 2026-11-05), Milestone 11 (§5.10) |
 | Grind rails (`Path3D`) | Yes, built in Milestone 10 for Acts 2 to 7 (§5.7) |
-| Wall-run and wall-jump | Yes, later |
+| Wall-run and wall-jump | Yes, on marked walls only (decided 2026-11-05), Milestone 11 (§5.10) |
 | Swimming (half acc/dec/frc/top and gravity, air timer) | Yes, built in Milestone 10 with drowning (§5.9) |
-| Light speed dash | **Yes**, chosen 2026-10-29 (`special` button along ring trails). Built once rings exist. |
+| Light speed dash | **Yes**, chosen 2026-10-29 (`special` button along ring trails), Milestone 11 (§5.10) |
 | Insta-shield and elemental shields | No |
 
 ### 5.5 Damage, rings and lives
@@ -193,7 +193,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 ### 5.6 Player controller (Milestones 2 and 3)
 
 - `engine/player/player.tscn` is a `CharacterBody3D` on the `player` layer, colliding with `world` and `gimmicks` (for solid item monitors). Its origin is at its feet. Standing, it uses a capsule 1.0 m tall and 0.3 m in radius; rolling, spin dashing and jumping it curls into a 0.3 m ball.
-- It is a state machine with one script per state in `engine/player/states/`: `GroundState` (run, brake, turn, crouch), `RollState`, `SpinDashState`, `AirState`, and since Milestone 5 `HurtState` (knockback) and `DeathState`. The shared surface handling, rings, hits and power-ups live in `player.gd`.
+- It is a state machine with one script per state in `engine/player/states/`: `GroundState` (run, brake, turn, crouch), `RollState`, `SpinDashState`, `AirState`, and since Milestone 5 `HurtState` (knockback) and `DeathState`; `HomingState` (Milestone 8), `GrindState` (Milestone 10), and in Milestone 11 `StompState`, `PeelOutState`, `DriftState`, `LightDashState`, `WallClingState` and `WallRunState`. The shared surface handling, rings, hits and power-ups live in `player.gd`.
 - On the ground, `ground_speed` and `heading` set the velocity along the surface, and `move_and_slide()` resolves collisions. The body turns to match the ground normal, pivoting on the center of its rounded bottom so the part touching the ground stays put.
 - Godot only snaps a body to the floor when its velocity points into it, and velocity along a slope rounds either way, so the player calls `apply_floor_snap()` itself after each move. A ray from the center of its rounded bottom then reads the ground normal, as the classic ground sensors did.
 - Walls: a head-on hit stops the player. A glancing hit slides along the wall, keeping only the part of the speed that wasn't pointing into it.
@@ -222,7 +222,8 @@ All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and ev
 - **Moving platforms:** a `MovingPlatform` travels back and forth by `travel` in its own space, easing in and out and waiting at each end, or floats on a `WaterVolume`, rising and falling with its tide. Players ride it. One that squeezes a player into the level crushes them (§5.5). It looks like a stone slab or a raft of logs.
 - **Crumbling platforms:** a `CrumblingPlatform` shakes for 0.5 s once a player stands on it, then falls, and comes back 6 s later. A run across a row of them holds.
 - **Breakable walls:** a `BreakableWall` of loose rocks. Rolling (or spin dashing) or boosting into it at 3 m/s or more smashes through without slowing down, and the rocks fly apart; anything else stops against it. It comes back when the stage reloads. Acts 2, 3, 5 and 6 hide their extra lives behind one.
-- **Layers:** springs, dash panels, checkpoints and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
+- **Wall-jump panels and wall-run strips** (Milestone 11): a `WallJumpPanel` is a patch of wall to cling to and kick off, a `WallRunStrip` a band along a wall to run on (§5.10). Each builds its own plate and catch area; only walls that carry one can be clung to or run on.
+- **Layers:** springs, dash panels, checkpoints, wall-jump panels, wall-run strips and the solid body of item monitors are on `gimmicks`; rings, red rings and 1-ups on `collectibles`; spikes on `hazards`.
 - **Stages** use `engine/systems/stage.gd` as their root script, which handles restarts and game over. `GameState` (autoload, `engine/systems/game_state.gd`) keeps what outlives a restart.
 
 ### 5.8 Boost and quickstep
@@ -245,6 +246,20 @@ Built in Milestone 10 for Acts 2 to 7 (decided 2026-11-02: the classic rules). T
 - **Air:** 30 s. Chimes warn at 25, 20 and 15 s left. With 12 s left the drowning music (§11.2) takes over from the stage's, and a big count from 5 down to 0 shows high in the middle of the screen, one number every 2 s. At 0 the player drowns, which costs a life, rings or not.
 - **Breathing:** surfacing, or touching a big air bubble (§5.7), fills the air again and ends the countdown and its music. A breath from a bubble holds the player still for 0.35 s.
 - The view under water is tinted blue.
+
+### 5.10 Drop dash, stomp, Super Peel Out, drift, light speed dash and walls (Milestone 11)
+
+Decided 2026-11-05: Milestone 11 finishes the moveset, so later worlds can be built for all of it. The values are in `player_physics.tres`.
+
+- **Stomp** (roll in the air: Ctrl / B): a slam straight down at 30 m/s (16 px/frame, the classic top falling speed), curled up, so it destroys badniks and breaks monitors on the way down without bouncing off them. It lands without speed, but for what a slope gives. Not during a homing attack, a knockback or an air boost.
+- **Drop dash** (as in Sonic Mania): with nothing in homing reach, holding the second jump press for 0.33 s (20 frames) charges it, and landing with jump still held launches a roll at 15 m/s (8 px/frame) plus a quarter of the speed already going that way, up to 22.5 m/s (12 px/frame); against the way the player was going, at 15 m/s. Letting go before landing cancels it. A quick tap of the second press is still the air dash, now fired as the button is let go. With a homing target in reach, the press is the homing attack, as before.
+- **Super Peel Out** (as in Sonic CD): standing still, hold drift (C / LT) and tap jump to rev. After 0.5 s (30 frames) of revving it's ready, and letting go of drift launches the player running at 22.5 m/s (12 px/frame); letting go sooner cancels it. The stick aims it while revving, as with the spin dash.
+- **Drift** (hold drift while running at 10 m/s or more and steering): the player slides round the corner, turning up to 300°/s however fast they go, where running turns 180°/s at speed. Friction still slows them, though the boost holds its speed.
+- **Light speed dash** (special: F / Y, decided 2026-10-29): with a ring within 3 m, the player zips from ring to ring at 40 m/s, collecting them, for as long as the next ring is within 6 m, then carries on at 15 m/s. A trail of rings across a gap is a path only the light speed dash can follow.
+- **Wall-jump panels** (marked walls only, decided 2026-11-05): a `WallJumpPanel` on a wall catches a player who jumps into it. They cling, sliding down slowly for up to 1 s, and jump kicks them off and up (9 m/s out, 13 m/s up), so two facing panels make a shaft to climb.
+- **Wall-run strips** (marked walls only): a `WallRunStrip` along a wall catches a player who jumps at it going 10 m/s or more along its length. They run on the wall at their speed with no gravity, carry on into the air at its end, and jump kicks them off it. The camera pivots 0.75 m out from the wall meanwhile, so it stays out of the rock.
+- Ordinary walls work as before.
+- **Where to try them:** the test room's moves area has a spot for each. In Emerald Shore: a wall-jump climb up to Act 2's high shelf, a wall to run along over Act 5's chasm, and a ring trail for the light speed dash over Act 7's cannon chasm (§7.2). The others work anywhere.
 
 ## 6. Camera
 
@@ -328,7 +343,7 @@ About 0.9 km in three legs. Platforming: a treetop route over a safe jungle floo
 
 1. **The jungle floor** (heading −Z): an 18 m wide floor between palm trunks, the safe route. A diagonal spring on its left ("to the treetops") throws the player up to the treetop route: decks 6 m up joined by rope bridges, with a red ring over the gap between two decks and a shield. A fall from the decks lands on the floor. A breakable wall on the floor's right hides an alcove with the extra life.
 2. **The ravine:** the routes meet at checkpoint 1 above a ravine. A long rope bridge on the right crosses it safely; on the left, two moving platforms and two crumbling ledges between them cross faster, with speed shoes and a red ring on the second ledge.
-3. **The canopy** (heading +X): a lift, or a homing chain on two gulls, climbs to a high shelf 16 m up, with a red ring at its end. From there a vine rail runs down over the canopy, with a red ring along it. Below, the canopy carries on over a pit (a crumbling ledge in it), past checkpoint 2, to a red spring with a red ring high above it.
+3. **The canopy** (heading +X): a lift, a homing chain on two gulls, or a wall-jump climb (panels on the shelf's cliff and on a rock pillar facing it, Milestone 11) goes up to a high shelf 16 m up, with a red ring at its end. From there a vine rail runs down over the canopy, with a red ring along it. Below, the canopy carries on over a pit (a crumbling ledge in it), past checkpoint 2, to a red spring with a red ring high above it.
 4. **The terraces** (heading −Z): down three terraces to fallen logs across the way (or a rail above them on the left), a loop, a bridge over the river, and the beach with the goal.
 
 Badniks: crabs on the start, the floor, the rope bridge (patrolling it), the far bank, the canopy, the terraces, the logs and the beach; clams on the third deck, the canopy and the beach; gulls hovering under the decks' gap and over the ravine's platforms as stepping stones, two for the homing chain, and one over the river.
@@ -364,7 +379,7 @@ About 0.85 km in two legs. Combat: packs of badniks on reef islets, homing chain
 About 0.7 km. Platforming in caves, under a dim sky of its own (`grotto_environment.tres`), with two 2.5D stretches.
 
 1. **Into the cave** (heading −Z): a tunnel from the beach. A breakable wall under a rock lintel on its right hides a room with the extra life and a red ring.
-2. **The chasm:** a narrow ledge along the left wall (safe), or three crumbling stones across the middle, with a red ring over the second. Checkpoint 1.
+2. **The chasm:** a narrow ledge along the left wall (safe), three crumbling stones across the middle, with a red ring over the second, or (Milestone 11) a wall-run strip along the right wall, 3 m up, with rings along it ("Running fast? Jump at the gold strip to run along the wall!"). Checkpoint 1.
 3. **The great hall,** crossed in 2.5D (heading +X): a pit with a platform shuttling over it, two crumbling ledges end to end over another pit (keep running and they hold), a lift to a high ledge (a red ring above its top stop), spikes, and a rock wall across the way to roll or boost through ("Roll or boost to smash through!").
 4. **The river tunnel,** in 3D again: a river with a 12 m/s current, a rail beside it with a red ring on its line, and fish leaping across. Checkpoint 2.
 5. **The shaft,** climbed in 2.5D: a spring to a ledge (a red ring above it), a lift, and a red spring up into the daylight, the exit and the goal.
@@ -386,7 +401,7 @@ About 0.6 km in two legs, under the grotto's sky. Mixed: two sea caverns whose t
 About 1 km in three legs, from 40 m up down to just above the sea, under a sunset sky (`sunset_environment.tres`) with a low, warm sun ahead of the final straight. Speed: the long cliff-top run toward the fortress.
 
 1. **Leg one** (heading −Z): a dash panel and a long downhill to a loop (a red ring at its top), then a dash panel and a ramp to jump a chasm (a red ring over it), or a sloping bridge beside it. A 120 m downhill follows, with two rails over the cliff edge and a red ring on the outer one, to checkpoint 1 and speed shoes.
-2. **Leg two** (heading +X): a spring cannon (a red spring tilted to throw anyone who touches it over a 16 m chasm, with a red ring on its arc) or a homing chain of three gulls beside it, a loop, and a second big jump from a dash panel and a ramp, or a bridge.
+2. **Leg two** (heading +X): a spring cannon (a red spring tilted to throw anyone who touches it over a 16 m chasm, with a red ring on its arc) or a homing chain of three gulls beside it, or (Milestone 11) a trail of rings arcing over the chasm just beyond the gulls, for the light speed dash, a loop, and a second big jump from a dash panel and a ramp, or a bridge.
 3. **Leg three** (heading −Z): a loop (the fifth red ring at its top), a narrow ridge with rails on both sides over the void (checkpoint 2, and gulls swooping), the extra life on a sea stack off the ridge, and the final straight with Act 8's fortress out at sea ahead.
 
 Badniks: crabs on the start, the first loop's floor, the ledges, the third leg's run and the final straight; clams on both landings; gulls over the first downhill and the rail run, three by the cannon, and two over the ridge.
@@ -624,6 +639,7 @@ Each one is grouped by the milestone where it starts to block work.
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
 | 10 | Art and audio pass, then a public demo release | **Done** (2026-11-05): audio (2026-10-31, §11), the art pass (2026-11-01, §8.3), Acts 2 to 7 with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9), and the first public demo, **v0.1.0**, on GitHub Releases |
+| 11 | The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running (§5.10) | **In progress** (decided 2026-11-05): all built, with a moves area in the test room and spots in Acts 2, 5 and 7 |
 
 **Releases** (decided 2026-11-05): pushing a `v*` tag publishes a GitHub pre-release (while the game is in 0.x) with Windows, Linux and macOS builds, each carrying the licenses, the credits and the bundled font's license, and with the notes in `docs/releases/<tag>.md`. The demo is on GitHub Releases only; itch.io can follow later. Each release is first checked from a test build (Actions → CI → Run workflow), launched on Windows.
 

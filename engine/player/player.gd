@@ -30,6 +30,7 @@ const SKID_SOUND_SPEED := 4.0  ## Braking from at least this fast (m/s) screeche
 const WATER_HEIGHT := 0.5  ## The player is under water once this point above their feet is (m).
 const CRUSH_MARGIN := 0.12  ## Squeezed this far into level geometry by something moving, the player is crushed (m).
 const CRUSH_REACH := 30.0  ## Only things that move within this distance can crush (m).
+const CAMERA_WALL_GAP := 0.75  ## While wall-running, the camera pivots this far out from the wall (m).
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -48,6 +49,9 @@ var wish := Vector3.ZERO  ## Camera-relative stick direction on the horizontal p
 var jump_pressed := false
 var jump_held := false
 var crouch_held := false
+var crouch_pressed := false
+var drift_held := false
+var special_pressed := false
 var boost_pressed := false
 var boost_held := false
 var quickstep_pressed := 0  ## -1 for a quickstep left this tick, 1 for right, else 0.
@@ -63,6 +67,13 @@ var hurt_state: HurtState
 var death_state: DeathState
 var homing_state: HomingState
 var grind_state: GrindState
+var stomp_state: StompState
+var peel_out_state: PeelOutState
+var drift_state: DriftState
+var light_dash_state: LightDashState
+var wall_cling_state: WallClingState
+var wall_run_state: WallRunState
+var drop_dash_charged := false  ## A drop dash is charged: landing with jump still held launches it.
 var homing_candidate: HomingTarget  ## What a homing attack would lock on to right now, shown with a reticle. Null on the ground or with the attack used.
 
 var _spawn: Transform3D
@@ -97,6 +108,8 @@ var _underwater := false  # Below a WaterVolume's surface.
 var _air := 30.0  # Seconds of air left under water.
 var _physics_variants: Dictionary[int, PlayerPhysics] = {}  # `physics` with speed shoes and under water, worked out once each.
 var _rail_cooldown := 0.0  # Seconds before a rail can catch the player again.
+var _wall_cooldown := 0.0  # Seconds before a wall-jump panel or wall-run strip can catch the player again.
+var _air_hold := -1.0  # Seconds the second jump press has been held with no homing target, or -1 with none held.
 var _crush_query := PhysicsShapeQueryParameters3D.new()
 var _crush_ball := SphereShape3D.new()
 var _crush_capsule := CapsuleShape3D.new()
@@ -123,6 +136,12 @@ func _ready() -> void:
 	death_state = DeathState.new(self)
 	homing_state = HomingState.new(self)
 	grind_state = GrindState.new(self)
+	stomp_state = StompState.new(self)
+	peel_out_state = PeelOutState.new(self)
+	drift_state = DriftState.new(self)
+	light_dash_state = LightDashState.new(self)
+	wall_cling_state = WallClingState.new(self)
+	wall_run_state = WallRunState.new(self)
 	if character:
 		if character.physics:
 			physics = character.physics
@@ -183,6 +202,9 @@ func _physics_process(delta: float) -> void:
 	_update_water(delta)
 	_update_boost(delta)
 	_start_quickstep()
+	_wall_cooldown = maxf(_wall_cooldown - delta, 0.0)
+	if special_pressed:
+		try_light_dash()
 	state.tick(delta)
 	move_and_slide()
 	state.after_move(delta)
@@ -217,16 +239,32 @@ func _process(_delta: float) -> void:
 	if _reticle.visible:
 		_reticle.global_position = homing_candidate.get_global_transform_interpolated().origin
 	if _model:
-		_model.animate(pose(), ground_speed if is_grounded() else velocity.length())
+		_model.animate(pose(), _pose_speed())
 
 
 ## Which of CharacterModel.POSES the player's model should show right now.
 func pose() -> StringName:
-	if state == grind_state:
-		return &"skid"  # Leaning back on the rail.
+	if state == grind_state or state == drift_state:
+		return &"skid"  # Leaning back on the rail, or into the drift.
+	if state == light_dash_state:
+		return &"spring"  # Stretched out, flying.
+	if state == wall_cling_state:
+		return &"push"  # Hands on the wall.
+	if state == wall_run_state or state == peel_out_state:
+		return &"ground"
 	var finished := not _input_enabled and is_grounded() and absf(ground_speed) < FINISH_SPEED
 	var sprung := _sprung and state == air_state and velocity.y > 0.0
 	return PlayerMotion.pose(state == death_state, state == hurt_state, is_attacking(), is_grounded(), sprung, finished, _braking, _pushing)
+
+
+# How fast the model's run looks: the speed along the ground (or the wall), or through the air,
+# and while revving a peel out, the speed it will launch at.
+func _pose_speed() -> float:
+	if state == peel_out_state:
+		return physics.peel_out_speed * peel_out_state.charge()
+	if is_grounded() or state == wall_run_state:
+		return ground_speed
+	return velocity.length()
 
 
 ## Leaves the current state and enters `next`.
@@ -263,9 +301,17 @@ func is_dead() -> bool:
 	return state == death_state
 
 
-## Whether the player is on the ground: running, rolling or spin dashing.
+## How far the camera's pivot moves off the player's position, beyond its usual height. Wall-running,
+## the player's feet are on the wall, and a camera pivoting there would slip into it.
+func camera_offset() -> Vector3:
+	if state == wall_run_state and wall_run_state.strip:
+		return wall_run_state.strip.normal() * CAMERA_WALL_GAP
+	return Vector3.ZERO
+
+
+## Whether the player is on the ground: running, drifting, rolling, spin dashing or revving a peel out.
 func is_grounded() -> bool:
-	return state == ground_state or state == roll_state or state == spin_dash_state
+	return state == ground_state or state == roll_state or state == spin_dash_state or state == drift_state or state == peel_out_state
 
 
 ## Whether the player is curled into a ball (jumping, rolling, spin dashing or homing in) or
@@ -480,6 +526,14 @@ func land() -> void:
 	if below.is_empty():
 		return
 	ground_normal = below["normal"]
+	_sprung = false
+	_air_action_ready = true
+	_air_boost_ready = true
+	_air_boost_timer = 0.0
+	if drop_dash_charged and jump_held:
+		_drop_dash()
+		return
+	cancel_air_hold()
 	var along := PlayerMotion.along_surface(velocity, ground_normal)
 	ground_speed = along.length()
 	if ground_speed < 1e-4:
@@ -487,10 +541,6 @@ func land() -> void:
 		along = heading
 	heading = _on_plane(along, ground_normal, _any_perpendicular(ground_normal))
 	_flat_heading = _flat(heading, _flat_heading)
-	_sprung = false
-	_air_action_ready = true
-	_air_boost_ready = true
-	_air_boost_timer = 0.0
 	change_state(ground_state)
 
 
@@ -510,6 +560,7 @@ func launch(new_velocity: Vector3, lock_time: float) -> void:
 	_sprung = true
 	_air_action_ready = true
 	_air_boost_ready = true
+	cancel_air_hold()
 	_coyote_timer = 0.0
 	lock_controls(lock_time)
 
@@ -557,9 +608,10 @@ func try_air_boost() -> bool:
 	return true
 
 
-## A second press of jump in the air: a homing attack on the nearest target in reach, or with none,
-## an air dash ahead. Once each time the player leaves the ground; landing a homing attack gives it
-## back. Returns whether it did either.
+## A second press of jump in the air: a homing attack on the nearest target in reach. With none,
+## the press starts a hold (update_air_hold()): let go soon and it's an air dash, held on it
+## charges a drop dash. Once each time the player leaves the ground; landing a homing attack gives
+## it back. Returns whether it started a homing attack, which takes over the tick.
 func try_air_action() -> bool:
 	if not _air_action_ready:
 		return false
@@ -571,13 +623,80 @@ func try_air_action() -> bool:
 		change_state(homing_state)
 		Sfx.play(&"homing")
 		return true
+	_air_hold = 0.0
+	return false
+
+
+## Times a second jump press held with no homing target. Let go before drop_dash_time and it's an
+## air dash; held that long, it charges a drop dash for the landing (drop_dash_charged), and letting
+## go after that cancels it. Returns whether an air dash went off this tick.
+func update_air_hold(delta: float) -> bool:
+	if _air_hold < 0.0:
+		return false
+	if not jump_held:
+		_air_hold = -1.0
+		if drop_dash_charged:
+			drop_dash_charged = false
+			return false
+		_air_dash()
+		return true
+	_air_hold += delta
+	if not drop_dash_charged and _air_hold >= physics.drop_dash_time:
+		drop_dash_charged = true
+		Sfx.play(&"drop_dash")
+	return false
+
+
+## Forgets a second jump press being held and any drop dash it charged.
+func cancel_air_hold() -> void:
+	_air_hold = -1.0
+	drop_dash_charged = false
+
+
+## An air dash: ahead at air_dash_speed or faster, never falling.
+func _air_dash() -> void:
 	var horizontal := PlayerMotion.air_dash(Vector3(velocity.x, 0.0, velocity.z), air_aim(), physics.air_dash_speed)
 	velocity = horizontal + Vector3.UP * maxf(velocity.y, 0.0)
 	air_state.jumped = true
 	air_state.rising = false
 	set_ball(true)
 	Sfx.play(&"air_dash")
+
+
+## Running fast with the stick to one side: a drift that way (DriftState). Returns whether it
+## started: the stick has to point at least a little sideways.
+func start_drift() -> bool:
+	var right := heading.cross(ground_normal)
+	if right.length_squared() < 1e-6:
+		return false
+	var sideways := wish.dot(right.normalized())
+	if absf(sideways) < 0.3:
+		return false
+	drift_state.side = signf(sideways)
+	change_state(drift_state)
 	return true
+
+
+## Roll in the air: a stomp straight down (StompState). Not during an air boost. Returns whether it
+## stomped.
+func try_stomp() -> bool:
+	if state != air_state or _air_boost_timer > 0.0:
+		return false
+	cancel_air_hold()
+	change_state(stomp_state)
+	return true
+
+
+# Landing with a charged drop dash and jump still held: a roll launched the way the stick points (or
+# the way the player was going), at drop_dash_speed plus a quarter of the speed already going that way.
+func _drop_dash() -> void:
+	var along := PlayerMotion.along_surface(velocity, ground_normal)
+	var toward := wish if wish.length_squared() > 0.01 else along
+	heading = _on_plane(toward, ground_normal, heading)
+	ground_speed = PlayerMotion.drop_dash_speed(along.dot(heading), physics)
+	cancel_air_hold()
+	change_state(roll_state)
+	Sfx.play(&"spin_release")
 
 
 ## The way the player faces in the air, for the homing attack and air dash: where the stick points,
@@ -944,6 +1063,126 @@ func _refresh_physics() -> void:
 	physics = _physics_variants[key]
 
 
+# --- Light speed dash and walls ------------------------------------------------------------
+
+## The special button: a light speed dash (LightDashState) along the rings from the nearest one
+## within light_dash_reach. Not while hurt, dead, homing in, stomping, on a rail or on a wall.
+## Returns whether it started.
+func try_light_dash() -> bool:
+	var allowed: Array[PlayerState] = [ground_state, roll_state, drift_state, air_state]
+	if not allowed.has(state):
+		return false
+	var ring := find_light_dash_ring(body_center(), Vector3.ZERO, physics.light_dash_reach)
+	if ring == null:
+		return false
+	cancel_air_hold()
+	light_dash_state.target = ring
+	change_state(light_dash_state)
+	return true
+
+
+## The ring a light speed dash at `from`, going `direction`, goes to next: the nearest one within
+## `reach` that can be collected and isn't behind (PlayerMotion.light_dash_next()), or null.
+func find_light_dash_ring(from: Vector3, direction: Vector3, reach: float) -> Ring:
+	var query := PhysicsShapeQueryParameters3D.new()
+	var sphere := SphereShape3D.new()
+	sphere.radius = reach
+	query.shape = sphere
+	query.transform = Transform3D(Basis.IDENTITY, from)
+	query.collision_mask = COLLECTIBLES_LAYER
+	query.collide_with_areas = true
+	query.collide_with_bodies = false
+	var found: Array[Ring] = []
+	var points: Array[Vector3] = []
+	for hit in get_world_3d().direct_space_state.intersect_shape(query, MAGNET_MAX_RINGS):
+		var ring := hit["collider"] as Ring
+		if ring and ring.collectable and not ring.is_queued_for_deletion() and not found.has(ring):
+			found.append(ring)
+			points.append(ring.global_position)
+	var pick := PlayerMotion.light_dash_next(from, direction, points, reach)
+	return found[pick] if pick >= 0 else null
+
+
+## The middle of the standing body, which the light speed dash steers through each ring.
+func body_center() -> Vector3:
+	return global_position + global_basis.y.normalized() * _standing_shape.position.y
+
+
+## How far from a wall the player's feet stand while clinging to it upright (m): their radius, and a little.
+func wall_offset() -> float:
+	return (_standing_shape.shape as CapsuleShape3D).radius + 0.05
+
+
+## Turns the body all the way to stand on a surface facing `up`, facing `forward`, as on a wall.
+func stand_on(up: Vector3, forward: Vector3) -> void:
+	_orient(up, forward, 1.0)
+
+
+## Catches the player on a wall-jump panel (WallClingState), if they're in the air and the walls
+## haven't just let go of them.
+func cling_to(panel: WallJumpPanel) -> void:
+	if state != air_state or _wall_cooldown > 0.0:
+		return
+	cancel_air_hold()
+	wall_cling_state.panel = panel
+	change_state(wall_cling_state)
+
+
+## Kicks off a wall facing out along `normal`: away and up (PlayerMotion.wall_jump_velocity()),
+## curled up like a jump, with the stick ignored for wall_jump_lock so the player arcs away. The air
+## actions are ready again.
+func wall_jump(normal: Vector3) -> void:
+	velocity = PlayerMotion.wall_jump_velocity(normal, physics)
+	heading = _flat(normal, heading)
+	air_state.jumped = true
+	air_state.rising = false
+	_air_action_ready = true
+	_air_boost_ready = true
+	_wall_cooldown = 0.15
+	lock_controls(physics.wall_jump_lock)
+	change_state(air_state)
+	set_ball(true)
+	Sfx.play(&"wall_kick")
+
+
+## Starts running along a wall-run strip (WallRunState) from `offset` metres along it, `direction`
+## 1 toward its end or -1 toward its start, at the speed the player has along it. Only from the air,
+## and not just after leaving a wall.
+func start_wall_run(strip: WallRunStrip, offset: float, direction: float) -> void:
+	if state != air_state or _wall_cooldown > 0.0:
+		return
+	cancel_air_hold()
+	ground_speed = absf(velocity.dot(strip.along()))
+	wall_run_state.strip = strip
+	wall_run_state.offset = offset
+	wall_run_state.direction = direction
+	_air_action_ready = true
+	_air_boost_ready = true
+	change_state(wall_run_state)
+
+
+## Leaves the wall-run strip: on along it into the air, drifting off the wall, or with `jumped`
+## kicked off it, away and up.
+func leave_wall_run(jumped: bool) -> void:
+	if state != wall_run_state:
+		return
+	var strip := wall_run_state.strip
+	var along := wall_run_state.motion_direction()
+	velocity = along * ground_speed
+	if jumped:
+		velocity += PlayerMotion.wall_jump_velocity(strip.normal(), physics) * 0.75
+		air_state.jumped = true
+		Sfx.play(&"wall_kick")
+	else:
+		velocity += strip.normal() * 2.0
+		air_state.jumped = false
+	air_state.rising = false
+	_wall_cooldown = 0.3
+	change_state(air_state)
+	if jumped:
+		set_ball(true)
+
+
 # --- Rails ----------------------------------------------------------------------------------
 
 ## Leaves the rail being ground: on along it into the air, or with `jumped` in a jump.
@@ -1198,6 +1437,9 @@ func _read_input() -> void:
 		jump_pressed = false
 		jump_held = false
 		crouch_held = false
+		crouch_pressed = false
+		drift_held = false
+		special_pressed = false
 		boost_pressed = false
 		boost_held = false
 		quickstep_pressed = 0
@@ -1206,6 +1448,9 @@ func _read_input() -> void:
 	jump_pressed = Input.is_action_just_pressed("jump")
 	jump_held = Input.is_action_pressed("jump")
 	crouch_held = Input.is_action_pressed("crouch")
+	crouch_pressed = Input.is_action_just_pressed("crouch")
+	drift_held = Input.is_action_pressed("drift")
+	special_pressed = Input.is_action_just_pressed("special")
 	boost_pressed = Input.is_action_just_pressed("boost")
 	boost_held = Input.is_action_pressed("boost")
 	quickstep_pressed = int(Input.is_action_just_pressed("quickstep_right")) - int(Input.is_action_just_pressed("quickstep_left"))

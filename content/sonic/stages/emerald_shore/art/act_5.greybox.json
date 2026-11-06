@@ -2886,6 +2886,69 @@
 			]
 		},
 		{
+			"name": "WallRunChasm",
+			"kind": "wall_run_strip",
+			"position": [
+				9.0,
+				3.0,
+				-142.0
+			]
+		},
+		{
+			"name": "RingsWallRunIn",
+			"kind": "Node3D",
+			"position": [
+				7.8,
+				0.8,
+				-92.0
+			]
+		},
+		{
+			"name": "RingsWallRun",
+			"kind": "Node3D",
+			"position": [
+				8.4,
+				3.0,
+				-112.0
+			]
+		},
+		{
+			"name": "SignWallRun",
+			"kind": "Label3D",
+			"position": [
+				3.0,
+				6.0,
+				-94.0
+			],
+			"text_size": [
+				8.28,
+				1.34
+			],
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					3.0,
+					6.0,
+					-94.0
+				]
+			},
+			"billboard": false
+		},
+		{
 			"name": "ScuttlerBeach",
 			"kind": "scuttler",
 			"position": [

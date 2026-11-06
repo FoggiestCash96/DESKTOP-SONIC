@@ -25,7 +25,7 @@ from stage_kit import Stage  # noqa: E402
 
 GRASS = ["Start", "Floor1", "FloorRise", "Merge", "FarBank", "Corner", "Canopy1", "Canopy2", "HighShelf", "Canopy3",
          "Corner2", "Terrace1", "Terrace2", "Terrace3", "LogRun", "LoopRun", "LoopFloor", "LoopExit", "Alcove", "EndWall"]
-OUTCROPS = ["AlcoveBack", "AlcoveSideNorth", "AlcoveSideSouth"]  # The secret alcove's rock walls.
+OUTCROPS = ["AlcoveBack", "AlcoveSideNorth", "AlcoveSideSouth", "ChimneyPillar"]  # Rock: the secret alcove's walls, the wall-jump pillar.
 SAND = ["Beach"]
 DECKS = ["Deck1", "Deck2", "Deck3", "Deck4"]  # The treetop decks, on posts beside the jungle floor.
 BRIDGES = ["Bridge1", "Bridge2", "RopeBridge", "RiverBridge"]
