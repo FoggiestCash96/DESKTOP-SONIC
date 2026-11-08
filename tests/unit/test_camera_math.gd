@@ -66,3 +66,47 @@ func test_speed_effects_ease_in_between_their_start_and_full_speeds() -> void:
 	assert_almost_eq(CameraMath.effect_amount(10.0, 12.0, 26.0), 0.0, 1e-6, "nothing below the start")
 	assert_almost_eq(CameraMath.effect_amount(19.0, 12.0, 26.0), 0.5, 1e-6, "half way")
 	assert_almost_eq(CameraMath.effect_amount(30.0, 12.0, 26.0), 1.0, 1e-6, "full from the full speed on")
+
+
+func test_stick_angle_is_zero_up_and_positive_to_the_right() -> void:
+	assert_almost_eq(CameraMath.stick_angle(Vector2(0.0, -1.0)), 0.0, 1e-6, "up")
+	assert_almost_eq(rad_to_deg(CameraMath.stick_angle(Vector2(1.0, 0.0))), 90.0, 1e-4, "right")
+	assert_almost_eq(rad_to_deg(CameraMath.stick_angle(Vector2(-1.0, 0.0))), -90.0, 1e-4, "left")
+
+
+## Out of a side view looking along -Z (yaw 0), holding right runs along +X. The camera swings round
+## behind the player (yaw -90°), and they bring the stick round to up.
+func test_held_input_turns_with_the_stick_so_the_player_keeps_going_the_same_way() -> void:
+	var side := 0.0
+	var behind := deg_to_rad(-90.0)
+	for degrees: float in [0.0, 30.0, 60.0, 90.0]:
+		var turn := deg_to_rad(-degrees)  # From right round toward up.
+		var stick := deg_to_rad(90.0) + turn
+		var yaw := CameraMath.held_input_yaw(side, behind, turn)
+		# Input runs along the yaw minus the stick's angle (see Player._camera_wish).
+		var run := CameraMath.forward_for_yaw(yaw - stick)
+		assert_almost_eq(run.distance_to(Vector3.RIGHT), 0.0, 1e-5, "still along +X with the stick %.0f° round" % degrees)
+	assert_almost_eq(CameraMath.held_input_yaw(side, behind, deg_to_rad(-120.0)), behind, 1e-6, "no further than the new view")
+	assert_almost_eq(CameraMath.held_input_yaw(side, behind, deg_to_rad(30.0)), side, 1e-6, "turned the other way, it stays on the old view")
+
+
+func test_held_input_lets_go_once_the_stick_has_come_round_or_turned_away() -> void:
+	var hold := deg_to_rad(45.0)
+	var behind := deg_to_rad(-90.0)
+	assert_true(CameraMath.keeps_input_hold(0.0, behind, 0.0, hold), "held still")
+	assert_true(CameraMath.keeps_input_hold(0.0, behind, deg_to_rad(-60.0), hold), "on its way round")
+	assert_false(CameraMath.keeps_input_hold(0.0, behind, deg_to_rad(-90.0), hold), "come round as far as the view")
+	assert_false(CameraMath.keeps_input_hold(0.0, behind, deg_to_rad(-89.5), hold), "or near enough, as a pad lands")
+	assert_true(CameraMath.keeps_input_hold(0.0, behind, deg_to_rad(40.0), hold), "a little the other way")
+	assert_false(CameraMath.keeps_input_hold(0.0, behind, deg_to_rad(50.0), hold), "clearly the other way: a new direction")
+	assert_false(CameraMath.keeps_input_hold(0.3, 0.3, 0.0, hold), "views facing the same way have nothing to hold")
+
+
+func test_a_lead_in_is_a_funnel_before_each_end_of_the_box() -> void:
+	var half := Vector3(50.0, 10.0, 5.0)
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(-60.0, 0.0, 0.0), half, 16.0, 1.0), 10.0, 1e-6, "10 m before the -X end")
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(58.0, 0.0, 12.0), half, 16.0, 1.0), 8.0, 1e-6, "8 m before the +X end, where the funnel is 13 m wide each side")
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(58.0, 0.0, 14.0), half, 16.0, 1.0), 0.0, 1e-6, "outside the funnel")
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(-70.0, 0.0, 0.0), half, 16.0, 1.0), 0.0, 1e-6, "further out than the lead-in")
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(-55.0, 12.0, 0.0), half, 16.0, 1.0), 0.0, 1e-6, "above the box")
+	assert_almost_eq(CameraMath.lead_in_distance(Vector3(0.0, 0.0, 0.0), half, 16.0, 1.0), 0.0, 1e-6, "inside the box")

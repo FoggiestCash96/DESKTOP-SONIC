@@ -28,6 +28,9 @@ extends Resource
 @export var recenter_time: float = 0.25  ## Seconds for camera_recenter to swing the camera behind the player.
 @export var focus_turn_speed: float = 180.0  ## How fast a camera volume with a focus turns to keep it in view (degrees per second).
 @export var focus_min_distance: float = 3.0  ## Closer than this to a volume's focus (m), the camera stops turning toward it, so passing right by doesn't spin the view.
+@export var input_hold_angle: float = 45.0  ## Through a change of view with the stick held, input keeps to the old view until the stick turns the other way by more than this (degrees). Turning it toward the new view brings input round with it.
+@export var input_grace_time: float = 0.5  ## For this long after the camera finishes blending into a new view (s), pressing the stick afresh...
+@export var input_grace_angle: float = 30.0  ## ...the way that kept the player going in the old view, to within this (degrees), still keeps them going: input keeps to the old view, as if they'd held the stick.
 
 @export_group("Collision")
 @export var collision_radius: float = 0.25  ## Size of the probe that keeps the camera out of walls (m).

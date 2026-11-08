@@ -28,8 +28,13 @@ var _view := Vector4.ZERO  # Yaw, pitch, distance and field of view being shown.
 var _arm := 0.0  # Camera distance after walls are taken into account.
 var _aim_ahead := Vector3.ZERO
 var _pivot_offset := Vector3.ZERO  # Player.camera_offset(), eased back.
-var _input_yaw := 0.0
-var _input_held := false  # The stick has been held since the camera last switched views.
+var _goal_yaw := 0.0  # Yaw of the view being shown or blended into, which input is relative to...
+var _held := false  # ...unless the stick has stayed held since the camera last switched views...
+var _held_yaw := 0.0  # ...so input keeps to the yaw it was relative to then (see CameraMath.held_input_yaw)...
+var _held_angle := 0.0  # ...and to which way the stick pointed then (CameraMath.stick_angle).
+var _old_yaw := 0.0  # The yaw input was relative to before the view last changed...
+var _since_switch := INF  # ...and how long ago that was (s).
+var _was_held := false  # The stick was held last frame.
 var _probe := PhysicsShapeQueryParameters3D.new()
 var _speed_lines := 0.0  # Strength of the speed effects, smoothed.
 var _blur := 0.0
@@ -51,7 +56,7 @@ func _ready() -> void:
 		var exclude: Array[RID] = [target.get_rid()]
 		_probe.exclude = exclude
 	_view = Vector4(_yaw, _pitch, settings.distance, settings.fov_rest)
-	_input_yaw = _yaw
+	_goal_yaw = _yaw
 	_arm = settings.distance
 	fov = settings.fov_rest
 	Input.mouse_mode = Input.MOUSE_MODE_CAPTURED
@@ -86,17 +91,24 @@ func _process(delta: float) -> void:
 		_watch_fall()
 		return
 	_read_camera_input(delta)
+	_since_switch += delta
 	_update_volume()
-	_view = _blend(_goal_view(delta), delta)
-	_update_input_yaw()
+	var goal := _goal_view(delta)
+	_view = _blend(goal, delta)
+	_update_input_yaw(goal.x)
 	_place(delta)
 
 
-## The yaw that movement input is relative to. Usually the camera's own yaw, but when a camera
-## volume switches the view while the stick is held, it stays on the old yaw until the stick is let
-## go, so running straight into a side-view section doesn't suddenly turn the player.
+## The yaw that movement input is relative to: that of the view the camera is showing or blending
+## into. When a camera volume switches the view while the stick is held, it starts from the old yaw
+## and turns along with the stick, so running straight into or out of a side-view section doesn't
+## turn the player, whether they hold the stick still or bring it round to suit the new view. It
+## goes by the stick as it is now, so it keeps up however fast the stick turns between frames.
 func input_yaw() -> float:
-	return _input_yaw
+	if _held:
+		var turn := wrapf(CameraMath.stick_angle(_stick()) - _held_angle, -PI, PI)
+		return CameraMath.held_input_yaw(_held_yaw, _goal_yaw, turn)
+	return _goal_yaw
 
 
 func _read_camera_input(delta: float) -> void:
@@ -131,8 +143,17 @@ func _update_volume() -> void:
 	_blend_from = _view
 	_blend_elapsed = 0.0
 	_blend_duration = best.blend_time if best else leaving.blend_time
-	_input_held = _stick_held()
-	if best == null:
+	_old_yaw = input_yaw()
+	_since_switch = 0.0
+	if not _held and _stick_held():
+		_held = true
+		_held_yaw = _old_yaw
+		_held_angle = CameraMath.stick_angle(_stick())
+	if best == null and leaving.side_view:
+		# Out of a side view: round behind the player, looking the way they're going.
+		_yaw = CameraMath.yaw_facing(target.horizontal_heading())
+		_pitch = deg_to_rad(settings.default_pitch)
+	elif best == null:
 		# Back to free mode: carry on from the view the volume left the camera in.
 		_yaw = _view.x
 		_pitch = _view.y
@@ -190,11 +211,21 @@ func _blend(goal: Vector4, delta: float) -> Vector4:
 	return Vector4(lerp_angle(_blend_from.x, goal.x, weight), lerpf(_blend_from.y, goal.y, weight), lerpf(_blend_from.z, goal.z, weight), lerpf(_blend_from.w, goal.w, weight))
 
 
-func _update_input_yaw() -> void:
-	if not _stick_held():
-		_input_held = false
-	if not _input_held:
-		_input_yaw = _view.x
+func _update_input_yaw(goal_yaw: float) -> void:
+	var held := _stick_held()
+	if held and not _was_held and not _held and _since_switch < _blend_duration + settings.input_grace_time:
+		# Pressed afresh just after a change of view: the way that keeps the player going in the old
+		# view (as after a side view, pressing right again) still does.
+		var old_way := CameraMath.forward_for_yaw(_old_yaw - CameraMath.stick_angle(_stick()))
+		if rad_to_deg(old_way.angle_to(target.horizontal_heading())) < settings.input_grace_angle:
+			_held = true
+			_held_yaw = _old_yaw
+			_held_angle = CameraMath.stick_angle(_stick())
+	_was_held = held
+	_goal_yaw = goal_yaw
+	if _held:
+		var turn := wrapf(CameraMath.stick_angle(_stick()) - _held_angle, -PI, PI)
+		_held = held and CameraMath.keeps_input_hold(_held_yaw, goal_yaw, turn, deg_to_rad(settings.input_hold_angle))
 
 
 func _place(delta: float) -> void:
@@ -270,8 +301,12 @@ func _inversion() -> Vector2:
 	return Vector2(-1.0 if GameSettings.invert_x else 1.0, -1.0 if GameSettings.invert_y else 1.0)
 
 
+func _stick() -> Vector2:
+	return Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+
+
 func _stick_held() -> bool:
-	return Input.get_vector("move_left", "move_right", "move_forward", "move_back") != Vector2.ZERO
+	return _stick() != Vector2.ZERO
 
 
 func _describe() -> String:

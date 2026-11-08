@@ -63,3 +63,46 @@ static func box_contains(box: Transform3D, size: Vector3, point: Vector3) -> boo
 	var local := box.affine_inverse() * point
 	var half := size * 0.5
 	return absf(local.x) <= half.x and absf(local.y) <= half.y and absf(local.z) <= half.z
+
+
+## Which way the stick points, as an angle: 0 is straight up (forward), positive toward the right.
+static func stick_angle(stick: Vector2) -> float:
+	return atan2(stick.x, -stick.y)
+
+
+## The yaw movement input is relative to while the stick stays held through a change of view. It
+## starts at `old_yaw`, the yaw input was relative to before, and turns along with the stick
+## (`stick_turn`: how far the stick has turned since, in radians, positive toward the right), up to
+## the new view's `new_yaw`. So the player keeps going the same way while they bring their thumb
+## round to suit the new view. Turning the stick the other way leaves it at `old_yaw`.
+static func held_input_yaw(old_yaw: float, new_yaw: float, stick_turn: float) -> float:
+	var change := wrapf(new_yaw - old_yaw, -PI, PI)
+	if change * stick_turn <= 0.0:
+		return old_yaw
+	return old_yaw + signf(change) * minf(absf(stick_turn), absf(change))
+
+
+## Whether input should keep to the old view (see held_input_yaw): only until the stick has come
+## round as far as the view has, or has turned the other way by more than `max_other_way` (a new
+## direction, for the new view). Views facing the same way have nothing to hold.
+static func keeps_input_hold(old_yaw: float, new_yaw: float, stick_turn: float, max_other_way: float) -> bool:
+	const CLOSE := 0.02  # Within about 1°, the stick has come round: a pad never lands exactly.
+	var change := wrapf(new_yaw - old_yaw, -PI, PI)
+	if absf(change) < CLOSE:
+		return false
+	if change * stick_turn > 0.0:
+		return absf(stick_turn) < absf(change) - CLOSE
+	return absf(stick_turn) <= max_other_way
+
+
+## How far before the nearer end of a 2.5D section's box a point is (m), when it's in the section's
+## lead-in: within `lead_in` of that end along the box's X axis, within the box's height, and within
+## a funnel that widens `flare` m across for every metre further out. 0 when it isn't. `local` is
+## the point in the box's own space and `half` is half the box's size.
+static func lead_in_distance(local: Vector3, half: Vector3, lead_in: float, flare: float) -> float:
+	var before := absf(local.x) - half.x
+	if before <= 0.0 or before > lead_in or absf(local.y) > half.y:
+		return 0.0
+	if absf(local.z) > half.z + before * flare:
+		return 0.0
+	return before

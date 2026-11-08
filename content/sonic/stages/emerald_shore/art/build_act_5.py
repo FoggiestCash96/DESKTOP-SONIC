@@ -26,7 +26,7 @@ from stage_kit import Stage  # noqa: E402
 SAND = ["Beach"]
 GRASS = ["Exit", "EndWall"]  # Out in the daylight again.
 FLOORS = ["Tunnel1", "Room1", "ChasmLedge", "Tunnel2", "HallCorner", "HallFloor1", "HallStep", "HallLanding", "HallHigh",
-          "HallDescent", "HallFloor2", "Tunnel3", "ShaftFloor", "ShaftLedge1", "ShaftLedge2"]
+          "HallDescent", "HallFloor2", "Tunnel3", "ShaftFloor", "ShaftLedge1", "ShaftLedge2", "HallApron"]
 WALLS = ["Tunnel1WallL", "Tunnel1WallR1", "Tunnel1WallR2", "Room1Back", "Room1SideN", "Room1SideS", "Room1Lintel",
          "ChasmWallL", "ChasmWallR", "Tunnel2WallL", "Tunnel2WallR", "HallWallW", "HallWallN", "HallWallS", "HallWallE1",
          "HallWallE2", "Tunnel3WallL", "Tunnel3WallR", "ShaftWallN", "ShaftWallS", "ShaftWallW"]

@@ -31,6 +31,9 @@ const WATER_HEIGHT := 0.5  ## The player is under water once this point above th
 const CRUSH_MARGIN := 0.12  ## Squeezed this far into level geometry by something moving, the player is crushed (m).
 const CRUSH_REACH := 30.0  ## Only things that move within this distance can crush (m).
 const CAMERA_WALL_GAP := 0.75  ## While wall-running, the camera pivots this far out from the wall (m).
+const ON_PATH := 0.05  ## A player this close to a 2.5D path's plane (m) is on the path.
+const LEAD_IN_SPEED := 1.0  ## A 2.5D section's lead-in eases in players heading into it at least this fast (m/s).
+const ALONG_PATH := 0.3  ## Turned along a 2.5D path, a player keeps going the way along it they were heading if that pointed at least this much along it; otherwise they turn into the section.
 
 static var _lost_ring: PackedScene  # Loaded on first use; preloading it here would make a load cycle with the rings.
 
@@ -92,6 +95,7 @@ var _magnet_timer := 0.0
 var _magnet_query := PhysicsShapeQueryParameters3D.new()
 var _input_enabled := true
 var _lane: CameraVolume  # The 2.5D section holding the player to its path, if any.
+var _onto_lane := false  # In one but off its path and running straight at it: the stick keeps them going but doesn't steer.
 var _model: CharacterModel  # The character's model, if `character` has one.
 var _braking := false  # Braking against the direction of travel this tick.
 var _pushing := false  # Pushing against a wall this tick.
@@ -1411,25 +1415,67 @@ func _find_lane() -> CameraVolume:
 	return null
 
 
-## In a 2.5D section: eases the player onto the path's plane and drops any motion across it, so
-## they can't step off the path into depth. On the ground they run along the path.
+## Keeps the player to 2.5D paths (camera volumes with lock_depth). In a section it brings them onto
+## its path and holds them there, so they can't step off it into depth: motion across it is dropped,
+## and on the ground they run along it. Off the path, they're pulled onto it, faster the faster they
+## go along it, and a player running at the path from the side keeps going straight onto it, then
+## turns along it. Heading into a section, its lead-in eases them onto its path on the way in.
 func _hold_to_lane(delta: float) -> void:
-	if _lane == null or state == death_state:
+	_onto_lane = false
+	if state == death_state or state == grind_state:
+		return
+	if _lane == null:
+		_ease_into_lane(delta)
 		return
 	var across := _lane.depth_axis()
-	var offset := (global_position - _lane.global_position).dot(across)
-	if absf(offset) > 1e-4:
-		var step := physics.lane_pull_speed * delta
-		move_and_collide(-across * clampf(offset, -step, step))
-	velocity -= across * velocity.dot(across)
+	var along := _lane.path_axis()
+	var pull := maxf(physics.lane_pull_speed, absf(velocity.dot(along)) * physics.lane_pull_ratio)
+	var offset := _pull_onto_path(_lane, pull * delta)
+	var toward := -signf(offset)  # Which way across the path lies.
+	var sideways := velocity.dot(across)
+	if absf(offset) > ON_PATH and sideways * toward > 0.0:
+		# Coming at the path from the side: that keeps bringing them, but not past it.
+		velocity -= across * (sideways - toward * minf(absf(sideways), absf(offset) / delta))
+	else:
+		velocity -= across * sideways
 	if not is_grounded():
 		return
-	var along := across.cross(ground_normal)
-	if along.length_squared() > 1e-6:
-		along = along.normalized()
-		heading = along if heading.dot(along) >= 0.0 else -along
-		if not _is_steep():
-			_flat_heading = _flat(heading, _flat_heading)
+	var flat := horizontal_heading()
+	if absf(offset) > ON_PATH and flat.dot(across) * toward > absf(flat.dot(along)):
+		heading = _on_plane(across * toward, ground_normal, heading)
+		_onto_lane = true
+	else:
+		var on_ground := across.cross(ground_normal)
+		if on_ground.length_squared() > 1e-6:
+			on_ground = on_ground.normalized()
+			var going := heading.dot(on_ground)
+			if absf(going) < ALONG_PATH:
+				going = on_ground.dot(_lane.inward(global_position))  # Came at it square on: into the section.
+			heading = on_ground if going >= 0.0 else -on_ground
+	if not _is_steep():
+		_flat_heading = _flat(heading, _flat_heading)
+
+
+## Heading into a 2.5D section from its lead-in: eases the player across toward its path as they go,
+## at the slant lane_pull_ratio sets, so they reach the section on the path.
+func _ease_into_lane(delta: float) -> void:
+	for node in get_tree().get_nodes_in_group(CameraVolume.GROUP):
+		var volume := node as CameraVolume
+		if volume == null:
+			continue
+		var inward := volume.lead_in_direction(global_position, physics.lane_pull_ratio)
+		var speed := velocity.dot(inward)
+		if inward != Vector3.ZERO and speed > LEAD_IN_SPEED:
+			_pull_onto_path(volume, speed * physics.lane_pull_ratio * delta)
+			return
+
+
+## Moves the player up to `step` m across toward `lane`'s path, and returns how far off it they are then.
+func _pull_onto_path(lane: CameraVolume, step: float) -> float:
+	var offset := lane.path_offset(global_position)
+	if absf(offset) > 1e-4:
+		move_and_collide(-lane.depth_axis() * clampf(offset, -step, step))
+	return lane.path_offset(global_position)
 
 
 func _read_input() -> void:
@@ -1458,9 +1504,32 @@ func _read_input() -> void:
 		_jump_buffer_timer = physics.jump_buffer_time
 	wish = _camera_wish()
 	if _lane:
-		# In a 2.5D section the stick only moves the player along the path.
-		var along := _lane.path_axis()
-		wish = along * wish.dot(along)
+		wish = _lane_wish(wish)
+
+
+## The stick in a 2.5D section: it only moves the player along the path, and pushing it up more
+## than to either side (into the screen, in a side view) keeps them going the way they face, as
+## players coming from a 3D stretch expect. Running straight at the path from the side, it keeps
+## them going, without steering, until they're on it.
+func _lane_wish(camera_wish: Vector3) -> Vector3:
+	var stick := Input.get_vector("move_left", "move_right", "move_forward", "move_back")
+	if _onto_lane:
+		return _flat(heading, _flat_heading) * stick.length()
+	var along := _lane.path_axis()
+	var reading := camera_wish.dot(along)
+	var up := maxf(-stick.y, 0.0)
+	if absf(reading) < up:
+		reading = up * _lane_way(along)
+	return along * reading
+
+
+## Which way along a 2.5D path the player is going (1 along `along`, -1 against it): the way they
+## face, or into the section if they face across it.
+func _lane_way(along: Vector3) -> float:
+	var going := horizontal_heading().dot(along)
+	if absf(going) >= ALONG_PATH:
+		return signf(going)
+	return _lane.inward(global_position).dot(along)
 
 
 ## The stick direction on the horizontal plane, relative to the active camera. Its length (0 to 1)
