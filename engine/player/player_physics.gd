@@ -115,7 +115,8 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export var jump_buffer_time: float = 0.1  ## Seconds a jump press is remembered before landing.
 
 @export_group("2.5D")
-@export var lane_pull_speed: float = 8.0  ## How fast a 2.5D section pulls the player onto its path (m/s).
+@export var lane_pull_speed: float = 8.0  ## How fast a 2.5D section pulls the player onto its path at the least (m/s)...
+@export var lane_pull_ratio: float = 1.5  ## ...or this many m/s for every m/s they go along it, if faster, so they come onto it at the same slant at any speed: 1.5 is about 56°, two metres of travel for every three off it, as quick as a quickstep. A section's lead-in eases them in at that slant too, and its funnel opens at it.
 
 @export_group("Damage")
 @export var hurt_speed: float = 2.0 * SPEED  ## Speed of the knockback from a hit, away from what hurt the player (m/s).
