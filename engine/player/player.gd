@@ -100,6 +100,7 @@ var _model: CharacterModel  # The character's model, if `character` has one.
 var _braking := false  # Braking against the direction of travel this tick.
 var _pushing := false  # Pushing against a wall this tick.
 var _sprung := false  # Launched by a spring and not landed since.
+var _launched_from: HomingTarget  # The homing target of the spring that launched the player, which the homing attack skips until they land.
 var _air_action_ready := true  # The homing attack or air dash hasn't been used since the player left the ground.
 var _safe_spots: Array[Transform3D] = []  # Where the player last stood on solid ground, older first, for the assist.
 var _air_boost_timer := 0.0  # Seconds of air boost left.
@@ -531,6 +532,7 @@ func land() -> void:
 		return
 	ground_normal = below["normal"]
 	_sprung = false
+	_launched_from = null
 	_air_action_ready = true
 	_air_boost_ready = true
 	_air_boost_timer = 0.0
@@ -551,11 +553,13 @@ func land() -> void:
 # --- Gimmicks -----------------------------------------------------------------------------
 
 ## Throws the player into the air at `new_velocity`, uncurled, as a spring does. The stick is
-## ignored for `lock_time` seconds.
-func launch(new_velocity: Vector3, lock_time: float) -> void:
+## ignored for `lock_time` seconds. `from` is the launcher's own homing target, if it has one: the
+## homing attack skips it until the player lands, rather than locking straight back on to it.
+func launch(new_velocity: Vector3, lock_time: float, from: HomingTarget = null) -> void:
 	if state == death_state:
 		return
 	velocity = new_velocity
+	_launched_from = from
 	if state != air_state:
 		change_state(air_state)
 	air_state.jumped = false
@@ -567,6 +571,12 @@ func launch(new_velocity: Vector3, lock_time: float) -> void:
 	cancel_air_hold()
 	_coyote_timer = 0.0
 	lock_controls(lock_time)
+
+
+## Moves the player straight toward having the middle of their ball at `point`, stopping short at
+## anything solid on the way, as a spring does to a homing attack that reaches it.
+func move_ball_to(point: Vector3) -> void:
+	move_and_collide(point - ball_center())
 
 
 ## Sends a grounded player along the surface in `direction` at `speed`, as sideways springs and
@@ -712,7 +722,8 @@ func air_aim() -> Vector3:
 
 
 ## The nearest enabled HomingTarget within reach (PlayerMotion.in_homing_reach()) that no level
-## geometry hides, or null.
+## geometry hides, or null. Springs count like everything else, except that the one that launched
+## the player is skipped until they land.
 func find_homing_target() -> HomingTarget:
 	var origin := ball_center()
 	var facing := air_aim()
@@ -720,7 +731,7 @@ func find_homing_target() -> HomingTarget:
 	var best_distance := INF
 	for node in get_tree().get_nodes_in_group(HomingTarget.GROUP):
 		var target := node as HomingTarget
-		if target == null or not target.enabled or not target.is_visible_in_tree():
+		if target == null or target == _launched_from or not target.enabled or not target.is_visible_in_tree():
 			continue
 		var offset := target.global_position - origin
 		var distance := offset.length()

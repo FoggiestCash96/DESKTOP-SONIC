@@ -219,7 +219,7 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 - **Badniks:** chosen world by world. **Emerald Shore** (decided 2026-10-30): Scuttler (a crab walker that charges), Galegull (a gull that dives, or hovers as a homing stepping stone), Pearlshot (a clam turret that fires pearls) and Leapfin (a fish that leaps from the water). All enemies must be original designs or clearly fan-made. No ripped models.
 - **Behaviour:** small state machines (patrol, notice, attack, stunned, destroyed) that release an animal. Built in Milestone 8 (DESIGN.md §9.1).
 - **Bosses:** one per world, at the end of its Act 8 (decided 2026-10-30). Default: 8 hits, with phase changes at 4 and 2. **Emerald Shore:** the Egg Tidecrab. Eggman's ship raises a great wave and leaves for good; the crab mech rises out of the wave, sweeps its claws, and slams them to send waves across the beach before sinking low with its core open (DESIGN.md §9.3). Other worlds: `[[FILL: as each world is built]]`.
-- **Homing-attack targets:** every enemy, item monitor and boss weak point carries a `HomingTarget` marker.
+- **Homing-attack targets:** every enemy, item monitor, spring and boss weak point carries a `HomingTarget` marker (springs since 2026-11-06, DESIGN.md §9.2).
 
 ---
 

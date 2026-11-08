@@ -152,7 +152,7 @@ The classic values come from the Sonic Physics Guide (px/frame at 60 fps), conve
 | Move | Status |
 |---|---|
 | Roll, spin dash, drop dash (hold 0.33 s), Super Peel Out | Yes: the roll and spin dash built in Milestone 3, the drop dash and Super Peel Out in Milestone 11 (§5.10) |
-| Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built in Milestone 8 (§9.2). |
+| Homing attack, air dash | Yes. Homing locks on up to **12 m** away within a **90° cone** (45° either side), chosen 2026-10-29. Built in Milestone 8 (§9.2). Springs became targets on 2026-11-06. |
 | Boost, air boost | Yes, built 2026-10-31 (decided then: 30 m/s on the ground and in the air, about 5 s per full gauge), §5.8 |
 | Quickstep | Yes, built with the boost (2.5 m sideways), §5.8 |
 | Drift | Yes, Milestone 11 (§5.10) |
@@ -208,7 +208,7 @@ Built in Milestone 5. The values are classic ones, in `player_physics.tres` (dam
 
 All of these are scenes in `engine/gimmicks/` and `engine/collectibles/`, and every number is a setting on the node.
 
-- **Springs** launch the player along the spring's +Y axis, uncurled, so letting go of jump doesn't cut the launch short (classic air drag still applies). Yellow springs launch at 18.75 m/s (10 px/frame, about 7.1 m high) and red ones at 30 m/s (16 px/frame, about 18 m). Upward springs keep the player's running speed, as the classic ones do. Turning `keep_momentum` off launches exactly along the spring, for diagonal springs aimed at a ledge. A spring lying on its side sends a grounded player along the ground at its speed instead. Springs can lock the stick for a moment: 0.27 s (16 frames) for classic sideways springs.
+- **Springs** launch the player along the spring's +Y axis, uncurled, so letting go of jump doesn't cut the launch short (classic air drag still applies). Yellow springs launch at 18.75 m/s (10 px/frame, about 7.1 m high) and red ones at 30 m/s (16 px/frame, about 18 m). Upward springs keep the player's running speed, as the classic ones do. Turning `keep_momentum` off launches exactly along the spring, for diagonal springs aimed at a ledge. A spring lying on its side sends a grounded player along the ground at its speed instead. Springs can lock the stick for a moment: 0.27 s (16 frames) for classic sideways springs. They're homing targets: a homing attack that reaches one launches the player exactly along it (§9.2).
 - **Dash panels** send a grounded player along the panel's −Z axis at 30 m/s (the classic speed booster, 16 px/frame), or faster if they already were, and lock the stick for 0.25 s.
 - **Spikes** hurt on touch, and again once the flashing runs out if the player is still on them.
 - **Ring rows** (`RingLine`) place rings along a line, straight or arched over a jump.
@@ -505,7 +505,7 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 
 - **Touching an enemy** hurts the player, unless they're curled up (jumping, rolling, spin dashing or homing in) or invincible. Then it bursts and frees an animal. Shots hurt even a curled-up player, unless a shield or invincibility protects them. Destroyed enemies come back when the stage reloads.
 - **Rebound**, the classic rule: destroying one in the air while falling onto it from above bounces the player back up at the speed they fell. Rising, or level with its middle or lower, they're only slowed by 1 px/frame (1.875 m/s, `rebound_slowdown`). After a homing attack they bounce straight up instead (§9.2). Rolling or spin dashing on the ground, they carry straight on.
-- **Homing targets:** every enemy, item monitor and boss weak point carries a `HomingTarget` marker where the attack aims, switched off while the thing can't be hit.
+- **Homing targets:** every enemy, item monitor, spring (§9.2) and boss weak point carries a `HomingTarget` marker where the attack aims, switched off while the thing can't be hit.
 - **Animations:** if an enemy's model has an AnimationPlayer with animations named after the modes (`patrol`, `notice`, `attack`, `stunned`), each plays as its mode starts, so real models from Blender drop in the same way.
 
 **Emerald Shore's badniks** (decided 2026-10-30): four original fan designs, built from simple shapes until the art pass.
@@ -522,6 +522,7 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 - **Homing attack:** pressing jump again in the air, once each time the player leaves the ground, locks on to the nearest target within **12 m** and **45° either side** of the way they face (where the stick points, or with it let go, their direction of travel), with no level geometry in the way. The player curls up and flies straight at it at 28 m/s, following it as it moves. A hit bounces them straight up at 10 m/s with the move ready again, so attacks chain from target to target. The attack gives up after 0.6 s, or if the target goes away.
 - **Air dash:** with nothing in reach, the same press dashes ahead at 15 m/s (or the player's own speed, if faster), dropping any sideways drift and stopping a fall for a moment.
 - It works after a jump, after running off a ledge, and after a spring. A yellow reticle shows on whatever a homing attack would lock on to.
+- **Springs** are homing targets too (decided 2026-11-06, from playing the v0.1.0 demo), with the marker just above the pad, where the player's ball rests on it. A homing attack that reaches a spring puts the ball there and launches the player exactly along the spring at its speed, keeping none of the attack's own speed, whatever the spring's `keep_momentum` says, so every homing launch from a spring flies the same way. Like a touch, the launch leaves the player uncurled with the homing attack ready again, so it can chain on to a target above. A spring counts like any other target, so the **nearest one in reach wins**, spring or enemy. The one exception is the spring that just launched the player: it's skipped until they land, so the reticle doesn't settle on the spring right below them. **Dash panels aren't targets.** A level that wants a homing chain to pass a spring keeps the chain's next target nearer than the spring (DEVELOPER.md). Emerald Shore's chains still pick their gulls from link to link. The one spring near a chain, Act 7's spring cannon beside the chain over the chasm, wins only for a player who jumps from right beside it, where it's nearer than the first gull, and its launch crosses the same chasm.
 - The values are in `player_physics.tres` (the "Homing attack" and "Enemies" groups).
 
 ### 9.3 Bosses (Milestone 8)
