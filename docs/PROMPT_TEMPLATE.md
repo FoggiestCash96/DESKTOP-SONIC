@@ -327,7 +327,7 @@ res://
 8. ~~Enemies and the first boss.~~ **Done 2026-10-30**, with the homing attack and air dash, four Emerald Shore badniks, and the Egg Tidecrab at the end of a greybox Act 8.
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
 10. ~~Art and audio pass, then a public demo release.~~ **Done 2026-11-05.** Audio 2026-10-31: original music and about 40 sound effects, all made in code (`tools/audio/`). Art pass 2026-11-01: the acts, objects, badniks, boss, Sonic and title screen, all script-built in Blender. Acts 2 to 7 2026-11-05, with water, grind rails, moving and crumbling platforms, breakable walls, swimming and their own music. The first public demo, v0.1.0, with all eight of Emerald Shore's acts, on GitHub Releases.
-11. The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running. **In progress** (decided 2026-11-05): all built, with a moves area in the test room and spots in Emerald Shore Acts 2, 5 and 7.
+11. ~~The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running.~~ **Done 2026-11-06** (decided 2026-11-05), with a moves area in the test room and spots in Emerald Shore Acts 2, 5 and 7.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 

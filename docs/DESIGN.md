@@ -640,7 +640,7 @@ Each one is grouped by the milestone where it starts to block work.
 | 8 | Enemies and the first boss | **Done** |
 | 9 | Menus, save system, settings, accessibility | **Done** |
 | 10 | Art and audio pass, then a public demo release | **Done** (2026-11-05): audio (2026-10-31, §11), the art pass (2026-11-01, §8.3), Acts 2 to 7 with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9), and the first public demo, **v0.1.0**, on GitHub Releases |
-| 11 | The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running (§5.10) | **In progress** (decided 2026-11-05): all built, with a moves area in the test room and spots in Acts 2, 5 and 7 |
+| 11 | The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running (§5.10) | **Done** (2026-11-06): decided 2026-11-05, with a moves area in the test room and spots in Acts 2, 5 and 7 |
 
 **Releases** (decided 2026-11-05): pushing a `v*` tag publishes a GitHub pre-release (while the game is in 0.x) with Windows, Linux and macOS builds, each carrying the licenses, the credits and the bundled font's license, and with the notes in `docs/releases/<tag>.md`. The demo is on GitHub Releases only; itch.io can follow later. Each release is first checked from a test build (Actions → CI → Run workflow), launched on Windows.
 
