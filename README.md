@@ -8,7 +8,7 @@ This is my open source game. Enjoy!
 
 ## Download
 
-Windows, Linux and macOS builds are on the [Releases page](https://github.com/FoggiestCash96/DESKTOP-SONIC/releases). The first demo, **v0.1.0**, has all eight acts of Emerald Shore.
+Windows, Linux and macOS builds are on the [Releases page](https://github.com/FoggiestCash96/DESKTOP-SONIC/releases). The latest demo, **v0.2.0**, has all eight acts of Emerald Shore and Sonic's full moveset.
 
 > macOS builds aren't notarized by Apple. The first time you open one, right-click the app and choose **Open**.
 
