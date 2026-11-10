@@ -96,6 +96,7 @@ var _magnet_query := PhysicsShapeQueryParameters3D.new()
 var _input_enabled := true
 var _lane: CameraVolume  # The 2.5D section holding the player to its path, if any.
 var _onto_lane := false  # In one but off its path and running straight at it: the stick keeps them going but doesn't steer.
+var _finishing := false  # Reached the goal: skidding to a stop.
 var _model: CharacterModel  # The character's model, if `character` has one.
 var _braking := false  # Braking against the direction of travel this tick.
 var _pushing := false  # Pushing against a wall this tick.
@@ -415,8 +416,12 @@ func apply_slope(strength: float, delta: float) -> void:
 
 
 ## Running: speeds up toward the stick, brakes when the stick points back, turns at the
-## speed-dependent turn rate, and coasts to a stop without input.
+## speed-dependent turn rate, and coasts to a stop without input. After the goal, skids to a stop.
 func run(delta: float) -> void:
+	if _finishing:
+		_braking = ground_speed > FINISH_SPEED
+		ground_speed = move_toward(ground_speed, 0.0, physics.finish_brake * delta)
+		return
 	var input := surface_wish()
 	var strength := input.length()
 	if strength <= 0.0:
@@ -870,6 +875,19 @@ func push(direction: Vector3, max_speed: float, amount: float) -> void:
 ## Turns the player's controls off, as at the goal, or back on.
 func set_input_enabled(on: bool) -> void:
 	_input_enabled = on
+
+
+## Reached the goal: the controls go, and on the ground the player skids to a stop
+## (finish_brake), then strikes the victory pose.
+func finish() -> void:
+	_input_enabled = false
+	_finishing = true
+
+
+## Moves the player by `motion` straight away, stopping at anything in the way, as a gimmick that
+## eases them along does.
+func nudge(motion: Vector3) -> void:
+	move_and_collide(motion)
 
 
 # --- Rings, damage and power-ups ----------------------------------------------------------

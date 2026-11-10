@@ -32,6 +32,12 @@ extends Resource
 @export var input_grace_time: float = 0.5  ## For this long after the camera finishes blending into a new view (s), pressing the stick afresh...
 @export var input_grace_angle: float = 30.0  ## ...the way that kept the player going in the old view, to within this (degrees), still keeps them going: input keeps to the old view, as if they'd held the stick.
 
+@export_group("Finish")
+@export var finish_blend: float = 1.2  ## Once an act is cleared, the camera comes round in front of the player over this long (s)...
+@export var finish_distance: float = 5.5  ## ...to this far from them (m)...
+@export var finish_height: float = 2.8  ## ...level with a point this far above their feet (m), so they stand in the lower part of the picture, below the results, with the goal ring behind them.
+@export var finish_pitch: float = 0.0  ## Pitch of that view (degrees). Negative looks down.
+
 @export_group("Collision")
 @export var collision_radius: float = 0.25  ## Size of the probe that keeps the camera out of walls (m).
 @export var collision_margin: float = 0.2  ## Gap kept between the camera and a wall in the way (m).

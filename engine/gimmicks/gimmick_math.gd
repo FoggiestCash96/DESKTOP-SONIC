@@ -1,7 +1,7 @@
 class_name GimmickMath
 extends RefCounted
-## Math for springs, bouncing objects, tidal waves, tides, moving platforms and breakable walls,
-## kept free of nodes so the unit tests can call it.
+## Math for springs, bouncing objects, tidal waves, tides, moving platforms, breakable walls and
+## the goal ring, kept free of nodes so the unit tests can call it.
 
 const ALONG_GROUND := 0.5  ## A launch direction this close to the surface (cosine from its normal, about 60°) runs along the ground.
 
@@ -79,3 +79,14 @@ static func platform_travel(time: float, travel_time: float, pause_time: float) 
 ## vector toward it): it has to be closing on the wall at `speed` or faster.
 static func breaks_wall(velocity: Vector3, direction: Vector3, speed: float) -> bool:
 	return velocity.dot(direction) >= speed
+
+
+## How long a leap takes to rise `height` metres under `gravity` (m/s²), coming to a stop at the top.
+static func time_to_rise(height: float, gravity: float) -> float:
+	return sqrt(2.0 * maxf(height, 0.0) / gravity) if gravity > 0.0 else 0.0
+
+
+## The upward speed for a leap that tops out `distance` metres ahead of a player going `speed` m/s
+## (under `gravity`), as through the goal ring.
+static func leap_speed(distance: float, speed: float, gravity: float) -> float:
+	return gravity * distance / speed if speed > 0.0 else 0.0
