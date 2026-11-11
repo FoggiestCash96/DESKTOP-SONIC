@@ -487,6 +487,7 @@ material_override = SubResource("StandardMaterial3D_qj8bu")
 mesh = SubResource("SphereMesh_31yi3")
 
 [node name="Core" type="MeshInstance3D" parent="CrabMech/Model/Body" unique_id=1134202310]
+unique_name_in_owner = true
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.75, 0)
 material_override = SubResource("StandardMaterial3D_sx4s6")
 mesh = SubResource("SphereMesh_kgcah")

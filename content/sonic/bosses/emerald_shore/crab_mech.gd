@@ -4,10 +4,12 @@ extends Boss
 ## up a great wave, then flies off for good; Eggman isn't seen again in the stage. The crab mech
 ## rises out of the wave as it breaks on the beach, and the fight begins.
 ##
-## The crab scuttles sideways to line up with the player. When they're close it sweeps a claw at
-## them (jump it). Then it raises both claws and slams them down, sending tidal waves rolling across
-## the beach (RollingWave: jump them, or ride them away), and sinks low with the lid over its core
-## open. That's the moment to hit the core. It takes 8 hits, and at 4 and 2 hits left it gets faster
+## The crab scuttles sideways to line up with the player, turning to face them wherever they are,
+## in front of it or behind. When they're close it sweeps a claw at them (jump it). Then it raises
+## both claws and slams them down, sending tidal waves rolling out from its front across the beach
+## (RollingWave: jump them, or ride them away), and sinks low with the lid over its core open and
+## the core risen into view. That's the moment to hit the core; the rest of the time it's sunk in
+## the shell under the shut lid. It takes 8 hits, and at 4 and 2 hits left it gets faster
 ## and angrier: more waves per slam, a shorter opening, and in its last phase a charge across the
 ## beach before each slam.
 ##
@@ -19,6 +21,8 @@ enum Act { WAITING, INTRO, MOVE, SWEEP_WINDUP, SWEEP, SLAM_WINDUP, SLAM, SUNK, R
 const STAND_HEIGHT := 2.6  ## Height of the body's middle while standing (m)...
 const SUNK_HEIGHT := 1.1  ## ...and while sunk low after a slam.
 const LID_OPEN := 1.4  ## How far each half of the lid swings open (radians).
+const CORE_UP := 0.75  ## Height of the core above the body's middle with the lid open (m)...
+const CORE_DOWN := 0.12  ## ...and sunk in the shell with it shut, all of it below the lid.
 const CLAW_RAISED := 1.2  ## Shoulder pitch with the claws raised to slam (radians).
 const CLAW_SLAMMED := 0.3  ## ...and slammed down, resting in the sand with the body sunk low.
 const SWEEP_OUT := 1.3  ## Shoulder yaw with a claw drawn back to sweep (radians)...
@@ -49,6 +53,7 @@ const PHASE_TINTS: Array[Color] = [Color(0.95, 0.45, 0.2), Color(1.0, 0.3, 0.1),
 @export var sweep_range: float = 6.5  ## Sweeps a claw at a player this close to its middle (m): about as far as the claws reach.
 @export var move_speeds: Array[float] = [5.0, 7.5, 10.0]  ## Scuttling speed in each phase (m/s).
 @export var move_times: Array[float] = [2.2, 1.8, 1.4]  ## Seconds of scuttling before each attack, per phase.
+@export var turn_speeds: Array[float] = [90.0, 120.0, 160.0]  ## How fast it turns to face the player, per phase (degrees per second). It turns while it moves and winds up, and holds its aim once an attack starts.
 @export var sweep_windups: Array[float] = [0.7, 0.5, 0.35]  ## Seconds of warning before a sweep, per phase.
 @export var slam_windups: Array[float] = [0.9, 0.7, 0.5]  ## Seconds with the claws raised before a slam, per phase.
 @export var waves_per_slam: Array[int] = [1, 2, 3]
@@ -83,6 +88,7 @@ var _camera_focus := Vector3.ZERO
 @onready var _shell: MeshInstance3D = %Shell
 @onready var _lid_left: Node3D = %LidLeft
 @onready var _lid_right: Node3D = %LidRight
+@onready var _core: Node3D = %Core
 @onready var _claw_left: Node3D = %ClawLeft
 @onready var _claw_right: Node3D = %ClawRight
 @onready var _claw_hurt_left: Area3D = %ClawHurtLeft
@@ -165,9 +171,11 @@ func _fight(delta: float) -> void:
 	match act:
 		Act.MOVE:
 			_scuttle(_lined_up_x(), move_speeds[phase], delta)
+			_face_player(delta)
 			if act_time >= move_times[phase]:
 				_choose_attack()
 		Act.SWEEP_WINDUP:
+			_face_player(delta)
 			var drawn := clampf(act_time / sweep_windups[phase], 0.0, 1.0)
 			_sweep_claw.rotation = Vector3(0.3 * drawn, SWEEP_OUT * _sweep_sign * drawn, 0.0)
 			if act_time >= sweep_windups[phase]:
@@ -184,6 +192,7 @@ func _fight(delta: float) -> void:
 				_set_act(Act.MOVE)
 				act_time = move_times[phase] - 0.3  # A short pause, then straight on to the slam.
 		Act.SLAM_WINDUP:
+			_face_player(delta)
 			var raised := clampf(act_time / 0.35, 0.0, 1.0)
 			_set_claw_pitch(CLAW_RAISED * raised)
 			_body.position.y = STAND_HEIGHT + 0.3 * raised
@@ -208,6 +217,7 @@ func _fight(delta: float) -> void:
 				_close_up(Act.RISE)
 		Act.RISE:
 			_stand_up(delta)
+			_face_player(delta)
 			if act_time >= RISE_TIME:
 				_swept = false
 				_charged = false
@@ -215,6 +225,7 @@ func _fight(delta: float) -> void:
 		Act.CHARGE_WINDUP:
 			var start := _home.x - move_range if _charge_to > _home.x else _home.x + move_range
 			_scuttle(start, move_speeds[phase] * 1.5, delta)
+			_face_player(delta)
 			if absf(position.x - start) < 0.1 and act_time >= 0.8:
 				Sfx.play_at(&"boss_charge", global_position)
 				_set_act(Act.CHARGE)
@@ -298,9 +309,13 @@ func _send_waves(delta: float) -> void:
 	wave.rolling = false
 	wave.free_when_done = true
 	get_parent().add_child(wave)
-	# From the claws' line, rolling toward the beach (+Z), across the whole arena.
-	wave.position = Vector3(_home.x, 0.0, position.z + 3.5)
-	wave.rotation = Vector3(0.0, PI, 0.0)
+	# From the claws' line, rolling out from the crab's front (its -Z), centred across the arena.
+	var front := Vector3(-sin(rotation.y), 0.0, -cos(rotation.y))
+	var across := Vector3(front.z, 0.0, -front.x)
+	var start := Vector3(position.x, 0.0, position.z) + front * 3.5
+	start += across * (_home - start).dot(across)
+	wave.position = Vector3(start.x, 0.0, start.z)
+	wave.rotation = Vector3(0.0, rotation.y, 0.0)  # A wave rolls along its -Z too.
 	wave.roll()
 
 
@@ -352,6 +367,15 @@ func _scuttle(goal_x: float, speed: float, delta: float) -> void:
 	position.x = move_toward(position.x, goal_x, speed * delta)
 
 
+## Turns toward the player at this phase's turn speed, so its front (its -Z, where the claws and
+## eyes are) faces them.
+func _face_player(delta: float) -> void:
+	var to := _to_parent(target.global_position) - position
+	if Vector2(to.x, to.z).length() < 0.5:
+		return
+	rotation.y = wrapf(rotate_toward(rotation.y, atan2(-to.x, -to.z), deg_to_rad(turn_speeds[phase]) * delta), -PI, PI)
+
+
 ## Where along its line the crab would be right in front of the player, within its range.
 func _lined_up_x() -> float:
 	return clampf(_to_parent(target.global_position).x, _home.x - move_range, _home.x + move_range)
@@ -372,10 +396,11 @@ func _set_claw_pitch(pitch: float) -> void:
 	_claw_right.rotation.x = pitch
 
 
-## 0 shut, 1 wide open.
+## 0 shut, with the core sunk under it, to 1 wide open, with the core risen into view.
 func _set_lid(open: float) -> void:
 	_lid_left.rotation.z = open * LID_OPEN
 	_lid_right.rotation.z = -open * LID_OPEN
+	_core.position.y = lerpf(CORE_DOWN, CORE_UP, open)
 
 
 func _shake(seconds: float, amount: float) -> void:
