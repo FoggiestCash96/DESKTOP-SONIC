@@ -12,6 +12,7 @@ const ACCEL := CLASSIC_FPS * CLASSIC_FPS / PIXELS_PER_METER  ## Converts a class
 @export_group("Ground")
 @export var acc: float = 0.046875 * ACCEL  ## Acceleration while running (m/s²).
 @export var dec: float = 0.5 * ACCEL  ## Braking while input points against the motion (m/s²).
+@export var finish_brake: float = 0.5 * ACCEL  ## After the goal, the player skids to a stop at this rate (m/s²), as hard as braking, so they stop within a short run past it even at boost speed.
 @export var frc: float = 0.046875 * ACCEL  ## Slowdown with no input (m/s²).
 @export var top: float = 6.0 * SPEED  ## Top speed from running alone (m/s). Slopes and boosts can go faster.
 @export var max_ground_speed: float = 16.0 * SPEED  ## Hard speed cap that keeps collision stable (m/s).

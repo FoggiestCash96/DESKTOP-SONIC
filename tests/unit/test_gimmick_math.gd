@@ -112,6 +112,19 @@ func test_only_a_fast_enough_approach_breaks_a_wall() -> void:
 	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, 10.0), Vector3.FORWARD, 3.0), "going away")
 
 
+
+func test_a_leap_through_the_goal_ring_tops_out_at_the_ring() -> void:
+	var gravity := 24.6
+	var rise := GimmickMath.time_to_rise(0.9, gravity)
+	assert_almost_eq(0.5 * gravity * rise * rise, 0.9, 1e-4, "rises 0.9 m in that time")
+	for speed: float in [6.0, 15.0, 30.0]:
+		var distance := speed * rise  # Where the leap starts.
+		var up := GimmickMath.leap_speed(distance, speed, gravity)
+		var time := distance / speed  # Time to reach the ring.
+		assert_almost_eq(up - gravity * time, 0.0, 1e-4, "at %.0f m/s it's at the top as it reaches the ring" % speed)
+		assert_almost_eq(up * time - 0.5 * gravity * time * time, 0.9, 1e-3, "at %.0f m/s, 0.9 m up" % speed)
+	assert_almost_eq(GimmickMath.leap_speed(2.0, 0.0, gravity), 0.0, 1e-6, "standing still: no leap")
+
 # The properties saved on the node named `node_name` in a scene, by name, without instancing it.
 func _saved(state: SceneState, node_name: StringName) -> Dictionary:
 	var found := {}

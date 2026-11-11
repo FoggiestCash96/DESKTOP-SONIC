@@ -35,6 +35,7 @@ var _held_angle := 0.0  # ...and to which way the stick pointed then (CameraMath
 var _old_yaw := 0.0  # The yaw input was relative to before the view last changed...
 var _since_switch := INF  # ...and how long ago that was (s).
 var _was_held := false  # The stick was held last frame.
+var _finished := false  # The act is cleared: the camera has come round in front of the player.
 var _probe := PhysicsShapeQueryParameters3D.new()
 var _speed_lines := 0.0  # Strength of the speed effects, smoothed.
 var _blur := 0.0
@@ -92,7 +93,10 @@ func _process(delta: float) -> void:
 		return
 	_read_camera_input(delta)
 	_since_switch += delta
-	_update_volume()
+	if GameState.cleared and not _finished:
+		_finish_view()
+	if not _finished:
+		_update_volume()
 	var goal := _goal_view(delta)
 	_view = _blend(goal, delta)
 	_update_input_yaw(goal.x)
@@ -159,7 +163,19 @@ func _update_volume() -> void:
 		_pitch = _view.y
 
 
+## Once the act is cleared: round in front of the player, to watch them come to a stop and strike
+## their pose, framed low so the results don't hide them, with the goal ring behind them.
+func _finish_view() -> void:
+	_finished = true
+	_volume = null
+	_blend_from = _view
+	_blend_elapsed = 0.0
+	_blend_duration = settings.finish_blend
+
+
 func _goal_view(delta: float) -> Vector4:
+	if _finished:
+		return Vector4(CameraMath.yaw_facing(-target.horizontal_heading()), deg_to_rad(settings.finish_pitch), settings.finish_distance, settings.fov_rest)
 	var speed_fov := CameraMath.speed_fov(target.velocity.length(), target.physics.top, settings.fov_rest, settings.fov_fast)
 	if target.is_boosting():
 		speed_fov = settings.fov_boost
@@ -235,9 +251,14 @@ func _place(delta: float) -> void:
 		_pivot_offset = shift
 	else:
 		_pivot_offset = _pivot_offset.move_toward(shift, PIVOT_RETURN * delta)
-	var pivot := target.get_global_transform_interpolated().origin + Vector3.UP * settings.height + _pivot_offset
+	var height := settings.height
+	if _finished:
+		height = lerpf(settings.height, settings.finish_height, CameraMath.blend_weight(_blend_elapsed, _blend_duration))
+	var pivot := target.get_global_transform_interpolated().origin + Vector3.UP * height + _pivot_offset
 	var ahead := CameraMath.look_ahead(target.velocity, settings.look_ahead_time, settings.look_ahead_max)
-	if _volume and _volume.side_view:
+	if _finished:
+		ahead = Vector3.ZERO  # Looking at the player, not ahead of them.
+	elif _volume and _volume.side_view:
 		var path := _volume.global_basis.x.normalized()
 		ahead = path * ahead.dot(path)
 	_aim_ahead = _aim_ahead.lerp(ahead, CameraMath.smoothing(settings.look_ahead_smoothing, delta))

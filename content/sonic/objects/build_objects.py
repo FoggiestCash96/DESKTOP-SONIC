@@ -1,5 +1,5 @@
 """Builds the models that dress the engine's objects: springs, dash panels, item monitors (with an
-icon for each item), checkpoints, the goal, the extra life, spike points and the animals freed
+icon for each item), checkpoints, the goal ring, the extra life, spike points and the animals freed
 from badniks. Each is a .glb next to this file, built from the layout of the object's placeholder
 scene (<name>.parts.json, written by tools/godot/export_parts.gd), so every part lands where the
 engine expects it. engine/art/model_skin.gd explains how a model dresses an object, and
@@ -29,7 +29,9 @@ WHITE = paint((0.97, 0.97, 0.97))
 BLACK = paint((0.08, 0.08, 0.10))
 YELLOW = paint((1.0, 0.82, 0.16))
 GOLD = paint((1.0, 0.76, 0.18))
+GOLD_DEEP = paint((0.86, 0.46, 0.08))
 RED = paint((0.88, 0.14, 0.12))
+RED_LIGHT = paint((1.0, 0.34, 0.26))
 BLUE = paint((0.14, 0.36, 0.92))
 NAVY = paint((0.10, 0.16, 0.44))
 SKY = paint((0.45, 0.75, 1.0))
@@ -38,6 +40,7 @@ GREEN = paint((0.32, 0.92, 0.42))
 CREAM = paint((0.97, 0.95, 0.88))
 ORANGE = paint((1.0, 0.62, 0.16))
 BIRD_BLUE = paint((0.25, 0.55, 1.0))
+GOAL_DISC = "goal_disc"  # A library material: see-through, showing the vertex colours, from both sides.
 
 
 def at(shape, position, yaw: float = 0.0, scale=1.0, tilt=(0.0, 0.0)):
@@ -145,26 +148,37 @@ def checkpoint(parts: Parts) -> None:
 
 
 def goal(parts: Parts) -> None:
-    for name, x in (("PostLeft", -9.0), ("PostRight", 9.0)):
-        post = parts.part(name)
-        bands(post, [RED, WHITE], 0.18, 0.0, 5.5, 11)
-        post.add(at(sphere(0.28, 12, 8), (x, 5.78, 0.0)), GOLD, smooth=True)
-    # The banner: a white middle for the GOAL text, chequered ends.
-    banner = parts.part("Banner")
-    banner.add(at(art_kit.box((17.6, 1.0, 0.1)), (0.0, 5.2, 0.0)), WHITE)
-    for column in range(14):
-        for row in range(2):
-            if (column + row) % 2:
-                continue
-            for x0 in (-8.8 + column * 0.5, 8.8 - (column + 1) * 0.5):
-                cell = art_kit.box((0.5, 0.5, 0.12), (x0 + 0.25, 4.95 + row * 0.5, 0.0))
-                banner.add(cell, BLACK)
-    sign = parts.part("Sign/Pole")
-    sign.add(lathe([(0.25, 0.0), (0.25, 0.05), (0.06, 0.1), (0.06, 2.4)], 10), STEEL, smooth=True)
-    panel = parts.part("Sign/Panel")
-    panel.add(facing_z(art_kit.cylinder(0.75, 0.08, 24), (6.0, 3.0, -0.04)), BLUE, smooth=False)
-    panel.add(at(star_prism(5, 0.55, 0.24, 0.12), (6.0, 3.0, 0.0)), GOLD)
-    panel.add(facing_z(lathe([(0.78, 0.0), (0.78, 0.1)], 24, cap_bottom=False, cap_top=False), (6.0, 3.0, -0.05)), GOLD, smooth=True)
+    """The giant ring at the end of an act: a gold band with a darker rim on its inside, a disc of
+    colour shading from red-orange at the edge through green to blue in the middle (seen through,
+    from the library's goal_disc material), and a red star that turns in the middle."""
+    middle = parts.origin("Ring")
+    circle = [middle + Vector((math.cos(t), math.sin(t), 0.0)) for t in (i * math.tau / 64 for i in range(65))]
+    band = parts.part("Ring/Band")
+    band.add(tube([middle + (p - middle) * 2.7 for p in circle], [0.3] * len(circle), 14, cap_end=False), GOLD, smooth=True)
+    band.add(tube([middle + (p - middle) * 2.42 for p in circle], [0.11] * len(circle), 8, cap_end=False), GOLD_DEEP, smooth=True)
+    # The disc: rings of vertices from the middle out, each with its colour.
+    stops = [(0.0, (0.12, 0.30, 0.95)), (0.45, (0.20, 0.55, 1.0)), (0.70, (0.15, 0.85, 0.70)), (0.86, (0.75, 0.95, 0.30)),
+             (0.95, (1.0, 0.60, 0.15)), (1.0, (0.95, 0.30, 0.15))]
+    segments = 64
+    vertices, colours, faces = [middle.copy()], [stops[0][1]], []
+    for fraction, colour in stops[1:]:
+        for i in range(segments):
+            angle = math.tau * i / segments
+            vertices.append(middle + Vector((math.cos(angle), math.sin(angle), 0.0)) * 2.45 * fraction)
+            colours.append(colour)
+    for ring in range(len(stops) - 1):
+        for i in range(segments):
+            j = (i + 1) % segments
+            outer_i, outer_j = 1 + ring * segments + i, 1 + ring * segments + j
+            if ring == 0:
+                faces.append((0, outer_i, outer_j))
+            else:
+                inner_i, inner_j = outer_i - segments, outer_j - segments
+                faces.append((inner_i, outer_i, outer_j, inner_j))
+    parts.part("Ring/Disc").add((vertices, faces), GOAL_DISC, colour=colours)
+    star = parts.part("Ring/Emblem/Star")
+    star.add(at(star_prism(5, 1.05, 0.45, 0.26), parts.origin("Ring/Emblem")), RED, smooth=False)
+    star.add(at(star_prism(5, 0.78, 0.33, 0.30), parts.origin("Ring/Emblem")), RED_LIGHT, smooth=False)
 
 
 def extra_life(parts: Parts) -> None:
