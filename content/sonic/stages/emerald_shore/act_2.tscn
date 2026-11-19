@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="28_mx5k3"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="29_ilrs3"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="30_xkbml"]
+[ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="40_guide"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_ntvp0"]
 size = Vector2(4000, 4000)
@@ -48,6 +49,13 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_cornerguide"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, -3.5, 6, -275, 0, 0, 0, 0, 0, 0, -3.5, 6, -301, 0, 0, 0, 0, 0, 0, -3.091, 6, -304.106, 0, 0, 0, 0, 0, 0, -1.892, 6, -307, 0, 0, 0, 0, 0, 0, 0.015, 6, -309.485, 0, 0, 0, 0, 0, 0, 2.5, 6, -311.392, 0, 0, 0, 0, 0, 0, 5.394, 6, -312.591, 0, 0, 0, 0, 0, 0, 8.5, 6, -313, 0, 0, 0, 0, 0, 0, 40, 6, -313, 0, 0, 0, 0, 0, 0, 64, 6, -313),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
 
 [node name="EmeraldShoreAct2" type="Node3D" unique_id=2104053087]
 script = ExtResource("1_yek4f")
@@ -548,6 +556,7 @@ material = ExtResource("12_v5jrw")
 [node name="SecretWall" parent="Gimmicks" unique_id=180054694 instance=ExtResource("16_l53ls")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.6, 0, -91)
 size = Vector3(10, 4, 1)
+look = "sandstone"
 
 [node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("17_4ijst")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -91)
@@ -737,6 +746,7 @@ script = ExtResource("26_p1vtm")
 
 [node name="RedRing5" parent="Gimmicks" unique_id=1370142593 instance=ExtResource("21_0tffl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 152, 12.1, -324)
+slot = 4
 
 [node name="RingsCanopy2" type="Node3D" parent="Gimmicks" unique_id=79666794]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 70, 6.8, -309)
@@ -766,6 +776,7 @@ speed = 30.0
 
 [node name="RedRing4" parent="Gimmicks" unique_id=2082024283 instance=ExtResource("21_0tffl")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 23.5, -322)
+slot = 5
 
 [node name="MonitorCanopyRings" parent="Gimmicks" unique_id=2030960987 instance=ExtResource("19_1vsia")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 190, 6, -307)
@@ -933,3 +944,14 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 219, -1, -630)
 
 [node name="PearlshotBeach" parent="Enemies" unique_id=1491763826 instance=ExtResource("29_ilrs3")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 203, -1, -652)
+
+[node name="CornerGuide" type="Node3D" parent="Gimmicks" unique_id=725778665 node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 14, 9, -303.5)
+script = ExtResource("40_guide")
+size = Vector3(62, 14, 47)
+pitch_degrees = -15.0
+distance = 6.0
+path = NodePath("../CornerGuidePath")
+
+[node name="CornerGuidePath" type="Path3D" parent="Gimmicks" unique_id=2028712779]
+curve = SubResource("Curve3D_cornerguide")

@@ -26,6 +26,8 @@ const GROUP := "camera_volumes"
 @export var avoid_walls: bool = true  ## Pull the camera in front of walls. Turn off where the view looks through geometry on purpose, such as the side of a loop.
 @export var priority: int = 0
 @export var focus: Node3D  ## Keeps this in view: the camera looks past the player at it, ignoring the volume's own facing.
+@export var path: Path3D  ## For a corner: the camera looks along this path, from the player toward the point `look_along` metres further on than the nearest, and movement input follows it, so holding forward runs round the corner. Draw it down the middle of the course.
+@export var look_along: float = 8.0  ## With a path: how far along it ahead of the player the camera looks (m).
 
 var _preview: MeshInstance3D
 
@@ -53,6 +55,23 @@ func path_axis() -> Vector3:
 ## Direction across a 2.5D path, into the screen and out: the box's Z axis.
 func depth_axis() -> Vector3:
 	return global_basis.z.normalized()
+
+
+## With a `path`: the yaw that looks from `point` toward the place on the path `look_along` metres
+## further on than the nearest to it (carrying straight on past its end). `fallback` without one.
+func guide_yaw(point: Vector3, fallback: float) -> float:
+	if path == null or path.curve == null or path.curve.point_count < 2:
+		return fallback
+	var curve := path.curve
+	var length := curve.get_baked_length()
+	var along := curve.get_closest_offset(path.global_transform.affine_inverse() * point) + look_along
+	var ahead := curve.sample_baked(minf(along, length))
+	if along > length:
+		var end := curve.sample_baked(length)
+		ahead = end + (end - curve.sample_baked(maxf(length - 1.0, 0.0))).normalized() * (along - length)
+	var toward := path.global_transform * ahead - point
+	toward.y = 0.0
+	return CameraMath.yaw_facing(toward) if toward.length_squared() > 1e-4 else fallback
 
 
 ## How far `point` is from a 2.5D path's plane, along depth_axis (m).

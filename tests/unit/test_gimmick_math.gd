@@ -112,6 +112,16 @@ func test_only_a_fast_enough_approach_breaks_a_wall() -> void:
 	assert_false(GimmickMath.breaks_wall(Vector3(0.0, 0.0, 10.0), Vector3.FORWARD, 3.0), "going away")
 
 
+func test_only_coming_down_fast_onto_a_floor_breaks_it() -> void:
+	var size := Vector3(6.0, 0.5, 4.0)
+	assert_true(GimmickMath.breaks_floor(Vector3(2.0, 1.0, -1.5), Vector3(0.0, -8.0, 3.0), size, 3.0), "jumping onto it")
+	assert_false(GimmickMath.breaks_floor(Vector3(2.0, 1.0, -1.5), Vector3(0.0, -2.0, 0.0), size, 3.0), "too slow")
+	assert_false(GimmickMath.breaks_floor(Vector3(0.0, 0.5, 0.0), Vector3(0.0, 0.0, -12.0), size, 3.0), "rolling across it")
+	assert_false(GimmickMath.breaks_floor(Vector3(0.0, 0.5, 0.0), Vector3(0.0, 8.0, 0.0), size, 3.0), "jumping up off it")
+	assert_false(GimmickMath.breaks_floor(Vector3(0.0, 1.0, 2.6), Vector3(0.0, -8.0, 0.0), size, 3.0), "landing beside it")
+	assert_false(GimmickMath.breaks_floor(Vector3(0.0, -1.0, 0.0), Vector3(0.0, -8.0, 0.0), size, 3.0), "already under it")
+
+
 
 func test_a_leap_through_the_goal_ring_tops_out_at_the_ring() -> void:
 	var gravity := 24.6

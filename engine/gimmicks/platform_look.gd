@@ -2,12 +2,22 @@ class_name PlatformLook
 extends RefCounted
 ## Builds what a platform looks like from its size, for MovingPlatform and CrumblingPlatform: a slab,
 ## or a raft of logs lying along X. The top is at y = 0. Materials come from the art bank
-## ("platform_stone", "crumbling_rock", "log_bark", "breakable_rock"), with plain colours as fallbacks.
+## ("platform_stone", "crumbling_rock", "log_bark", and BreakableWall's "breakable_rock" and the
+## rest of its looks), with plain colours as fallbacks.
 
 const FALLBACK_COLOURS := {
 	&"platform_stone": Color(0.62, 0.58, 0.52),
 	&"crumbling_rock": Color(0.8, 0.55, 0.35),
 	&"breakable_rock": Color(0.7, 0.5, 0.32),
+	&"breakable_grass": Color(0.4, 0.72, 0.24),
+	&"breakable_sand": Color(0.93, 0.84, 0.62),
+	&"breakable_sandstone": Color(0.92, 0.62, 0.36),
+	&"breakable_cave": Color(0.44, 0.38, 0.4),
+	&"breakable_cave_floor": Color(0.58, 0.5, 0.45),
+	&"breakable_stone": Color(0.51, 0.52, 0.56),
+	&"breakable_stone_floor": Color(0.58, 0.58, 0.62),
+	&"breakable_planks": Color(0.74, 0.52, 0.31),
+	&"breakable_reef": Color(0.95, 0.6, 0.5),
 	&"log_bark": Color(0.55, 0.36, 0.2),
 }
 
@@ -50,6 +60,7 @@ static func material(material_name: StringName) -> Material:
 		return found
 	var plain := StandardMaterial3D.new()
 	plain.albedo_color = FALLBACK_COLOURS.get(material_name, Color(0.6, 0.6, 0.6))
+	plain.vertex_color_use_as_albedo = true  # Shades a breakable wall's blocks; white on meshes without colours.
 	plain.roughness = 0.9
 	plain.diffuse_mode = BaseMaterial3D.DIFFUSE_TOON
 	plain.specular_mode = BaseMaterial3D.SPECULAR_TOON

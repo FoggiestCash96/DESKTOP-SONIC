@@ -15,7 +15,8 @@ var stage := ""  ## Scene path of the stage being played, or "" before one start
 var checkpoint := ""  ## The last checkpoint touched, as an id from id_of(), or "".
 var checkpoint_spawn := Transform3D.IDENTITY  ## Where the player restarts from that checkpoint.
 var checkpoint_time := 0.0  ## The stage clock when that checkpoint was touched.
-var hidden_total := 0  ## Hidden collectibles in the current stage. Each one counts itself in as it loads.
+var hidden_total := 0  ## Hidden collectibles in the current stage. Each one counts itself in as it loads...
+var hidden_slots: Dictionary[String, int] = {}  ## ...and says which of the HUD's slots it fills (1 for the first), by id.
 var hidden_found := 0  ## Hidden collectibles found on this visit to the stage.
 var cleared := false  ## The current stage's goal was reached.
 var cleared_rings := 0  ## Rings the player had at the goal.
@@ -50,6 +51,7 @@ func enter_stage(path: String) -> void:
 		_clear_stage()
 	time = checkpoint_time
 	hidden_total = 0
+	hidden_slots.clear()
 	cleared = false
 	clock_running = true
 
@@ -97,6 +99,15 @@ func is_found(id: String) -> bool:
 ## Ids of the hidden collectibles found on this visit to the stage.
 func hidden_found_ids() -> PackedStringArray:
 	return _found_hidden.duplicate()
+
+
+## The number `text` ends with, as in "RedRing3", or 0 if it doesn't end with one: the HUD slot a
+## hidden collectible named that way fills.
+func number_at_end(text: String) -> int:
+	var start := text.length()
+	while start > 0 and text[start - 1].is_valid_int():
+		start -= 1
+	return text.substr(start).to_int() if start < text.length() else 0
 
 
 ## Starts the current stage over: no checkpoints, nothing found, the clock back to zero.
@@ -154,6 +165,7 @@ func _clear_stage() -> void:
 	time = 0.0
 	clock_running = false
 	hidden_total = 0
+	hidden_slots.clear()
 	hidden_found = 0
 	cleared = false
 	cleared_rings = 0

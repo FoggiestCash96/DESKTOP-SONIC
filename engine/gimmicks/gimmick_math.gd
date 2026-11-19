@@ -81,6 +81,14 @@ static func breaks_wall(velocity: Vector3, direction: Vector3, speed: float) -> 
 	return velocity.dot(direction) >= speed
 
 
+## Whether something at `over` moving at `velocity` breaks through a breakable floor `size` big, both
+## in the floor's own space (its top at y = 0, centred on X and Z): it has to be above the floor and
+## over it, not beside it, and coming down at `speed` or faster.
+static func breaks_floor(over: Vector3, velocity: Vector3, size: Vector3, speed: float) -> bool:
+	return over.y > 0.0 and absf(over.x) <= size.x * 0.5 and absf(over.z) <= size.z * 0.5 \
+			and breaks_wall(velocity, Vector3.DOWN, speed)
+
+
 ## How long a leap takes to rise `height` metres under `gravity` (m/s²), coming to a stop at the top.
 static func time_to_rise(height: float, gravity: float) -> float:
 	return sqrt(2.0 * maxf(height, 0.0) / gravity) if gravity > 0.0 else 0.0

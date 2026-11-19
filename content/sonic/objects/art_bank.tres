@@ -22,6 +22,15 @@
 [ext_resource type="Script" path="res://engine/art/art_bank.gd" id="12_u6kul"]
 [ext_resource type="Material" path="res://content/sonic/materials/wall_jump_panel.tres" id="40_walljp"]
 [ext_resource type="Material" path="res://content/sonic/materials/wall_run_strip.tres" id="41_wallrn"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/grass.tres" id="50_brkgrass"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sand.tres" id="51_brksand"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sandstone.tres" id="52_brksandst"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/cave_rock.tres" id="53_brkcave"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/cave_floor.tres" id="54_brkcave_f"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/stone_blocks.tres" id="55_brkstone"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/stone_tiles.tres" id="56_brkstone_"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/planks.tres" id="57_brkplanks"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/reef.tres" id="58_brkreef"]
 
 [resource]
 script = ExtResource("12_u6kul")
@@ -36,7 +45,16 @@ models = Dictionary[StringName, PackedScene]({
 &"spring": ExtResource("4_lth88")
 })
 materials = Dictionary[StringName, Material]({
+&"breakable_cave": ExtResource("53_brkcave"),
+&"breakable_cave_floor": ExtResource("54_brkcave_f"),
+&"breakable_grass": ExtResource("50_brkgrass"),
+&"breakable_planks": ExtResource("57_brkplanks"),
+&"breakable_reef": ExtResource("58_brkreef"),
 &"breakable_rock": ExtResource("20_breaka"),
+&"breakable_sand": ExtResource("51_brksand"),
+&"breakable_sandstone": ExtResource("52_brksandst"),
+&"breakable_stone": ExtResource("55_brkstone"),
+&"breakable_stone_floor": ExtResource("56_brkstone_"),
 &"bubble": ExtResource("21_bubble"),
 &"crumbling_rock": ExtResource("22_crumbl"),
 &"log_bark": ExtResource("23_log_ba"),

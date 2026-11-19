@@ -27,6 +27,7 @@ extends Resource
 @export var auto_follow_max_angle: float = 135.0  ## The camera doesn't swing round while the player runs at it more steeply than this (degrees).
 @export var recenter_time: float = 0.25  ## Seconds for camera_recenter to swing the camera behind the player.
 @export var focus_turn_speed: float = 180.0  ## How fast a camera volume with a focus turns to keep it in view (degrees per second).
+@export var guide_turn_speed: float = 240.0  ## How fast a camera volume with a path turns to look along it (degrees per second).
 @export var focus_min_distance: float = 3.0  ## Closer than this to a volume's focus (m), the camera stops turning toward it, so passing right by doesn't spin the view.
 @export var input_hold_angle: float = 45.0  ## Through a change of view with the stick held, input keeps to the old view until the stick turns the other way by more than this (degrees). Turning it toward the new view brings input round with it.
 @export var input_grace_time: float = 0.5  ## For this long after the camera finishes blending into a new view (s), pressing the stick afresh...

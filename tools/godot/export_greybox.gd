@@ -9,8 +9,9 @@ extends SceneTree
 ## volumes (so scenery can keep out of a side view's line of sight), invisible walls (boxes on
 ## static bodies in the Geometry group, so the art can show what stops the player), grind rails
 ## (points along them), bodies of water, where the gimmicks and enemies are (with the size and
-## travel of platforms and breakable walls), the sea's height and the player's start. Positions are world
-## positions in Godot's axes (Y up), rounded to 0.1 mm so the file only changes when the greybox does.
+## travel of platforms and breakable walls; a camera volume's guide path isn't one), the sea's height
+## and the player's start. Positions are world positions in Godot's axes (Y up), rounded to 0.1 mm so
+## the file only changes when the greybox does.
 ## The stage isn't added to the scene tree, so none of its scripts run.
 
 const PRECISION := 0.0001
@@ -44,6 +45,11 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 	var markers: Array[Dictionary] = []
 	var sea_height: Variant = null
 	var player_start: Variant = null
+	# Camera volumes' guide paths: where the camera looks round a corner, nothing on the ground.
+	var guide_paths: Array[Node] = []
+	for volume in stage.find_children("*", "", true, false):
+		if volume is CameraVolume and (volume as CameraVolume).path:
+			guide_paths.append((volume as CameraVolume).path)
 	for node in stage.find_children("*", "", true, false):
 		var parent := node.get_parent()
 		if node is CSGShape3D and (node as CSGShape3D).is_root_shape():
@@ -95,6 +101,8 @@ static func export_stage(stage: Node, path: String) -> Dictionary:
 				"side_view": volume.side_view,
 				"distance": _number(volume.distance),
 			})
+		elif node in guide_paths:
+			pass
 		elif node.name == &"Sea" and node is Node3D:
 			sea_height = _number(world_transform(node as Node3D).origin.y)
 		elif node.name == &"Player" and node is Node3D:
