@@ -164,6 +164,7 @@ func _take_hit(player: Player) -> void:
 
 
 func _defeat() -> void:
+	GameState.add_score(GameState.rules.boss_points, weak_point.global_position)
 	fighting = false
 	vulnerable = false
 	model.visible = true

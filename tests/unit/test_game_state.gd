@@ -42,6 +42,51 @@ func test_a_restart_resumes_from_the_last_checkpoint() -> void:
 	assert_eq(_game.hidden_found, 1)
 
 
+func test_the_score_goes_back_to_the_checkpoints_on_a_restart() -> void:
+	_game.enter_stage("res://a.tscn")
+	_game.add_score(300)
+	_game.touch_checkpoint("Checkpoint", SPAWN)
+	_game.add_score(500)
+	_game.enter_stage("res://a.tscn")  # Reloaded after a death.
+	assert_eq(_game.score, 300, "the badniks after the checkpoint are back, and so are their points")
+	_game.enter_stage("res://b.tscn")
+	assert_eq(_game.score, 0, "a new stage starts from nothing")
+
+
+func test_points_stop_at_the_goal() -> void:
+	_game.enter_stage("res://a.tscn")
+	_game.add_score(100)
+	_game.clear_stage(0)
+	_game.add_score(100)
+	assert_eq(_game.score, 100)
+
+
+func test_checkpoints_record_their_splits() -> void:
+	var passed: Array = []
+	_game.checkpoint_passed.connect(func(id: String, time: float) -> void: passed.append([id, time]))
+	_game.enter_stage("res://a.tscn")
+	_game.time = 31.5
+	_game.touch_checkpoint("Checkpoint1", SPAWN)
+	_game.time = 40.0
+	_game.touch_checkpoint("Checkpoint1", SPAWN)
+	assert_almost_eq(_game.splits["Checkpoint1"], 31.5, 1e-6, "the first touch's time")
+	assert_eq(passed.size(), 1, "announced once")
+	_game.reset_stage()
+	assert_true(_game.splits.is_empty(), "starting over forgets them")
+
+
+func test_time_attack_ends_on_leaving_the_stage() -> void:
+	_game.time_attack = true
+	_game.enter_stage("res://a.tscn")
+	_game.reset_stage()
+	assert_true(_game.time_attack, "starting the act over keeps it")
+	_game.leave_stage()
+	assert_false(_game.time_attack)
+	_game.time_attack = true
+	_game.new_game()
+	assert_false(_game.time_attack)
+
+
 func test_a_checkpoint_only_counts_the_first_time() -> void:
 	_game.enter_stage("res://a.tscn")
 	_game.time = 10.0

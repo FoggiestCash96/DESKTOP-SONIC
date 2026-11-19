@@ -23,7 +23,7 @@ const SOUNDS: Array[StringName] = [
 	&"red_ring", &"wave", &"splash", &"enemy_pop", &"enemy_shot", &"boss_hit",
 	&"air_warning", &"breathe", &"drown", &"grind", &"grind_loop", &"crumble", &"wall_break",
 	&"stomp", &"stomp_land", &"drop_dash", &"peel_out", &"light_dash", &"wall_kick", &"wall_cling",
-	&"ui_move", &"ui_confirm", &"ui_back",
+	&"ui_move", &"ui_confirm", &"ui_back", &"tally", &"rank", &"rank_s",
 ]
 const NAVIGATION: Array[StringName] = [&"ui_up", &"ui_down", &"ui_left", &"ui_right", &"ui_focus_next", &"ui_focus_prev"]
 

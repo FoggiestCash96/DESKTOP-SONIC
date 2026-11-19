@@ -138,6 +138,7 @@ func _build_accessibility(rows: VBoxContainer) -> void:
 		sizes.append(PERCENT_FORMAT % roundi(factor * 100.0))
 	_choice(rows, "OPT_HUD_SIZE", sizes, func() -> int: return GameSettings.HUD_SCALES.find(GameSettings.hud_scale),
 		func(index: int) -> void: GameSettings.hud_scale = GameSettings.HUD_SCALES[index])
+	_toggle(rows, "OPT_GHOST", "ghost")
 	var note := MenuKit.label("OPT_ASSIST_NOTE", 24, Color(1, 1, 1, 0.75))
 	note.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	note.custom_minimum_size = Vector2(900, 0)

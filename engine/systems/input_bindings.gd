@@ -9,7 +9,7 @@ extends RefCounted
 const ACTIONS: Array[StringName] = [
 	&"move_forward", &"move_back", &"move_left", &"move_right", &"jump", &"boost", &"crouch", &"drift",
 	&"quickstep_left", &"quickstep_right", &"special", &"camera_up", &"camera_down", &"camera_left",
-	&"camera_right", &"camera_recenter", &"pause",
+	&"camera_right", &"camera_recenter", &"pause", &"restart",
 ]
 ## Actions that stay on the controller's sticks and D-pad: only their keyboard binding changes.
 const STICK_ACTIONS: Array[StringName] = [

@@ -577,6 +577,39 @@ def ui_start() -> np.ndarray:
     return place(parts, 1.2)
 
 
+# --- Results -----------------------------------------------------------------------------
+
+def tally() -> np.ndarray:
+    """One tick of the results counting up: a short, bright blip."""
+    return blip(1760.0, 0.05, "pulse", 0.25)
+
+
+def _stamp() -> np.ndarray:
+    """A rank landing on the results: a thump and a slap."""
+    n = ns(0.5)
+    thump = synth.sine(synth.curve([(0.0, 180.0), (0.08, 55.0)], n, exponential=True)) * synth.decay_env(n, 0.18)
+    slap = synth.filt(synth.noise(n, 61), "bandpass", 1800.0, 0.9) * synth.decay_env(n, 0.04)
+    return thump * 0.9 + slap * 0.6
+
+
+def _rank_chord() -> np.ndarray:
+    """F major, the act clear jingle's key, rung on bells."""
+    return sum(bell(f, 1.0, 0.6) for f in (698.5, 880.0, 1046.5)) / 3.0
+
+
+def rank() -> np.ndarray:
+    """A rank stamping onto the results: the thump, then a bright chord."""
+    return place([(0.0, _stamp()), (0.02, _rank_chord())], 1.1)
+
+
+def rank_s() -> np.ndarray:
+    """An S rank: the stamp and the chord, then a sparkle running up over it."""
+    parts = [(0.0, _stamp()), (0.02, _rank_chord())]
+    for i, f in enumerate((1396.9, 1760.0, 2093.0, 2793.8)):
+        parts.append((0.12 + i * 0.06, bell(f, 0.7, 0.8) * 0.45))
+    return place(parts, 1.4)
+
+
 # Each sound's function, by the name of its file.
 SOUNDS = {
     "jump": jump, "roll": roll, "spin_charge": spin_charge, "spin_release": spin_release, "skid": skid,
@@ -594,6 +627,7 @@ SOUNDS = {
     "ship": ship,
     "ui_move": ui_move, "ui_confirm": ui_confirm, "ui_back": ui_back, "ui_locked": ui_locked,
     "ui_pause": ui_pause, "ui_start": ui_start,
+    "tally": tally, "rank": rank, "rank_s": rank_s,
 }
 
 # How loud each sound is (LUFS; the music sits at -17). Frequent sounds sit lower, big hits higher.
@@ -611,6 +645,7 @@ LEVELS = {
     "crumble": -19.0, "wall_break": -16.0,
     "stomp": -18.0, "stomp_land": -17.0, "drop_dash": -20.0, "peel_out": -19.0, "light_dash": -18.0,
     "wall_kick": -19.0, "wall_cling": -21.0,
+    "tally": -27.0, "rank": -18.0, "rank_s": -17.0,
 }
 
 LOOPS = {"boost_loop", "grind_loop"}

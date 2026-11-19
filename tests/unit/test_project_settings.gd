@@ -6,7 +6,7 @@ const REQUIRED_ACTIONS: Array[StringName] = [
 	&"move_left", &"move_right", &"move_forward", &"move_back",
 	&"camera_left", &"camera_right", &"camera_up", &"camera_down",
 	&"jump", &"boost", &"crouch", &"drift", &"quickstep_left", &"quickstep_right",
-	&"special", &"camera_recenter", &"pause", &"debug_overlay",
+	&"special", &"camera_recenter", &"pause", &"restart", &"debug_overlay",
 ]
 
 ## Gameplay is controller first, so these need both a keyboard and a controller binding.
@@ -14,7 +14,7 @@ const KEYBOARD_AND_CONTROLLER_ACTIONS: Array[StringName] = [
 	&"move_left", &"move_right", &"move_forward", &"move_back",
 	&"camera_left", &"camera_right", &"camera_up", &"camera_down",
 	&"jump", &"boost", &"crouch", &"drift", &"quickstep_left", &"quickstep_right",
-	&"special", &"pause",
+	&"special", &"pause", &"restart",
 ]
 
 

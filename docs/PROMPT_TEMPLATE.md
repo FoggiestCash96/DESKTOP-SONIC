@@ -228,8 +228,8 @@ Character ideas to fill: Tails (`[[flight: timer-limited, carries P2?]]`), Knuck
 - Rings, 1-ups, item monitors (10 rings, shield, speed shoes, invincibility, ring magnet, plus a boost refill, built with the boost; decided 2026-10-30), checkpoints (star posts).
 - Hidden collectibles per act: **Red rings**, count **5** (decided 2026-10-30).
 - Special stages / Chaos Emeralds: `[[CHOOSE: None | Classic-style 3D half-pipe | Sphere grid | Own design]]`. Super form unlocked at 7: `[[Y/N]]`.
-- Ranking: `[[CHOOSE: None | S–D rank by time+rings+score]]`.
-- Time attack and ghost replays: `[[Y/N]]` (needs deterministic input recording; see §15).
+- Ranking: **S–D rank by time + rings + score** (decided 2026-11-19): badniks score as in the classic games, and the goal adds a time bonus and a ring bonus. DESIGN.md §10.6.
+- Time attack and ghost replays: **Y** (decided 2026-11-19): an instant restart, checkpoint splits and a ghost. The ghost replays the model's recorded position, turn and pose, not inputs, so it needs no deterministic physics. DESIGN.md §10.6.
 
 ---
 
@@ -328,6 +328,7 @@ res://
 9. ~~Menus, save system, settings, accessibility.~~ **Done 2026-10-31**: title menu, 10 save slots, a menu world map, options with remappable controls, a pause menu, both assists, and the Adventure-style HUD.
 10. ~~Art and audio pass, then a public demo release.~~ **Done 2026-11-05.** Audio 2026-10-31: original music and about 40 sound effects, all made in code (`tools/audio/`). Art pass 2026-11-01: the acts, objects, badniks, boss, Sonic and title screen, all script-built in Blender. Acts 2 to 7 2026-11-05, with water, grind rails, moving and crumbling platforms, breakable walls, swimming and their own music. The first public demo, v0.1.0, with all eight of Emerald Shore's acts, on GitHub Releases.
 11. ~~The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running.~~ **Done 2026-11-06** (decided 2026-11-05), with a moves area in the test room and spots in Emerald Shore Acts 2, 5 and 7.
+12. ~~Ranking and time attack.~~ **Done 2026-11-19** (decided 2026-11-19): S to D ranks from a score of time, rings and badniks, and time attack with an instant restart, splits and a ghost.
 
 **Now do:** `[[FILL: e.g. "Milestone 2: Player physics v1"]]`
 

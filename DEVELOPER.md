@@ -138,7 +138,7 @@ A checkpoint counts anywhere through its gate: set `gate_width` to the width of 
 
 Acts live in `content/sonic/stages/<world>/act_<n>.tscn`, blocked out in Godot and dressed in Blender afterwards. An act needs:
 
-- A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results), its `hub_scene` (`content/sonic/ui/map/world_map.tscn`, where the goal leads while a save slot is played), and its `next_scene` (where the goal leads without one).
+- A root `Node3D` with `engine/systems/stage.gd`. Set its `title` (shown on the title card and the results), its `hub_scene` (`content/sonic/ui/map/world_map.tscn`, where the goal leads while a save slot is played), and its `next_scene` (where the goal leads without one). For its rank, set its `par_time` (seconds for a steady clear; the time bonus runs out at twice this) and its `rank_scores`, the lowest goal totals for S, A, B and C. docs/DESIGN.md §10.6 has how Emerald Shore's were worked out; `tests/unit/test_acts.gd` checks every act has them.
 - An instance of `engine/player/player.tscn`. Set its `character` (`content/sonic/characters/sonic/sonic.tres` for Sonic) and a `kill_height` a little below the lowest ground.
 - `engine/camera/player_camera.tscn` (its `target` is the player) and `content/sonic/ui/hud/hud.tscn` (its `target` too).
 - The greybox environment and a sun, then ground made of CSG shapes with `use_collision` on, using the greybox materials.

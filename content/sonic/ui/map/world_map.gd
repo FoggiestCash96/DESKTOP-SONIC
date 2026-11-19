@@ -1,9 +1,10 @@
 extends Control
 ## The world map (decided 2026-10-31: a menu map for now; a grander one comes with the art pass). The
-## six worlds sit along a path, each with its acts listed on the right with their best time, rings and
-## red rings from the save slot. Left and right pick a world, up and down an act; jump plays it. An act
-## unlocks when the act before it is cleared, and a world when the one before it is beaten. Back
-## returns to the save slots.
+## six worlds sit along a path, each with its acts listed on the right with their rank, best time,
+## score, rings, red rings and time attack record from the save slot. Left and right pick a world, up
+## and down an act; jump plays it, and special plays a cleared one in time attack. An act unlocks when
+## the act before it is cleared, and a world when the one before it is beaten. Back returns to the
+## save slots.
 
 const RED_RINGS_PER_ACT := 5  ## Every act hides five red rings (decided 2026-10-30).
 const NODE_RADIUS := 54.0
@@ -17,6 +18,7 @@ const PATH_COLOR := Color(1.0, 1.0, 1.0, 0.35)
 
 var world := 0  ## The world shown.
 var _act_buttons: Array[Button] = []
+var _focused := 0  # The act whose details show.
 
 @onready var _map: Control = %Map
 @onready var _world_title: Label = %WorldTitle
@@ -25,15 +27,16 @@ var _act_buttons: Array[Button] = []
 
 
 func _ready() -> void:
-	# Back from an act not yet cleared, its act keeps the focus; after a clear, the next act to play.
+	# Back from an act not yet cleared, or from time attack, its act keeps the focus; after a clear,
+	# the next act to play.
 	var last := worlds.find_act(GameState.stage)
-	var unfinished := last.x >= 0 and not SaveData.is_cleared(SaveGame.data, GameState.stage)
+	var again := last.x >= 0 and (GameState.time_attack or not SaveData.is_cleared(SaveGame.data, GameState.stage))
 	# Whatever is chosen here starts fresh: no checkpoint or clock carried over from the last visit.
 	GameState.leave_stage()
 	Music.play(music)
 	world = maxi(last.x, 0)
 	_map.draw.connect(_draw_map)
-	_show_world(last.y if unfinished else -1)
+	_show_world(last.y if again else -1)
 
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -44,6 +47,9 @@ func _unhandled_input(event: InputEvent) -> void:
 		get_viewport().set_input_as_handled()
 		world = wrapi(world + (-1 if event.is_action_pressed("ui_left") else 1), 0, worlds.worlds.size())
 		_show_world(-1)
+	elif event.is_action_pressed("special"):
+		get_viewport().set_input_as_handled()
+		_time_attack(_focused)
 
 
 func is_world_unlocked(index: int) -> bool:
@@ -93,12 +99,14 @@ func _act_text(index: int) -> String:
 	elif not is_act_unlocked(world, index):
 		status = tr("MAP_LOCKED")
 	elif SaveData.is_cleared(SaveGame.data, act.scene):
-		status = tr("MAP_CLEARED")
+		var rank := str(SaveData.act(SaveGame.data, act.scene).get("best_rank", ""))
+		status = tr("MAP_CLEARED_RANK") % rank if rank != "" else tr("MAP_CLEARED")
 	var act_name := ("%s  ·  %s" % [act.title, tr("MAP_BOSS")]) if act.boss else act.title
 	return "%s   ·   %s" % [act_name, status] if status != "" else act_name
 
 
 func _show_details(index: int) -> void:
+	_focused = index
 	var act := worlds.worlds[world].acts[index]
 	var lines: PackedStringArray = [act.title]
 	if not is_world_unlocked(world):
@@ -111,16 +119,40 @@ func _show_details(index: int) -> void:
 		lines.append(tr("MAP_NOT_CLEARED"))
 	else:
 		var record := SaveData.act(SaveGame.data, act.scene)
+		var rank := str(record.get("best_rank", ""))
+		if rank != "":
+			lines.append(tr("MAP_BEST_RANK") % [rank, int(record.get("best_score", 0))] + _assisted(record, "score_assisted"))
 		var best := GameState.format_time(float(record.get("best_time", 0.0)))
-		lines.append(tr("MAP_BEST_TIME") % best + (" " + tr("MAP_ASSISTED") if bool(record.get("assisted", false)) else ""))
+		lines.append(tr("MAP_BEST_TIME") % best + _assisted(record, "assisted"))
 		lines.append(tr("MAP_BEST_RINGS") % int(record.get("best_rings", 0)))
 		lines.append(tr("MAP_RED_RINGS") % [SaveData.red_rings_of(SaveGame.data, act.scene).size(), RED_RINGS_PER_ACT])
+		var times: PackedStringArray = []
+		for run in SaveData.time_attack_runs(SaveGame.data, act.scene):
+			times.append(GameState.format_time(float(run["time"])) + _assisted(run, "assisted"))
+		if not times.is_empty():
+			lines.append(tr("MAP_TIME_ATTACK") % "  ·  ".join(times))
+		lines.append(tr("MAP_TIME_ATTACK_HINT"))
 	_details.text = "\n".join(lines)
+
+
+# " (with assists)" if `record`'s `key` says a record was set with an assist on, else "".
+func _assisted(record: Dictionary, key: String) -> String:
+	return " " + tr("MAP_ASSISTED") if bool(record.get(key, false)) else ""
 
 
 func _play(index: int) -> void:
 	var act := worlds.worlds[world].acts[index]
 	if act.scene != "" and is_act_unlocked(world, index):
+		get_tree().change_scene_to_file(act.scene)
+	else:
+		Sfx.play_ui(&"ui_locked")
+
+
+# Plays a cleared act in time attack (GameState.time_attack).
+func _time_attack(index: int) -> void:
+	var act := worlds.worlds[world].acts[index]
+	if act.scene != "" and is_act_unlocked(world, index) and SaveData.is_cleared(SaveGame.data, act.scene):
+		GameState.time_attack = true
 		get_tree().change_scene_to_file(act.scene)
 	else:
 		Sfx.play_ui(&"ui_locked")

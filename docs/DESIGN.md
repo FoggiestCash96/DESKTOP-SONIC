@@ -550,14 +550,14 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 ### 10.1 Flow and the world map
 
 - **Title screen:** Enter, A or Start brings up the main menu: Play, Options, Test room and Quit. Two developer shortcuts skip the menus without a save slot: F or Y opens the test room, Shift or X Act 8's boss.
-- **Play** leads to the save slots, then the **world map** (decided 2026-10-31: a menu map for now). The six worlds sit along a path, with the chosen world's eight acts listed beside it: each act's best time, most rings and red rings found (out of 5), whether it is cleared, locked or not built yet, and the boss act marked. Left and right pick a world, up and down an act, and jump plays it.
+- **Play** leads to the save slots, then the **world map** (decided 2026-10-31: a menu map for now). The six worlds sit along a path, with the chosen world's eight acts listed beside it: each act's rank, best total, best time, most rings, red rings found (out of 5) and time attack record, whether it is cleared, locked or not built yet, and the boss act marked. Left and right pick a world, up and down an act, and jump plays it; special plays a cleared act in time attack (§10.6).
 - **Unlocking:** a world's first built act is open from the start; each later act opens when the built act before it is cleared (Act 8 opened after Act 1 until Acts 2 to 7 existed). A world opens once the world before it is beaten (its last built act cleared).
 - **After an act:** the results show for 6 s (a jump press after 1.5 s skips them), then the world map returns with the next act to play chosen. Leaving an act from the pause menu returns to its place on the map. With no save slot, as when a stage is run on its own, the goal leads to the stage's `next_scene` or the title screen instead.
-- **Pause:** Start or Esc pauses the game: resume, restart from the last checkpoint (once one is touched), restart the act, the options, or quit to the world map (the title screen without a save slot). The game can't be paused once the goal is reached or the player has died.
+- **Pause:** Start or Esc pauses the game: resume, restart from the last checkpoint (once one is touched, and not in time attack), restart the act, the options, or quit to the world map (the title screen without a save slot). The game can't be paused once the goal is reached or the player has died.
 
 ### 10.2 Save slots and settings
 
-- **Save slots** (decided 2026-10-31: 10): each is `user://saves/slot_NN.json`, holding the play time and, for every cleared act, its best time (marked if set with an assist), most rings, and the ids of every red ring found there. Clearing an act saves at once, through a temporary file so a crash can't leave half a save. A slot that can't be read, or comes from a newer version, shows as a new game. The special button (F or Y) deletes a slot, after asking.
+- **Save slots** (decided 2026-10-31: 10): each is `user://saves/slot_NN.json`, holding the play time and, for every cleared act, its best time and best total with the rank it earned (each marked if set with an assist), most rings, the ids of every red ring found there, and its fastest time attack run's time and splits. The ghosts of those runs are kept beside it, in `user://saves/slot_NN_ghosts/`, and deleted with the slot. Clearing an act saves at once, through a temporary file so a crash can't leave half a save. A slot that can't be read, or comes from a newer version, shows as a new game. The special button (F or Y) deletes a slot, after asking.
 - **Lives** aren't saved: every visit to a slot starts with 5, and a game over sends you back to the map with 5 again.
 - **Settings** are kept apart from the slots, for the whole game, in `user://settings.cfg`, so they apply from the title screen on. They change in the Options menu, from the title screen or the pause menu, take effect at once, and are saved when it closes:
 
@@ -567,21 +567,21 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 | Audio | Master, music, sound effects and voice volume, one bus each (`default_bus_layout.tres`) |
 | Camera | Camera sensitivity (25 to 200%), invert either axis, speed lines, motion blur, screen shake |
 | Controls | Remap every action's keyboard or mouse binding, and the controller button (or trigger) of every button action; movement and the camera stay on the sticks and D-pad. Reset to defaults. |
-| Accessibility | Game speed, the invincibility assist, HUD size (100, 125 or 150%) |
+| Accessibility | Game speed, the invincibility assist, HUD size (100, 125 or 150%), the time attack ghost |
 
 ### 10.3 Accessibility (decided 2026-10-31: both assists)
 
 - **Game speed:** 100, 90, 80 or 70%. Everything in a stage slows down, giving more time to react; menus stay at full speed.
 - **Invincibility assist:** hits never hurt, and falling into a pit puts the player back on solid ground (where they stood a moment before) instead of costing a life.
-- Best times set with either assist are saved marked as assisted, and the HUD tags a stage played with them.
+- Best times and ranks set with either assist are saved marked as assisted (decided 2026-11-19: assisted clears are ranked like any other, marked), and the HUD tags a stage played with them.
 - Along with camera sensitivity, motion blur and speed lines off, and a HUD that never relies on colour alone.
 
 ### 10.4 HUD (decided 2026-10-31: Adventure-style)
 
-- **Top left:** a big ring count beside a ring icon (blinking red at zero, since the next hit is fatal), the time below it, and the act's red rings below that: a bright filled ring for each one found, an outline for each still to find, each red ring in its own slot.
-- **Bottom left:** lives beside Sonic's icon, with the assists in use tagged above.
+- **Top left:** a big ring count beside a ring icon (blinking red at zero, since the next hit is fatal), the time and the score below it, and the act's red rings below that: a bright filled ring for each one found, an outline for each still to find, each red ring in its own slot. In time attack the score gives way to the act's best time, and a split shows beside the time at each checkpoint (§10.6).
+- **Bottom left:** lives beside Sonic's icon (hidden in time attack), with the assists in use and time attack tagged above.
 - **Top right:** the power-ups running and their seconds left. **Bottom right:** the boost gauge, ten segments that fill as it does, brighter while boosting and pulsing when full; empty segments stay as outlines.
-- **Also:** the act's title card as it starts, a boss's name and hits left during its fight, the results (with a new record marked), GAME OVER, and the pause menu.
+- **Also:** the act's title card as it starts, a boss's name and hits left during its fight, the results (the score's tally and rank, with a new record marked), GAME OVER, and the pause menu.
 - Its size follows the HUD size setting. The icons are drawn in code until the art pass.
 
 ### 10.5 Text
@@ -589,6 +589,28 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 All menu and HUD text goes through Godot's translation system, from `content/sonic/ui/translations/strings.csv` (English for now), so the community can add languages by adding a column.
 
 Characters the engine's default font lacks, such as the arrows on signs, come from a bundled font, DejaVu Sans Bold (decided 2026-11-05 for the demo): it's added to the default font's fallbacks at start-up (`SymbolFont`, named by the project setting `game/ui/symbol_font`), so those characters look the same on every system instead of depending on the fonts each one has installed, where a system without such a font would show boxes. Everything else keeps the default font's look. `tests/unit/test_fonts.gd` checks that every character on a sign in a stage, and in the game's text, is in one font or the other. A sign's text faces its +Z axis, toward the players coming at it; on a 2.5D stretch it faces the side-view camera.
+
+### 10.6 Ranks and time attack (Milestone 12)
+
+Decided 2026-11-19: every clear is ranked, S to D, from a **score of time, rings and badniks**, as in Colors and Generations, and a cleared act can be replayed in **time attack, with an instant restart, splits and a ghost**. Clears made with an assist are ranked like any other, marked as assisted.
+
+- **Score:** badniks score as in the classic games: 100, 200, 500, then 1000 for each one destroyed in a row before the player lands (a homing chain, or rolling or boosting through a row), and back to 100 once they land. Beating a boss scores 1000. The points float up from where they were won (gold from 1000), except in time attack. After a death the score goes back to what it was at the checkpoint, as the clock does.
+- **At the goal** the results add two bonuses to the score: a time bonus of 300 points for each second the act was cleared inside twice its par time (`Stage.par_time`), and a ring bonus of 100 for each ring held. The total earns the rank: each act sets the lowest totals for S, A, B and C (`Stage.rank_scores`), and anything below is D. As in Generations (decided 2026-11-19: livelier results), the bonuses count up into the total, ticking, then the rank stamps on with a sound of its own, a brighter one for an S. The points live in `engine/systems/game_rules.tres`.
+- **Par times and targets** (set 2026-11-19, to be tuned by playing): an act's par time is a steady clear, from the autopilot playtests' times (Act 8's from its run and a typical boss fight). Its S target is a par-time run holding 40% of the act's rings, with half its badniks destroyed (and the boss beaten), and A, B and C are 85, 70 and 55% of that, to the nearest thousand.
+
+| Act | Par (s) | Rings, badniks | S | A | B | C |
+|---|---|---|---|---|---|---|
+| 1 | 80 | 148, 10 | 30,000 | 26,000 | 21,000 | 17,000 |
+| 2 | 76 | 226, 18 | 33,000 | 28,000 | 23,000 | 18,000 |
+| 3 | 76 | 126, 14 | 29,000 | 24,000 | 20,000 | 16,000 |
+| 4 | 81 | 152, 46 | 33,000 | 28,000 | 23,000 | 18,000 |
+| 5 | 82 | 146, 14 | 31,000 | 26,000 | 22,000 | 17,000 |
+| 6 | 77 | 142, 11 | 29,000 | 25,000 | 21,000 | 16,000 |
+| 7 | 79 | 182, 16 | 32,000 | 27,000 | 22,000 | 17,000 |
+| 8 | 60 | 66, 9 and the boss | 22,000 | 19,000 | 15,000 | 12,000 |
+
+- **Time attack:** on the world map, special (F or Y) plays a cleared act in time attack. No lives are lost: a death, or the restart button (R or Back) at any time, starts the act over at once, and the pause menu offers no restart from the checkpoint. The HUD shows the act's fastest time attack run (BEST) in place of the score and hides the lives; at each checkpoint, a split beside the time shows the clock there and how far ahead (-) or behind (+) the fastest run it was. Reaching the goal keeps the fastest run's time and splits on the slot, and the three fastest runs' times (decided 2026-11-19), which the world map lists. Time attack runs have no score or rank, and leave the act's other records alone.
+- **Ghosts:** the fastest time attack run is kept as a ghost, a see-through Sonic that replays it alongside the player, in step with the stage clock. It records where the player's model was, how it was turned and its pose, 30 times a second (`GhostRun`), rather than the inputs, so it needs no deterministic physics. Each slot keeps one ghost per act. The Time attack ghost option (Accessibility) hides it.
 
 ## 11. Audio (Milestone 10)
 
@@ -639,7 +661,7 @@ Each one is grouped by the milestone where it starts to block work.
 | Needed by | Decision |
 |---|---|
 | **Each world, as it's built** | Its badnik roster and boss concept. Emerald Shore's are decided (§9). |
-| **Later** | Special stages and Chaos Emeralds; ranking; time attack and ghosts; local and online multiplayer; 2D art tool; community channel; itch.io and GameJolt pages |
+| **Later** | Special stages and Chaos Emeralds; local and online multiplayer; 2D art tool; community channel; itch.io and GameJolt pages |
 
 ## 13. Roadmap
 
@@ -656,6 +678,7 @@ Each one is grouped by the milestone where it starts to block work.
 | 9 | Menus, save system, settings, accessibility | **Done** |
 | 10 | Art and audio pass, then a public demo release | **Done** (2026-11-05): audio (2026-10-31, §11), the art pass (2026-11-01, §8.3), Acts 2 to 7 with their art and music (2026-11-05, §7.2), bringing water, grind rails, moving and crumbling platforms, breakable walls, and swimming and drowning (§5.7, §5.9), and the first public demo, **v0.1.0**, on GitHub Releases |
 | 11 | The rest of the moves: stomp, drop dash, Super Peel Out, drift, light speed dash, wall-jumps and wall-running (§5.10) | **Done** (2026-11-06): decided 2026-11-05, with a moves area in the test room and spots in Acts 2, 5 and 7 |
+| 12 | Ranking and time attack: a score of time, rings and badniks, S to D ranks, and time attack with an instant restart, splits and a ghost (§10.6) | **Done** (2026-11-19): decided 2026-11-19 |
 
 **Releases** (decided 2026-11-05): pushing a `v*` tag publishes a GitHub pre-release (while the game is in 0.x) with Windows, Linux and macOS builds, each carrying the licenses, the credits and the bundled font's license, and with the notes in `docs/releases/<tag>.md`. The demo is on GitHub Releases only; itch.io can follow later. Each release is first checked from a test build (Actions → CI → Run workflow), launched on Windows. **v0.2.0** (decided 2026-11-08, a minor version since it adds Milestone 11's moves) also brings the fixes from playing v0.1.0: the homing attack onto springs (§9.2) and forgiving 2.5D transitions (§6.1).
 
