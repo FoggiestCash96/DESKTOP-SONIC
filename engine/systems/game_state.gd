@@ -8,6 +8,11 @@ signal game_over  ## The last life was lost. The world map (or the title screen)
 signal stage_cleared  ## The goal was reached. The results show for rules.results_time.
 signal checkpoint_passed(id: String, time: float)  ## A checkpoint was touched for the first time on this visit, with the stage clock then.
 
+const POPUP_RISE := 1.6  ## Metres points float up from where they were won...
+const POPUP_TIME := 0.9  ## ...over this many seconds, fading out at the end.
+const POPUP_GOLD := Color(1.0, 0.82, 0.25)  ## A thousand points or more.
+const POPUP_OUTLINE := Color(0.024, 0.063, 0.227)  ## The HUD's outline.
+
 @export var rules: GameRules = preload("res://engine/systems/game_rules.tres")
 
 var lives := 0
@@ -134,10 +139,14 @@ func leave_stage() -> void:
 	_clear_stage()
 
 
-## Adds `points` to the stage's score, until its goal is reached.
-func add_score(points: int) -> void:
-	if not cleared:
-		score += points
+## Adds `points` to the stage's score, until its goal is reached. Given where they were won (`at`),
+## they float up from there, as in the classic games; not in time attack, which keeps no score.
+func add_score(points: int, at := Vector3.INF) -> void:
+	if cleared:
+		return
+	score += points
+	if at.is_finite() and not time_attack and is_inside_tree() and get_tree().current_scene:
+		_pop_up(str(points), at, POPUP_GOLD if points >= 1000 else Color.WHITE)
 
 
 func add_life() -> void:
@@ -175,6 +184,27 @@ func id_of(node: Node) -> String:
 func format_time(seconds: float) -> String:
 	var hundredths := floori(seconds * 100.0 + 0.001)  # The nudge keeps 65.32 from showing as 1:05.31.
 	return "%d:%02d.%02d" % [floori(hundredths / 6000.0), floori(hundredths / 100.0) % 60, hundredths % 100]
+
+
+# `text` floating up from `at` in the current scene, facing the camera, drawn over the scenery.
+func _pop_up(text: String, at: Vector3, color: Color) -> void:
+	var label := Label3D.new()
+	label.text = text
+	label.billboard = BaseMaterial3D.BILLBOARD_ENABLED
+	label.no_depth_test = true
+	label.font_size = 72
+	label.pixel_size = 0.012
+	label.outline_size = 18
+	label.modulate = color
+	label.outline_modulate = POPUP_OUTLINE
+	# It moves in a tween on rendered frames, where physics interpolation would only drag it behind.
+	label.physics_interpolation_mode = Node.PHYSICS_INTERPOLATION_MODE_OFF
+	get_tree().current_scene.add_child(label)
+	label.global_position = at
+	var rise := label.create_tween()
+	rise.tween_property(label, "global_position", at + Vector3.UP * POPUP_RISE, POPUP_TIME).set_ease(Tween.EASE_OUT).set_trans(Tween.TRANS_CUBIC)
+	rise.parallel().tween_property(label, "modulate:a", 0.0, POPUP_TIME * 0.35).set_delay(POPUP_TIME * 0.65)
+	rise.tween_callback(label.queue_free)
 
 
 func _clear_stage() -> void:

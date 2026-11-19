@@ -63,6 +63,18 @@ func test_a_time_attack_record_keeps_the_fastest_run_and_its_splits() -> void:
 	assert_true(SaveData.splits_of(slot, ACT_2).is_empty(), "no run, no splits")
 
 
+func test_time_attack_keeps_the_three_fastest_runs() -> void:
+	var slot := SaveData.new_slot()
+	for run: Array in [[80.0, false], [75.0, true], [90.0, false], [70.0, false]]:
+		SaveData.record_time_attack(slot, ACT_1, float(run[0]), {}, bool(run[1]))
+	var runs := SaveData.time_attack_runs(SaveData.from_json(SaveData.to_json(slot)), ACT_1)
+	assert_eq(runs.size(), 3, "only the fastest three")
+	assert_eq([float(runs[0]["time"]), float(runs[1]["time"]), float(runs[2]["time"])], [70.0, 75.0, 80.0], "fastest first")
+	assert_true(bool(runs[1]["assisted"]) and not bool(runs[0]["assisted"]), "each says whether an assist was on")
+	var older := SaveData.from_json('{"version": 1, "acts": {"%s": {"cleared": true, "ta_time": 64.5, "ta_assisted": false}}}' % ACT_1)
+	assert_almost_eq(float(SaveData.time_attack_runs(older, ACT_1)[0]["time"]), 64.5, 1e-5, "a record from before keeps its one run")
+
+
 func test_a_clear_saved_before_scores_existed_takes_a_score() -> void:
 	var slot := SaveData.from_json('{"version": 1, "acts": {"%s": {"cleared": true, "best_time": 80.0, "assisted": false, "best_rings": 50, "red_rings": []}}}' % ACT_1)
 	var improved := SaveData.record_clear(slot, ACT_1, 90.0, 10, PackedStringArray(), false, 1000, "D")

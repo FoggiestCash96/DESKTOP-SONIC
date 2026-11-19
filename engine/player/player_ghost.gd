@@ -1,7 +1,8 @@
 class_name PlayerGhost
 extends Node3D
 ## A see-through copy of a player's model replaying a GhostRun in step with the stage clock: the run
-## to race in time attack. It stays a moment at the end of the run, then goes.
+## to race in time attack. It stays a moment at the end of the run, then goes, and hides while the
+## ghost setting (GameSettings.ghost) is off.
 
 const COLOR := Color(0.55, 0.85, 1.0, 0.45)
 const LINGER := 1.0  ## Seconds it stays at the end of its run.
@@ -38,7 +39,7 @@ func _process(_delta: float) -> void:
 
 func _follow() -> void:
 	var frame := run.sample(GameState.time) if run and _model else {}
-	visible = not frame.is_empty() and GameState.time <= run.duration() + LINGER
+	visible = GameSettings.ghost and not frame.is_empty() and GameState.time <= run.duration() + LINGER
 	if not visible:
 		return
 	global_transform = frame["transform"] as Transform3D

@@ -64,6 +64,7 @@ OPT_RESET_CONTROLS,Reset controls to defaults
 OPT_GAME_SPEED,Game speed
 OPT_ASSIST,Invincibility assist
 OPT_HUD_SIZE,HUD size
+OPT_GHOST,Time attack ghost
 OPT_ASSIST_NOTE,"A slower game speed gives you more time to react. With the invincibility assist, hits never hurt, and falling into a pit puts you back on solid ground. Best times and ranks set with either show as assisted."
 ACTION_MOVE_FORWARD,Move forward
 ACTION_MOVE_BACK,Move back

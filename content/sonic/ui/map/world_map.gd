@@ -126,8 +126,11 @@ func _show_details(index: int) -> void:
 		lines.append(tr("MAP_BEST_TIME") % best + _assisted(record, "assisted"))
 		lines.append(tr("MAP_BEST_RINGS") % int(record.get("best_rings", 0)))
 		lines.append(tr("MAP_RED_RINGS") % [SaveData.red_rings_of(SaveGame.data, act.scene).size(), RED_RINGS_PER_ACT])
-		if record.has("ta_time"):
-			lines.append(tr("MAP_TIME_ATTACK") % GameState.format_time(float(record["ta_time"])) + _assisted(record, "ta_assisted"))
+		var times: PackedStringArray = []
+		for run in SaveData.time_attack_runs(SaveGame.data, act.scene):
+			times.append(GameState.format_time(float(run["time"])) + _assisted(run, "assisted"))
+		if not times.is_empty():
+			lines.append(tr("MAP_TIME_ATTACK") % "  ·  ".join(times))
 		lines.append(tr("MAP_TIME_ATTACK_HINT"))
 	_details.text = "\n".join(lines)
 

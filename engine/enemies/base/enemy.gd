@@ -91,7 +91,7 @@ func destroy(by: Player) -> void:
 	if by:
 		by.rebound_from(center)
 		by.add_boost(by.physics.boost_per_enemy)
-		GameState.add_score(GameState.rules.enemy_points_for(by.enemy_chain))
+		GameState.add_score(GameState.rules.enemy_points_for(by.enemy_chain), center)
 		by.enemy_chain += 1
 	Sfx.play_at(&"enemy_pop", center)
 	var stage := get_parent()

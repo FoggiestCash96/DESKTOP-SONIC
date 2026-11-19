@@ -567,7 +567,7 @@ Enemies are built on `engine/enemies/base/enemy.gd`: a small state machine that 
 | Audio | Master, music, sound effects and voice volume, one bus each (`default_bus_layout.tres`) |
 | Camera | Camera sensitivity (25 to 200%), invert either axis, speed lines, motion blur, screen shake |
 | Controls | Remap every action's keyboard or mouse binding, and the controller button (or trigger) of every button action; movement and the camera stay on the sticks and D-pad. Reset to defaults. |
-| Accessibility | Game speed, the invincibility assist, HUD size (100, 125 or 150%) |
+| Accessibility | Game speed, the invincibility assist, HUD size (100, 125 or 150%), the time attack ghost |
 
 ### 10.3 Accessibility (decided 2026-10-31: both assists)
 
@@ -594,8 +594,8 @@ Characters the engine's default font lacks, such as the arrows on signs, come fr
 
 Decided 2026-11-19: every clear is ranked, S to D, from a **score of time, rings and badniks**, as in Colors and Generations, and a cleared act can be replayed in **time attack, with an instant restart, splits and a ghost**. Clears made with an assist are ranked like any other, marked as assisted.
 
-- **Score:** badniks score as in the classic games: 100, 200, 500, then 1000 for each one destroyed in a row before the player lands (a homing chain, or rolling or boosting through a row), and back to 100 once they land. Beating a boss scores 1000. After a death the score goes back to what it was at the checkpoint, as the clock does.
-- **At the goal** the results add two bonuses to the score: a time bonus of 300 points for each second the act was cleared inside twice its par time (`Stage.par_time`), and a ring bonus of 100 for each ring held. The total earns the rank: each act sets the lowest totals for S, A, B and C (`Stage.rank_scores`), and anything below is D. The rank stamps onto the results a second after they appear. The points live in `engine/systems/game_rules.tres`.
+- **Score:** badniks score as in the classic games: 100, 200, 500, then 1000 for each one destroyed in a row before the player lands (a homing chain, or rolling or boosting through a row), and back to 100 once they land. Beating a boss scores 1000. The points float up from where they were won (gold from 1000), except in time attack. After a death the score goes back to what it was at the checkpoint, as the clock does.
+- **At the goal** the results add two bonuses to the score: a time bonus of 300 points for each second the act was cleared inside twice its par time (`Stage.par_time`), and a ring bonus of 100 for each ring held. The total earns the rank: each act sets the lowest totals for S, A, B and C (`Stage.rank_scores`), and anything below is D. As in Generations (decided 2026-11-19: livelier results), the bonuses count up into the total, ticking, then the rank stamps on with a sound of its own, a brighter one for an S. The points live in `engine/systems/game_rules.tres`.
 - **Par times and targets** (set 2026-11-19, to be tuned by playing): an act's par time is a steady clear, from the autopilot playtests' times (Act 8's from its run and a typical boss fight). Its S target is a par-time run holding 40% of the act's rings, with half its badniks destroyed (and the boss beaten), and A, B and C are 85, 70 and 55% of that, to the nearest thousand.
 
 | Act | Par (s) | Rings, badniks | S | A | B | C |
@@ -609,8 +609,8 @@ Decided 2026-11-19: every clear is ranked, S to D, from a **score of time, rings
 | 7 | 79 | 182, 16 | 32,000 | 27,000 | 22,000 | 17,000 |
 | 8 | 60 | 66, 9 and the boss | 22,000 | 19,000 | 15,000 | 12,000 |
 
-- **Time attack:** on the world map, special (F or Y) plays a cleared act in time attack. No lives are lost: a death, or the restart button (R or Back) at any time, starts the act over at once, and the pause menu offers no restart from the checkpoint. The HUD shows the act's fastest time attack run (BEST) in place of the score and hides the lives; at each checkpoint, a split beside the time shows the clock there and how far ahead (-) or behind (+) the fastest run it was. Reaching the goal keeps the fastest run's time and splits on the slot. Time attack runs have no score or rank, and leave the act's other records alone.
-- **Ghosts:** the fastest time attack run is kept as a ghost, a see-through Sonic that replays it alongside the player, in step with the stage clock. It records where the player's model was, how it was turned and its pose, 30 times a second (`GhostRun`), rather than the inputs, so it needs no deterministic physics. Each slot keeps one ghost per act.
+- **Time attack:** on the world map, special (F or Y) plays a cleared act in time attack. No lives are lost: a death, or the restart button (R or Back) at any time, starts the act over at once, and the pause menu offers no restart from the checkpoint. The HUD shows the act's fastest time attack run (BEST) in place of the score and hides the lives; at each checkpoint, a split beside the time shows the clock there and how far ahead (-) or behind (+) the fastest run it was. Reaching the goal keeps the fastest run's time and splits on the slot, and the three fastest runs' times (decided 2026-11-19), which the world map lists. Time attack runs have no score or rank, and leave the act's other records alone.
+- **Ghosts:** the fastest time attack run is kept as a ghost, a see-through Sonic that replays it alongside the player, in step with the stage clock. It records where the player's model was, how it was turned and its pose, 30 times a second (`GhostRun`), rather than the inputs, so it needs no deterministic physics. Each slot keeps one ghost per act. The Time attack ghost option (Accessibility) hides it.
 
 ## 11. Audio (Milestone 10)
 

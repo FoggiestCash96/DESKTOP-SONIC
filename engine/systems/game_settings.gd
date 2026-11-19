@@ -18,7 +18,7 @@ const SECTIONS: Dictionary[String, Array] = {
 	"video": ["fullscreen", "vsync", "render_scale", "fps_limit"],
 	"camera": ["camera_sensitivity", "invert_x", "invert_y"],
 	"effects": ["speed_lines", "motion_blur", "screen_shake"],
-	"accessibility": ["game_speed", "assist", "hud_scale"],
+	"accessibility": ["game_speed", "assist", "hud_scale", "ghost"],
 }
 
 var path := "user://settings.cfg"  ## Tests point this somewhere else.
@@ -46,6 +46,7 @@ var path := "user://settings.cfg"  ## Tests point this somewhere else.
 @export var game_speed := 1.0  ## One of GAME_SPEEDS.
 @export var assist := false  ## Hits never hurt, and pits put the player back on solid ground instead of costing a life.
 @export var hud_scale := 1.0  ## One of HUD_SCALES.
+@export var ghost := true  ## Time attack shows the ghost of the act's fastest run.
 
 @export_group("Controls")
 @export var bindings: Dictionary = {}  ## Remapped controls: action -> {"keyboard": event, "controller": event}, as InputBindings stores them.

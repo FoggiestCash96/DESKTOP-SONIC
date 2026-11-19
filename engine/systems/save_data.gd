@@ -5,14 +5,16 @@ extends RefCounted
 ##   version    the format version (VERSION)
 ##   play_time  seconds played on the slot
 ##   acts       act scene path -> {cleared, best_time, assisted, best_rings, red_rings, best_score,
-##              best_rank, score_assisted, ta_time, ta_assisted, ta_splits}
+##              best_rank, score_assisted, ta_time, ta_assisted, ta_splits, ta_runs}
 ## `assisted` says whether the best time was set with an assist on (`score_assisted` the same for the
 ## best score). `red_rings` lists the ids of the hidden collectibles ever found in the act, and
-## `best_rank` is the rank the best score earned. The `ta_` keys are the fastest time attack run: its
-## time, whether an assist was on, and the stage clock at each checkpoint (by id). An act with no
-## time attack run has none of them. SaveGame (autoload) reads and writes the slots.
+## `best_rank` is the rank the best score earned. The `ta_` keys are time attack's: the fastest run's
+## time, whether an assist was on and the stage clock at each checkpoint (by id), and `ta_runs`, the
+## fastest TIME_ATTACK_RUNS runs as {time, assisted}, fastest first. An act with no time attack run
+## has none of them. SaveGame (autoload) reads and writes the slots.
 
 const VERSION := 1
+const TIME_ATTACK_RUNS := 3  ## Time attack runs each act keeps, fastest first.
 
 
 static func new_slot() -> Dictionary:
@@ -51,10 +53,12 @@ static func record_clear(slot: Dictionary, act_id: String, time: float, rings: i
 
 
 ## Records a time attack run of the act at `act_id` in `slot` that reached the goal in `time`, with
-## the stage clock at each checkpoint it passed (`splits`, by id). Only the fastest run is kept.
-## Returns {first_clear, best_time}: whether it was the act's first time attack run, and the fastest.
+## the stage clock at each checkpoint it passed (`splits`, by id). The fastest run keeps its splits,
+## and the fastest TIME_ATTACK_RUNS keep their times. Returns {first_clear, best_time}: whether it was
+## the act's first time attack run, and the fastest.
 static func record_time_attack(slot: Dictionary, act_id: String, time: float, splits: Dictionary, assisted: bool) -> Dictionary:
 	var acts: Dictionary = slot.get_or_add("acts", {})
+	var runs := time_attack_runs(slot, act_id)
 	var record := act(slot, act_id).duplicate()
 	var first := not record.has("ta_time")
 	var faster := first or time < float(record.get("ta_time", INF))
@@ -62,8 +66,26 @@ static func record_time_attack(slot: Dictionary, act_id: String, time: float, sp
 		record["ta_time"] = time
 		record["ta_assisted"] = assisted
 		record["ta_splits"] = splits.duplicate()
+	runs.append({"time": time, "assisted": assisted})
+	runs.sort_custom(func(a: Dictionary, b: Dictionary) -> bool: return float(a["time"]) < float(b["time"]))
+	record["ta_runs"] = runs.slice(0, TIME_ATTACK_RUNS)
 	acts[act_id] = record
 	return {"first_clear": first, "best_time": faster}
+
+
+## The fastest time attack runs of the act at `act_id`, fastest first, as {time, assisted}.
+static func time_attack_runs(slot: Dictionary, act_id: String) -> Array[Dictionary]:
+	var record := act(slot, act_id)
+	var runs: Array[Dictionary] = []
+	var listed: Variant = record.get("ta_runs")
+	if listed is Array:
+		for run: Variant in listed:
+			var time: Variant = (run as Dictionary).get("time") if run is Dictionary else null
+			if time is float or time is int:
+				runs.append({"time": float(time), "assisted": bool((run as Dictionary).get("assisted", false))})
+	elif record.has("ta_time"):  # Saved before the fastest few were kept.
+		runs.append({"time": float(record["ta_time"]), "assisted": bool(record.get("ta_assisted", false))})
+	return runs
 
 
 ## The stage clock at each checkpoint (by id) on the fastest time attack run of the act at `act_id`.

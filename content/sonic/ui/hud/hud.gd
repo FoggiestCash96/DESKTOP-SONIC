@@ -18,7 +18,10 @@ const RED_RING_SIZE := Vector2(34, 34)
 const SPLIT_TIME := 3.0  ## Seconds a time attack split shows after a checkpoint.
 const SPLIT_FASTER := Color(0.45, 0.85, 1.0)
 const SPLIT_SLOWER := Color(1.0, 0.45, 0.35)
-const RANK_DELAY := 1.0  ## Seconds after the results appear that the rank lands.
+const COUNT_DELAY := 0.4  ## Seconds after the results appear before the bonuses count up...
+const COUNT_TIME := 0.8  ## ...each taking this long...
+const TICK_MSEC := 50  ## ...and ticking at most this often (ms).
+const RANK_DELAY := 0.25  ## Seconds after the count that the rank lands.
 const RANK_COLORS: Dictionary[String, Color] = {
 	"S": Color(1.0, 0.82, 0.25), "A": Color(1.0, 0.45, 0.35), "B": Color(0.45, 0.85, 1.0),
 	"C": Color(0.55, 0.95, 0.5), "D": Color(0.8, 0.8, 0.85),
@@ -29,6 +32,10 @@ const RANK_COLORS: Dictionary[String, Color] = {
 var _red_ring_icons: Array[Control] = []
 var _best_time := -1.0  # In time attack, the act's fastest run, or -1 with none yet.
 var _split_left := 0.0  # Seconds the split has left to show.
+var _tally: Dictionary = {}  # The goal's score, counting up on the results.
+var _assisted_tag := ""  # Its total's "(with assists)", if one was on.
+var _shown_total := -1  # The total the results show while counting.
+var _last_tick := 0  # When the count last ticked (ms).
 
 @onready var _top_left: Control = %TopLeft
 @onready var _bottom_left: Control = %BottomLeft
@@ -176,12 +183,11 @@ func _show_results(improved: Dictionary) -> void:
 		_result_score.visible = _best_time >= 0.0
 		_result_score.text = "%s   %s" % [tr("HUD_BEST"), GameState.format_time(_best_time)]
 	elif not tally.is_empty():
-		var assisted := GameSettings.assist or GameSettings.game_speed < 1.0
+		_tally = tally
+		_assisted_tag = ("  " + tr("MAP_ASSISTED")) if GameSettings.assist or GameSettings.game_speed < 1.0 else ""
 		_result_score.text = "%s   %d" % [tr("HUD_SCORE"), int(tally["score"])]
-		_result_time_bonus.text = "%s   %d" % [tr("RESULTS_TIME_BONUS"), int(tally["time_bonus"])]
-		_result_ring_bonus.text = "%s   %d" % [tr("RESULTS_RING_BONUS"), int(tally["ring_bonus"])]
-		_result_total.text = "%s   %d%s" % [tr("RESULTS_TOTAL"), int(tally["total"]), ("  " + tr("MAP_ASSISTED")) if assisted else ""]
-	_show_rank(str(tally.get("rank", "")))
+		_show_count(0.0)
+	_count_then_rank(str(tally.get("rank", "")))
 	_new_record.visible = bool(improved.get("best_time", false)) and not bool(improved.get("first_clear", true))
 	_continue_hint.text = "RESULTS_RETRY" if time_attack else "RESULTS_CONTINUE"
 	_continue_hint.visible = true
@@ -203,21 +209,48 @@ func _show_split(id: String, time: float) -> void:
 	_split_left = SPLIT_TIME
 
 
-# The rank stamps onto the results a moment after they appear.
-func _show_rank(rank: String) -> void:
+# As in the modern games, the bonuses count up into the total, ticking as they go, then the rank
+# stamps onto the results with a sound of its own (a brighter one for an S).
+func _count_then_rank(rank: String) -> void:
 	_result_rank.visible = rank != ""
+	if rank != "":
+		_result_rank.text = tr("RESULTS_RANK") % rank
+		_result_rank.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE) as Color)
+		_result_rank.modulate.a = 0.0  # Its line is there from the start, so the results don't shift when it lands.
+	if _tally.is_empty():
+		return
+	var count := create_tween()
+	count.tween_interval(COUNT_DELAY)
+	count.tween_method(_show_count, 0.0, 2.0, COUNT_TIME * 2.0)
 	if rank == "":
 		return
-	_result_rank.text = tr("RESULTS_RANK") % rank
-	_result_rank.add_theme_color_override("font_color", RANK_COLORS.get(rank, Color.WHITE) as Color)
-	_result_rank.modulate.a = 0.0  # Its line is there from the start, so the results don't shift when it lands.
-	var stamp := create_tween()
-	stamp.tween_interval(RANK_DELAY)
-	stamp.tween_callback(func() -> void:
+	count.tween_interval(RANK_DELAY)
+	count.tween_callback(func() -> void:
 		_result_rank.pivot_offset = _result_rank.size * 0.5
 		_result_rank.modulate.a = 1.0
-		Sfx.play_ui(&"checkpoint"))
-	stamp.tween_property(_result_rank, "scale", Vector2.ONE, 0.25).from(Vector2.ONE * 1.8).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+		Sfx.play_ui(&"rank_s" if rank == "S" else &"rank"))
+	count.tween_property(_result_rank, "scale", Vector2.ONE, 0.25).from(Vector2.ONE * 1.8).set_trans(Tween.TRANS_BACK).set_ease(Tween.EASE_OUT)
+
+
+# The bonuses `progress` of the way through counting up: the time bonus from 0 to 1, then the ring
+# bonus from 1 to 2. Ticks as the total climbs.
+func _show_count(progress: float) -> void:
+	var time_bonus := _counted(int(_tally["time_bonus"]), progress)
+	var ring_bonus := _counted(int(_tally["ring_bonus"]), progress - 1.0)
+	var total := int(_tally["score"]) + time_bonus + ring_bonus
+	_result_time_bonus.text = "%s   %d" % [tr("RESULTS_TIME_BONUS"), time_bonus]
+	_result_ring_bonus.text = "%s   %d" % [tr("RESULTS_RING_BONUS"), ring_bonus]
+	_result_total.text = "%s   %d%s" % [tr("RESULTS_TOTAL"), total, _assisted_tag]
+	var now := Time.get_ticks_msec()
+	if total != _shown_total and _shown_total >= 0 and now - _last_tick >= TICK_MSEC:
+		_last_tick = now
+		Sfx.play_ui(&"tally")
+	_shown_total = total
+
+
+# `full`, counted `share` of the way up (0 to 1), in tens.
+static func _counted(full: int, share: float) -> int:
+	return full if share >= 1.0 else roundi(full * maxf(share, 0.0) / 10.0) * 10
 
 
 func _show_boss() -> void:
