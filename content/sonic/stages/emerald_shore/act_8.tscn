@@ -57,6 +57,8 @@ title = "Emerald Shore Act 8: Stormy Coastal Fortress"
 hub_scene = "res://content/sonic/ui/map/world_map.tscn"
 music = ExtResource("2_x67ys")
 fast_music = ExtResource("3_1fy4l")
+par_time = 60.0
+rank_scores = PackedInt32Array(22000, 19000, 15000, 12000)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=1216114723]
 environment = ExtResource("2_5p8sn")

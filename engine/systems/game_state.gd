@@ -1,10 +1,12 @@
 extends Node
-## What outlives a stage restart: lives, the stage clock, the checkpoints touched and the unique
-## items found on this visit to the stage. Autoloaded as GameState. A Stage reports itself as it
-## loads; after a death it reloads and resumes from the last checkpoint touched.
+## What outlives a stage restart: lives, the stage clock, the score, the checkpoints touched and the
+## unique items found on this visit to the stage, and whether it is played in time attack.
+## Autoloaded as GameState. A Stage reports itself as it loads; after a death it reloads and resumes
+## from the last checkpoint touched.
 
 signal game_over  ## The last life was lost. The world map (or the title screen) returns after rules.game_over_time.
 signal stage_cleared  ## The goal was reached. The results show for rules.results_time.
+signal checkpoint_passed(id: String, time: float)  ## A checkpoint was touched for the first time on this visit, with the stage clock then.
 
 @export var rules: GameRules = preload("res://engine/systems/game_rules.tres")
 
@@ -20,6 +22,10 @@ var hidden_slots: Dictionary[String, int] = {}  ## ...and says which of the HUD'
 var hidden_found := 0  ## Hidden collectibles found on this visit to the stage.
 var cleared := false  ## The current stage's goal was reached.
 var cleared_rings := 0  ## Rings the player had at the goal.
+var score := 0  ## Points scored on the stage so far, for badniks and bosses. The goal adds its bonuses (GameRules.tally()).
+var checkpoint_score := 0  ## The score when that checkpoint was touched: a restart from it goes back to this.
+var splits: Dictionary[String, float] = {}  ## The stage clock as each checkpoint was first touched on this visit, by id.
+var time_attack := false  ## The stage is played in time attack: no lives are lost, a death or the restart button starts it over, and the run is recorded as a ghost. The world map sets it; leaving the stage clears it.
 
 var _touched: Dictionary[String, bool] = {}  # Checkpoints touched on this visit to the stage.
 var _found: Dictionary[String, bool] = {}  # Unique items (hidden collectibles, extra lives) found on this visit.
@@ -40,6 +46,7 @@ func _physics_process(delta: float) -> void:
 func new_game() -> void:
 	lives = rules.start_lives
 	stage = ""
+	time_attack = false
 	_clear_stage()
 
 
@@ -50,6 +57,7 @@ func enter_stage(path: String) -> void:
 		stage = path
 		_clear_stage()
 	time = checkpoint_time
+	score = checkpoint_score
 	hidden_total = 0
 	hidden_slots.clear()
 	cleared = false
@@ -66,7 +74,8 @@ func spawn_point(stage_path: String, default: Transform3D) -> Transform3D:
 	return checkpoint_spawn if checkpoint != "" and stage_path == stage else default
 
 
-## Records a checkpoint and the stage clock. Returns false if it was already touched on this visit.
+## Records a checkpoint with the stage clock and the score. Returns false if it was already touched
+## on this visit.
 func touch_checkpoint(id: String, spawn: Transform3D) -> bool:
 	if _touched.has(id):
 		return false
@@ -74,6 +83,9 @@ func touch_checkpoint(id: String, spawn: Transform3D) -> bool:
 	checkpoint = id
 	checkpoint_spawn = spawn
 	checkpoint_time = time
+	checkpoint_score = score
+	splits[id] = time
+	checkpoint_passed.emit(id, time)
 	return true
 
 
@@ -118,7 +130,14 @@ func reset_stage() -> void:
 ## Forgets the stage being played, so the next one entered starts fresh even if it is the same one.
 func leave_stage() -> void:
 	stage = ""
+	time_attack = false
 	_clear_stage()
+
+
+## Adds `points` to the stage's score, until its goal is reached.
+func add_score(points: int) -> void:
+	if not cleared:
+		score += points
 
 
 func add_life() -> void:
@@ -169,12 +188,16 @@ func _clear_stage() -> void:
 	hidden_found = 0
 	cleared = false
 	cleared_rings = 0
+	score = 0
+	checkpoint_score = 0
+	splits.clear()
 	_touched.clear()
 	_found.clear()
 	_found_hidden.clear()
 
 
 func _describe() -> String:
-	return "lives %d  |  time %s%s  |  checkpoint %s" % [
-		lives, format_time(time), "" if clock_running else " (stopped)", checkpoint if checkpoint != "" else "none",
+	return "lives %d  |  time %s%s  |  score %d%s  |  checkpoint %s" % [
+		lives, format_time(time), "" if clock_running else " (stopped)", score, "  |  time attack" if time_attack else "",
+		checkpoint if checkpoint != "" else "none",
 	]

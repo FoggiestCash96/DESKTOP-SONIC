@@ -1,7 +1,8 @@
 extends Node
-## The save slots: SLOTS files of JSON in `directory`, each holding one game's progress (SaveData).
-## Autoloaded as SaveGame. The slot screen starts a slot (new or saved); clearing an act records it
-## and saves at once. With no slot started, as when a stage is run on its own, nothing is saved.
+## The save slots: SLOTS files of JSON in `directory`, each holding one game's progress (SaveData),
+## with a folder beside it for the ghosts of its fastest time attack runs (GhostRun). Autoloaded as
+## SaveGame. The slot screen starts a slot (new or saved); clearing an act records it and saves at
+## once. With no slot started, as when a stage is run on its own, nothing is saved.
 
 signal saved
 
@@ -58,6 +59,11 @@ func delete(index: int) -> bool:
 	if index == slot:
 		slot = -1
 		data = {}
+	var ghosts := _ghost_directory(index)
+	if DirAccess.dir_exists_absolute(ghosts):
+		for file in DirAccess.get_files_at(ghosts):
+			DirAccess.remove_absolute(ghosts.path_join(file))
+		DirAccess.remove_absolute(ghosts)
 	if not exists(index):
 		return true
 	return DirAccess.remove_absolute(path_of(index)) == OK
@@ -86,12 +92,58 @@ func save() -> bool:
 
 ## Records clearing an act (SaveData.record_clear()) and saves. Returns what improved, or an empty
 ## Dictionary with no slot started.
-func record_clear(act_id: String, time: float, rings: int, found: PackedStringArray, assisted: bool) -> Dictionary:
+func record_clear(act_id: String, time: float, rings: int, found: PackedStringArray, assisted: bool, score := 0, rank := "") -> Dictionary:
 	if slot < 0:
 		return {}
-	var improved := SaveData.record_clear(data, act_id, time, rings, found, assisted)
+	var improved := SaveData.record_clear(data, act_id, time, rings, found, assisted, score, rank)
 	save()
 	return improved
+
+
+## Records a time attack run (SaveData.record_time_attack()) and saves. Returns what improved, or
+## an empty Dictionary with no slot started.
+func record_time_attack(act_id: String, time: float, splits: Dictionary, assisted: bool) -> Dictionary:
+	if slot < 0:
+		return {}
+	var improved := SaveData.record_time_attack(data, act_id, time, splits, assisted)
+	save()
+	return improved
+
+
+## Where the started slot keeps the ghost of its fastest time attack run of the act at `act_id`.
+func ghost_path(act_id: String) -> String:
+	return "%s/%s.ghost" % [_ghost_directory(slot), act_id.md5_text()]
+
+
+## Saves `run` (GhostRun.to_dict()) as the started slot's ghost for the act at `act_id`, through a
+## temporary file like save(). Returns whether it worked.
+func save_ghost(act_id: String, run: Dictionary) -> bool:
+	if slot < 0:
+		return false
+	DirAccess.make_dir_recursive_absolute(_ghost_directory(slot))
+	var path := ghost_path(act_id)
+	var file := FileAccess.open(path + ".tmp", FileAccess.WRITE)
+	if file == null:
+		push_error("Can't write %s: %s" % [path + ".tmp", error_string(FileAccess.get_open_error())])
+		return false
+	file.store_var(run)
+	file.close()
+	var error := DirAccess.rename_absolute(path + ".tmp", path)
+	if error != OK:
+		push_error("Can't save %s: %s" % [path, error_string(error)])
+		return false
+	return true
+
+
+## The started slot's ghost for the act at `act_id` (GhostRun.to_dict()), or an empty Dictionary.
+func load_ghost(act_id: String) -> Dictionary:
+	if slot < 0 or not FileAccess.file_exists(ghost_path(act_id)):
+		return {}
+	var file := FileAccess.open(ghost_path(act_id), FileAccess.READ)
+	if file == null:
+		return {}
+	var run: Variant = file.get_var()  # Never decodes objects.
+	return run if run is Dictionary else {}
 
 
 func act(act_id: String) -> Dictionary:
@@ -101,3 +153,7 @@ func act(act_id: String) -> Dictionary:
 ## Ids of the hidden collectibles found in the act at `act_id` on the started slot.
 func red_rings(act_id: String) -> PackedStringArray:
 	return SaveData.red_rings_of(data, act_id)
+
+
+func _ghost_directory(index: int) -> String:
+	return "%s/slot_%02d_ghosts" % [directory, index + 1]

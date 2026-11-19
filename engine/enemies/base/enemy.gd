@@ -6,8 +6,8 @@ extends Node3D
 ##
 ## Touching the player hurts them, unless they are curled up (jumping, rolling, spin dashing or
 ## homing in) or invincible: then the enemy is destroyed, bursting into an explosion and freeing an
-## animal, and the player rebounds off it (Player.rebound_from()). It stays destroyed until the
-## stage reloads.
+## animal, and the player rebounds off it (Player.rebound_from()) and scores, more for each one in a
+## row before they land (GameRules.enemy_points). It stays destroyed until the stage reloads.
 ##
 ## The scene needs a %Hitbox (an Area3D watching the player layer), a %HomingTarget where the homing
 ## attack should aim, and a %Model holding the visuals. If the model has an AnimationPlayer with
@@ -91,6 +91,8 @@ func destroy(by: Player) -> void:
 	if by:
 		by.rebound_from(center)
 		by.add_boost(by.physics.boost_per_enemy)
+		GameState.add_score(GameState.rules.enemy_points_for(by.enemy_chain))
+		by.enemy_chain += 1
 	Sfx.play_at(&"enemy_pop", center)
 	var stage := get_parent()
 	var explosion := (load(EXPLOSION_SCENE) as PackedScene).instantiate() as Node3D

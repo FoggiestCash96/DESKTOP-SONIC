@@ -31,6 +31,45 @@ func test_later_clears_keep_the_best_and_add_red_rings() -> void:
 	assert_true(bool(SaveData.act(slot, ACT_1)["assisted"]), "a best time set with an assist says so")
 
 
+func test_the_best_score_keeps_its_rank_and_says_if_assisted() -> void:
+	var slot := SaveData.new_slot()
+	var first := SaveData.record_clear(slot, ACT_1, 80.0, 50, PackedStringArray(), false, 30000, "B")
+	assert_true(bool(first["best_score"]))
+	var lower := SaveData.record_clear(slot, ACT_1, 70.0, 50, PackedStringArray(), false, 20000, "C")
+	assert_false(bool(lower["best_score"]), "a lower score isn't a best")
+	assert_eq(str(SaveData.act(slot, ACT_1)["best_rank"]), "B", "the best score's rank stays")
+	var higher := SaveData.record_clear(slot, ACT_1, 90.0, 50, PackedStringArray(), true, 45000, "S")
+	assert_true(bool(higher["best_score"]))
+	var record := SaveData.act(slot, ACT_1)
+	assert_eq(int(record["best_score"]), 45000)
+	assert_eq(str(record["best_rank"]), "S")
+	assert_true(bool(record["score_assisted"]), "a best score set with an assist says so")
+	assert_false(bool(record["assisted"]), "the best time, set without one, doesn't")
+
+
+func test_a_time_attack_record_keeps_the_fastest_run_and_its_splits() -> void:
+	var slot := SaveData.new_slot()
+	SaveData.record_clear(slot, ACT_1, 80.0, 50, PackedStringArray(), false, 30000, "B")
+	var first := SaveData.record_time_attack(slot, ACT_1, 75.5, {"Checkpoint1": 30.25}, false)
+	assert_true(bool(first["first_clear"]) and bool(first["best_time"]), str(first))
+	var slower := SaveData.record_time_attack(slot, ACT_1, 77.0, {"Checkpoint1": 29.0}, false)
+	assert_false(bool(slower["first_clear"]) or bool(slower["best_time"]), "a slower run isn't kept")
+	assert_almost_eq(float(SaveData.splits_of(slot, ACT_1)["Checkpoint1"]), 30.25, 1e-5, "the fastest run's splits")
+	SaveData.record_clear(slot, ACT_1, 85.0, 40, PackedStringArray(), false, 25000, "C")
+	var back := SaveData.from_json(SaveData.to_json(slot))
+	assert_almost_eq(float(SaveData.act(back, ACT_1)["ta_time"]), 75.5, 1e-5, "a clear keeps the time attack record, through JSON too")
+	assert_almost_eq(float(SaveData.splits_of(back, ACT_1)["Checkpoint1"]), 30.25)
+	assert_almost_eq(float(SaveData.act(back, ACT_1)["best_time"]), 80.0, 1e-5, "time attack runs leave the act's best time alone")
+	assert_true(SaveData.splits_of(slot, ACT_2).is_empty(), "no run, no splits")
+
+
+func test_a_clear_saved_before_scores_existed_takes_a_score() -> void:
+	var slot := SaveData.from_json('{"version": 1, "acts": {"%s": {"cleared": true, "best_time": 80.0, "assisted": false, "best_rings": 50, "red_rings": []}}}' % ACT_1)
+	var improved := SaveData.record_clear(slot, ACT_1, 90.0, 10, PackedStringArray(), false, 1000, "D")
+	assert_true(bool(improved["best_score"]) and not bool(improved["first_clear"]), str(improved))
+	assert_eq(str(SaveData.act(slot, ACT_1)["best_rank"]), "D")
+
+
 func test_acts_unlock_in_order_skipping_ones_not_built() -> void:
 	var slot := SaveData.new_slot()
 	var acts := PackedStringArray([ACT_1, "", "", ACT_8])

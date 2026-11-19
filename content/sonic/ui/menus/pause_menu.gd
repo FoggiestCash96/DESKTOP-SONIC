@@ -39,7 +39,8 @@ func open() -> void:
 	var stage := _stage()
 	if stage == null or not stage.can_pause():
 		return
-	_checkpoint_button.visible = GameState.checkpoint != ""
+	# A time attack run only counts from the start: going back to a checkpoint would keep its time.
+	_checkpoint_button.visible = GameState.checkpoint != "" and not GameState.time_attack
 	_quit_button.text = "PAUSE_QUIT_MAP" if SaveGame.has_slot() and stage.hub_scene != "" else "PAUSE_QUIT_TITLE"
 	visible = true
 	get_tree().paused = true

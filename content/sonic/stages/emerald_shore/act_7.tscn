@@ -81,6 +81,8 @@ hub_scene = "res://content/sonic/ui/map/world_map.tscn"
 next_scene = "res://content/sonic/stages/emerald_shore/act_8.tscn"
 music = ExtResource("2_rcpr6")
 fast_music = ExtResource("3_dl6bk")
+par_time = 79.0
+rank_scores = PackedInt32Array(32000, 27000, 22000, 17000)
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="." unique_id=2023925998]
 environment = ExtResource("4_syt6l")

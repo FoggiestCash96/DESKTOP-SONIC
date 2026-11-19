@@ -77,6 +77,7 @@ var light_dash_state: LightDashState
 var wall_cling_state: WallClingState
 var wall_run_state: WallRunState
 var drop_dash_charged := false  ## A drop dash is charged: landing with jump still held launches it.
+var enemy_chain := 0  ## Badniks destroyed since the player last landed. Each one in a row scores more (GameRules.enemy_points).
 var homing_candidate: HomingTarget  ## What a homing attack would lock on to right now, shown with a reticle. Null on the ground or with the attack used.
 
 var _spawn: Transform3D
@@ -245,7 +246,7 @@ func _process(_delta: float) -> void:
 	if _reticle.visible:
 		_reticle.global_position = homing_candidate.get_global_transform_interpolated().origin
 	if _model:
-		_model.animate(pose(), _pose_speed())
+		_model.animate(pose(), pose_speed())
 
 
 ## Which of CharacterModel.POSES the player's model should show right now.
@@ -263,14 +264,19 @@ func pose() -> StringName:
 	return PlayerMotion.pose(state == death_state, state == hurt_state, is_attacking(), is_grounded(), sprung, finished, _braking, _pushing)
 
 
-# How fast the model's run looks: the speed along the ground (or the wall), or through the air,
-# and while revving a peel out, the speed it will launch at.
-func _pose_speed() -> float:
+## How fast the model's pose looks: the speed along the ground (or the wall), or through the air,
+## and while revving a peel out, the speed it will launch at.
+func pose_speed() -> float:
 	if state == peel_out_state:
 		return physics.peel_out_speed * peel_out_state.charge()
 	if is_grounded() or state == wall_run_state:
 		return ground_speed
 	return velocity.length()
+
+
+## Where the player's model is and how it's turned, as a ghost of the run replays it.
+func model_transform() -> Transform3D:
+	return _visual.global_transform
 
 
 ## Leaves the current state and enters `next`.
@@ -538,6 +544,7 @@ func land() -> void:
 	ground_normal = below["normal"]
 	_sprung = false
 	_launched_from = null
+	enemy_chain = 0
 	_air_action_ready = true
 	_air_boost_ready = true
 	_air_boost_timer = 0.0

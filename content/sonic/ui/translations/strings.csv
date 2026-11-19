@@ -19,6 +19,7 @@ MAP_HINT,"Left and right: world    Jump: play    Back: save slots"
 MAP_LOCKED,Locked
 MAP_COMING,Coming later
 MAP_CLEARED,Cleared
+MAP_CLEARED_RANK,Cleared  ·  Rank %s
 MAP_BOSS,Boss
 MAP_WORLD_LOCKED,Beat the world before this one to reach it.
 MAP_NOT_BUILT,This act isn't built yet.
@@ -28,6 +29,9 @@ MAP_BEST_TIME,Best time %s
 MAP_ASSISTED,(with assists)
 MAP_BEST_RINGS,Most rings %d
 MAP_RED_RINGS,Red rings %d / %d
+MAP_BEST_RANK,Best rank %s (%d points)
+MAP_TIME_ATTACK,Time attack best %s
+MAP_TIME_ATTACK_HINT,Special (F or Y): time attack
 OPT_TITLE,Options
 OPT_HINT,"LB and RB (or Q and E): switch tabs    Back: save and close"
 OPT_BACK,Save and close
@@ -60,7 +64,7 @@ OPT_RESET_CONTROLS,Reset controls to defaults
 OPT_GAME_SPEED,Game speed
 OPT_ASSIST,Invincibility assist
 OPT_HUD_SIZE,HUD size
-OPT_ASSIST_NOTE,"A slower game speed gives you more time to react. With the invincibility assist, hits never hurt, and falling into a pit puts you back on solid ground. Best times set with either show as assisted."
+OPT_ASSIST_NOTE,"A slower game speed gives you more time to react. With the invincibility assist, hits never hurt, and falling into a pit puts you back on solid ground. Best times and ranks set with either show as assisted."
 ACTION_MOVE_FORWARD,Move forward
 ACTION_MOVE_BACK,Move back
 ACTION_MOVE_LEFT,Move left
@@ -78,6 +82,7 @@ ACTION_CAMERA_LEFT,Camera left
 ACTION_CAMERA_RIGHT,Camera right
 ACTION_CAMERA_RECENTER,Camera behind the player
 ACTION_PAUSE,Pause
+ACTION_RESTART,Restart (time attack)
 PAUSE_TITLE,Paused
 PAUSE_RESUME,Resume
 PAUSE_RESTART_CHECKPOINT,Restart from the checkpoint
@@ -87,6 +92,9 @@ PAUSE_QUIT_MAP,Quit to the world map
 PAUSE_QUIT_TITLE,Quit to the title screen
 HUD_TIME,TIME
 HUD_RINGS,RINGS
+HUD_SCORE,SCORE
+HUD_BEST,BEST
+HUD_TIME_ATTACK,TIME ATTACK
 HUD_ASSIST,ASSIST
 HUD_SPEED,SPEED %d%%
 HUD_SHIELD,SHIELD
@@ -97,5 +105,11 @@ HUD_BOOST,BOOST
 HUD_GAME_OVER,GAME OVER
 RESULTS_CLEAR,%s CLEAR
 RESULTS_RED_RINGS,RED RINGS   %d / %d
+RESULTS_TIME_ATTACK,%s TIME ATTACK
+RESULTS_TIME_BONUS,TIME BONUS
+RESULTS_RING_BONUS,RING BONUS
+RESULTS_TOTAL,TOTAL
+RESULTS_RANK,RANK  %s
 RESULTS_NEW_RECORD,NEW RECORD!
 RESULTS_CONTINUE,Jump to continue
+RESULTS_RETRY,Jump to continue    Restart (R or Back): try again
