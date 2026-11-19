@@ -31,6 +31,7 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="29_s65pk"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="30_dlhdd"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/leapfin.tscn" id="31_bqn08"]
+[ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="40_guide"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_fjdda"]
 size = Vector2(4000, 4000)
@@ -48,6 +49,13 @@ _data = {
 "tilts": PackedFloat32Array(0, 0, 0)
 }
 point_count = 3
+
+[sub_resource type="Curve3D" id="Curve3D_cornerguide"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 22, -486, 0, 0, 0, 0, 0, 0, 0, 22, -502, 0, 0, 0, 0, 0, 0, 0.443, 22, -505.365, 0, 0, 0, 0, 0, 0, 1.742, 22, -508.5, 0, 0, 0, 0, 0, 0, 3.808, 22, -511.192, 0, 0, 0, 0, 0, 0, 6.5, 22, -513.258, 0, 0, 0, 0, 0, 0, 9.635, 22, -514.557, 0, 0, 0, 0, 0, 0, 13, 22, -515, 0, 0, 0, 0, 0, 0, 40, 22, -515, 0, 0, 0, 0, 0, 0, 60, 19.7, -515),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
 
 [node name="EmeraldShoreAct3" type="Node3D" unique_id=2051983768]
 script = ExtResource("1_pp6n0")
@@ -295,6 +303,7 @@ script = ExtResource("17_ldp6t")
 [node name="SecretWall" parent="Gimmicks" unique_id=1547800193 instance=ExtResource("18_08tsq")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 13.6, 22, -485)
 size = Vector3(10, 4, 1)
+look = "sandstone"
 
 [node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("19_2vf5n")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 17.5, 22, -485)
@@ -563,3 +572,14 @@ transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 420,
 
 [node name="GullBeach" parent="Enemies" unique_id=1718764913 instance=ExtResource("30_dlhdd")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 430, 3, -521)
+
+[node name="CornerGuide" type="Node3D" parent="Gimmicks" unique_id=1671437194 node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 23.5, -511)
+script = ExtResource("40_guide")
+size = Vector3(59, 17, 36)
+pitch_degrees = -15.0
+distance = 6.0
+path = NodePath("../CornerGuidePath")
+
+[node name="CornerGuidePath" type="Path3D" parent="Gimmicks" unique_id=108023705]
+curve = SubResource("Curve3D_cornerguide")

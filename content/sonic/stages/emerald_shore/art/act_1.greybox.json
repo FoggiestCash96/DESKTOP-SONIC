@@ -1521,9 +1521,43 @@
 			],
 			"side_view": true,
 			"distance": 14.0
+		},
+		{
+			"name": "CornerGuide",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					13.5,
+					5.0,
+					-502.5
+				]
+			},
+			"size": [
+				57.0,
+				18.0,
+				55.0
+			],
+			"side_view": false,
+			"distance": 6.0
 		}
 	],
 	"walls": [],
+	"rails": [],
+	"water": [],
 	"markers": [
 		{
 			"name": "RingsStart",

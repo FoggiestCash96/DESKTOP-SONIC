@@ -1063,7 +1063,40 @@
 			"curb_height": 0.6
 		}
 	],
-	"camera_volumes": [],
+	"camera_volumes": [
+		{
+			"name": "CornerGuide",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					15.5,
+					23.5,
+					-511.0
+				]
+			},
+			"size": [
+				59.0,
+				17.0,
+				36.0
+			],
+			"side_view": false,
+			"distance": 6.0
+		}
+	],
 	"walls": [],
 	"rails": [
 		{

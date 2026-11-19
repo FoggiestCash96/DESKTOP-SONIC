@@ -120,3 +120,20 @@ func test_times_show_minutes_seconds_and_hundredths() -> void:
 	assert_eq(_game.format_time(0.0), "0:00.00")
 	assert_eq(_game.format_time(65.32), "1:05.32")
 	assert_eq(_game.format_time(59.999), "0:59.99")
+
+
+func test_a_red_ring_named_with_a_number_fills_that_slot() -> void:
+	assert_eq(_game.number_at_end("RedRing3"), 3, "RedRing3")
+	assert_eq(_game.number_at_end("RedRing12"), 12, "two digits")
+	assert_eq(_game.number_at_end("Secret"), 0, "no number")
+	assert_eq(_game.number_at_end(""), 0, "no name")
+
+
+func test_the_slots_are_forgotten_on_entering_a_stage() -> void:
+	_game.enter_stage("res://a.tscn")
+	_game.hidden_slots["Gimmicks/RedRing1"] = 1
+	_game.enter_stage("res://b.tscn")
+	assert_true(_game.hidden_slots.is_empty(), "a new stage registers its own")
+	_game.hidden_slots["Gimmicks/RedRing2"] = 2
+	_game.enter_stage("res://b.tscn")
+	assert_true(_game.hidden_slots.is_empty(), "the same stage again, after a death: they register again as they load")

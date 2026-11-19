@@ -34,6 +34,8 @@
 [ext_resource type="Script" path="res://engine/gimmicks/breakable_wall.gd" id="32_fxy16"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/wall_jump_panel.tscn" id="33_k8xy3"]
 [ext_resource type="PackedScene" path="res://engine/gimmicks/wall_run_strip.tscn" id="34_qcmr0"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/grass.tres" id="35_grass"]
+[ext_resource type="Material" path="res://content/sonic/stages/emerald_shore/art/materials/sand.tres" id="36_sand"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_5u85v"]
 size = Vector3(0.3, 1.5, 0.3)
@@ -1029,8 +1031,8 @@ swoops = false
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 172, 4, 4)
 pixel_size = 0.01
 billboard = 1
-text = "Water, rails, platforms
-and breakable walls →"
+text = "Water, rails, platforms,
+breakable walls and floors →"
 font_size = 64
 
 [node name="PoolWallNorth" type="CSGBox3D" parent="WaterAndRails" unique_id=2083108816]
@@ -1205,6 +1207,66 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 5.5, -128)
 pixel_size = 0.01
 billboard = 1
 text = "Roll or boost through"
+font_size = 48
+
+[node name="GrassRamp" type="CSGPolygon3D" parent="WaterAndRails" unique_id=742459170]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 183, 0, -168)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 12, 0, 12, 3)
+depth = 6.0
+material = ExtResource("35_grass")
+
+[node name="GrassNear" type="CSGBox3D" parent="WaterAndRails" unique_id=1484335750]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 1.5, -183)
+use_collision = true
+size = Vector3(6, 3, 6)
+material = ExtResource("35_grass")
+
+[node name="GrassFloor" type="StaticBody3D" parent="WaterAndRails" unique_id=473873953]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 3, -188)
+script = ExtResource("32_fxy16")
+size = Vector3(6, 0.5, 4)
+as_floor = true
+look = "grass"
+
+[node name="GrassFar" type="CSGBox3D" parent="WaterAndRails" unique_id=1316129225]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 180, 1.5, -194)
+use_collision = true
+size = Vector3(6, 3, 8)
+material = ExtResource("35_grass")
+
+[node name="SandRamp" type="CSGPolygon3D" parent="WaterAndRails" unique_id=1901675488]
+transform = Transform3D(0, 0, 1, 0, 1, 0, -1, 0, 0, 195, 0, -168)
+use_collision = true
+polygon = PackedVector2Array(0, 0, 12, 0, 12, 3)
+depth = 6.0
+material = ExtResource("36_sand")
+
+[node name="SandNear" type="CSGBox3D" parent="WaterAndRails" unique_id=1641465454]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 192, 1.5, -183)
+use_collision = true
+size = Vector3(6, 3, 6)
+material = ExtResource("36_sand")
+
+[node name="SandFloor" type="StaticBody3D" parent="WaterAndRails" unique_id=1655195058]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 192, 3, -188)
+script = ExtResource("32_fxy16")
+size = Vector3(6, 0.5, 4)
+as_floor = true
+look = "sand"
+
+[node name="SandFar" type="CSGBox3D" parent="WaterAndRails" unique_id=1111968390]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 192, 1.5, -194)
+use_collision = true
+size = Vector3(6, 3, 8)
+material = ExtResource("36_sand")
+
+[node name="SignFloors" type="Label3D" parent="WaterAndRails" unique_id=1662042401]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 186, 6, -170)
+pixel_size = 0.01
+billboard = 1
+text = "Jump or stomp onto
+the floors to break through"
 font_size = 48
 
 [node name="Moves" type="Node3D" parent="." unique_id=258477897]

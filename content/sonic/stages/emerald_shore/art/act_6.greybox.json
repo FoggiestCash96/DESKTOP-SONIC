@@ -1598,7 +1598,40 @@
 		}
 	],
 	"loops": [],
-	"camera_volumes": [],
+	"camera_volumes": [
+		{
+			"name": "CornerGuide",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					8.5,
+					6.5,
+					-206.5
+				]
+			},
+			"size": [
+				43.0,
+				17.0,
+				43.0
+			],
+			"side_view": false,
+			"distance": 6.0
+		}
+	],
 	"walls": [],
 	"rails": [
 		{

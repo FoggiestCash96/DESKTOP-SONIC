@@ -82,11 +82,16 @@ func _process(_delta: float) -> void:
 
 ## How many of the act's red rings have been found: on this visit, or on an earlier clear.
 func red_rings_found() -> int:
+	return mini(_found_red_rings().size(), GameState.hidden_total)
+
+
+## Ids of the act's red rings found on this visit or on an earlier clear.
+func _found_red_rings() -> PackedStringArray:
 	var ids := SaveGame.red_rings(GameState.stage)
 	for id in GameState.hidden_found_ids():
 		if not ids.has(id):
 			ids.append(id)
-	return mini(ids.size(), GameState.hidden_total)
+	return ids
 
 
 func _update_red_rings() -> void:
@@ -101,9 +106,21 @@ func _update_red_rings() -> void:
 			icon.custom_minimum_size = RED_RING_SIZE
 			_red_rings.add_child(icon)
 			_red_ring_icons.append(icon)
-	var found := red_rings_found()
-	for i in _red_ring_icons.size():
-		_red_ring_icons[i].set("found", i < found)
+	# Each red ring lights its own slot; any without one fills the first slots left.
+	var lit: Array[bool] = []
+	lit.resize(_red_ring_icons.size())
+	var loose := 0
+	for id in _found_red_rings():
+		var slot: int = GameState.hidden_slots.get(id, 0)
+		if slot >= 1 and slot <= lit.size() and not lit[slot - 1]:
+			lit[slot - 1] = true
+		else:
+			loose += 1
+	for i in lit.size():
+		if not lit[i] and loose > 0:
+			lit[i] = true
+			loose -= 1
+		_red_ring_icons[i].set("found", lit[i])
 
 
 func _show_results(improved: Dictionary) -> void:

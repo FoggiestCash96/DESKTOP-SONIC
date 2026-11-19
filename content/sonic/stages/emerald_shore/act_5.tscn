@@ -427,12 +427,14 @@ material = ExtResource("11_uhvuw")
 [node name="Room1Wall" parent="Gimmicks" unique_id=1079680876 instance=ExtResource("14_5acfn")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 9.6, 0, -65)
 size = Vector3(10, 4, 1)
+look = "cave"
 
 [node name="ExtraLife" parent="Gimmicks" unique_id=1036461689 instance=ExtResource("15_h35dy")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 0, -65)
 
 [node name="RedRing2" parent="Gimmicks" unique_id=1266011146 instance=ExtResource("16_xqqyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 16.2, 0.8, -65)
+slot = 1
 
 [node name="ChasmStone1" parent="Gimmicks" unique_id=1336936344 instance=ExtResource("17_0nud4")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, -116)
@@ -448,6 +450,7 @@ size = Vector3(5, 1, 5)
 
 [node name="RedRing1" parent="Gimmicks" unique_id=1211033912 instance=ExtResource("16_xqqyt")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 3.6, -124)
+slot = 2
 
 [node name="RingsBeach" type="Node3D" parent="Gimmicks" unique_id=65160650]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0.8, -6)
@@ -523,6 +526,7 @@ pause_time = 1.5
 [node name="HallWall" parent="Gimmicks" unique_id=1032854367 instance=ExtResource("14_5acfn")]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 151, 0, -228)
 size = Vector3(8, 4, 1)
+look = "cave"
 
 [node name="RingsHall1" type="Node3D" parent="Gimmicks" unique_id=1145072133]
 transform = Transform3D(-4.371139e-08, 0, -1, 0, 1, 0, 1, 0, -4.371139e-08, 14, 0.8, -228)

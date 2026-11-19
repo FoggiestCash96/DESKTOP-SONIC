@@ -27,6 +27,7 @@
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/scuttler.tscn" id="25_8wmid"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/galegull.tscn" id="26_h0tge"]
 [ext_resource type="PackedScene" path="res://content/sonic/enemies/pearlshot.tscn" id="27_dycab"]
+[ext_resource type="Script" path="res://engine/camera/camera_volume.gd" id="40_guide"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_bn5hy"]
 size = Vector2(4000, 4000)
@@ -58,6 +59,20 @@ _data = {
 "tilts": PackedFloat32Array(0, 0)
 }
 point_count = 2
+
+[sub_resource type="Curve3D" id="Curve3D_cornerguide1"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 0, 2, -375, 0, 0, 0, 0, 0, 0, 0, 2, -400, 0, 0, 0, 0, 0, 0, 0.443, 2, -403.365, 0, 0, 0, 0, 0, 0, 1.742, 2, -406.5, 0, 0, 0, 0, 0, 0, 3.808, 2, -409.192, 0, 0, 0, 0, 0, 0, 6.5, 2, -411.258, 0, 0, 0, 0, 0, 0, 9.635, 2, -412.557, 0, 0, 0, 0, 0, 0, 13, 2, -413, 0, 0, 0, 0, 0, 0, 40, 2, -413, 0, 0, 0, 0, 0, 0, 60, 2, -413),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
+
+[sub_resource type="Curve3D" id="Curve3D_cornerguide2"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 198, -4, -413, 0, 0, 0, 0, 0, 0, 222, -6, -413, 0, 0, 0, 0, 0, 0, 225.365, -6, -413.443, 0, 0, 0, 0, 0, 0, 228.5, -6, -414.742, 0, 0, 0, 0, 0, 0, 231.192, -6, -416.808, 0, 0, 0, 0, 0, 0, 233.258, -6, -419.5, 0, 0, 0, 0, 0, 0, 234.557, -6, -422.635, 0, 0, 0, 0, 0, 0, 235, -6, -426, 0, 0, 0, 0, 0, 0, 235, -6, -445, 0, 0, 0, 0, 0, 0, 235, -6, -466),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 10
 
 [node name="EmeraldShoreAct7" type="Node3D" unique_id=1754660278]
 script = ExtResource("1_mv4ee")
@@ -573,3 +588,25 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 238, 0, -660)
 
 [node name="ScuttlerFinal" parent="Enemies" unique_id=1584790336 instance=ExtResource("25_8wmid")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 241, -4, -740)
+
+[node name="CornerGuide1" type="Node3D" parent="Gimmicks" unique_id=1398048431 node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.5, 3, -403.5)
+script = ExtResource("40_guide")
+size = Vector3(59, 14, 47)
+pitch_degrees = -15.0
+distance = 6.0
+path = NodePath("../CornerGuide1Path")
+
+[node name="CornerGuide1Path" type="Path3D" parent="Gimmicks" unique_id=1795509591]
+curve = SubResource("Curve3D_cornerguide1")
+
+[node name="CornerGuide2" type="Node3D" parent="Gimmicks" unique_id=729180759 node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 222, -5, -427)
+script = ExtResource("40_guide")
+size = Vector3(54, 18, 56)
+pitch_degrees = -15.0
+distance = 6.0
+path = NodePath("../CornerGuide2Path")
+
+[node name="CornerGuide2Path" type="Path3D" parent="Gimmicks" unique_id=179295771]
+curve = SubResource("Curve3D_cornerguide2")

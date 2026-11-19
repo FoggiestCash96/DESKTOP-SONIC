@@ -1167,7 +1167,72 @@
 			"curb_height": 0.6
 		}
 	],
-	"camera_volumes": [],
+	"camera_volumes": [
+		{
+			"name": "CornerGuide1",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					15.5,
+					3.0,
+					-403.5
+				]
+			},
+			"size": [
+				59.0,
+				14.0,
+				47.0
+			],
+			"side_view": false,
+			"distance": 6.0
+		},
+		{
+			"name": "CornerGuide2",
+			"transform": {
+				"x": [
+					1.0,
+					0.0,
+					0.0
+				],
+				"y": [
+					0.0,
+					1.0,
+					0.0
+				],
+				"z": [
+					0.0,
+					0.0,
+					1.0
+				],
+				"origin": [
+					222.0,
+					-5.0,
+					-427.0
+				]
+			},
+			"size": [
+				54.0,
+				18.0,
+				56.0
+			],
+			"side_view": false,
+			"distance": 6.0
+		}
+	],
 	"walls": [],
 	"rails": [
 		{

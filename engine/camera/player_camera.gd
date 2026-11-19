@@ -149,7 +149,9 @@ func _update_volume() -> void:
 	_blend_duration = best.blend_time if best else leaving.blend_time
 	_old_yaw = input_yaw()
 	_since_switch = 0.0
-	if not _held and _stick_held():
+	if _guided(best):
+		_held = false  # Along a guide, input follows the view, so holding forward runs round with it.
+	elif not _held and _stick_held():
 		_held = true
 		_held_yaw = _old_yaw
 		_held_angle = CameraMath.stick_angle(_stick())
@@ -186,9 +188,13 @@ func _goal_view(delta: float) -> Vector4:
 	return Vector4(_yaw, _pitch, settings.distance, speed_fov)
 
 
-## The yaw the current volume asks for. With a focus, it turns (at up to focus_turn_speed) to look
-## past the player at it, and holds still while the player is right next to it.
+## The yaw the current volume asks for. With a path, it looks along it ahead of the player (turning
+## at up to guide_turn_speed). With a focus, it turns (at up to focus_turn_speed) to look past the
+## player at it, and holds still while the player is right next to it.
 func _volume_yaw(delta: float) -> float:
+	if _guided(_volume):
+		var along := _volume.guide_yaw(target.get_global_transform_interpolated().origin, _view.x)
+		return CameraMath.approach_angle(_view.x, along, deg_to_rad(settings.guide_turn_speed) * delta)
 	var focus := _volume.focus
 	if focus == null or not is_instance_valid(focus):
 		return _volume.view_yaw()
@@ -229,7 +235,7 @@ func _blend(goal: Vector4, delta: float) -> Vector4:
 
 func _update_input_yaw(goal_yaw: float) -> void:
 	var held := _stick_held()
-	if held and not _was_held and not _held and _since_switch < _blend_duration + settings.input_grace_time:
+	if held and not _was_held and not _held and not _guided(_volume) and _since_switch < _blend_duration + settings.input_grace_time:
 		# Pressed afresh just after a change of view: the way that keeps the player going in the old
 		# view (as after a side view, pressing right again) still does.
 		var old_way := CameraMath.forward_for_yaw(_old_yaw - CameraMath.stick_angle(_stick()))
@@ -320,6 +326,11 @@ func _clear_distance(pivot: Vector3, offset: Vector3) -> float:
 ## -1 on each axis the player has inverted in the settings, else 1.
 func _inversion() -> Vector2:
 	return Vector2(-1.0 if GameSettings.invert_x else 1.0, -1.0 if GameSettings.invert_y else 1.0)
+
+
+## Whether `volume` is a guide along a path, which input follows.
+static func _guided(volume: CameraVolume) -> bool:
+	return volume != null and volume.path != null
 
 
 func _stick() -> Vector2:

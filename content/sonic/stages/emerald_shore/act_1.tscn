@@ -34,6 +34,13 @@
 [sub_resource type="PlaneMesh" id="PlaneMesh_3sfmo"]
 size = Vector2(4000, 4000)
 
+[sub_resource type="Curve3D" id="Curve3D_cornerguide"]
+_data = {
+"points": PackedVector3Array(0, 0, 0, 0, 0, 0, 5, 6, -478, 0, 0, 0, 0, 0, 0, 5, 6, -503, 0, 0, 0, 0, 0, 0, 5.409, 6, -506.106, 0, 0, 0, 0, 0, 0, 6.608, 6, -509, 0, 0, 0, 0, 0, 0, 8.515, 6, -511.485, 0, 0, 0, 0, 0, 0, 11, 6, -513.392, 0, 0, 0, 0, 0, 0, 13.894, 6, -514.591, 0, 0, 0, 0, 0, 0, 17, 6, -515, 0, 0, 0, 0, 0, 0, 25, 6, -515, 0, 0, 0, 0, 0, 0, 40, 3.75, -515, 0, 0, 0, 0, 0, 0, 55, 1.5, -515),
+"tilts": PackedFloat32Array(0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0)
+}
+point_count = 11
+
 [node name="EmeraldShoreAct1" type="Node3D" unique_id=1381585461]
 script = ExtResource("1_4hkn0")
 title = "Emerald Shore Act 1: Sunny Beachfront"
@@ -625,3 +632,14 @@ hide_depth = 1.0
 
 [node name="ScuttlerRollers" parent="Enemies" unique_id=1008302499 instance=ExtResource("22_lm72i")]
 transform = Transform3D(-4.371139e-08, 0, 1, 0, 1, 0, -1, 0, -4.371139e-08, 530, 0, -510)
+
+[node name="CornerGuide" type="Node3D" parent="Gimmicks" unique_id=1912021070 node_paths=PackedStringArray("path")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.5, 5, -502.5)
+script = ExtResource("17_g5eva")
+size = Vector3(57, 18, 55)
+pitch_degrees = -15.0
+distance = 6.0
+path = NodePath("../CornerGuidePath")
+
+[node name="CornerGuidePath" type="Path3D" parent="Gimmicks" unique_id=2055977344]
+curve = SubResource("Curve3D_cornerguide")
